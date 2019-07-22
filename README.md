@@ -1,7 +1,11 @@
-# <b>TIBS-filoinfo</b>
-### <b>Talleres Internacionales de Bioinformática - Centro de Ciencias Genómicas, UNAM, Cuernavaca, México</b>
+# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2019" width="115" height="115" align="middle"> <b>TIB2019-T3</b>
 
-Este repositorio contiene el material para el [Taller 3 - An&aacute;lisis comparativo de genomas microbianos: Pangen&oacute;mica y filoinform&aacute;tica](http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/) de los [Talleres Internacionales de Bioinform&aacute;tica - TIB2019](http://congresos.nnb.unam.mx/TIB2019), celebrados en el [Centro de Ciencias Genómicas](http://www.ccg.unam.mx) de la [Universidad Nacional Aut&oacute;noma de M&eacute;xico](http://www.ccg.unam.mx), del 29 de julio al 2 de agosto de 2019.
+## <b>Talleres Internacionales de Bioinformática - Centro de Ciencias Genómicas, UNAM, Cuernavaca, México</b>
+
+*** 
+
+### Sobre el repositorio
+Este repositorio contiene el material para el [Taller 3 - An&aacute;lisis comparativo de genomas microbianos: Pangen&oacute;mica y filoinform&aacute;tica](http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/) de los [Talleres Internacionales de Bioinform&aacute;tica - TIB2019](http://congresos.nnb.unam.mx/TIB2019), a celebrarse en el [Centro de Ciencias Genómicas](http://www.ccg.unam.mx) de la [Universidad Nacional Aut&oacute;noma de M&eacute;xico](http://www.ccg.unam.mx), del 29 de julio al 2 de agosto de 2019.
 
 #### Otros repositorios asociados a ediciones anteriores de los TIB
 - [T2: Análisis exploratorio y estadístico de datos biológicos usando R](https://github.com/vinuesa/curso_Rstats), edición [TIB2018](http://congresos.nnb.unam.mx/TIB2018/)

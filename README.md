@@ -1,8 +1,11 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2019" width="115" height="115" align="middle"> <b>TIB2019-T3</b>
 
 ## <b>Talleres Internacionales de Bioinformática - Centro de Ciencias Genómicas, UNAM, Cuernavaca, México</b>
-
-*** 
 
 ### Sobre el repositorio
 Este repositorio contiene el material para el [Taller 3 - An&aacute;lisis comparativo de genomas microbianos: Pangen&oacute;mica y filoinform&aacute;tica](http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/) de los [Talleres Internacionales de Bioinform&aacute;tica - TIB2019](http://congresos.nnb.unam.mx/TIB2019), a celebrarse en el [Centro de Ciencias Genómicas](http://www.ccg.unam.mx) de la [Universidad Nacional Aut&oacute;noma de M&eacute;xico](http://www.ccg.unam.mx), del 29 de julio al 2 de agosto de 2019.
@@ -66,19 +69,33 @@ En [ubuntu](https://www.ubuntu.com/) es muy f&aacute;cil instalar git:
 
 ***
 
-## Sesiones y material asociado
-
+## <b>Sesiones y materia  l asociado</b>
 ### Horario y lugar de impartici&oacute;n de las sesiones
 Las clases se imparten del 29 de Julio al 2 de Agosto en el aula 3 de la LCG-UNAM, Cuernavaca, Morelos
 de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb.unam.mx/TIB2019/programa/)
 
-#### Sesiones
-- Introducción a Linux (teoría y práctica)
-- Conceptos básicos de biología evolutiva y filogenética
-- Búsqueda de homólogos usando BLAST desde la línea de comandos (prácticas)
-- Alineamientos múltiples (prácticas)
-- Introducción a los métodos filogenéticos, árboles de genes y de árboles de especies
-- Modelos de sustitución y máxima verosimilitud (teoría)
+#### <b>Sesión 1: Introducción a Linux (teoría y práctica)</b>
+  + [presentaci&oacute;n - PDF: Primer contacto con un sistema GNU/Linux](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/Intro_biocomputo_sistemas_Linux_pt1.pdf)
+  + Pr&aacute;ctica 1. Navegación del sistema y uso de comandos básicos
+      + [pr&aacute;ctica1 - html](https://vinuesa.github.io/TIB-filoinfo/sesion1_intro2linux/) 
+      + [pr&aacute;ctica1 - pdf](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/working_with_linux_commands.pdf)
+  + Pr&aacute;ctica 2. Descarga de secuencias en formato FASTA de GenBank usando el sistema ENTREZ y parseo de los archivos usando herrramientas de filtrado
+    - [pr&aacute;ctica2 - html](https://vinuesa.github.io/OMICAS_UAEM/practica2_parseo_fastas/)
+    - [pr&aacute;ctica2 - pdf](https://github.com/vinuesa/OMICAS_UAEM/tree/master/docs/practica2_parseo_fastas/ejercicio_parseo_fastas_ENTREZ.pdf)
+
+- Lecturas recomendadas:
+  - Atma Ivancevic. The ten commandments for learning how to code. [Carrer Column, Nature, 20 Feb. 2019](https://www.nature.com/articles/d41586-019-00653-5)
+  - Velez Rueda AJ, Benítez GI, Marchetti J, Hasenahuer MA, Fornasari MS, Palopoli N, Parisi G. Bioinformatics calls the school: Use of smartphones to introduce
+Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):e1006473.](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006473)
+  - Dudley JT, Butte AJ. A quick guide for developing effective bioinformatics programming skills. [PLoS Comput Biol. 2009 Dec;5(12):e1000589](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000589)
+
+
+#### <b>Sesión 2: Conceptos básicos de biología evolutiva y filogenética</b>
+#### <b>Sesión 3: Búsqueda de homólogos usando BLAST desde la línea de comandos (prácticas)</b>
+<!--
+### <b>Sesión 4: Alineamientos múltiples (prácticas)</b>
+### Sesión 5: Introducción a los métodos filogenéticos, árboles de genes y de árboles de especies
+### Sesión 6: Modelos de sustitución y máxima verosimilitud (teoría)
 - Ajuste de modelos e inferencia de filogenias de máxima verosimilitud (prácticas)
 - Delimitación de especies bacterianas usando métodos evolutivos y datos multilocus
 - Inferencia bayesiana de filogenias (teoría y práctica)
@@ -87,7 +104,7 @@ de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb
 - Análisis pangenómico usando GET_HOMOLOGUES (prácticas)
 - Estrategias para la estima de filogenias genómicas (teoría)
 - Estima de filogenias genómicas con GET_PHYLOMARKERS (prácticas)
-
+-->
 En construcci&oacute;n ...
 
 

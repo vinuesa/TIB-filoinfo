@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa" />
 
-<meta name="date" content="2019-07-21" />
+<meta name="date" content="2019-07-22" />
 
 <title>Tema 1. Introducción al biocómputo en sistemas GNU/Linux</title>
 
@@ -377,7 +377,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Tema 1. Introducción al biocómputo en sistemas GNU/Linux</h1>
 <h4 class="author">Pablo Vinuesa</h4>
-<h4 class="date">2019-07-21</h4>
+<h4 class="date">2019-07-22</h4>
 
 </div>
 
@@ -420,8 +420,7 @@ $(document).ready(function () {
 <li><a href="#ejemplos-de-uso-basico-de-sed"><span class="toc-section-number">1.9.1</span> Ejemplos de uso básico de <b>sed</b>:</a></li>
 </ul></li>
 <li><a href="#uso-de-tuberias-de-herramientas-unixlinux-para-filtrado-de-texto-con-cut-grep-sort-uniq-wc-y"><span class="toc-section-number">1.10</span> Uso de tuberias de herramientas UNIX/Linux para filtrado de texto con <b>cut</b>, <b>grep</b>, <b>sort</b>, <b>uniq</b>, <b>wc</b> y <b>|</b></a><ul>
-<li><a href="#exprolemos-el-archivo-comprimido-con-compresion-gnu-zip-con-usando-los-comandos-zless-o-zcat"><span class="toc-section-number">1.10.1</span> Exprolemos el archivo comprimido (con compresión gnu zip) con usando los comandos <b>zless</b> o <b>zcat</b></a></li>
-<li><a href="#herramientas-de-filtrado-de-texto-de-unixlinux-cut-sort-uniq-wc-grep-y"><span class="toc-section-number">1.10.2</span> Herramientas de filtrado de texto de UNIX/Linux: <b>cut</b>, <b>sort</b>, <b>uniq</b>, <b>wc</b> <b>grep</b> y <b>|</b></a></li>
+<li><a href="#ejemplos-de-herramientas-de-filtrado-de-texto-en-accion"><span class="toc-section-number">1.10.1</span> Ejemplos de herramientas de filtrado de texto en acción</a></li>
 </ul></li>
 <li><a href="#manual-de-cada-comando-man-command"><span class="toc-section-number">1.11</span> Manual de cada comando: <b>man command</b></a></li>
 <li><a href="#redireccionado-de-la-salida-stout-a-un-archivo-con-el-comando"><span class="toc-section-number">1.12</span> redireccionado de la salida STOUT a un archivo con el comando <b>&gt;</b></a></li>
@@ -437,7 +436,7 @@ $(document).ready(function () {
 <div id="tema-1.-introduccion-al-biocomputo-en-sistemas-gnulinux---primer-contacto" class="section level1">
 <h1><span class="header-section-number">1</span> Tema 1. Introducción al biocómputo en sistemas GNU/Linux - Primer contacto</h1>
 <p>Este apunte fue creado para el <a href="http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/">Taller 3 - Análisis comparativo de genomas microbianos: Pangenómica y filoinformática</a> de los <a href="http://congresos.nnb.unam.mx/TIB2019">Talleres Internacionales de Bioinformática - TIB2019</a>, celebrados en el <a href="http://www.ccg.unam.mx">Centro de Ciencias Genómicas</a> de la <a href="http://www.ccg.unam.mx">Universidad Nacional Autónoma de México</a>, del 29 de julio al 2 de agosto de 2019 por <a href="http://www.ccg.unan.mx/~vinuesa/">Pablo Vinuesa, CCG-UNAM</a></p>
-<p>version: 2019-07-21</p>
+<p>version: 2019-07-22</p>
 <p>Una vez que domines los comandos básicos que se presentarán seguidamente, recomiendo revisar tutoriales mucho más detallados y completos como los siguientes:</p>
 <ul>
 <li><p><a href="https://tiswww.case.edu/php/chet/bash/bashref.html">Bash Reference Manual</a></p></li>
@@ -448,7 +447,7 @@ $(document).ready(function () {
 <h2><span class="header-section-number">1.1</span> Exploremos el sistema en el que estamos trabajando</h2>
 <div id="ssh-establecer-sesion-remota-encriptada-segura-via-ssh-al-servidor-ivory" class="section level3">
 <h3><span class="header-section-number">1.1.1</span> <strong>ssh</strong> establecer sesion remota encriptada (segura) via ssh al servidor ivory</h3>
-<pre class="bash"><code># ssh -l $USER IP</code></pre>
+<pre><code>ssh -l $USER IP</code></pre>
 </div>
 <div id="hostname-muestra-el-nombre-del-host-la-maquina-a-la-que-estoy-conectado-y-la-ip" class="section level3">
 <h3><span class="header-section-number">1.1.2</span> <strong>hostname</strong> muestra el nombre del host (la máquina a la que estoy conectado) y la IP</h3>
@@ -482,14 +481,18 @@ ls
 # mostrar todos (-a all) los archivos, incluidos los ocultos
 ls -a</code></pre>
 <pre><code>## assembly_summary.txt.gz
-## Filesystem_commands.tab
-## grep
+## empty_file
+## github_TIB-filoinfo_screenshot.png
 ## intro2genomics
 ## intro_biocomputo_Linux_pt1.odp
 ## Intro_biocomputo_Linux_pt1.pdf
 ## linux_basic_commands.tab
 ## linux_commands.tab
 ## linux_very_basic_commands_table.csv
+## sesion_local_capt_pantalla.png
+## sesion_remota_bonampak_capt_pantalla1.png
+## sesion_remota_bonampak_capt_pantalla2.png
+## sesion_remota_bonampak_capt_pantalla.png
 ## Stenotrophomonas_complete_genomes_and_ftp_paths.txt
 ## working_with_linux_commands.code
 ## working_with_linux_commands.html
@@ -497,8 +500,8 @@ ls -a</code></pre>
 ## .
 ## ..
 ## assembly_summary.txt.gz
-## Filesystem_commands.tab
-## grep
+## empty_file
+## github_TIB-filoinfo_screenshot.png
 ## intro2genomics
 ## intro_biocomputo_Linux_pt1.odp
 ## Intro_biocomputo_Linux_pt1.pdf
@@ -507,6 +510,10 @@ ls -a</code></pre>
 ## .linux_commands.tab.swp
 ## linux_very_basic_commands_table.csv
 ## .Rhistory
+## sesion_local_capt_pantalla.png
+## sesion_remota_bonampak_capt_pantalla1.png
+## sesion_remota_bonampak_capt_pantalla2.png
+## sesion_remota_bonampak_capt_pantalla.png
 ## Stenotrophomonas_complete_genomes_and_ftp_paths.txt
 ## working_with_linux_commands.code
 ## working_with_linux_commands.html
@@ -710,20 +717,24 @@ fi
 <li>comprueba los <strong>permisos</strong> del nuevo directorio</li>
 </ul>
 <pre class="bash"><code>ls -l</code></pre>
-<pre><code>## total 13136
+<pre><code>## total 11772
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
-## -rwxr-xr-x 1 vinuesa vinuesa    1814 jul 21 20:28 Filesystem_commands.tab
-## -rwxr-xr-x 1 vinuesa vinuesa    2346 jul 21 11:21 grep
-## drwxr-xr-x 3 vinuesa vinuesa    4096 jul 21 11:21 intro2genomics
-## -rwxr-xr-x 1 vinuesa vinuesa 2408618 jul 21 11:21 intro_biocomputo_Linux_pt1.odp
-## -rwxr-xr-x 1 vinuesa vinuesa 3458392 jul 21 11:21 Intro_biocomputo_Linux_pt1.pdf
+## -rw-r--r-- 1 vinuesa vinuesa       0 jul 22 21:41 empty_file
+## -rw-r--r-- 1 vinuesa vinuesa   87065 jul 22 20:59 github_TIB-filoinfo_screenshot.png
+## drwxr-xr-x 3 vinuesa vinuesa    4096 jul 22 21:23 intro2genomics
+## -rw-r--r-- 1 vinuesa vinuesa 2186396 jul 22 21:11 intro_biocomputo_Linux_pt1.odp
+## -rw-r--r-- 1 vinuesa vinuesa 1692567 jul 22 21:11 Intro_biocomputo_Linux_pt1.pdf
 ## -rwxr-xr-x 1 vinuesa vinuesa   10193 jul 21 11:21 linux_basic_commands.tab
-## lrwxrwxrwx 1 vinuesa vinuesa      78 jul 21 20:32 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## lrwxrwxrwx 1 vinuesa vinuesa      78 jul 22 21:41 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
 ## -rwxr-xr-x 1 vinuesa vinuesa    1705 jul 21 11:21 linux_very_basic_commands_table.csv
-## -rw-r--r-- 1 vinuesa vinuesa   47651 jul 21 20:32 Stenotrophomonas_complete_genomes_and_ftp_paths.txt
+## -rw-rw-r-- 1 vinuesa vinuesa   51271 jul 22 18:55 sesion_local_capt_pantalla.png
+## -rw-r--r-- 1 vinuesa vinuesa   40746 jul 22 18:56 sesion_remota_bonampak_capt_pantalla1.png
+## -rw-r--r-- 1 vinuesa vinuesa    4468 jul 22 18:57 sesion_remota_bonampak_capt_pantalla2.png
+## -rw-rw-r-- 1 vinuesa vinuesa  408580 jul 22 18:51 sesion_remota_bonampak_capt_pantalla.png
+## -rw-r--r-- 1 vinuesa vinuesa   47651 jul 22 21:41 Stenotrophomonas_complete_genomes_and_ftp_paths.txt
 ## -rwxr-xr-x 1 vinuesa vinuesa    6047 jul 21 11:21 working_with_linux_commands.code
-## -rwxr-xr-x 1 vinuesa vinuesa  681247 jul 21 20:32 working_with_linux_commands.html
-## -rwxr-xr-x 1 vinuesa vinuesa   17903 jul 21 20:31 working_with_linux_commands.Rmd</code></pre>
+## -rw-r--r-- 1 vinuesa vinuesa  682508 jul 22 21:41 working_with_linux_commands.html
+## -rw-r--r-- 1 vinuesa vinuesa   19004 jul 22 21:43 working_with_linux_commands.Rmd</code></pre>
 <ul>
 <li>generemos un subdirectorio por debajo del que acabamos de crear:</li>
 </ul>
@@ -781,21 +792,25 @@ fi
 # confirmamos que se genero la liga
 ls -l
 </code></pre>
-<pre><code>## total 13140
+<pre><code>## total 11776
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
-## lrwxrwxrwx 1 vinuesa vinuesa      78 jul 21 20:33 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
-## -rwxr-xr-x 1 vinuesa vinuesa    1814 jul 21 20:28 Filesystem_commands.tab
-## -rwxr-xr-x 1 vinuesa vinuesa    2346 jul 21 11:21 grep
-## drwxr-xr-x 3 vinuesa vinuesa    4096 jul 21 11:21 intro2genomics
-## -rwxr-xr-x 1 vinuesa vinuesa 2408618 jul 21 11:21 intro_biocomputo_Linux_pt1.odp
-## -rwxr-xr-x 1 vinuesa vinuesa 3458392 jul 21 11:21 Intro_biocomputo_Linux_pt1.pdf
+## lrwxrwxrwx 1 vinuesa vinuesa      78 jul 22 21:43 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## -rw-r--r-- 1 vinuesa vinuesa       0 jul 22 21:41 empty_file
+## -rw-r--r-- 1 vinuesa vinuesa   87065 jul 22 20:59 github_TIB-filoinfo_screenshot.png
+## drwxr-xr-x 3 vinuesa vinuesa    4096 jul 22 21:23 intro2genomics
+## -rw-r--r-- 1 vinuesa vinuesa 2186396 jul 22 21:11 intro_biocomputo_Linux_pt1.odp
+## -rw-r--r-- 1 vinuesa vinuesa 1692567 jul 22 21:11 Intro_biocomputo_Linux_pt1.pdf
 ## -rwxr-xr-x 1 vinuesa vinuesa   10193 jul 21 11:21 linux_basic_commands.tab
-## lrwxrwxrwx 1 vinuesa vinuesa      78 jul 21 20:32 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## lrwxrwxrwx 1 vinuesa vinuesa      78 jul 22 21:41 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
 ## -rwxr-xr-x 1 vinuesa vinuesa    1705 jul 21 11:21 linux_very_basic_commands_table.csv
-## -rw-r--r-- 1 vinuesa vinuesa   47651 jul 21 20:32 Stenotrophomonas_complete_genomes_and_ftp_paths.txt
+## -rw-rw-r-- 1 vinuesa vinuesa   51271 jul 22 18:55 sesion_local_capt_pantalla.png
+## -rw-r--r-- 1 vinuesa vinuesa   40746 jul 22 18:56 sesion_remota_bonampak_capt_pantalla1.png
+## -rw-r--r-- 1 vinuesa vinuesa    4468 jul 22 18:57 sesion_remota_bonampak_capt_pantalla2.png
+## -rw-rw-r-- 1 vinuesa vinuesa  408580 jul 22 18:51 sesion_remota_bonampak_capt_pantalla.png
+## -rw-r--r-- 1 vinuesa vinuesa   47651 jul 22 21:41 Stenotrophomonas_complete_genomes_and_ftp_paths.txt
 ## -rwxr-xr-x 1 vinuesa vinuesa    6047 jul 21 11:21 working_with_linux_commands.code
-## -rwxr-xr-x 1 vinuesa vinuesa  681247 jul 21 20:32 working_with_linux_commands.html
-## -rwxr-xr-x 1 vinuesa vinuesa   17903 jul 21 20:31 working_with_linux_commands.Rmd</code></pre>
+## -rw-r--r-- 1 vinuesa vinuesa  682508 jul 22 21:41 working_with_linux_commands.html
+## -rw-r--r-- 1 vinuesa vinuesa   19004 jul 22 21:43 working_with_linux_commands.Rmd</code></pre>
 <div id="renombramos-la-liga-o-cualquier-archivo-o-directorio" class="section level3">
 <h3><span class="header-section-number">1.6.1</span> renombramos la liga (o cualquier archivo o directorio)</h3>
 <pre class="bash"><code>  mv comandos_de_linux.tab linux_commands.tab</code></pre>
@@ -943,8 +958,9 @@ gedit linux_commands.tab &amp;
 <p>UNIX y Linux ofrecen una gran cantidad de herramientas para todo tipo de trabajos, cada una generalmente con muchas opciones. En bioinformática y genómica, los archivos de texto plano (ASCII) son los más comunes. Por ello es muy útil dominar algunas de las herramientas de filtrado de texto más comunes. Como ejemplo, trabajaremos con el archivo assembly_summary.txt, que contiene los datos de ensambles genómicos de la división RefSeq de GenBank. Lo descargué y comprimí con los siguientes comandos:</p>
 <pre><code>wget -c ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt
 gzip assembly_summary.txt</code></pre>
-<div id="exprolemos-el-archivo-comprimido-con-compresion-gnu-zip-con-usando-los-comandos-zless-o-zcat" class="section level3">
-<h3><span class="header-section-number">1.10.1</span> Exprolemos el archivo comprimido (con compresión gnu zip) con usando los comandos <b>zless</b> o <b>zcat</b></h3>
+<ul>
+<li>Exploremos el archivo comprimido (con compresión gnu zip) con usando los comandos <b>zless</b> o <b>zcat</b></li>
+</ul>
 <pre><code>zless assembly_summary.txt.gz </code></pre>
 <pre class="bash"><code># veamos las 5 primeras líneas del archivo
 zcat assembly_summary.txt.gz | head -5</code></pre>
@@ -953,21 +969,16 @@ zcat assembly_summary.txt.gz | head -5</code></pre>
 ## GCF_000010525.1  PRJNA224116 SAMD00060925        representative genome   438753  7   Azorhizobium caulinodans ORS 571    strain=ORS 571      latest  Complete Genome Major   Full    2007/10/16  ASM1052v1   University of Tokyo GCA_000010525.1 identical   ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/010/525/GCF_000010525.1_ASM1052v1        assembly from type material
 ## GCF_000007365.1  PRJNA224116 SAMN02604269        representative genome   198804  9   Buchnera aphidicola str. Sg (Schizaphis graminum)   strain=Sg       latest  Complete Genome Major   Full    2002/07/02  ASM736v1    Uppsala Univ.   GCA_000007365.1 identical   ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/007/365/GCF_000007365.1_ASM736v1     
 ## GCF_000007725.1  PRJNA224116 SAMN02604289        representative genome   224915  9   Buchnera aphidicola str. Bp (Baizongia pistaciae)   strain=Bp (Baizongia pistaciae)     latest  Complete Genome Major   Full    2003/01/29  ASM772v1    Valencia Univ.  GCA_000007725.1 identical   ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/007/725/GCF_000007725.1_ASM772v1     </code></pre>
-</div>
-<div id="herramientas-de-filtrado-de-texto-de-unixlinux-cut-sort-uniq-wc-grep-y" class="section level3">
-<h3><span class="header-section-number">1.10.2</span> Herramientas de filtrado de texto de UNIX/Linux: <b>cut</b>, <b>sort</b>, <b>uniq</b>, <b>wc</b> <b>grep</b> y <b>|</b></h3>
+<div id="ejemplos-de-herramientas-de-filtrado-de-texto-en-accion" class="section level3">
+<h3><span class="header-section-number">1.10.1</span> Ejemplos de herramientas de filtrado de texto en acción</h3>
 <ul>
 <li>cut corta líneas de texto/tablas por delimitadores de campo (-d) específicos (TAB por defecto), extrayendo los campos indicados con -f (cut -d’ ’ -f1-3,5,9)</li>
 <li>sort ordena (sor -u; sort -nrk2; sort -dk1)</li>
 <li>wc cuenta líneas, palabras y caracteres (wc -l)</li>
 <li>uniq regresa listas de valores únicos (uniq -c)</li>
 <li>grep Filtra las lineas de un archivo que contienen (o no) caracteres o expresiones regulares (grep -E ‘^XXX|YYY|zzz$’; grep -v ‘^#’)</li>
-<li>el pipe ‘|’ conecta la salida de un comando <STDOUT> con la entrada &gt;STDIN&gt; de otro</li>
-</ul>
-<div id="ejemplos-de-cut-sort-uniq-wc-grep-y-en-accion" class="section level4">
-<h4><span class="header-section-number">1.10.2.1</span> Ejemplos de <b>cut</b>, <b>sort</b>, <b>uniq</b>, <b>wc</b> <b>grep</b> y <b>|</b> en acción</h4>
-<ul>
-<li>¿cuántas líneas tiene el archivo assembly_summary.txt.gz?</li>
+<li><p>el pipe ‘|’ conecta la salida de un comando <STDOUT> con la entrada &gt;STDIN&gt; de otro</p></li>
+<li><p>¿cuántas líneas tiene el archivo assembly_summary.txt.gz?</p></li>
 </ul>
 <pre class="bash"><code># ¿cuántas líneas tiene el archivo assembly_summary.txt.gz?
 zcat assembly_summary.txt.gz | wc
@@ -1077,14 +1088,13 @@ zgrep -E 'Acinetobacter|Pseudomonas|Klebsiella' assembly_summary.txt.gz | cut -f
 <p>Veremos la gran utilidad y versatilidad de combinaciones de estos comandos para el procesamiento de archivos de secuencias en un ejercicio más adelante.</p>
 </div>
 </div>
-</div>
 <div id="manual-de-cada-comando-man-command" class="section level2">
 <h2><span class="header-section-number">1.11</span> Manual de cada comando: <b>man command</b></h2>
 <pre class="bash"><code># mira las opciones de cut y sort en la manpage
 man cut | head -20
 
 man sort | head -20</code></pre>
-<pre><code>## CUT(1)                                                                                       User Commands                                                                                      CUT(1)
+<pre><code>## CUT(1)                                             User Commands                                            CUT(1)
 ## 
 ## NAME
 ##        cut - remove sections from each line of files
@@ -1104,7 +1114,7 @@ man sort | head -20</code></pre>
 ## 
 ##        -c, --characters=LIST
 ##               select only these characters
-## SORT(1)                                                                                      User Commands                                                                                     SORT(1)
+## SORT(1)                                            User Commands                                           SORT(1)
 ## 
 ## NAME
 ##        sort - sort lines of text files
@@ -1156,7 +1166,7 @@ echo &quot;$archivo_de_comandos_linux&quot;</code></pre>
 date=$(date | awk '{print $3,$2,$6}' | sed 's/ //g')
 h=$(hostname)
 echo &quot;&gt;&gt;&gt; working in: $wkdir at &lt;$h&gt; on &lt;$date&gt;&quot;</code></pre>
-<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux at &lt;alisio&gt; on &lt;21jul2019&gt;</code></pre>
+<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux at &lt;alisio&gt; on &lt;22jul2019&gt;</code></pre>
 <ul>
 <li>Modificación de variables y operaciones con ellas</li>
 </ul>
@@ -1180,15 +1190,155 @@ echo &quot;basedir has ${#basedir} characters  # \${#basedir}&quot;
 </div>
 <div id="condicionales" class="section level3">
 <h3><span class="header-section-number">1.13.2</span> Condicionales</h3>
+<div id="comparacion-de-integros" class="section level4">
+<h4><span class="header-section-number">1.13.2.1</span> Comparación de íntegros</h4>
+<pre class="bash"><code>i=5
+j=3
+
+if [ &quot;$i&quot; -lt &quot;$j&quot; ]; then
+   echo &quot;$i &lt; $j&quot;
+elif [ &quot;$i&quot; -gt &quot;$j&quot; ]; then
+   echo &quot;$i &gt; $j &quot;
+fi</code></pre>
+<pre><code>## 5 &gt; 3</code></pre>
+</div>
+<div id="comparacion-de-cadenas-de-caracteres" class="section level4">
+<h4><span class="header-section-number">1.13.2.2</span> Comparación de cadenas de caracteres</h4>
+<pre class="bash"><code>i=carla
+j=juan
+
+if [ &quot;$i&quot; == &quot;$j&quot; ]; then
+   echo &quot;$i = $j&quot;
+elif [ &quot;$i&quot; != &quot;$j&quot; ]; then
+   echo &quot;i:$i no es igual a i:$j &quot;
+fi</code></pre>
+<pre><code>## i:carla no es igual a i:juan</code></pre>
+</div>
+<div id="comprobacion-de-la-existencia-de-un-archivo-de-tamano-0-bytes" class="section level4">
+<h4><span class="header-section-number">1.13.2.3</span> Comprobación de la existencia de un archivo de tamaño &gt; 0 bytes</h4>
+<pre class="bash"><code>touch empty_file
+ls -l empty_file
+ls -l *gz
+f=$(ls *gz)
+
+if [ -e empty_file  ]; then
+   echo &quot;empty_file file exists&quot;
+fi
+
+if [ ! -s empty_file  ]; then
+   echo &quot;empty_file file exists but is empty&quot;
+fi
+
+if [ -s &quot;$f&quot; ]; then
+   echo &quot;$f exists and is non-empty&quot;
+fi
+</code></pre>
+<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 jul 22 21:43 empty_file
+## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
+## empty_file file exists
+## empty_file file exists but is empty
+## assembly_summary.txt.gz exists and is non-empty</code></pre>
+<pre class="bash"><code># también podemos usar la versión corta del test:
+f=$(ls *gz)
+[ -s &quot;$f&quot; ] &amp;&amp; echo &quot;$f exists and is non-empty&quot;</code></pre>
+<pre><code>## assembly_summary.txt.gz exists and is non-empty</code></pre>
+</div>
 </div>
 <div id="bucles-for" class="section level3">
 <h3><span class="header-section-number">1.13.3</span> Bucles for</h3>
+<pre class="bash"><code># veamos el contenido del directorio antes de correr el bucle
+ls</code></pre>
+<pre><code>## assembly_summary.txt.gz
+## empty_file
+## github_TIB-filoinfo_screenshot.png
+## intro2genomics
+## intro_biocomputo_Linux_pt1.odp
+## Intro_biocomputo_Linux_pt1.pdf
+## linux_basic_commands.tab
+## linux_commands.tab
+## linux_very_basic_commands_table.csv
+## sesion_local_capt_pantalla.png
+## sesion_remota_bonampak_capt_pantalla1.png
+## sesion_remota_bonampak_capt_pantalla2.png
+## sesion_remota_bonampak_capt_pantalla.png
+## Stenotrophomonas_complete_genomes_and_ftp_paths.txt
+## working_with_linux_commands.code
+## working_with_linux_commands.html
+## working_with_linux_commands.Rmd</code></pre>
 <pre class="bash"><code>#&gt;&gt;&gt; AVANZADO: usa un bucle for, acoplado a las herramientas de filtrado arriba mostradas,
 #              para generar archivos que contengan solo los comandos de las diferentes categorias
 #              nombrando a los archivos por estas
 
-for type in $(cut -f2 linux_basic_commands.tab | sort -u); do grep &quot;$type&quot; linux_basic_commands.tab &gt; ${type}.cmds; done
+# for type in $(cut -f2 linux_basic_commands.tab | sort -u); do grep &quot;$type&quot; linux_basic_commands.tab &gt; ${type}.cmds; done
+for type in $(cut -f2 linux_basic_commands.tab | sort -u); do 
+    grep &quot;$type&quot; linux_basic_commands.tab &gt; ${type}.cmds
+done
 </code></pre>
+<pre class="bash"><code># veamos el contenido del directorio después de correr el bucle
+ls</code></pre>
+<pre><code>## administration.cmds
+## assembly_summary.txt.gz
+## Batch.cmds
+## Category.cmds
+## C.cmds
+## empty_file
+## Filesystem.cmds
+## FORTRAN77.cmds
+## github_TIB-filoinfo_screenshot.png
+## intro2genomics
+## intro_biocomputo_Linux_pt1.odp
+## Intro_biocomputo_Linux_pt1.pdf
+## linux_basic_commands.tab
+## linux_commands.tab
+## linux_very_basic_commands_table.csv
+## management.cmds
+## Misc.cmds
+## Network.cmds
+## Process.cmds
+## processing.cmds
+## programming.cmds
+## Programming.cmds
+## SCCS.cmds
+## sesion_local_capt_pantalla.png
+## sesion_remota_bonampak_capt_pantalla1.png
+## sesion_remota_bonampak_capt_pantalla2.png
+## sesion_remota_bonampak_capt_pantalla.png
+## Shell.cmds
+## Stenotrophomonas_complete_genomes_and_ftp_paths.txt
+## System.cmds
+## Text.cmds
+## utilities.cmds
+## working_with_linux_commands.code
+## working_with_linux_commands.html
+## working_with_linux_commands.Rmd</code></pre>
+<pre class="bash"><code># veamos el contenido de uno de los nuevos archivos generados
+cat programming.cmds</code></pre>
+<pre><code>## cc/c99   C programming   Compile standard C programs     IEEE Std 1003.1-2001
+## cflow    C programming   Generate a C-language call graph    System V
+## command  Shell programming   Execute a simple command    
+## ctags    C programming   Create a tags file  3BSD
+## cxref    C programming   Generate a C-language program cross-reference table     System V
+## echo     Shell programming   Write arguments to standard output  Version 2 AT&amp;T UNIX
+## expr     Shell programming   Evaluate arguments as an expression     Version 7 AT&amp;T UNIX
+## false    Shell programming   Return false value  Version 7 AT&amp;T UNIX
+## fort77   FORTRAN77 programming   FORTRAN compiler    XPG4
+## getopts  Shell programming   Parse utility options   
+## lex  C programming   Generate programs for lexical tasks     Version 7 AT&amp;T UNIX
+## logger   Shell programming   Log messages    4.3BSD
+## nm   C programming   Write the name list of an object file   Version 1 AT&amp;T UNIX
+## printf   Shell programming   Write formatted output  4.3BSD-Reno
+## read     Shell programming   Read a line from standard input     
+## sh   Shell programming   Shell, the standard command language interpreter    Version 7 AT&amp;T UNIX (in earlier versions, sh was either the Thompson shell or the PWB shell)
+## sleep    Shell programming   Suspend execution for an interval   Version 4 AT&amp;T UNIX
+## strings  C programming   Find printable strings in files     2BSD
+## strip    C programming   Remove unnecessary information from executable files    Version 1 AT&amp;T UNIX
+## tee  Shell programming   Duplicate the standard output   Version 5 AT&amp;T UNIX
+## test     Shell programming   Evaluate expression     Version 7 AT&amp;T UNIX
+## true     Shell programming   Return true value   Version 7 AT&amp;T UNIX
+## xargs    Shell programming   Construct argument lists and invoke utility     PWB UNIX
+## yacc     C programming   Yet another compiler compiler   PWB UNIX</code></pre>
+<pre class="bash"><code># finalmente borremos los nuevos archivos generados
+rm *.cmds</code></pre>
 </div>
 </div>
 </div>

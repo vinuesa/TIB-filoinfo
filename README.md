@@ -75,7 +75,7 @@ Las clases se imparten del 29 de Julio al 2 de Agosto en el aula 3 de la LCG-UNA
 de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb.unam.mx/TIB2019/programa/)
 
 #### <b>Sesión 1: Introducción a Linux (teoría y práctica)</b>
-  + [presentaci&oacute;n - PDF: Primer contacto con un sistema GNU/Linux](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/Intro_biocomputo_sistemas_Linux_pt1.pdf)
+  + [presentaci&oacute;n - PDF: Primer contacto con un sistema GNU/Linux](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf)
   + Pr&aacute;ctica 1. Navegación del sistema y uso de comandos básicos
       + [pr&aacute;ctica1 - html](https://vinuesa.github.io/TIB-filoinfo/sesion1_intro2linux/) 
       + [pr&aacute;ctica1 - pdf](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/working_with_linux_commands.pdf)

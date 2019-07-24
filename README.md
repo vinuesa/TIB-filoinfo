@@ -1,8 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
 # <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2019" width="115" height="115" align="middle"> <b>TIB2019-T3</b>
 
 ## <b>Talleres Internacionales de Bioinformática - Centro de Ciencias Genómicas, UNAM, Cuernavaca, México</b>
@@ -71,17 +66,20 @@ En [ubuntu](https://www.ubuntu.com/) es muy f&aacute;cil instalar git:
 
 ## <b>Sesiones y materia  l asociado</b>
 ### Horario y lugar de impartici&oacute;n de las sesiones
-Las clases se imparten del 29 de Julio al 2 de Agosto en el aula 3 de la LCG-UNAM, Cuernavaca, Morelos
+Las clases se imparten del 29 de Julio al 2 de Agosto en el auditorio Guillermo Soberón del [CCG-UNAM]((http://www.ccg.unam.mx/), Cuernavaca, Morelos
 de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb.unam.mx/TIB2019/programa/)
 
 #### <b>Sesión 1: Introducción a Linux (teoría y práctica)</b>
   + [presentaci&oacute;n - PDF: Primer contacto con un sistema GNU/Linux](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf)
-  + Pr&aacute;ctica 1. Navegación del sistema y uso de comandos básicos
-      + [pr&aacute;ctica1 - html](https://vinuesa.github.io/TIB-filoinfo/sesion1_intro2linux/) 
-      + [pr&aacute;ctica1 - pdf](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/working_with_linux_commands.pdf)
-  + Pr&aacute;ctica 2. Descarga de secuencias en formato FASTA de GenBank usando el sistema ENTREZ y parseo de los archivos usando herrramientas de filtrado
+  + Pr&aacute;ctica. Navegación del sistema, uso de comandos básicos y ejercicio de parseo de archivo FASTA
+      + [pr&aacute;ctica - html](https://vinuesa.github.io/TIB-filoinfo/sesion1_intro2linux/) 
+      + [pr&aacute;ctica - pdf](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/working_with_linux_commands.pdf)
+  
+<!--
++ Pr&aacute;ctica 2. Descarga de secuencias en formato FASTA de GenBank usando el sistema ENTREZ y parseo de los archivos usando herrramientas de filtrado
     - [pr&aacute;ctica2 - html](https://vinuesa.github.io/OMICAS_UAEM/practica2_parseo_fastas/)
     - [pr&aacute;ctica2 - pdf](https://github.com/vinuesa/OMICAS_UAEM/tree/master/docs/practica2_parseo_fastas/ejercicio_parseo_fastas_ENTREZ.pdf)
+-->
 
 - Lecturas recomendadas:
   - Atma Ivancevic. The ten commandments for learning how to code. [Carrer Column, Nature, 20 Feb. 2019](https://www.nature.com/articles/d41586-019-00653-5)
@@ -92,19 +90,18 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 #### <b>Sesión 2: Conceptos básicos de biología evolutiva y filogenética</b>
 #### <b>Sesión 3: Búsqueda de homólogos usando BLAST desde la línea de comandos (prácticas)</b>
-<!--
-### <b>Sesión 4: Alineamientos múltiples (prácticas)</b>
-### Sesión 5: Introducción a los métodos filogenéticos, árboles de genes y de árboles de especies
-### Sesión 6: Modelos de sustitución y máxima verosimilitud (teoría)
-- Ajuste de modelos e inferencia de filogenias de máxima verosimilitud (prácticas)
-- Delimitación de especies bacterianas usando métodos evolutivos y datos multilocus
-- Inferencia bayesiana de filogenias (teoría y práctica)
-- Pangenómica y evolución microbiana (Seminario de investigación)
-- Cómputo de familias de genes homólogos con datos genómicos (teoría)
-- Análisis pangenómico usando GET_HOMOLOGUES (prácticas)
-- Estrategias para la estima de filogenias genómicas (teoría)
-- Estima de filogenias genómicas con GET_PHYLOMARKERS (prácticas)
--->
+#### <b>Sesión 4: Alineamientos múltiples (prácticas)</b>
+#### <b>Sesión 5: Introducción a los métodos filogenéticos, árboles de genes y de árboles de especies</b>
+#### <b>Sesión 6: Modelos de sustitución y máxima verosimilitud (teoría)</b>
+#### <b>Ajuste de modelos e inferencia de filogenias de máxima verosimilitud (prácticas)</b>
+#### <b>Delimitación de especies bacterianas usando métodos evolutivos y datos multilocus</b>
+#### <b>Inferencia bayesiana de filogenias (teoría y práctica)</b>
+#### <b>Pangenómica y evolución microbiana (Seminario de investigación)</b>
+#### <b>Cómputo de familias de genes homólogos con datos genómicos (teoría)</b>
+#### <b>Análisis pangenómico usando GET_HOMOLOGUES (prácticas)</b>
+#### <b>Estrategias para la estima de filogenias genómicas (teoría)</b>
+#### <b>Estima de filogenias genómicas con GET_PHYLOMARKERS (prácticas)</b>
+
 En construcci&oacute;n ...
 
 

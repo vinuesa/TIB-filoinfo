@@ -1,0 +1,161 @@
+IEEE Std 1003.1-2008 utilities Name 	Category 	Description 	First appeared
+admin 	SCCS 	Create and administer SCCS files 	PWB UNIX
+alias 	Misc 	Define or display aliases 	
+ar 	Misc 	Create and maintain library archives 	Version 1 AT&T UNIX
+asa 	Text processing 	Interpret carriage-control characters 	System V
+at 	Process management 	Execute commands at a later time 	Version 7 AT&T UNIX
+awk 	Text processing 	Pattern scanning and processing language 	Version 7 AT&T UNIX
+basename 	Filesystem 	Return non-directory portion of a pathname; see also dirname 	Version 7 AT&T UNIX
+batch 	Process management 	Schedule commands to be executed in a batch queue 	
+bc 	Misc 	Arbitrary-precision arithmetic language 	Version 6 AT&T UNIX
+bg 	Process management 	Run jobs in the background 	
+cc/c99 	C programming 	Compile standard C programs 	IEEE Std 1003.1-2001
+cal 	Misc 	Print a calendar 	Version 5 AT&T UNIX
+cat 	Filesystem 	Concatenate and print files 	Version 1 AT&T UNIX
+cd 	Filesystem 	Change the working directory 	Version 6 AT&T UNIX
+cflow 	C programming 	Generate a C-language call graph 	System V
+chgrp 	Filesystem 	Change the file group ownership 	PWB UNIX
+chmod 	Filesystem 	Change the file modes/attributes/permissions 	Version 1 AT&T UNIX
+chown 	Filesystem 	Change the file ownership 	Version 1 AT&T UNIX
+cksum 	Filesystem 	Write file checksums and sizes 	4.4BSD
+cmp 	Filesystem 	Compare two files; see also diff 	Version 1 AT&T UNIX
+comm 	Text processing 	Select or reject lines common to two files 	Version 4 AT&T UNIX
+command 	Shell programming 	Execute a simple command 	
+compress 	Filesystem 	Compress data 	4.3BSD
+cp 	Filesystem 	Copy files 	Version 1 AT&T UNIX
+crontab 	Misc 	Schedule periodic background work 	System V
+csplit 	Text processing 	Split files based on context 	PWB UNIX
+ctags 	C programming 	Create a tags file 	3BSD
+cut 	Text processing 	Cut out selected fields of each line of a file 	System III
+cxref 	C programming 	Generate a C-language program cross-reference table 	System V
+date 	Misc 	Display the date and time 	Version 1 AT&T UNIX
+dd 	Filesystem 	Convert and copy a file 	Version 5 AT&T UNIX
+delta 	SCCS 	Make a delta (change) to an SCCS file 	PWB UNIX
+df 	Filesystem 	Report free disk space 	Version 1 AT&T UNIX
+diff 	Text processing 	Compare two files; see also cmp 	Version 5 AT&T UNIX
+dirname 	Filesystem 	Return the directory portion of a pathname; see also basename 	System III
+du 	Filesystem 	Estimate file space usage 	Version 1 AT&T UNIX
+echo 	Shell programming 	Write arguments to standard output 	Version 2 AT&T UNIX
+ed 	Text processing 	The standard text editor 	Version 1 AT&T UNIX
+env 	Misc 	Set the environment for command invocation 	System III
+ex 	Text processing 	Text editor 	1BSD
+expand 	Text processing 	Convert tabs to spaces 	3BSD
+expr 	Shell programming 	Evaluate arguments as an expression 	Version 7 AT&T UNIX
+false 	Shell programming 	Return false value 	Version 7 AT&T UNIX
+fc 	Misc 	Process the command history list 	
+fg 	Process management 	Run jobs in the foreground 	
+file 	Filesystem 	Determine file type 	Version 4 AT&T UNIX
+find 	Filesystem 	Find files 	Version 1 AT&T UNIX
+fold 	Text processing 	Filter for folding lines 	1BSD
+fort77 	FORTRAN77 programming 	FORTRAN compiler 	XPG4
+fuser 	Process management 	List process IDs of all processes that have one or more files open 	System V
+gencat 	Misc 	Generate a formatted message catalog 	
+get 	SCCS 	Get a version of an SCCS file 	PWB UNIX
+getconf 	Misc 	Get configuration values 	
+getopts 	Shell programming 	Parse utility options 	
+grep 	Misc 	Search text for a pattern 	Version 4 AT&T UNIX
+hash 	Misc 	hash database access method 	
+head 	Text processing 	Copy the first part of files 	PWB UNIX[citation needed]
+iconv 	Text processing 	Codeset conversion 	HP-UX
+id 	Misc 	Return user identity 	4.4BSD
+ipcrm 	Misc 	Remove a message queue, semaphore set, or shared memory segment identifier 	System V
+ipcs 	Misc 	Report interprocess communication facilities status 	System V
+jobs 	Process management 	Display status of jobs in the current session 	
+join 	Text processing 	Merges two sorted text files based on the presence of a common field 	Version 7 AT&T UNIX
+kill 	Process management 	Terminate or signal processes 	Version 4 AT&T UNIX
+lex 	C programming 	Generate programs for lexical tasks 	Version 7 AT&T UNIX
+link 	Filesystem 	Create a hard link to a file 	Version 1 AT&T UNIX
+ln 	Filesystem 	Link files 	Version 1 AT&T UNIX
+locale 	Misc 	Get locale-specific information 	
+localedef 	Misc 	Define locale environment 	
+logger 	Shell programming 	Log messages 	4.3BSD
+logname 	Misc 	Return the user's login name 	4.4BSD
+lp 	Text processing 	Send files to a printer 	System V
+ls 	Filesystem 	List directory contents 	Version 1 AT&T UNIX
+m4 	Misc 	Macro processor 	PWB UNIX
+mailx 	Misc 	Process messages 	Version 1 AT&T UNIX
+make 	Programming 	Maintain, update, and regenerate groups of programs 	PWB UNIX
+man 	Misc 	Display system documentation 	Version 2 AT&T UNIX
+mesg 	Misc 	Permit or deny messages 	Version 1 AT&T UNIX
+mkdir 	Filesystem 	Make directories 	Version 1 AT&T UNIX
+mkfifo 	Filesystem 	Make FIFO special files 	4.4BSD[dubious – discuss]
+more 	Text processing 	Display files on a page-by-page basis 	3BSD
+mv 	Filesystem 	Move files 	Version 1 AT&T UNIX
+newgrp 	Misc 	Change to a new group (functionaliy similar to sg[1]) 	Version 6 AT&T UNIX
+nice 	Process management 	Invoke a utility with an altered nice value 	Version 4 AT&T UNIX
+nl 	Text processing 	Line numbering filter 	System III
+nm 	C programming 	Write the name list of an object file 	Version 1 AT&T UNIX
+nohup 	Process management 	Invoke a utility immune to hangups 	Version 4 AT&T UNIX
+od 	Misc 	Dump files in various formats 	Version 1 AT&T UNIX
+paste 	Text processing 	Merge corresponding or subsequent lines of files 	Version 32V AT&T UNIX
+patch 	Text processing 	Apply changes to files 	4.3BSD
+pathchk 	Filesystem 	Check pathnames 	
+pax 	Misc 	Portable archive interchange 	4.4BSD[citation needed]
+pr 	Text processing 	Print files 	Version 1 AT&T UNIX
+printf 	Shell programming 	Write formatted output 	4.3BSD-Reno
+prs 	SCCS 	Print an SCCS file 	PWB UNIX
+ps 	Process management 	Report process status 	Version 4 AT&T UNIX
+pwd 	Filesystem 	print working directory - Return working directory name 	Version 5 AT&T UNIX
+qalter 	Batch utilities 	Alter batch job 	
+qdel 	Batch utilities 	Delete batch jobs 	
+qhold 	Batch utilities 	Hold batch jobs 	
+qmove 	Batch utilities 	Move batch jobs 	
+qmsg 	Batch utilities 	Send message to batch jobs 	
+qrerun 	Batch utilities 	Rerun batch jobs 	
+qrls 	Batch utilities 	Release batch jobs 	
+qselect 	Batch utilities 	Select batch jobs 	
+qsig 	Batch utilities 	Signal batch jobs 	
+qstat 	Batch utilities 	Show status of batch jobs 	
+qsub 	Batch utilities 	Submit a script 	
+read 	Shell programming 	Read a line from standard input 	
+renice 	Process management 	Set nice values of running processes 	4BSD
+rm 	Filesystem 	Remove directory entries 	Version 1 AT&T UNIX
+rmdel 	SCCS 	Remove a delta from an SCCS file 	PWB UNIX
+rmdir 	Filesystem 	Remove directories 	Version 1 AT&T UNIX
+sact 	SCCS 	Print current SCCS file-editing activity 	System III
+sccs 	SCCS 	Front end for the SCCS subsystem 	4.3BSD
+sed 	Text processing 	Stream editor 	Version 7 AT&T UNIX
+sh 	Shell programming 	Shell, the standard command language interpreter 	Version 7 AT&T UNIX (in earlier versions, sh was either the Thompson shell or the PWB shell)
+sleep 	Shell programming 	Suspend execution for an interval 	Version 4 AT&T UNIX
+sort 	Text processing 	Sort, merge, or sequence check text files 	Version 1 AT&T UNIX
+split 	Misc 	Split files into pieces 	Version 3 AT&T UNIX
+strings 	C programming 	Find printable strings in files 	2BSD
+strip 	C programming 	Remove unnecessary information from executable files 	Version 1 AT&T UNIX
+stty 	Misc 	Set the options for a terminal 	Version 2 AT&T UNIX
+tabs 	Misc 	Set terminal tabs 	PWB UNIX
+tail 	Text processing 	Copy the last part of a file 	PWB UNIX[citation needed]
+talk 	Misc 	Talk to another user 	4.2BSD
+tee 	Shell programming 	Duplicate the standard output 	Version 5 AT&T UNIX
+test 	Shell programming 	Evaluate expression 	Version 7 AT&T UNIX
+time 	Process management 	Time a simple command 	Version 3 AT&T UNIX
+touch 	Filesystem 	Change file access and modification times 	Version 7 AT&T UNIX
+tput 	Misc 	Change terminal characteristics 	System V
+tr 	Text processing 	Translate characters 	Version 4 AT&T UNIX
+true 	Shell programming 	Return true value 	Version 7 AT&T UNIX
+tsort 	Text processing 	Topological sort 	Version 7 AT&T UNIX
+tty 	Misc 	Return user's terminal name 	Version 1 AT&T UNIX
+type 	Misc 	Displays how a name would be interpreted if used as a command 	
+ulimit 	Misc 	Set or report file size limit 	
+umask 	Misc 	Get or set the file mode creation mask 	System III
+unalias 	Misc 	Remove alias definitions 	
+uname 	Misc 	Return system name 	PWB UNIX
+uncompress 	Misc 	Expand compressed data 	4.3BSD
+unexpand 	Text processing 	Convert spaces to tabs 	3BSD
+unget 	SCCS 	Undo a previous get of an SCCS file 	System III
+uniq 	Text processing 	Report or filter out repeated lines in a file 	Version 3 AT&T UNIX
+unlink 	Filesystem 	Call the unlink function 	Version 1 AT&T UNIX
+uucp 	Network 	System-to-system copy 	Version 7 AT&T UNIX
+uudecode 	Network 	Decode a binary file 	4BSD
+uuencode 	Network 	Encode a binary file 	4BSD
+uustat 	Network 	uucp status inquiry and job control 	System III
+uux 	Process management 	Remote command execution 	Version 7 AT&T UNIX
+val 	SCCS 	Validate SCCS files 	System III
+vi 	Text processing 	Screen-oriented (visual) display editor 	1BSD
+wait 	Process management 	Await process completion 	Version 4 AT&T UNIX
+wc 	Text processing 	Line, word and byte or character count 	Version 1 AT&T UNIX
+what 	SCCS 	Identify SCCS files 	PWB UNIX
+who 	System administration 	Display who is on the system 	Version 1 AT&T UNIX
+write 	Misc 	Write to another user's terminal 	Version 1 AT&T UNIX
+xargs 	Shell programming 	Construct argument lists and invoke utility 	PWB UNIX
+yacc 	C programming 	Yet another compiler compiler 	PWB UNIX
+zcat 	Text processing 	Expand and concatenate data 	4.3BSD

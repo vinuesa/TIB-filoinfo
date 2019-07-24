@@ -64,7 +64,7 @@ En [ubuntu](https://www.ubuntu.com/) es muy f&aacute;cil instalar git:
 
 ***
 
-## <b>Sesiones y materia  l asociado</b>
+## <b>Sesiones y material asociado</b>
 ### Horario y lugar de impartici&oacute;n de las sesiones
 Las clases se imparten del 29 de Julio al 2 de Agosto en el auditorio Guillermo Soberón del [CCG-UNAM]((http://www.ccg.unam.mx/), Cuernavaca, Morelos
 de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb.unam.mx/TIB2019/programa/)

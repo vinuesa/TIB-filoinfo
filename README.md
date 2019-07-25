@@ -84,8 +84,8 @@ Las clases se imparten del 29 de Julio al 2 de Agosto en el auditorio Guillermo 
 de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb.unam.mx/TIB2019/programa/)
 
 #### <b>Sesión 1: Introducción a Linux (teoría y práctica)</b>
-  + [presentaci&oacute;n - PDF: Primer contacto con un sistema GNU/Linux](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf)
-  + Pr&aacute;ctica. Navegación del sistema, uso de comandos básicos y ejercicio de parseo de archivo FASTA
+- [presentaci&oacute;n - PDF: Primer contacto con un sistema GNU/Linux](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf)
+- Pr&aacute;ctica. Navegación del sistema, uso de comandos básicos y ejercicio de parseo de archivo FASTA
       + [pr&aacute;ctica - html](https://vinuesa.github.io/TIB-filoinfo/sesion1_intro2linux/) 
       + [pr&aacute;ctica - pdf](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/working_with_linux_commands.pdf)
   
@@ -103,8 +103,10 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 
 #### <b>Sesión 2: Conceptos básicos de biología evolutiva y filogenética</b>
-#### <b>Sesión 3: Búsqueda de homólogos usando BLAST desde la línea de comandos (prácticas)</b>
-#### <b>Sesión 4: Alineamientos múltiples (prácticas)</b>
+- [presentaci&oacute;n - PDF: conceptos básicos de filogenética y evolución](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion2_conceptos_basicos/sesion2_conceptos_basicos_filogenetica_y_evol.pdf)
+
+#### <b>Sesión 3: Búsqueda de homólogos usando BLAST desde la línea de comandos (teoría y prácticas)</b>
+#### <b>Sesión 4: Alineamientos múltiples (teoría y prácticas)</b>
 #### <b>Sesión 5: Introducción a los métodos filogenéticos, árboles de genes y de árboles de especies</b>
 #### <b>Sesión 6: Modelos de sustitución y máxima verosimilitud (teoría)</b>
 #### <b>Ajuste de modelos e inferencia de filogenias de máxima verosimilitud (prácticas)</b>

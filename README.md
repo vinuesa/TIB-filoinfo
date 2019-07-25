@@ -1,5 +1,7 @@
 # <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2019" width="115" height="115" align="middle"> <b>TIB2019-T3</b>
 
+<img src="docs/pics/TIB2019_pantallazo.png" alt="TIB2019-screenshot">
+
 ## <b>Talleres Internacionales de Bioinformática - Centro de Ciencias Genómicas, UNAM, Cuernavaca, México</b>
 
 ### Sobre el repositorio
@@ -31,7 +33,11 @@ Al final del curso tendrán una amplia visión sobre el espectro de posibilidade
 Es recomendable tener conocimientos básicos de Unix/Linux a nivel básico, ya que todas las demostraciones de software se harán en este sistema operativo.
 
 #### Requisitos técnicos
-Es necesario que el alumno traiga su computadora personal, de preferencia con Linux (o MacOS X) como sistema operativo. Si usan Windows, deberán tener instalado [MobaXterm](https://mobaxterm.mobatek.net/download-home-edition.html) (para Ms Windows), o alguna otra herramienta que permita establecer una conexión SSH al servidor que corre los programas a usar en el curso.
+Es necesario que el alumno traiga su computadora personal, de preferencia con Linux (o MacOS X) como sistema operativo. 
+
+<b>Si usan Windows, deberán tener instalado [MobaXterm](https://mobaxterm.mobatek.net/download-home-edition.html) (para Ms Windows) antes de llegar al taller!</b>. 
+
+Aquí tienen [instrucciones para la instalación de MobaXterm en Windows](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/Instalación_de_mobaXterm_en_Windows.pdf)
 
 ### Sobre el profesor
 Hola, me llamo [Pablo Vinuesa](http://www.ccg.unam.mx/~vinuesa/). Soy investigador titular del 
@@ -53,14 +59,22 @@ El material del [T3, TIB-filoinfo](http://congresos.nnb.unam.mx/TIB2019/t3-anali
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0</a>
 
+
 ### Clonaci&oacute;n del repositorio
-Si tienes instalado [git](https://git-scm.com/) en tu computadora, puedes clonar el repositorio con el comando:
+- Si tienes instalado [git](https://git-scm.com/) en tu computadora, puedes clonar el repositorio con el comando:
 
    <code>git clone https://github.com/vinuesa/TIBS-filoinfo.git</code>
 
-En [ubuntu](https://www.ubuntu.com/) es muy f&aacute;cil instalar git: 
+- Para actualizar el repositorio, ejecuta este comando desde dentro del directorio TIBS-filoinfo
+  
+   <code>git pull https://github.com/vinuesa/TIBS-filoinfo.git</code>
+
+En [ubuntu](https://www.ubuntu.com/) y [MobaXterm](https://mobaxterm.mobatek.net/download-home-edition.html) es muy f&aacute;cil instalar git: 
 
   <code>sudo apt install git</code>
+
+Vean además las [instrucciones para la instalación de MobaXterm en Windows](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/Instalación_de_mobaXterm_en_Windows.pdf), 
+que indican cómo instalar el <i>Git plugin</i> de MobaXterm. 
 
 ***
 

@@ -106,6 +106,15 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 - [presentaci&oacute;n - PDF: conceptos básicos de filogenética y evolución](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion2_conceptos_basicos/sesion2_conceptos_basicos_filogenetica_y_evol.pdf)
 
 #### <b>Sesión 3: Búsqueda de homólogos usando BLAST desde la línea de comandos (teoría y prácticas)</b>
+- [presentación - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/Tema3_BLAST_OVERVIEW.pdf)
+
+<!--
+
+- práctica1 - comandos
+- práctica1 - 16S_4blastN.tgz
+- práctica1 - gene_discovery_and_annotation_using_blastx.tgz
+
+-->
 #### <b>Sesión 4: Alineamientos múltiples (teoría y prácticas)</b>
 #### <b>Sesión 5: Introducción a los métodos filogenéticos, árboles de genes y de árboles de especies</b>
 #### <b>Sesión 6: Modelos de sustitución y máxima verosimilitud (teoría)</b>

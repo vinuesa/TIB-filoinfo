@@ -83,6 +83,9 @@ que indican cómo instalar el <i>Git plugin</i> de MobaXterm.
 Las clases se imparten del 29 de Julio al 2 de Agosto en el auditorio Guillermo Soberón del [CCG-UNAM]((http://www.ccg.unam.mx/), Cuernavaca, Morelos
 de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb.unam.mx/TIB2019/programa/)
 
+
+### Lunes 29 de Julio
+
 #### <b>Sesión 1: Introducción a Linux (teoría y práctica)</b>
 - [presentaci&oacute;n - PDF: Primer contacto con un sistema GNU/Linux](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf)
 - Pr&aacute;ctica. Navegación del sistema, uso de comandos básicos y ejercicio de parseo de archivo FASTA
@@ -100,11 +103,21 @@ de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb
   - Velez Rueda AJ, Benítez GI, Marchetti J, Hasenahuer MA, Fornasari MS, Palopoli N, Parisi G. Bioinformatics calls the school: Use of smartphones to introduce
 Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):e1006473.](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006473)
   - Dudley JT, Butte AJ. A quick guide for developing effective bioinformatics programming skills. [PLoS Comput Biol. 2009 Dec;5(12):e1000589](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000589)
-  - [The Linux Command Line](http://linuxcommand.org/lc3_learning_the_shell.php#contents)
+  - [The Linux Command Line - a complete introduction. William E. Shotts, Jr. No Starch Press](http://linuxcommand.org/lc3_learning_the_shell.php#contents)
+  - [Bioinformatics Data Skills: Reproducible and Robust Research with Open Source Tools. Vince Buffalo. O'Reilly Media 2014](http://freecomputerbooks.com/Bioinformatics-Data-Skills.html)
 
 
 #### <b>Sesión 2: Conceptos básicos de biología evolutiva y filogenética</b>
 - [presentaci&oacute;n - PDF: conceptos básicos de filogenética y evolución](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion2_conceptos_basicos/sesion2_conceptos_basicos_filogenetica_y_evol.pdf)
+
+
+- Lecturas recomendadas
+  - [Fitch WM. Homology a personal view on some of the problems. Trends Genet. 2000 May;16(5):227-31](https://www.ncbi.nlm.nih.gov/pubmed/10782117)
+  - [Koonin EV. Orthologs, paralogs, and evolutionary genomics. Annu Rev Genet. 2005;39:309-38](https://www.ncbi.nlm.nih.gov/pubmed/16285863)
+  - [Glover N, Dessimoz C, Ebersberger I, Forslund SK, Gabaldón T, Huerta-Cepas J, Martin MJ et al. Quest for Orthologs Consortium. Advances and Applications in the Quest for Orthologs. Mol Biol Evol. 2019 Jun 26. pii: msz150. doi: 10.1093/molbev/msz150.](https://www.ncbi.nlm.nih.gov/pubmed/31241141)
+
+
+### Martes 30 de Julio
 
 #### <b>Sesión 3: Búsqueda de homólogos usando BLAST desde la línea de comandos (teoría y prácticas)</b>
 - [presentación - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/Tema3_BLAST_OVERVIEW.pdf)
@@ -116,15 +129,36 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 - práctica1 - gene_discovery_and_annotation_using_blastx.tgz
 
 -->
+
+- Lecturas recomendadas
+  - [Camacho C, Coulouris G, Avagyan V, Ma N, Papadopoulos J, Bealer K, Madden TL. BLAST+: architecture and applications. BMC Bioinformatics. 2009 Dec 15;10:421](https://www.ncbi.nlm.nih.gov/pubmed/20003500)
+  - [Hu G, Kurgan L. Sequence Similarity Searching. Curr Protoc Protein Sci. 2019 Feb;95(1):e71. doi: 10.1002/cpps.71](https://www.ncbi.nlm.nih.gov/pubmed/30102464)
 #### <b>Sesión 4: Alineamientos múltiples (teoría y prácticas)</b>
+
+- Lecturas recomendadas
+  - [Simossis V, Kleinjung J, Heringa J. An overview of multiple sequence alignment. Curr Protoc Bioinformatics. 2003 Nov;Chapter 3:Unit 3.7](https://www.ncbi.nlm.nih.gov/pubmed/18428699)
+  - [Sievers F, Higgins DG. Clustal Omega for making accurate alignments of many protein sequences. Protein Sci. 2018 Jan;27(1):135-145](https://www.ncbi.nlm.nih.gov/pubmed/28884485)
+
 #### <b>Sesión 5: Introducción a los métodos filogenéticos, árboles de genes y de árboles de especies</b>
+
+- Lecturas recomendadas
+  - [Yang Z, Rannala B. Molecular phylogenetics: principles and practice. Nat Rev Genet. 2012 Mar 28;13(5):303-14](https://www.ncbi.nlm.nih.gov/pubmed/22456349)
+
+### Miércoles 31 de Julio
 #### <b>Sesión 6: Modelos de sustitución y máxima verosimilitud (teoría)</b>
 #### <b>Ajuste de modelos e inferencia de filogenias de máxima verosimilitud (prácticas)</b>
 #### <b>Delimitación de especies bacterianas usando métodos evolutivos y datos multilocus</b>
+
 #### <b>Inferencia bayesiana de filogenias (teoría y práctica)</b>
+- Lecturas recomendadas
+  - [Nascimento FF, Reis MD, Yang Z. A biologist's guide to Bayesian phylogenetic analysis. Nat Ecol Evol. 2017 Oct;1(10):1446-1454](https://www.ncbi.nlm.nih.gov/pubmed/28983516)
+
+### Jueves 1 de Agosto
 #### <b>Pangenómica y evolución microbiana (Seminario de investigación)</b>
 #### <b>Cómputo de familias de genes homólogos con datos genómicos (teoría)</b>
 #### <b>Análisis pangenómico usando GET_HOMOLOGUES (prácticas)</b>
+
+### Viernes 2 de Agosto
 #### <b>Estrategias para la estima de filogenias genómicas (teoría)</b>
 #### <b>Estima de filogenias genómicas con GET_PHYLOMARKERS (prácticas)</b>
 

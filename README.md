@@ -100,6 +100,7 @@ de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb
   - Velez Rueda AJ, Benítez GI, Marchetti J, Hasenahuer MA, Fornasari MS, Palopoli N, Parisi G. Bioinformatics calls the school: Use of smartphones to introduce
 Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):e1006473.](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006473)
   - Dudley JT, Butte AJ. A quick guide for developing effective bioinformatics programming skills. [PLoS Comput Biol. 2009 Dec;5(12):e1000589](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000589)
+  - [The Linux Command Line](http://linuxcommand.org/lc3_learning_the_shell.php#contents)
 
 
 #### <b>Sesión 2: Conceptos básicos de biología evolutiva y filogenética</b>

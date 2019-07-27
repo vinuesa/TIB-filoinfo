@@ -121,15 +121,9 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 #### <b>Sesión 3: Búsqueda de homólogos usando BLAST desde la línea de comandos (teoría y prácticas)</b>
 - [presentación - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/Tema3_BLAST_OVERVIEW.pdf)
-
-<!--
-
-- práctica1 - comandos
-- práctica1 - 16S_4blastN.tgz
-- práctica1 - gene_discovery_and_annotation_using_blastx.tgz
-
--->
-
+- [práctica - comandos, txt](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/runing_and_parsing_BLAST_from_the_cmd_line.commands)
+- [práctica - 16S_4blastN.tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/16S_4blastN.tgz)
+- [práctica - gene_discovery_and_annotation_using_blastx.tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/gene_discovery_and_annotation_using_blastx.tgz)
 - Lecturas recomendadas
   - [Camacho C, Coulouris G, Avagyan V, Ma N, Papadopoulos J, Bealer K, Madden TL. BLAST+: architecture and applications. BMC Bioinformatics. 2009 Dec 15;10:421](https://www.ncbi.nlm.nih.gov/pubmed/20003500)
   - [Hu G, Kurgan L. Sequence Similarity Searching. Curr Protoc Protein Sci. 2019 Feb;95(1):e71. doi: 10.1002/cpps.71](https://www.ncbi.nlm.nih.gov/pubmed/30102464)

@@ -1,0 +1,166 @@
+######################
+# >>> TIB2019-T3 <<< #
+######################
+# Practicas de alineamiento multiple usando programas de la familia clustal
+# Autor: Pablo Vinuesa; CCG-UNAM; http://www.ccg.unam.mx:/~vinuesa/
+# https://github.com/vinuesa/TIB-filoinfo
+# V2: Julio 2019
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#======================================================================================
+# uso basico de clustalw
+clustalw -infile=fasta_no_alineado -align -output=fasta -outfile=archivo_cluwaln.fasta
+
+clustalw -infile=archivo.fasta -align -pwmatrix=blosum -pwgapopen=12
+-pwgapext=0.2 -matrix=blosum -gapopen=12 -gapext=0.2 -outorder=aligned 
+-convert -outfile=archivo_aln1.phy -output=phylip
+#======================================================================================
+
+
+##################################
+#>>> I) ejemplos con clustalw <<<#
+##################################
+
+# 1) alineamiento estandar de aminoacidos
+clustalw -infile=4_GDP_procar_ualn.faa -outfile=4_GDP_procar_cluAln.faa -output=fasta
+clustalw -infile=6_GDP_eucar_ualn.faa -outfile=6_GDP_eucar_cluAln.faa -output=fasta
+
+# 2) Ahora un alineamiento de perfil contra perfil
+clustalw -profile -profile1=6_GDP_eucar_cluAln.faa -profile2=4_GDP_procar_cluAln.faa -outfile=10_GDP_eucar_prokar.aln
+
+# 3) visualizacion de alineamientos
+# i) un alineamiento en formato fasta
+less 4_GDP_procar_ualn.faa
+
+# ii) un alineamiento en formato clustal
+less 10_GDP_eucar_prokar.aln
+
+# iii) usando seaview, un paquete multiplataforma para filogenetica
+seaview  10_GDP_eucar_prokar.aln &
+
+
+# 4) Alineamiento de CDSs
+clustalw -infile=leuA-Bacillales.fas -outfile=leuA-Bacillales.aln
+
+# exploren el alineamiento. Notan algún problema
+seaview leuA-Bacillales.aln &
+
+# ahora hagamoslo bien:
+# 4.1 traducir fasta de CDSs a proteinas, asumiendo que todos los CDSs estan en el marco de lectura +1!!!
+translate_fastas.pl -e fas -t 11
+
+less leuA-Bacillales_translated.faa
+
+# 4.2 alinear los productos de traduccion (secuencias de proteinas)
+#     NOTA: es crítico pedirle a clustalw que escriba el alineamiento 
+#           con las secuencias en el mismo orden que el archivo de entrada !!!
+clustalw -infile=leuA-Bacillales_translated.faa -outfile=leuA-Bacillales_translated_clu.faa -output=fasta -OUTORDER=input
+
+# 4.3 usar el alineamiento multiple de proteinas para guiar el alineamiento de codones
+./prot2cdnAlns.pl leuA-Bacillales.fas leuA-Bacillales_translated_clu.faa
+
+# compara el resultado con el de leuA-Bacillales_cdnaln.fas con leuA-Bacillales.aln
+seaview  leuA-Bacillales_cdnaln.fas &
+
+
+#======================================================================================
+# opciones de clustalo
+#======================================================================================
+
+
+clustalo --help
+Clustal Omega - 1.2.4 (AndreaGiacomo)
+
+Check http://www.clustal.org for more information and updates.
+
+- Usage: 
+clustalo [-hv] [-i {<file>,-}] 
+   [--hmm-in=<file>]... [--hmm-batch=<file>] 
+   [--dealign] [--profile1=<file>] [--profile2=<file>] 
+       [--is-profile] [-t {Protein, RNA, DNA}] [--infmt={a2m=fa[sta],clu[stal],msf,phy[lip],selex,st[ockholm],vie[nna]}] 
+   [--distmat-in=<file>] [--distmat-out=<file>] [--guidetree-in=<file>] [--guidetree-out=<file>] [--pileup] [--full] [--full-iter]
+   [--cluster-size=<n>] [--clustering-out=<file>] [--trans=<n>] [--posterior-out=<file>] [--use-kimura] [--percent-id] 
+   
+   [-o {file,-}] [--outfmt={a2m=fa[sta],clu[stal],msf,phy[lip],selex,st[ockholm],vie[nna]}] [--residuenumber] [--wrap=<n>] 
+      [--output-order={input-order,tree-order}]
+   
+   [--iterations=<n>] [--max-guidetree-iterations=<n>] [--max-hmm-iterations=<n>] 
+  
+   [--maxnumseq=<n>] [--maxseqlen=<l>] [--auto] 
+  
+   [--threads=<n>] [--pseudo=<file>] [-l <file>] 
+
+   [--version] [--long-version] [--force] [--MAC-RAM=<n>]
+
+
+###################################
+#>>> II) ejemplos con clustalo <<<#
+###################################
+
+# 1) generacion de alineamientos estandar usando un bucle for
+for file in *ualn.faa; do clustalo -i $file -o ${file%.*}_cluOaln.phy --outfmt phy --output-order input-order; done
+
+
+# 2) generacion de un alineamiento de perfiles 
+clustalo --profile1 6_GDP_eucar_ualn_cluOaln.phy --profile2 4_GDP_procar_ualn_cluOaln.phy --infmt phy --outfmt fa -o 10_GDP_eucar_prokar_cluO_prof2prof.faa
+
+# 3) genera alineamiento de codones a partir de los archivos leuA-Bacillales.fas y leuA-Bacillales_translated.faa
+clustalo -ileuA-Bacillales_translated.faa -o leuA-Bacillales_translated_cluo.faa --output-order input-order
+
+# 3.1 usar el alineamiento multiple de proteinas para guiar el alineamiento de codones
+./prot2cdnAlns.pl leuA-Bacillales.fas leuA-Bacillales_translated_cluo.faa
+
+# 3.2 visualiza el resultado
+seaview  leuA-Bacillales_cdnaln.fas &
+
+# 4) por ultimo, genera un alineamiento multiple de CDS con clustalo directamente
+clustalo -i leuA-Bacillales.fas -o leuA-Bacillales_cluoAln.fas
+
+seaview leuA-Bacillales_cluoAln.fas &
+
+# compara los tres alineamientos:
+leuA-Bacillales_cdnaln.fas
+leuA-Bacillales_cluoAln.fas
+
+
+######################################
+#>>> III) Conversión de formatos <<< #
+######################################
+
+# explora el script ./convert_alnFormats_using_clustalw.sh para que entiendas lo que hace
+./convert_alnFormats_using_clustalw.sh leuA-Bacillales_cdnaln.fas nexus
+
+
+# una solucion mas genral y poderosa
+convert_aln_format_batch_bp.pl 
+Usage: /home/vinuesa/bin/convert_aln_format_batch_bp.pl inputformat infile_ext outputformat outputfile_ext
+
+	          Supported formats include:
+
+              bl2seq      Bl2seq Blast output
+              clustalw    clustalw (.aln) format
+              emboss      EMBOSS water and needle format
+              fasta       FASTA format
+              maf         Multiple Alignment Format
+              mase        mase (seaview) format
+              mega        MEGA format
+              meme        MEME format
+              msf         msf (GCG) format
+              nexus       Swofford et al NEXUS format
+              pfam        Pfam sequence alignment format
+              phylip      Felsenstein PHYLIP format
+              prodom      prodom (protein domain) format
+              psi         PSI?BLAST format
+              selex       selex (hmmer) format
+              stockholm   stockholm format
+
+# ejemplo
+convert_aln_format_batch_bp.pl fasta fas phylip phy
+
+ls *phy
+
+head leuA-Bacillales_cdnaln.phy
+
+
+

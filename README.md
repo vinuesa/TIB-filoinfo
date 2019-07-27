@@ -140,7 +140,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
   - [convert_alnFormats_using_clustalw.sh](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/convert_alnFormats_using_clustalw.sh)
   - [convert_aln_format_batch_bp.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/convert_aln_format_batch_bp.pl)
   - [translate_fastas.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/translate_fastas.pl)
-  - [prot2cdnAlns.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/prot2cdnAlns.pl=
+  - [prot2cdnAlns.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/prot2cdnAlns.pl)
 - Lecturas recomendadas
   - Simossis V, Kleinjung J, Heringa J. An overview of multiple sequence alignment. [Curr Protoc Bioinformatics. 2003 Nov;Chapter 3:Unit 3.7](https://www.ncbi.nlm.nih.gov/pubmed/18428699)
   - Sievers F, Higgins DG. Clustal Omega for making accurate alignments of many protein sequences. [Protein Sci. 2018 Jan;27(1):135-145](https://www.ncbi.nlm.nih.gov/pubmed/28884485)

@@ -106,14 +106,17 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
   - The Linux Command Line - a complete introduction. [William E. Shotts, Jr. No Starch Press](http://linuxcommand.org/lc3_learning_the_shell.php#contents)
   - Bioinformatics Data Skills: Reproducible and Robust Research with Open Source Tools. [Vince Buffalo. O'Reilly Media 2014](http://freecomputerbooks.com/Bioinformatics-Data-Skills.html)
 
-#### <b>Sesión 2: Conceptos básicos de biología evolutiva y filogenética</b>
+#### <b>Sesión 2: Conceptos básicos de biología evolutiva, filogenética y (pan)genómica microbiana</b>
 - [presentaci&oacute;n - PDF: conceptos básicos de filogenética y evolución](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion2_conceptos_basicos/sesion2_conceptos_basicos_filogenetica_y_evol.pdf)
-
 
 - Lecturas recomendadas
   - Fitch WM. Homology a personal view on some of the problems. [Trends Genet. 2000 May;16(5):227-31](https://www.ncbi.nlm.nih.gov/pubmed/10782117)
   - Koonin EV. Orthologs, paralogs, and evolutionary genomics. [Annu Rev Genet. 2005;39:309-38](https://www.ncbi.nlm.nih.gov/pubmed/16285863)
   - Glover N, Dessimoz C, Ebersberger I, Forslund SK, Gabaldón T, Huerta-Cepas J, Martin MJ et al. Quest for Orthologs Consortium. Advances and Applications in the Quest for Orthologs. [Mol Biol Evol. 2019 Jun 26. pii: msz150. doi: 10.1093/molbev/msz150.](https://www.ncbi.nlm.nih.gov/pubmed/31241141)
+  - Vernikos G, Medini D, Riley DR, Tettelin H. Ten years of pan-genome analyses. [Curr Opin Microbiol. 2015 Feb;23:148-54](https://www.ncbi.nlm.nih.gov/pubmed/25483351)
+  - McInerney JO, McNally A, O'Connell MJ. Why prokaryotes have pangenomes. [Nat Microbiol. 2017 Mar 28;2:17040](https://www.ncbi.nlm.nih.gov/pubmed/28350002)
+  - Sela I, Wolf YI, Koonin EV. Theory of prokaryotic genome evolution. [Proc Natl Acad Sci U S A. 2016 Oct 11;113(41):11399-11407](https://www.ncbi.nlm.nih.gov/pubmed/27702904)
+  - Land M, Hauser L, Jun SR, Nookaew I, Leuze MR, Ahn TH, Karpinets T, Lund O, Kora G, Wassenaar T, Poudel S, Ussery DW. Insights from 20 years of bacterial genome sequencing. [Funct Integr Genomics. 2015 Mar;15(2):141-61](https://www.ncbi.nlm.nih.gov/pubmed/25722247)
 
 ***
 
@@ -143,10 +146,11 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
   - [prot2cdnAlns.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/prot2cdnAlns.pl)
 - Lecturas recomendadas
   - Simossis V, Kleinjung J, Heringa J. An overview of multiple sequence alignment. [Curr Protoc Bioinformatics. 2003 Nov;Chapter 3:Unit 3.7](https://www.ncbi.nlm.nih.gov/pubmed/18428699)
+  - Sievers F, Wilm A, Dineen D, Gibson TJ, Karplus K, Li W, Lopez R, McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG. Fast, scalable generation of high-quality protein multiple sequence alignments using Clustal Omega. [Mol Syst Biol. 2011 Oct 11;7:539](https://www.ncbi.nlm.nih.gov/pubmed/21988835)
   - Sievers F, Higgins DG. Clustal Omega for making accurate alignments of many protein sequences. [Protein Sci. 2018 Jan;27(1):135-145](https://www.ncbi.nlm.nih.gov/pubmed/28884485)
 
-#### <b>Sesión 5: Introducción a los métodos filogenéticos, árboles de genes y de árboles de especies</b>
-
+#### <b>Sesión 5: Introducción a los métodos filogenéticos, modelos de sustitución y algoritmos de búsqueda de árboles</b>
+- [presentación - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion5_metodos_filogeneticos_y_modelos/Tema5_metodos_filogeneticos_y_modelos.pdf)
 - Lecturas recomendadas
   - Yang Z, Rannala B. Molecular phylogenetics: principles and practice. [Nat Rev Genet. 2012 Mar 28;13(5):303-14](https://www.ncbi.nlm.nih.gov/pubmed/22456349)
 

@@ -48,6 +48,9 @@ Mis [l&iacute;neas de investigaci&oacute;n](http://www.ccg.unam.mx/~vinuesa/rese
 integran la gen&oacute;mica y la bioinform&aacute;tica con la biolog&iacute;a y gen&eacute;tica molecular para entender 
 la evoluci&oacute;n y emergencia de pat&oacute;genos oportunistas a partir de microbios ambientales.
 
+### Sobre los ayudantes
+Tenemos el privilegio de poder contar con <bAli Berenice Posada Reyes</b> y <b>Julio Valerdi Negrero</b> como ayudantes del [T3](http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/). Ambos son personas con un excelente trato, además de ser alumnos de posgardo de la UNAM con amplia experiencia en bionformática y filogenética.
+
 ### Sobre el material did&aacute;ctico
 A trav&eacute;s de estas p&aacute;ginas se distribuyen los apuntes, ejercicios y datos que se usar&aacute;n en el [Taller 3 - An&aacute;lisis comparativo de genomas microbianos: Pangen&oacute;mica y filoinform&aacute;tica](http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/).
 Para tu convenienca, se distribuye en formatos pdf y html.
@@ -76,11 +79,14 @@ En [ubuntu](https://www.ubuntu.com/) y [MobaXterm](https://mobaxterm.mobatek.net
 Vean además las [instrucciones para la instalación de MobaXterm en Windows](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/Instalación_de_mobaXterm_en_Windows.pdf), 
 que indican cómo instalar el <i>Git plugin</i> de MobaXterm. 
 
+### Agradecimientos
+Quiero agradecer expresamente a todo el [Comité Organizador de los TIB2019](http://congresos.nnb.unam.mx/TIB2019/#organizadores) por el apoyo y facilidades prestadas para poder impartir este taller. Un agradecimiento muy especial quiero hacer al L.C.C. Alfredo José Hernández Alvarez (LCG-UNAM) por su invaluable apoyo en la configuración del ambiente e instalación del software en el servidor Linux que vamos a usar en este taller.
+
 ***
 
 ## <b>Sesiones y material asociado</b>
 ### Horario y lugar de impartici&oacute;n de las sesiones
-Las clases se imparten del 29 de Julio al 2 de Agosto en el auditorio Guillermo Soberón del [CCG-UNAM]((http://www.ccg.unam.mx/), Cuernavaca, Morelos
+Las clases se imparten del 29 de Julio al 2 de Agosto en el auditorio Guillermo Soberón del [CCG-UNAM](http://www.ccg.unam.mx/), Cuernavaca, Morelos
 de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb.unam.mx/TIB2019/programa/)
 
 

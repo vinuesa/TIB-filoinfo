@@ -158,9 +158,17 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ***
 
-#### <b>Sesión 6: Modelos de sustitución y máxima verosimilitud (teoría)</b>
-#### <b>Ajuste de modelos e inferencia de filogenias de máxima verosimilitud (prácticas)</b>
-#### <b>Delimitación de especies bacterianas usando métodos evolutivos y datos multilocus</b>
+#### <b>Sesión 6: Selección de modelos e inferencia de filogenias bajo máxima verosimilitud (teoría y práctica)</b>
+- [presentación - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/Tema6_maxima_verosimilitud_y_seleccion_de_models.pdf)
+- práctica
+  - [tutorial phyml, comandos - html]((https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/phyml_commands.html)
+  - [tutorial phyml (secuencias), tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/phyml_tutorial_data.tgz)
+  - [tutorial jmodeltest (comandos y secuencias), tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/jmodeltest_tutorial.tgz)
+- Lecturas recomendadas
+  - Lefort V, Longueville JE, Gascuel O. SMS: Smart Model Selection in PhyML. [Mol Biol Evol. 2017 Sep 1;34(9):2422-2424](https://www.ncbi.nlm.nih.gov/pubmed/28472384)
+  - Criscuolo A. morePhyML: improving the phylogenetic tree space exploration with PhyML 3. Mol [Phylogenet Evol. 2011 Dec;61(3):944-8](https://www.ncbi.nlm.nih.gov/pubmed/21925283)
+  - Guindon S, Dufayard JF, Lefort V, Anisimova M, Hordijk W, Gascuel O. New algorithms and methods to estimate maximum-likelihood phylogenies: assessing the performance of PhyML 3.0. [Syst Biol. 2010 May;59(3):307-21](https://www.ncbi.nlm.nih.gov/pubmed/20525638)
+
 
 #### <b>Inferencia bayesiana de filogenias (teoría y práctica)</b>
 - Lecturas recomendadas
@@ -173,13 +181,15 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 #### <b>Pangenómica y evolución microbiana (Seminario de investigación)</b>
 #### <b>Cómputo de familias de genes homólogos con datos genómicos (teoría)</b>
 #### <b>Análisis pangenómico usando GET_HOMOLOGUES (prácticas)</b>
-
+- Lecturas recomendadas
+  -
 ***
 
 ### Viernes 2 de Agosto
 #### <b>Estrategias para la estima de filogenias genómicas (teoría)</b>
 #### <b>Estima de filogenias genómicas con GET_PHYLOMARKERS (prácticas)</b>
-
+- Lecturas recomendadas
+  -
 En construcci&oacute;n ...
 
 

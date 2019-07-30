@@ -150,8 +150,8 @@ sub print_help
 	   blast-imager.pl > \${file%.fa}_blast_graph.png; done
       
       3) using blastx (from the blast+ suite; note -outfmt 6 usage, wich is equivalent to blastall -p blastx -m 8)
-          for file in *fa; do blastx -query $file -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | \
-          blast-imager.pl > ${file%.*}.png; done	   
+          for file in *fa; do blastx -query \$file -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | \
+          blast-imager.pl > \${file%.*}.png; done	   
       
 
 HELP

@@ -22,13 +22,20 @@
 #====================================================================================
 #>>> PRELIMINARIES:
 #====================================================================================
-# i) download the sequence data to your working directories for this practice
+# i) download or copy the sequence data to your working directories for this practice
+cd && [ ! -d TIB2019-T3 ] && TIB2019-T3
+
+cd TIB2019-T3
+
+mkdir sesion3_BLAST && cd sesion3_BLAST
 
 # ii) Lets generate two subdirectories
 mkdir BLAST_DB_AA BLAST_DB_NT
 
 # iii) lets save the path to our parental working directory in a variable
 wkdir=$(pwd)
+
+cp /space31/PIG/vinuesa/TIB2019-T3/sesion3_BLAST/data/*tgz .
 
 # lets see the contents of the variable $wkdir
 echo $wkdir
@@ -75,12 +82,12 @@ grep '>' 16S_seqs4_blastDB.fna | cut -d_ -f1,2 | sort | uniq -c
 #      What command would you use to inspect the sequences?
 
 # 1.2.1)  generate a proper fasta header for db indexing
-perl -pe 'if( /^>/ ){ $c++; s/>/>gnl|16S_DB|$c / }' 16S_seqs4_blastDB.fna | grep '>' 
+perl -pe 'if( /^>/ ){ $c++; s/>/>gnl|16S_DB|$c / }' 16S_seqs4_blastDB.fna | grep '^>' 
 perl -pe 'if( /^>/ ){ $c++; s/>/>gnl|16S_DB|$c / }' 16S_seqs4_blastDB.fna > 16S_seqs4_blastDB.fnaed
 
 ## 2) run formatdb, generating an indexed DB
 formatdb -i 16S_seqs4_blastDB.fnaed -p F -o T
-
+132.248.220.35
 # 2.1) run blastn (blastall -p blastn), and get only the best hit (-b 1) in tabular format (-m 8).
 blastall -p blastn -i 16S_problema.fna -b 1 -a 6 -d 16S_seqs4_blastDB.fnaed -m 8
 blastall -p blastn -i 16S_problema.fna -b 1 -a 6 -d 16S_seqs4_blastDB.fnaed -m 8 > 16S_problema_blastN_b1_m8.tab
@@ -109,15 +116,15 @@ paste problem_seqs.txt hit_sequence_headers.txt > classified_16S_problema_sequen
 
 blastall -p blastn -i 16S_problema.fna -b 10 -a 6 -d 16S_seqs4_blastDB.fnaed -m 8 > 16S_problema_blastN_b10_m8.tab
 
-perl -ne '@f = split /\t/; print if $f[2] >= 98.5' 16S_problema_blastN_b10_m8.tab | less
-
-# like above, but imposing also aln len > 1000 with implicit split -ane
-perl -ane '{print "$F[0]\tF[1]" if $F[2] > 98.5 && $F[3] > 1000 }' 16S_problema_blastN_b10_m8.tab
-
 # The simplest way to parse a table on the command line is using AWK:
 # see this nice and complete AWK tutorial: http://www.grymoire.com/Unix/Awk.html
 awk '$3 > 98.5 && $4 > 1000' 16S_problema_blastN_b10_m8.tab | cut -f1,2
 awk 'BEGIN{OFS="\t"} $3 > 98.5 && $4 > 1000 {print $1, $2}' 16S_problema_blastN_b10_m8.tab
+
+#perl -ne '@f = split /\t/; print if $f[2] >= 98.5' 16S_problema_blastN_b10_m8.tab | less
+# like above, but imposing also aln len > 1000 with implicit split -ane
+#perl -ane '{print "$F[0]\tF[1]" if $F[2] > 98.5 && $F[3] > 1000 }' 16S_problema_blastN_b10_m8.tab
+
 
 
 #============================
@@ -157,8 +164,6 @@ tar -xvzf gene_discovery_and_annotation_using_blastx.tgz
 #  by means of blastx. To do so, we need to format a blastx-searchable DB using the
 #  protein sequences provided in the file integron_cassettes4blastdb.faa
 #========================================================================================
-
-
 
 # 1) explore FASTA headers and fix them, if required
 grep '^>' integron_cassettes4blastdb.faa | head -20

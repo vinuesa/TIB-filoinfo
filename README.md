@@ -170,6 +170,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 - práctica
   - [tutorial phyml, comandos - html](https://vinuesa.github.io/TIB-filoinfo/sesion6_maxima_verosimilitud/)
   - [tutorial phyml (secuencias), tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/phyml_tutorial_data.tgz)
+  - [tutorial jmodeltest (presentación) - pdf](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/jmodeltest_tutorial.pdf)
   - [tutorial jmodeltest (comandos y secuencias), tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/jmodeltest_tutorial.tgz)
 - Lecturas recomendadas
   - Lefort V, Longueville JE, Gascuel O. SMS: Smart Model Selection in PhyML. [Mol Biol Evol. 2017 Sep 1;34(9):2422-2424](https://www.ncbi.nlm.nih.gov/pubmed/28472384)

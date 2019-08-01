@@ -187,10 +187,11 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 ***
 
 ### Jueves 1 de Agosto
-#### <b>Pangenómica y evolución microbiana (Seminario de investigación)</b>
 #### <b>Cómputo de familias de genes homólogos con datos genómicos usando GET_HOMOLOGUES(teoría)</b>
 - [presentación - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion5_metodos_filogeneticos_y_modelos/sesion7_pangenomica_GET_HOMOLOGUES/pangenomica_microbiana_y_GET_HOMOLOGUES_TIB19.pdf)
-- [Análisis pangenómico con GET_HOMOLOGUES (prácticas)]()
+- [Análisis pangenómico con GET_HOMOLOGUES (código) - txt](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion7_pangenomica_GET_HOMOLOGUES/data/code4_GET_HOMOLOGUES_TIB19-T3.txt)
+- [Análisis pangenómico con GET_HOMOLOGUES (secuencias) - tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion7_pangenomica_GET_HOMOLOGUES/data/pIncAC.tgz)
+
 - Lecturas recomendadas
   - Medini D, Donati C, Tettelin H, Masignani V, Rappuoli R. The microbial pan-genome. [Curr Opin Genet Dev. 2005 Dec;15(6):589-94](https://www.ncbi.nlm.nih.gov/pubmed/16185861)
   - Contreras-Moreira B, Vinuesa P. GET_HOMOLOGUES, a versatile software package for scalable and robust microbial pangenome analysis. [Appl Environ Microbiol. 2013 Dec;79(24):7696-701](https://www.ncbi.nlm.nih.gov/pubmed/24096415)
@@ -202,13 +203,14 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 ### Viernes 2 de Agosto
 #### <b>Estrategias para la estima de filogenias genómicas</b>
 - [presentación - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion8_filogenomica_GET_PHYLOMARKERS/get_phylomarkers_overview_TIB2019-T3.pdf)
+- [tutorial - html](https://github.com/vinuesa/get_phylomarkers/blob/master/docs/GET_PHYLOMARKERS_manual.md#get_phylomarkers-tutorial)
 #### <b>Estima de filogenias genómicas con GET_PHYLOMARKERS (prácticas)</b>
 - Lecturas recomendadas
   - Vinuesa P, Ochoa-Sánchez LE, Contreras-Moreira B. GET_PHYLOMARKERS, a Software Package to Select Optimal Orthologous Clusters for Phylogenomics and Inferring
 Pan-Genome Phylogenies, Used for a Critical Geno-Taxonomic Revision of the Genus Stenotrophomonas. [Front Microbiol. 2018 May 1;9:771](https://www.frontiersin.org/articles/10.3389/fmicb.2018.00771/full)
 
 
-En construcci&oacute;n ...
+#### <b>Pangenómica y evolución microbiana (seminario integrativo de investigación)</b>
 
 
 

@@ -49,7 +49,7 @@ integran la gen&oacute;mica y la bioinform&aacute;tica con la biolog&iacute;a y 
 la evoluci&oacute;n y emergencia de pat&oacute;genos oportunistas a partir de microbios ambientales.
 
 ### Sobre los ayudantes
-Tenemos el privilegio de poder contar con <bAli Berenice Posada Reyes</b> y <b>Julio Valerdi Negrero</b> como ayudantes del [T3](http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/). Ambos son personas con un excelente trato, además de ser alumnos de posgardo de la UNAM con amplia experiencia en bionformática y filogenética.
+Tenemos el privilegio de poder contar con <b>Ali Berenice Posada Reyes</b> y <b>Julio Valerdi Negrero</b> como ayudantes del [T3](http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/). Ambos son personas con un excelente trato, además de ser alumnos de posgardo de la UNAM con amplia experiencia en bionformática y filogenética.
 
 ### Sobre el material did&aacute;ctico
 A trav&eacute;s de estas p&aacute;ginas se distribuyen los apuntes, ejercicios y datos que se usar&aacute;n en el [Taller 3 - An&aacute;lisis comparativo de genomas microbianos: Pangen&oacute;mica y filoinform&aacute;tica](http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/).
@@ -210,7 +210,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 Pan-Genome Phylogenies, Used for a Critical Geno-Taxonomic Revision of the Genus Stenotrophomonas. [Front Microbiol. 2018 May 1;9:771](https://www.frontiersin.org/articles/10.3389/fmicb.2018.00771/full)
 
 
-#### <b>Pangenómica y evolución microbiana (seminario integrativo de investigación)</b>
+#### <b>Pangenómica y evolución de patógenos oportunistas multidrogo-resistentes (seminario integrativo de investigación)</b>
 
 
 

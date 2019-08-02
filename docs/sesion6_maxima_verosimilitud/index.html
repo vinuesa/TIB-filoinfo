@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México" />
 
-<meta name="date" content="2019-07-28" />
+<meta name="date" content="2019-08-01" />
 
 <title>Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</title>
 
@@ -377,7 +377,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</h1>
 <h4 class="author">Pablo Vinuesa, CCG-UNAM, Cuernavaca, México</h4>
-<h4 class="date">2019-07-28</h4>
+<h4 class="date">2019-08-01</h4>
 
 </div>
 
@@ -488,7 +488,7 @@ phyml -i 10_GDP_eucar_prokar_cluO_prof2prof.faa  -d aa -m WAG -c 4 -a e -v e -s 
 <pre><code># visualizemos el alineamiento para confirmar que es tal y que está en formato phylip (requerido por phyml)
 head primates.phy &amp;&amp; tail primates.phy
 
-phyml -i primates.phy -m 000000 -o n &amp;&gt; /dev/null
+phyml -i primates.phy -d nt -m 000000 -f 0.25,0.25,0.25,0.25 -b 0 -c 1 -o n &amp;&gt; /dev/null
 
 # renombremos el archivo
 mv primates.phy_phyml_tree.txt primates_JC.ph
@@ -587,12 +587,12 @@ plot(dfr$model, dfr$lnL, xlab=&quot;substitution models&quot;, ylab=&quot;ln-L v
 dfr
 
 # LRT = 2(   lnL1    -    lnL0  )
-xsq &lt;- 2*( -5778.111 - -5781.239) # 2 veces la diferencia de lnL entre el modelo nulo - alternativo
-xsq # [1] 6.256
+xsq &lt;- 2*(-5778.661 - -5781.796) # 2 veces la diferencia de lnL entre el modelo nulo - alternativo
+xsq # [1] 6.27
 
 # cómputo de estadísticas
-pchisq(xsq,1)      # 0.9876227;  este es el valor critico de la X2 para el estadistico LRT con 1 grado de libertad; [1] 1
-1-(pchisq(xsq,1))  # 0.01237734 esta es la p asociada a dicho valor crítico, SIGNIFICATIVA con alpha = 0.05, pero no con alpha = 0.01
+pchisq(xsq,1)      # 0.9877201;  este es el valor critico de la X2 para el estadistico LRT con 1 grado de libertad; [1] 1
+1-(pchisq(xsq,1))  # 0.01227991; esta es la p asociada a dicho valor crítico, SIGNIFICATIVA con alpha = 0.05, pero no con alpha = 0.01
 
 q()         # para salir de R
             # decimos que NO quieren salvar sesion</code></pre>
@@ -627,27 +627,27 @@ figtree primates.phy_phyml_tree.txt &amp;</code></pre>
 # NOTA: copia todo el bloque, hasta pasado el done, y pégalo en tu consola
 
 # primero estimemos un árbol rápido 
-phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -c 1 
+phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -c 1 -b 0 &amp;&gt; /dev/null
 
 # y renombrémoslo, para su uso como usertree
 mv primates_21_AA.phy_phyml_tree.txt primates_Blosum62.ph
 
 # Corramos un bucle for para hacer ésto más eficiente 
 for mat in BLOSUM62 DAYHOFF JTT LG MTMAM WAG; do
-     echo &quot; &gt;&gt;&gt; running: phyml -i primates_21_AA.phy -d aa -m $mat -u primates_Blosum62.ph -c 1 -v 0 -o r &amp;&gt; /dev/null&quot;
-     phyml -i primates_21_AA.phy -d aa -m $mat -u primates_Blosum62.ph -c 1 -o r &amp;&gt; /dev/null     
+     echo &quot; &gt;&gt;&gt; running: phyml -i primates_21_AA.phy -d aa -m $mat -u primates_Blosum62.ph -c 1 -v 0 -o lr &amp;&gt; /dev/null&quot;
+     phyml -i primates_21_AA.phy -d aa -m $mat -u primates_Blosum62.ph -c 1 -o lr &amp;&gt; /dev/null     
      grep Log- *21_AA*stats.txt &gt; ${mat}.fit
 
-     echo &quot; &gt;&gt;&gt; running: phyml -i primates_21_AA.phy -d aa -m $mat -c 4 -a e -u primates_Blosum62.ph -o r &amp;&gt; /dev/null&quot;
-     phyml -i primates_21_AA.phy -d aa -m ${mat} -c 4 -a e -u primates_Blosum62.ph -o r &amp;&gt; /dev/null     
+     echo &quot; &gt;&gt;&gt; running: phyml -i primates_21_AA.phy -d aa -m $mat -c 4 -a e -u primates_Blosum62.ph -o lr &amp;&gt; /dev/null&quot;
+     phyml -i primates_21_AA.phy -d aa -m ${mat} -c 4 -a e -u primates_Blosum62.ph -o lr &amp;&gt; /dev/null     
      grep Log- *21_AA*stats.txt &gt; ${mat}+G.fit
 
-     echo &quot; &gt;&gt;&gt; running: phyml -i primates_21_AA.phy -d aa -m $mat -f e -c 1 -u primates_Blosum62.ph -o r &amp;&gt; /dev/null&quot;
-     phyml -i primates_21_AA.phy -d aa -m $mat -f e -c 1 -u primates_Blosum62.ph -o r &amp;&gt; /dev/null     
+     echo &quot; &gt;&gt;&gt; running: phyml -i primates_21_AA.phy -d aa -m $mat -f e -c 1 -u primates_Blosum62.ph -o lr &amp;&gt; /dev/null&quot;
+     phyml -i primates_21_AA.phy -d aa -m $mat -f e -c 1 -u primates_Blosum62.ph -o lr &amp;&gt; /dev/null     
      grep Log- *21_AA*stats.txt &gt; ${mat}+f.fit
 
-     echo &quot; &gt;&gt;&gt; running: phyml -i primates_21_AA.phy -d aa -m $mat -u primates_Blosum62.ph -f e -a e -o r &amp;&gt; /dev/null&quot;
-     phyml -i primates_21_AA.phy -d aa -m $mat -u primates_Blosum62.ph -f e -a e -c 4 -o r &amp;&gt; /dev/null     
+     echo &quot; &gt;&gt;&gt; running: phyml -i primates_21_AA.phy -d aa -m $mat -u primates_Blosum62.ph -f e -a e -o lr &amp;&gt; /dev/null&quot;
+     phyml -i primates_21_AA.phy -d aa -m $mat -u primates_Blosum62.ph -f e -a e -c 4 -o lr &amp;&gt; /dev/null     
      grep Log- *21_AA*stats.txt &gt; ${mat}+f+G.fit
 done</code></pre>
 <div id="analisis-grafico-y-numerico-de-resultados-usando-herramientes-del-filtrado-y-r" class="section level4">
@@ -695,15 +695,22 @@ par(opar)
 dfrord &lt;- dfr[order(dfr$lnL),]
 dotchart(dfrord$lnL, labels = dfrord$model, main = &quot;sorted model scores&quot;, xlab=&quot;lnL score&quot;)
 
+# guardémoslo como pdf
+pdf(file=&quot;dotchart_sorted_model_scores_for_primates_21_AA.pdf&quot;)
+dotchart(dfrord$lnL, labels = dfrord$model, main = &quot;sorted model scores&quot;, xlab=&quot;lnL score&quot;)
+dev.off()
+
+
 # veamos los resultados ordenados por valor decreciente de lnL
 dfr[order(dfr$lnL, dfr$model, decreasing = TRUE), ]
-#          model       lnL
-#10      JTT+f+G -4779.895
-#12        JTT+G -4816.827
-#9         JTT+f -4863.585
-#22      WAG+f+G -4871.378
-#18    MTMAM+f+G -4879.238
-#11          JTT -4901.528
+
+#       model       lnL
+#10   JTT+f+G -4775.994
+#12     JTT+G -4813.719
+#9      JTT+f -4862.849
+#18 MTMAM+f+G -4867.374
+#22   WAG+f+G -4868.112
+#11       JTT -4901.877
 # ... truncado
 
 # ¿Qué podemos concluir de esta salida?
@@ -711,9 +718,9 @@ dfr[order(dfr$lnL, dfr$model, decreasing = TRUE), ]
 # Computo de AICmin y deltaAICi         
 # recuerda: AICi = 2Ki - 2(lnLi); donde Ki = numero parametros libres del modelo i; lnLi = lnL del modelo i
 
-AIC_JTTfg &lt;- 2*19 -2*(-4779.895)
-AIC_JTTG  &lt;- 2*1 -2*(-4816.827)
-AIC_JTTf &lt;- 2*19 -2*(-4863.585)
+AIC_JTTfg &lt;- 2*(19+1) -2*(-4775.994)
+AIC_JTTG  &lt;- 2*1 -2*(-4813.719)
+AIC_JTTf &lt;- 2*19 -2*(-4862.849)
 
 cat(AIC_JTTfg, &quot;\n&quot;, AIC_JTTG, &quot;\n&quot;, AIC_JTTf, &quot;\n&quot;)
 
@@ -724,6 +731,9 @@ deltaJTTf &lt;- AIC_JTTf - AICmin
 
 cat (&quot;deltaAIC&quot;, &quot;\t&quot;, &quot;value&quot;, &quot;\n&quot;, &quot;deltaJTTG&quot;, &quot;\t&quot;, deltaJTTG,  &quot;\n&quot;, &quot;deltaJTTf&quot;, &quot;\t&quot;, deltaJTTf,  &quot;\n&quot;)
 
+# deltaAIC     value 
+# deltaJTTG      37.45  # dista &gt;&gt; 10 unidades de AIC del AICmin, por tanto, son modelos que podemos descartar
+# deltaJTTf      171.71 
 
 #&gt;&gt;&gt; CONCLUSION: el análisis de AIC claramente muestra que por mucho el mejor modelo de los evaluados es JTT+f+G &lt;&lt;&lt;</code></pre>
 </div>

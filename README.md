@@ -1,6 +1,6 @@
 # <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2019" width="115" height="115" align="middle"> <b>TIB2019-T3</b>
 
-<img src="docs/pics/TIB2019_banner.png" alt="TIB2019-screenshot">
+<img src="docs/pics/TIB19-T3_foto_de_grupo1.jpg" alt="TIB2019-T3 foto de grupo">
 
 ## <b>Talleres Internacionales de Bioinformática - Centro de Ciencias Genómicas, UNAM, Cuernavaca, México</b>
 

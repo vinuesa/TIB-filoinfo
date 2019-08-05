@@ -1,6 +1,6 @@
 # <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2019" width="115" height="115" align="middle"> <b>TIB2019-T3</b>
 
-<img src="docs/pics/TIB19-T3_foto_de_grupo1.png" alt="TIB2019-T3 foto de grupo" width="200" height="150" align="middle">
+<img src="docs/pics/TIB19-T3_foto_de_grupo1.png" alt="TIB2019-T3 foto de grupo" width="400" height="300" align="middle">
 
 ## <b>Talleres Internacionales de Bioinformática - Centro de Ciencias Genómicas, UNAM, Cuernavaca, México</b>
 
@@ -89,7 +89,7 @@ Quiero agradecer expresamente a todo el [Comité Organizador de los TIB2019](htt
 Las clases se imparten del 29 de Julio al 2 de Agosto en el auditorio Guillermo Soberón del [CCG-UNAM](http://www.ccg.unam.mx/), Cuernavaca, Morelos
 de 9 a 17:30 hrs, seg&uacute;n el [programa de los TIB2019](http://congresos.nnb.unam.mx/TIB2019/programa/)
 
-<img src="docs/pics/PV_impartiendo_clases_TIB19_2.png" alt="TIB2019-T3 foto de grupo" width="200" height="150">
+<img src="docs/pics/PV_impartiendo_clases_TIB19_2.png" alt="TIB2019-T3 foto de grupo" width="400" height="300">
 
 
 ### Lunes 29 de Julio

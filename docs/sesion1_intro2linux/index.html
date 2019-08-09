@@ -387,7 +387,7 @@ $(document).ready(function () {
 <li><a href="#licencia-y-terminos-de-uso"><span class="toc-section-number">1.1</span> Licencia y términos de uso</a></li>
 <li><a href="#referencias-adicionales"><span class="toc-section-number">1.2</span> Referencias adicionales</a></li>
 </ul></li>
-<li><a href="#navegacion-del-sistema-y-operaciones-basicas---priemer-contacto-con-un-sistema-linux"><span class="toc-section-number">2</span> Navegación del sistema y operaciones básicas - priemer contacto con un sistema Linux</a><ul>
+<li><a href="#navegacion-del-sistema-y-operaciones-basicas---primer-contacto-con-un-sistema-linux"><span class="toc-section-number">2</span> Navegación del sistema y operaciones básicas - primer contacto con un sistema Linux</a><ul>
 <li><a href="#conexion-a-un-servidor-y-exploracion-de-sus-caracteristicas-basicas"><span class="toc-section-number">2.1</span> Conexión a un servidor y exploración de sus características básicas</a><ul>
 <li><a href="#hostname-muestra-el-nombre-del-host-la-maquina-a-la-que-estoy-conectado-y-la-ip"><span class="toc-section-number">2.1.1</span> <strong>hostname</strong> muestra el nombre del host (la máquina a la que estoy conectado) y la IP</a></li>
 <li><a href="#uname-muestra-el-sistema-operativo-del-host"><span class="toc-section-number">2.1.2</span> <strong>uname</strong> muestra el sistema operativo del host</a></li>
@@ -488,8 +488,8 @@ $(document).ready(function () {
 <hr />
 </div>
 </div>
-<div id="navegacion-del-sistema-y-operaciones-basicas---priemer-contacto-con-un-sistema-linux" class="section level1">
-<h1><span class="header-section-number">2</span> Navegación del sistema y operaciones básicas - priemer contacto con un sistema Linux</h1>
+<div id="navegacion-del-sistema-y-operaciones-basicas---primer-contacto-con-un-sistema-linux" class="section level1">
+<h1><span class="header-section-number">2</span> Navegación del sistema y operaciones básicas - primer contacto con un sistema Linux</h1>
 <div id="conexion-a-un-servidor-y-exploracion-de-sus-caracteristicas-basicas" class="section level2">
 <h2><span class="header-section-number">2.1</span> Conexión a un servidor y exploración de sus características básicas</h2>
 <p>Estas prácticas están diseñadas para correr en un servidor remoto, pero puedes hacerlo también en una sesión local, es decir, en tu máquina. Sólo tienes que poner en un directorio los archivos con los que vamos a trabajar, los cuales puedes <a href="https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/data">descargar del directorio sesion1_intro2linux/data del sitio GitHub</a> ### <strong>ssh</strong> establecer sesion remota encriptada (segura) via ssh al servidor con número dado de IP</p>
@@ -572,7 +572,7 @@ ls -a | tail </code></pre>
 ## drwxr-xr-x   2 root root       4096 jul 25 09:43 bin
 ## drwxr-xr-x   4 root root       4096 jul 25 09:43 boot
 ## drwxr-xr-x   2 root root       4096 may 30 15:02 cdrom
-## drwxr-xr-x  20 root root       4420 ago  8 18:02 dev
+## drwxr-xr-x  20 root root       4500 ago  8 21:40 dev
 ## drwxr-xr-x 151 root root      12288 ago  4 00:01 etc
 ## drwxr-xr-x   5 root root       4096 jul 19 21:46 home
 ## lrwxrwxrwx   1 root root         33 jul 24 17:51 initrd.img -&gt; boot/initrd.img-4.15.0-55-generic
@@ -584,7 +584,7 @@ ls -a | tail </code></pre>
 ## drwxr-xr-x   3 root root       4096 jun 26 18:32 media
 ## drwxr-xr-x   2 root root       4096 abr 26  2018 mnt
 ## drwxr-xr-x   4 root root       4096 ago  3 10:27 opt
-## dr-xr-xr-x 359 root root          0 ago  8 18:00 proc
+## dr-xr-xr-x 367 root root          0 ago  8 18:00 proc
 ## drwx------   5 root root       4096 jul  4 12:57 root
 ## drwxr-xr-x  35 root root       1060 ago  8 18:02 run
 ## drwxr-xr-x   2 root root      12288 jul 15 14:59 sbin</code></pre>
@@ -808,10 +808,10 @@ fi
 
 # confirmamos que se generaron las ligas
 ls -l | head</code></pre>
-<pre><code>## total 16092
+<pre><code>## total 16088
 ## -rw-r--r-- 1 vinuesa vinuesa  110128 jul 24 18:14 800px-Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
-## lrwxrwxrwx 1 vinuesa vinuesa      78 ago  8 20:46 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## lrwxrwxrwx 1 vinuesa vinuesa      78 ago  8 21:42 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
 ## -rw-r--r-- 1 vinuesa vinuesa  438308 jul 24 18:21 Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa  222602 jul 23 20:19 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
 ## -rw-r--r-- 1 vinuesa vinuesa   87065 jul 22 20:59 github_TIB-filoinfo_screenshot.png
@@ -1304,7 +1304,7 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 ago  8 20:46 empty_file
+<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 ago  8 21:42 empty_file
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty
@@ -1820,6 +1820,9 @@ done</code></pre>
 ## ATGAAGCTCGGCAAGAACGACCGGTCGATGGATGTCGAGGCGGTGTCCTCCGGTTCTCTCGGGCTCGACATTGCACTGGGGATCGGCGGTCTGCCCAAGGGGCGCGTCGTGGAAATCTACGGGCCGGAATCCTCGGGCAAGACCACGCTGGCGCTGCACACGGTGGCGGAAGCGCAGAAGAAGGGCGGCATCTGTGCCTTCATCGACGCCGAGCACGCGCTCGACCCGGTCTATGCACGCAAGCTCGGGGTCAATATCGACGAGCTGCTGATTTCGCAGCCGGACACCGGCGAGCAGGCGCTGGAAATCTGCGACACGCTGGTGCGCTCGGGTGCGGTGGACGTTCTGGTGGTCGATTCGGTCGCGGCGCTGGTGCCGAAGGCCGAACTCGAGGGCGAGATGGGCGATGCGCTGCCGGGTCTCCAGGCCCGCCTGATGAGCCAGGCGCTGCGCAAGCTGACGGCCTCCATCAACAAGTCCCACACCATGGTGATCTTCATCAACCAGATC
 ## &gt;EU574314.1_[Bjaponicum_strain_NeRa14]
 ## ATGAAGCTCGGCAAGAACGACCGGTCGATGGATGTCGAGGCGGTGTCCTCCGGTTCTCTCGGGCTCGACATTGCGCTGGGGATCGGCGGTCTGCCCAAGGGGCGCGTCGTGGAAATCTACGGGCCGGAATCCTCGGGCAAGACCACGCTGGCGCTGCACACGGTGGCGGAAGCGCAGAAGAAGGGCGGAATCTGTGCCTTCATCGACGCCGAGCACGCGCTCGACCCGGTCTATGCGCGCAAGCTGGGGGTCAATATCGACGAGCTGCTGATTTCGCAGCCGGACACGGGCGAGCAGGCGCTGGAAATCTGCGACACGCTGGTGCGCTCGGGTGCGGTGGACGTTCTGGTGGTCGATTCGGTCGCGGCGCTGGTGCCGAAGGCCGAACTCGAGGGCGAGATGGGCGATGCGCTGCCGGGTCTCCAGGCCCGYCTGATGAGCCAGGCGCTGCGCAAGCTGACGGCCTCCATCAACAAGTCCCACACCATGGTGATCTTCATCAACCAGATC</code></pre>
+<ol start="17" style="list-style-type: decimal">
+<li>si quieren, borren todos los archivos generados, para empezar con un directorio de trabajo limpio, para repetir el ejercicio ;)</li>
+</ol>
 <pre class="bash"><code>rm *fnaed *fnaedtab *fas Stenotrophomonas_complete_genomes_and_ftp_paths.txt empty_file</code></pre>
 </div>
 </div>

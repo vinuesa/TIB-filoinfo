@@ -397,7 +397,8 @@ $(document).ready(function () {
 <li><a href="#exploracion-del-sistema-de-archivos"><span class="toc-section-number">2.2</span> Exploración del sistema de archivos</a><ul>
 <li><a href="#pwd-imprime-la-ruta-absoluta-del-directorio-actual"><span class="toc-section-number">2.2.1</span> <strong>pwd</strong> imprime la ruta absoluta del directorio actual</a></li>
 <li><a href="#ls-lista-contenidos-del-directorio"><span class="toc-section-number">2.2.2</span> <strong>ls</strong> lista contenidos del directorio</a></li>
-<li><a href="#expansion-de-caracteres-con-y"><span class="toc-section-number">2.2.3</span> Expansión de caracteres con * y ?</a></li>
+<li><a href="#file-nos-indica-las-propiedades-de-un-archivo"><span class="toc-section-number">2.2.3</span> <strong>file</strong> nos indica las propiedades de un archivo</a></li>
+<li><a href="#expansion-de-caracteres-con-y"><span class="toc-section-number">2.2.4</span> Expansión de caracteres con * y ?</a></li>
 </ul></li>
 <li><a href="#moviendonos-por-el-sistema-de-archivos-comando-cd"><span class="toc-section-number">2.3</span> Moviéndonos por el sistema de archivos: comando <b>cd</b></a><ul>
 <li><a href="#de-nuevo-donde-estoy-imprime-directorio-actual-con-pwd"><span class="toc-section-number">2.3.1</span> de nuevo, ¿dónde estoy?: imprime directorio actual con <b>pwd</b></a></li>
@@ -537,30 +538,52 @@ pwd</code></pre>
 <h3><span class="header-section-number">2.2.2</span> <strong>ls</strong> lista contenidos del directorio</h3>
 <pre class="bash"><code># Qué contiene el directorio actual?
 ls | head</code></pre>
-<pre><code>## 800px-Evolución_UNIX.png
-## assembly_summary.txt.gz
-## Evolución_UNIX.png
+<pre><code>## assembly_summary.txt.gz
 ## fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## github_TIB-filoinfo_screenshot.png
 ## intro_biocomputo_Linux_pt1.odp
 ## Intro_biocomputo_Linux_pt1.pdf
 ## linux_basic_commands.tab
 ## linux_commands.tab
-## linux_very_basic_commands_table.csv</code></pre>
-<pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos
-ls -a | tail </code></pre>
-<pre><code>## sesion_local_capt_pantalla.png
-## sesion_remota_bonampak_capt_pantalla1.png
-## sesion_remota_bonampak_capt_pantalla2.png
-## sesion_remota_bonampak_capt_pantalla.png
-## Taller_CG-FC_pagina_web_CCG.png
-## TIB2019-T3
-## working_with_linux_commands.code
-## working_with_linux_commands.html
-## working_with_linux_commands.pdf
-## working_with_linux_commands.Rmd</code></pre>
+## linux_very_basic_commands_table.csv
+## pics
+## recA_Bradyrhizobium_vinuesa.fna
+## recA_Byuanmingense.fna</code></pre>
+<pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos, y sus propiedades
+ls -al </code></pre>
+<pre><code>## total 17432
+## drwxr-xr-x 5 vinuesa vinuesa    4096 ago  9 20:09 .
+## drwxr-xr-x 3 vinuesa vinuesa    4096 ago  8 18:05 ..
+## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago  8 18:05 assembly_summary.txt.gz
+## lrwxrwxrwx 1 vinuesa vinuesa      53 ago  9 20:00 fetch_recA_bradys_vinuesa_nuccore_screenshot.png -&gt; pics/fetch_recA_bradys_vinuesa_nuccore_screenshot.png
+## -rw-r--r-- 1 vinuesa vinuesa 6280842 ago  9 09:42 intro_biocomputo_Linux_pt1.odp
+## -rw-r--r-- 1 vinuesa vinuesa 3128839 ago  8 18:05 Intro_biocomputo_Linux_pt1.pdf
+## -rwxr-xr-x 1 vinuesa vinuesa   10193 ago  8 18:05 linux_basic_commands.tab
+## lrwxrwxrwx 1 vinuesa vinuesa      78 ago  9 20:09 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## -rwxr-xr-x 1 vinuesa vinuesa    1705 ago  8 18:05 linux_very_basic_commands_table.csv
+## drwxr-xr-x 3 vinuesa vinuesa    4096 ago  9 20:00 pics
+## -rw-r--r-- 1 vinuesa vinuesa   77803 ago  8 20:39 recA_Bradyrhizobium_vinuesa.fna
+## -rw-r--r-- 1 vinuesa vinuesa   17704 ago  9 20:09 recA_Byuanmingense.fna
+## drwxr-xr-x 2 vinuesa vinuesa    4096 ago  8 20:14 recA_seq_data
+## -rwxr-xr-x 1 vinuesa vinuesa       8 ago  9 10:02 .Rhistory
+## drwxr-xr-x 3 vinuesa vinuesa    4096 ago  8 18:33 TIB2019-T3
+## -rwxr-xr-x 1 vinuesa vinuesa    6047 ago  8 18:05 working_with_linux_commands.code
+## -rw-r--r-- 1 vinuesa vinuesa 1109145 ago  9 20:09 working_with_linux_commands.html
+## -rw-r--r-- 1 vinuesa vinuesa  343862 ago  9 19:46 working_with_linux_commands.pdf
+## -rw-r--r-- 1 vinuesa vinuesa   46466 ago  9 20:09 working_with_linux_commands.Rmd</code></pre>
+</div>
+<div id="file-nos-indica-las-propiedades-de-un-archivo" class="section level3">
+<h3><span class="header-section-number">2.2.3</span> <strong>file</strong> nos indica las propiedades de un archivo</h3>
+<pre class="bash"><code># mostrar las características de los archivos con file
+file .Rhistory
+file assembly_summary.txt.gz
+file linux_commands.tab
+file TIB2019-T3</code></pre>
+<pre><code>## .Rhistory: ASCII text
+## assembly_summary.txt.gz: gzip compressed data, was &quot;assembly_summary.txt&quot;, last modified: Mon Jul 22 00:26:11 2019, from Unix
+## linux_commands.tab: symbolic link to /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## TIB2019-T3: directory</code></pre>
 <div id="veamos-el-contenido-del-directorio-raiz" class="section level4">
-<h4><span class="header-section-number">2.2.2.1</span> Veamos el contenido del directorio raiz</h4>
+<h4><span class="header-section-number">2.2.3.1</span> Veamos el contenido del directorio raiz</h4>
 <ul>
 <li>corramos un <span class="math inline">\(ls\)</span> sin argumentos</li>
 </ul>
@@ -595,13 +618,13 @@ ls -a | tail </code></pre>
 ## drwxr-xr-x   3 root root       4096 jun 26 18:32 media
 ## drwxr-xr-x   2 root root       4096 abr 26  2018 mnt
 ## drwxr-xr-x   4 root root       4096 ago  3 10:27 opt
-## dr-xr-xr-x 349 root root          0 ago  9 17:55 proc
+## dr-xr-xr-x 342 root root          0 ago  9 17:55 proc
 ## drwx------   5 root root       4096 jul  4 12:57 root
 ## drwxr-xr-x  35 root root       1060 ago  9 17:56 run
 ## drwxr-xr-x   2 root root      12288 ago  9 09:09 sbin</code></pre>
 </div>
 <div id="veamos-las-primeras-5-entradas-y-ultimas-5-del-directorio-bin" class="section level4">
-<h4><span class="header-section-number">2.2.2.2</span> Veamos las primeras 5 entradas y últimas 5 del directorio /bin</h4>
+<h4><span class="header-section-number">2.2.3.2</span> Veamos las primeras 5 entradas y últimas 5 del directorio /bin</h4>
 <pre class="bash"><code>ls /bin | head -5</code></pre>
 <pre><code>## bash
 ## brltty
@@ -640,7 +663,7 @@ ls -ltr /bin | head -20</code></pre>
 </div>
 </div>
 <div id="expansion-de-caracteres-con-y" class="section level3">
-<h3><span class="header-section-number">2.2.3</span> Expansión de caracteres con * y ?</h3>
+<h3><span class="header-section-number">2.2.4</span> Expansión de caracteres con * y ?</h3>
 <pre class="bash"><code># lista los archivos en /bin que empiezan por las letras b y c
 ls /bin/b* 
 ls /bin/c*</code></pre>
@@ -725,16 +748,16 @@ pwd</code></pre>
 <li>y lista los contenidos</li>
 </ul>
 <pre class="bash"><code>ls | head</code></pre>
-<pre><code>## 800px-Evolución_UNIX.png
-## assembly_summary.txt.gz
-## Evolución_UNIX.png
+<pre><code>## assembly_summary.txt.gz
 ## fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## github_TIB-filoinfo_screenshot.png
 ## intro_biocomputo_Linux_pt1.odp
 ## Intro_biocomputo_Linux_pt1.pdf
 ## linux_basic_commands.tab
 ## linux_commands.tab
-## linux_very_basic_commands_table.csv</code></pre>
+## linux_very_basic_commands_table.csv
+## pics
+## recA_Bradyrhizobium_vinuesa.fna
+## recA_Byuanmingense.fna</code></pre>
 </div>
 </div>
 <div id="generacion-de-directorios-comando-mkdir" class="section level2">
@@ -819,16 +842,16 @@ fi
 
 # confirmamos que se generaron las ligas
 ls -l | head</code></pre>
-<pre><code>## total 19580
-## -rw-r--r-- 1 vinuesa vinuesa  110128 ago  8 18:05 800px-Evolución_UNIX.png
+<pre><code>## total 17424
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago  8 18:05 assembly_summary.txt.gz
-## lrwxrwxrwx 1 vinuesa vinuesa      78 ago  9 19:43 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
-## -rw-r--r-- 1 vinuesa vinuesa  438308 ago  8 18:05 Evolución_UNIX.png
-## -rw-r--r-- 1 vinuesa vinuesa  222602 ago  8 18:05 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## -rw-r--r-- 1 vinuesa vinuesa   87065 ago  8 18:05 github_TIB-filoinfo_screenshot.png
+## lrwxrwxrwx 1 vinuesa vinuesa      78 ago  9 20:14 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## lrwxrwxrwx 1 vinuesa vinuesa      53 ago  9 20:00 fetch_recA_bradys_vinuesa_nuccore_screenshot.png -&gt; pics/fetch_recA_bradys_vinuesa_nuccore_screenshot.png
 ## -rw-r--r-- 1 vinuesa vinuesa 6280842 ago  9 09:42 intro_biocomputo_Linux_pt1.odp
 ## -rw-r--r-- 1 vinuesa vinuesa 3128839 ago  8 18:05 Intro_biocomputo_Linux_pt1.pdf
-## -rwxr-xr-x 1 vinuesa vinuesa   10193 ago  8 18:05 linux_basic_commands.tab</code></pre>
+## -rwxr-xr-x 1 vinuesa vinuesa   10193 ago  8 18:05 linux_basic_commands.tab
+## lrwxrwxrwx 1 vinuesa vinuesa      78 ago  9 20:09 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## -rwxr-xr-x 1 vinuesa vinuesa    1705 ago  8 18:05 linux_very_basic_commands_table.csv
+## drwxr-xr-x 3 vinuesa vinuesa    4096 ago  9 20:00 pics</code></pre>
 <div id="renombramos-la-liga-o-cualquier-archivo-o-directorio" class="section level3">
 <h3><span class="header-section-number">2.6.1</span> renombramos la liga (o cualquier archivo o directorio)</h3>
 <pre class="bash"><code>  mv comandos_de_linux.tab linux_commands.tab</code></pre>
@@ -1125,7 +1148,7 @@ zgrep -E 'Acinetobacter|Pseudomonas|Klebsiella' assembly_summary.txt.gz | cut -f
 <h2><span class="header-section-number">2.12</span> Manual de cada comando: <b>man command</b></h2>
 <pre class="bash"><code># mira las opciones de cut y sort en la manpage
 man cut | head -30</code></pre>
-<pre><code>## CUT(1)                                                        User Commands                                                       CUT(1)
+<pre><code>## CUT(1)                                                                       User Commands                                                                      CUT(1)
 ## 
 ## NAME
 ##        cut - remove sections from each line of files
@@ -1315,7 +1338,7 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 ago  9 19:43 empty_file
+<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 ago  9 20:14 empty_file
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago  8 18:05 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty
@@ -1619,7 +1642,7 @@ zcat assembly_summary.txt.gz | awk 'BEGIN{FS=&quot;\t&quot;; OFS=&quot; ~~~ &quo
 ## Helicobacter pylori GAM100Ai ~~~ ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/310/005/GCF_000310005.2_ASM31000v2
 ## Helicobacter pylori GAM101Biv ~~~ ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/344/945/GCF_000344945.2_ASM34494v2</code></pre>
 <ul>
-<li>genera una estadística del número de genomas por especie (columna # 8) del género Pseudomonas en formato tabular [#Especie_genomas], y muestra sólo las especies con al menos 20 genomas secuenciados. Añade una cabecera a la salida.</li>
+<li>genera una estadística del número de genomas por especie (columna # 8) del género Pseudomonas en formato tabular [EspecieTABnum_genomas], y muestra sólo las especies con al menos 20 genomas secuenciados. Añade una cabecera a la salida.</li>
 </ul>
 <pre class="bash"><code># genera una estadística del número de genomas por especie (columna # 8) del género Pseudomonas en formato tabular [Especie\tnum_genomas], y muestra sólo las especies con al menos 20 genomas secuenciados!
 echo -e &quot;Especie\tnum_genomas&quot;
@@ -1902,7 +1925,7 @@ done</code></pre>
 <ol start="17" style="list-style-type: decimal">
 <li>si quieren, borren todos los archivos generados, para empezar con un directorio de trabajo limpio, para repetir el ejercicio ;)</li>
 </ol>
-<pre class="bash"><code>rm *fnaed *fnaedtab *fas Stenotrophomonas_complete_genomes_and_ftp_paths.txt empty_file</code></pre>
+<pre class="bash"><code>rm *fnaed *fnaedtab *fas Stenotrophomonas_complete_genomes_and_ftp_paths.txt empty_file Pseudomonas_species*</code></pre>
 <hr />
 </div>
 </div>

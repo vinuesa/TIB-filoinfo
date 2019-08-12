@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# the 1st line in a script is the so-called shebang line
+#  which indicates the system which command interpreter 
+#  should read and execute the following code, bash in this case
+#  The shebang line shown above, is a portable version for bash scripts
+
+# AUTHOR: Pablo Vinuesa
+# AIM: learning basic BASH-programming constructs for TIB2019-T3
+# https://github.com/vinuesa/TIB-filoinfo
+
+# global variables
+progname=${0##*/}     # find_dir
+VERSION='0.1_29Jul19' 
+
+# Function definition
+function print_help()
+{
+   # this is a so-called HERE-DOC, to easily print out formatted text
+   cat << HELP
+
+    $progname v$VERSION usage synopsis:
+
+    $progname <int [maximal search depth for (sub)directories, e.g.:1>
+
+    AIM: find directories below the current one at the desired max_depth 
+
+    USAGE EXAMPLES:
+          $progname 1
+          $progname 2
+
+HELP
+
+exit 1
+}
+
+# capture user-provided arguments in variables $1, $2 ... $9
+# and save them to named variables, for better readability
+max_depth=$1
+type=${2:-d}  # if not provided, the second argument is set to 'd' by default.
+
+# check arguments
+[ -z $max_depth ] && print_help
+
+# execute find command with the provided arguments
+find . -maxdepth $max_depth -type $type

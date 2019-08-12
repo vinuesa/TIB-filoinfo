@@ -448,6 +448,7 @@ $(document).ready(function () {
 <li><a href="#bash-scripts---primeros-pasos"><span class="toc-section-number">3.4</span> <strong><span class="math inline">\(Bash\)</span> scripts</strong> - primeros pasos</a><ul>
 <li><a href="#la-shebang-line-usrbinenv-bash-y-permisos-de-ejecucion---el-script-ls_dir"><span class="toc-section-number">3.4.1</span> la “<strong>shebang line</strong>” (#!/usr/bin/env bash) y permisos de ejecución - el script <em>ls_dir</em></a></li>
 <li><a href="#funciones-y-argumentos-posicionales-en-bash---el-script-find_dir"><span class="toc-section-number">3.4.2</span> <strong>Funciones</strong> y <strong>argumentos posicionales</strong> en <span class="math inline">\(Bash\)</span> - el script <em>find_dir</em></a></li>
+<li><a href="#alineamiento-multiple-de-secuencias-e-interconversion-de-formatos-con-align_seqs_with_clustal_or_muscle.sh-y-convert_alnformats_using_clustalw.sh"><span class="toc-section-number">3.4.3</span> Alineamiento múltiple de secuencias e interconversión de formatos con <em>align_seqs_with_clustal_or_muscle.sh</em> y <em>convert_alnFormats_using_clustalw.sh</em></a></li>
 </ul></li>
 </ul></li>
 <li><a href="#el-lenguaje-de-procesamiento-de-patrones-awk"><span class="toc-section-number">4</span> El lenguaje de procesamiento de patrones <b>AWK</b></a><ul>
@@ -558,8 +559,8 @@ ls | head</code></pre>
 ## linux_very_basic_commands_table.csv</code></pre>
 <pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos, y sus propiedades
 ls -al </code></pre>
-<pre><code>## total 16108
-## drwxr-xr-x  5 vinuesa vinuesa    4096 ago 11 18:55 .
+<pre><code>## total 16264
+## drwxr-xr-x  5 vinuesa vinuesa    4096 ago 11 20:52 .
 ## drwxr-xr-x 11 vinuesa vinuesa    4096 ago  1 22:54 ..
 ## -rw-r--r--  1 vinuesa vinuesa  110128 jul 24 18:14 800px-Evolución_UNIX.png
 ## -rw-r--r--  1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
@@ -569,23 +570,24 @@ ls -al </code></pre>
 ## -rw-r--r--  1 vinuesa vinuesa 3534816 jul 28 22:46 intro_biocomputo_Linux_pt1.odp
 ## -rw-r--r--  1 vinuesa vinuesa 3128839 jul 24 20:38 Intro_biocomputo_Linux_pt1.pdf
 ## -rwxr-xr-x  1 vinuesa vinuesa   10193 jul 21 11:21 linux_basic_commands.tab
-## lrwxrwxrwx  1 vinuesa vinuesa      78 ago  8 21:44 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## lrwxrwxrwx  1 vinuesa vinuesa      78 ago 11 20:52 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
 ## -rwxr-xr-x  1 vinuesa vinuesa    1024 jul 21 11:21 .linux_commands.tab.swp
 ## -rwxr-xr-x  1 vinuesa vinuesa    1705 jul 21 11:21 linux_very_basic_commands_table.csv
 ## -rw-rw-r--  1 vinuesa vinuesa  106127 jul 24 19:10 MobaXTerm_plugins_page_screenshot.png
 ## drwxr-xr-x  2 vinuesa vinuesa    4096 jul 24 18:12 MobaXterm_screen_shots
 ## -rw-r--r--  1 vinuesa vinuesa   77803 ago  8 20:46 recA_Bradyrhizobium_vinuesa.fna
+## -rw-r--r--  1 vinuesa vinuesa   17704 ago 11 20:52 recA_Byuanmingense.fna
 ## drwxr-xr-x  2 vinuesa vinuesa    4096 ago  8 19:50 recA_seq_data
-## -rwxr-xr-x  1 vinuesa vinuesa       8 ago  8 22:01 .Rhistory
+## -rwxr-xr-x  1 vinuesa vinuesa       8 ago 11 20:28 .Rhistory
 ## -rw-rw-r--  1 vinuesa vinuesa   51271 jul 22 18:55 sesion_local_capt_pantalla.png
 ## -rw-r--r--  1 vinuesa vinuesa   40746 jul 22 18:56 sesion_remota_bonampak_capt_pantalla1.png
 ## -rw-r--r--  1 vinuesa vinuesa    4468 jul 22 18:57 sesion_remota_bonampak_capt_pantalla2.png
 ## -rw-rw-r--  1 vinuesa vinuesa  408580 jul 22 18:51 sesion_remota_bonampak_capt_pantalla.png
 ## drwxr-xr-x  3 vinuesa vinuesa    4096 ago  8 19:13 TIB2019-T3
 ## -rwxr-xr-x  1 vinuesa vinuesa    6047 jul 21 11:21 working_with_linux_commands.code
-## -rw-r--r--  1 vinuesa vinuesa 1038439 ago  8 21:42 working_with_linux_commands.html
-## -rw-r--r--  1 vinuesa vinuesa  328746 ago  8 21:44 working_with_linux_commands.pdf
-## -rw-r--r--  1 vinuesa vinuesa   51973 ago 11 20:17 working_with_linux_commands.Rmd</code></pre>
+## -rw-r--r--  1 vinuesa vinuesa 1121320 ago 11 20:45 working_with_linux_commands.html
+## -rw-r--r--  1 vinuesa vinuesa  382316 ago 11 20:52 working_with_linux_commands.pdf
+## -rw-r--r--  1 vinuesa vinuesa   53305 ago 11 20:52 working_with_linux_commands.Rmd</code></pre>
 </div>
 <div id="file-nos-indica-las-propiedades-de-un-archivo" class="section level3">
 <h3><span class="header-section-number">2.2.3</span> <strong>file</strong> nos indica las propiedades de un archivo</h3>
@@ -634,7 +636,7 @@ file TIB2019-T3</code></pre>
 ## drwxr-xr-x   3 root root       4096 jun 26 18:32 media
 ## drwxr-xr-x   2 root root       4096 abr 26  2018 mnt
 ## drwxr-xr-x   4 root root       4096 ago  3 10:27 opt
-## dr-xr-xr-x 352 root root          0 ago 11 17:39 proc
+## dr-xr-xr-x 357 root root          0 ago 11 17:39 proc
 ## drwx------   5 root root       4096 jul  4 12:57 root
 ## drwxr-xr-x  35 root root       1100 ago 11 17:45 run
 ## drwxr-xr-x   2 root root      12288 ago  9 09:09 sbin</code></pre>
@@ -858,10 +860,10 @@ fi
 
 # confirmamos que se generaron las ligas
 ls -l | head</code></pre>
-<pre><code>## total 16096
+<pre><code>## total 16252
 ## -rw-r--r-- 1 vinuesa vinuesa  110128 jul 24 18:14 800px-Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
-## lrwxrwxrwx 1 vinuesa vinuesa      78 ago 11 20:17 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## lrwxrwxrwx 1 vinuesa vinuesa      78 ago 11 20:52 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
 ## -rw-r--r-- 1 vinuesa vinuesa  438308 jul 24 18:21 Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa  222602 jul 23 20:19 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
 ## -rw-r--r-- 1 vinuesa vinuesa   87065 jul 22 20:59 github_TIB-filoinfo_screenshot.png
@@ -1354,7 +1356,7 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 ago 11 20:17 empty_file
+<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 ago 11 20:52 empty_file
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty
@@ -1491,7 +1493,7 @@ rm *.cmds</code></pre>
 </div>
 <div id="bash-scripts---primeros-pasos" class="section level2">
 <h2><span class="header-section-number">3.4</span> <strong><span class="math inline">\(Bash\)</span> scripts</strong> - primeros pasos</h2>
-<p>Para finalizar esta sección, voy a mostrarles dos ejemplos muy sencillos de <strong>Shell scripts</strong> escritos en <span class="math inline">\(Bash\)</span>, que integran varios de las estructuras de control arriba descritas.</p>
+<p>Para finalizar esta sección, voy a mostrarles varios ejemplos muy sencillos de <strong>Shell scripts</strong> escritos en <span class="math inline">\(Bash\)</span> que integran varios aspectos de la sintaxis básica del lenguaje arriba descritas, así como extensiones adicionales como son <strong>argumentos posicionales</strong> y <strong>funciones</strong></p>
 <div id="la-shebang-line-usrbinenv-bash-y-permisos-de-ejecucion---el-script-ls_dir" class="section level3">
 <h3><span class="header-section-number">3.4.1</span> la “<strong>shebang line</strong>” (#!/usr/bin/env bash) y permisos de ejecución - el script <em>ls_dir</em></h3>
 <p>Se conocen como <em>scripts</em> a archivos de texto plano (codificación ASCII) que contienen los comandos a ser ejecutados secuencialmente por un <strong>intérprete de comandos</strong> particular, como <span class="math inline">\(bash\)</span>, <span class="math inline">\(perl\)</span>, <span class="math inline">\(R\)</span> …</p>
@@ -1522,7 +1524,7 @@ CTRL-D</code></pre>
 <p>Noten que la primera línea inicia con lo que se conoce como una <strong>shebang line</strong>:</p>
 <p><code>#!/usr/bin/env bash</code></p>
 <p>Esta línea, en la cabecera del archivo (¡sin dejar especios a la izquierda o arriba de la línea!), le indica al sistema operativo qué <strong>intérprete de comandos</strong> usar para la ejecución del código que sigue. En este caso se llama al intérprete de comandos <span class="math inline">\(bash\)</span></p>
-<p>Noten también que cualquier línea que inicie con <span class="math inline">\(#\)</span> después de la shebang line, representa un comentario, es decir, que el texto que sigue al gato no es interpretado por <span class="math inline">\(bash\)</span></p>
+<p>Noten también que cualquier línea que inicie con <strong>#</strong> después de la shebang line, representa un comentario, es decir, que el texto que sigue al gato no es interpretado por <span class="math inline">\(bash\)</span></p>
 <p>Para ejecutar el script como si fuera un comando cualquiera de <span class="math inline">\(Linux\)</span>, le damos <strong>permisos de ejecución</strong>:</p>
 <pre><code>chmod 755 ls_dir</code></pre>
 <p>Comprueba los permisos:</p>
@@ -1621,6 +1623,14 @@ find . -maxdepth $max_depth -type $type</code></pre>
 ## ./TIB2019-T3
 ## ./recA_seq_data
 ## ./MobaXterm_screen_shots</code></pre>
+</div>
+<div id="alineamiento-multiple-de-secuencias-e-interconversion-de-formatos-con-align_seqs_with_clustal_or_muscle.sh-y-convert_alnformats_using_clustalw.sh" class="section level3">
+<h3><span class="header-section-number">3.4.3</span> Alineamiento múltiple de secuencias e interconversión de formatos con <em>align_seqs_with_clustal_or_muscle.sh</em> y <em>convert_alnFormats_using_clustalw.sh</em></h3>
+<p>Para finalizar esta sección de introducción a la programación en <span class="math inline">\(Bash\)</span>, explora el código del script <a href="https://github.com/vinuesa/TIB-filoinfo/blob/master/docs/bin/align_seqs_with_clustal_or_muscle.sh">align_seqs_with_clustal_or_muscle.sh</a>, que permite hacer alineamientos múltiples con <span class="math inline">\(clustalw\)</span> o con <span class="math inline">\(muscle\)</span>, dos programas muy populares para este fin.</p>
+<p>Explora también el código del script <a href="https://github.com/vinuesa/TIB-filoinfo/blob/master/docs/bin/convert_alnFormats_using_clustalw.sh">convert_alnFormats_using_clustalw.sh</a>, que permite hacer inteconversión de formatos con clustalw.</p>
+<p>Los alineamientos múltiples y las llamadas a <span class="math inline">\(clustalw\)</span> las explicaremos en la <a href="https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos">sesión4_alineamientos</a>.</p>
+<p>Con lo aprendido hasta ahora y los comentarios que documentan los scripts, deberías entender lo que hacen.</p>
+<p>Vuelve a explorar ambos scripts después de haber revisado la <a href="https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos">sesión4_alineamientos</a>.</p>
 <hr />
 </div>
 </div>

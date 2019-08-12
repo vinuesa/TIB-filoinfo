@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# the 1st line in a script is the so-called shebang line
+#  which indicates the system which command interpreter 
+#  should read and execute the following code, bash in this case
+#  The shebang line shown above, is a portable version for bash scripts
+
+# AUTHOR: Pablo Vinuesa
+# AIM: learning basic BASH-programming constructs for TIB2019-T3
+# https://github.com/vinuesa/TIB-filoinfo
+
+for file in $(ls)
+do 
+    if [ -d "$file" ]
+    then 
+        echo "$file"
+    fi
+done
+

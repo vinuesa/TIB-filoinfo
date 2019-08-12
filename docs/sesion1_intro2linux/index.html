@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, Centro de Ciencias Genómicas - UNAM" />
 
-<meta name="date" content="2019-08-09" />
+<meta name="date" content="2019-08-11" />
 
 <title>Sesión 1. Introducción al biocómputo en sistemas GNU/Linux</title>
 
@@ -377,7 +377,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Sesión 1. Introducción al biocómputo en sistemas GNU/Linux</h1>
 <h4 class="author">Pablo Vinuesa, Centro de Ciencias Genómicas - UNAM</h4>
-<h4 class="date">2019-08-09</h4>
+<h4 class="date">2019-08-11</h4>
 
 </div>
 
@@ -430,16 +430,24 @@ $(document).ready(function () {
 <li><a href="#manual-de-cada-comando-man-command"><span class="toc-section-number">2.12</span> Manual de cada comando: <b>man command</b></a></li>
 <li><a href="#ayuda-de-cada-comando-command-help"><span class="toc-section-number">2.13</span> Ayuda de cada comando: <b>command –help</b></a></li>
 </ul></li>
-<li><a href="#inicios-de-programacion-en-bash"><span class="toc-section-number">3</span> Inicios de programación en Bash</a><ul>
-<li><a href="#asignacion-de-variables"><span class="toc-section-number">3.1</span> Asignación de variables</a></li>
-<li><a href="#condicionales"><span class="toc-section-number">3.2</span> Condicionales</a><ul>
+<li><a href="#inicios-de-programacion-en-bash"><span class="toc-section-number">3</span> Inicios de programación en <span class="math inline">\(Bash\)</span></a><ul>
+<li><a href="#asignacion-y-uso-de-variables"><span class="toc-section-number">3.1</span> Asignación y uso de <strong>variables</strong></a><ul>
+<li><a href="#captura-de-la-salida-de-un-comando-con-comando"><span class="toc-section-number">3.1.1</span> Captura de la salida de un comando con <b>$(comando)</b></a></li>
+<li><a href="#modificacion-de-variables-y-operaciones-con-ellas"><span class="toc-section-number">3.1.2</span> Modificación de variables y operaciones con ellas</a></li>
+</ul></li>
+<li><a href="#condicionales"><span class="toc-section-number">3.2</span> <strong>Condicionales</strong></a><ul>
 <li><a href="#comparacion-de-integros-en-condicionales"><span class="toc-section-number">3.2.1</span> Comparación de íntegros en condicionales</a></li>
 <li><a href="#comparacion-de-cadenas-de-caracteres-en-condicionales"><span class="toc-section-number">3.2.2</span> Comparación de cadenas de caracteres en condicionales</a></li>
 <li><a href="#comprobacion-de-la-existencia-de-un-archivo-de-tamano-0-bytes"><span class="toc-section-number">3.2.3</span> Comprobación de la existencia de un archivo de tamaño &gt; 0 bytes</a></li>
-<li><a href="#if-elif-else"><span class="toc-section-number">3.2.4</span> if; elif; else</a></li>
+<li><a href="#la-version-corta-de-test-condicion-comando1-comando2"><span class="toc-section-number">3.2.4</span> La versión corta de test <strong>[ condición ] &amp;&amp; comando1 &amp;&amp; comando2</strong> …</a></li>
+<li><a href="#if-elif-else"><span class="toc-section-number">3.2.5</span> <strong>if; elif; else</strong></a></li>
 </ul></li>
-<li><a href="#bucles-for"><span class="toc-section-number">3.3</span> Bucles for</a><ul>
+<li><a href="#bucles-for"><span class="toc-section-number">3.3</span> <strong>Bucles for</strong></a><ul>
 <li><a href="#ejemplo-de-bucle-for-acoplado-a-las-herramientas-de-filtrado-y-de-manipulacion-de-variables"><span class="toc-section-number">3.3.1</span> Ejemplo de bucle for, acoplado a las herramientas de filtrado y de manipulación de variables</a></li>
+</ul></li>
+<li><a href="#bash-scripts---primeros-pasos"><span class="toc-section-number">3.4</span> <strong><span class="math inline">\(Bash\)</span> scripts</strong> - primeros pasos</a><ul>
+<li><a href="#la-shebang-line-usrbinenv-bash-y-permisos-de-ejecucion---el-script-ls_dir"><span class="toc-section-number">3.4.1</span> la “<strong>shebang line</strong>” (#!/usr/bin/env bash) y permisos de ejecución - el script <em>ls_dir</em></a></li>
+<li><a href="#funciones-y-argumentos-posicionales-en-bash---el-script-find_dir"><span class="toc-section-number">3.4.2</span> <strong>Funciones</strong> y <strong>argumentos posicionales</strong> en <span class="math inline">\(Bash\)</span> - el script <em>find_dir</em></a></li>
 </ul></li>
 </ul></li>
 <li><a href="#el-lenguaje-de-procesamiento-de-patrones-awk"><span class="toc-section-number">4</span> El lenguaje de procesamiento de patrones <b>AWK</b></a><ul>
@@ -479,7 +487,7 @@ $(document).ready(function () {
 <h1><span class="header-section-number">1</span> Presentación</h1>
 <p>Este apunte fue creado para el <a href="http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/">Taller 3 - Análisis comparativo de genomas microbianos: Pangenómica y filoinformática</a> de los <a href="http://congresos.nnb.unam.mx/TIB2019">Talleres Internacionales de Bioinformática - TIB2019</a>, celebrados en el <a href="http://www.ccg.unam.mx">Centro de Ciencias Genómicas</a> de la <a href="http://www.ccg.unam.mx">Universidad Nacional Autónoma de México</a>, del 29 de julio al 2 de agosto de 2019 por <a href="http://www.ccg.unan.mx/~vinuesa/">Pablo Vinuesa, CCG-UNAM</a>.</p>
 <p>Las versión actual (posteriores a 2 de Agosto de 2019) contiene extensiones y adaptaciones para el <a href="http://www.ccg.unam.mx/noticias/academicas/taller-de-ciencias-genomicas-de-moleculas-a-ecosistemas/">Taller de Ciencias Genómicas: de Moléculas a Ecosistemas</a>, que impartimos investigadores del <a href="http://www.ccg.unam.mx">CCG-UNAM</a> para alumnos de la <a href="http://www.fciencias.unam.mx/">Facultad de Ciencias - UNAM</a>.</p>
-<p>Version: 2019-08-09</p>
+<p>Version: 2019-08-11</p>
 <div id="licencia-y-terminos-de-uso" class="section level2">
 <h2><span class="header-section-number">1.1</span> Licencia y términos de uso</h2>
 <p>El material del <a href="http://congresos.nnb.unam.mx/TIB2019/t3-analisis-comparativo-de-genomas-microbianos-pangenomica-y-filoinformatica/">T3, TIB-filoinfo</a> lo distribuyo públicamente a través de este <a href="https://github.com/vinuesa/TIB-filoinfo">repositorio GitHub</a> bajo la <a href="https://creativecommons.org/licenses/by-nc/4.0/"><strong>Licencia No Comercial Creative Commons 4.0</strong></a></p>
@@ -532,44 +540,52 @@ htop</code></pre>
 <h3><span class="header-section-number">2.2.1</span> <strong>pwd</strong> imprime la ruta absoluta del directorio actual</h3>
 <pre class="bash"><code># dónde me encuentro en el sistema?
 pwd</code></pre>
-<pre><code>## /home/vinuesa/Cursos/Taller_CG-FC/sesion1_intro2linux</code></pre>
+<pre><code>## /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux</code></pre>
 </div>
 <div id="ls-lista-contenidos-del-directorio" class="section level3">
 <h3><span class="header-section-number">2.2.2</span> <strong>ls</strong> lista contenidos del directorio</h3>
 <pre class="bash"><code># Qué contiene el directorio actual?
 ls | head</code></pre>
-<pre><code>## assembly_summary.txt.gz
+<pre><code>## 800px-Evolución_UNIX.png
+## assembly_summary.txt.gz
+## Evolución_UNIX.png
 ## fetch_recA_bradys_vinuesa_nuccore_screenshot.png
+## github_TIB-filoinfo_screenshot.png
 ## intro_biocomputo_Linux_pt1.odp
 ## Intro_biocomputo_Linux_pt1.pdf
 ## linux_basic_commands.tab
 ## linux_commands.tab
-## linux_very_basic_commands_table.csv
-## pics
-## recA_Bradyrhizobium_vinuesa.fna
-## recA_Byuanmingense.fna</code></pre>
+## linux_very_basic_commands_table.csv</code></pre>
 <pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos, y sus propiedades
 ls -al </code></pre>
-<pre><code>## total 17432
-## drwxr-xr-x 5 vinuesa vinuesa    4096 ago  9 20:09 .
-## drwxr-xr-x 3 vinuesa vinuesa    4096 ago  8 18:05 ..
-## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago  8 18:05 assembly_summary.txt.gz
-## lrwxrwxrwx 1 vinuesa vinuesa      53 ago  9 20:00 fetch_recA_bradys_vinuesa_nuccore_screenshot.png -&gt; pics/fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## -rw-r--r-- 1 vinuesa vinuesa 6280842 ago  9 09:42 intro_biocomputo_Linux_pt1.odp
-## -rw-r--r-- 1 vinuesa vinuesa 3128839 ago  8 18:05 Intro_biocomputo_Linux_pt1.pdf
-## -rwxr-xr-x 1 vinuesa vinuesa   10193 ago  8 18:05 linux_basic_commands.tab
-## lrwxrwxrwx 1 vinuesa vinuesa      78 ago  9 20:09 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
-## -rwxr-xr-x 1 vinuesa vinuesa    1705 ago  8 18:05 linux_very_basic_commands_table.csv
-## drwxr-xr-x 3 vinuesa vinuesa    4096 ago  9 20:00 pics
-## -rw-r--r-- 1 vinuesa vinuesa   77803 ago  8 20:39 recA_Bradyrhizobium_vinuesa.fna
-## -rw-r--r-- 1 vinuesa vinuesa   17704 ago  9 20:09 recA_Byuanmingense.fna
-## drwxr-xr-x 2 vinuesa vinuesa    4096 ago  8 20:14 recA_seq_data
-## -rwxr-xr-x 1 vinuesa vinuesa       8 ago  9 10:02 .Rhistory
-## drwxr-xr-x 3 vinuesa vinuesa    4096 ago  8 18:33 TIB2019-T3
-## -rwxr-xr-x 1 vinuesa vinuesa    6047 ago  8 18:05 working_with_linux_commands.code
-## -rw-r--r-- 1 vinuesa vinuesa 1109145 ago  9 20:09 working_with_linux_commands.html
-## -rw-r--r-- 1 vinuesa vinuesa  343862 ago  9 19:46 working_with_linux_commands.pdf
-## -rw-r--r-- 1 vinuesa vinuesa   46466 ago  9 20:09 working_with_linux_commands.Rmd</code></pre>
+<pre><code>## total 16108
+## drwxr-xr-x  5 vinuesa vinuesa    4096 ago 11 18:55 .
+## drwxr-xr-x 11 vinuesa vinuesa    4096 ago  1 22:54 ..
+## -rw-r--r--  1 vinuesa vinuesa  110128 jul 24 18:14 800px-Evolución_UNIX.png
+## -rw-r--r--  1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
+## -rw-r--r--  1 vinuesa vinuesa  438308 jul 24 18:21 Evolución_UNIX.png
+## -rw-r--r--  1 vinuesa vinuesa  222602 jul 23 20:19 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
+## -rw-r--r--  1 vinuesa vinuesa   87065 jul 22 20:59 github_TIB-filoinfo_screenshot.png
+## -rw-r--r--  1 vinuesa vinuesa 3534816 jul 28 22:46 intro_biocomputo_Linux_pt1.odp
+## -rw-r--r--  1 vinuesa vinuesa 3128839 jul 24 20:38 Intro_biocomputo_Linux_pt1.pdf
+## -rwxr-xr-x  1 vinuesa vinuesa   10193 jul 21 11:21 linux_basic_commands.tab
+## lrwxrwxrwx  1 vinuesa vinuesa      78 ago  8 21:44 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## -rwxr-xr-x  1 vinuesa vinuesa    1024 jul 21 11:21 .linux_commands.tab.swp
+## -rwxr-xr-x  1 vinuesa vinuesa    1705 jul 21 11:21 linux_very_basic_commands_table.csv
+## -rw-rw-r--  1 vinuesa vinuesa  106127 jul 24 19:10 MobaXTerm_plugins_page_screenshot.png
+## drwxr-xr-x  2 vinuesa vinuesa    4096 jul 24 18:12 MobaXterm_screen_shots
+## -rw-r--r--  1 vinuesa vinuesa   77803 ago  8 20:46 recA_Bradyrhizobium_vinuesa.fna
+## drwxr-xr-x  2 vinuesa vinuesa    4096 ago  8 19:50 recA_seq_data
+## -rwxr-xr-x  1 vinuesa vinuesa       8 ago  8 22:01 .Rhistory
+## -rw-rw-r--  1 vinuesa vinuesa   51271 jul 22 18:55 sesion_local_capt_pantalla.png
+## -rw-r--r--  1 vinuesa vinuesa   40746 jul 22 18:56 sesion_remota_bonampak_capt_pantalla1.png
+## -rw-r--r--  1 vinuesa vinuesa    4468 jul 22 18:57 sesion_remota_bonampak_capt_pantalla2.png
+## -rw-rw-r--  1 vinuesa vinuesa  408580 jul 22 18:51 sesion_remota_bonampak_capt_pantalla.png
+## drwxr-xr-x  3 vinuesa vinuesa    4096 ago  8 19:13 TIB2019-T3
+## -rwxr-xr-x  1 vinuesa vinuesa    6047 jul 21 11:21 working_with_linux_commands.code
+## -rw-r--r--  1 vinuesa vinuesa 1038439 ago  8 21:42 working_with_linux_commands.html
+## -rw-r--r--  1 vinuesa vinuesa  328746 ago  8 21:44 working_with_linux_commands.pdf
+## -rw-r--r--  1 vinuesa vinuesa   51973 ago 11 20:17 working_with_linux_commands.Rmd</code></pre>
 </div>
 <div id="file-nos-indica-las-propiedades-de-un-archivo" class="section level3">
 <h3><span class="header-section-number">2.2.3</span> <strong>file</strong> nos indica las propiedades de un archivo</h3>
@@ -606,7 +622,7 @@ file TIB2019-T3</code></pre>
 ## drwxr-xr-x   2 root root       4096 ago  9 09:09 bin
 ## drwxr-xr-x   4 root root       4096 ago  9 09:09 boot
 ## drwxr-xr-x   2 root root       4096 may 30 15:02 cdrom
-## drwxr-xr-x  20 root root       4420 ago  9 17:57 dev
+## drwxr-xr-x  20 root root       4420 ago 11 17:41 dev
 ## drwxr-xr-x 151 root root      12288 ago  9 09:09 etc
 ## drwxr-xr-x   5 root root       4096 jul 19 21:46 home
 ## lrwxrwxrwx   1 root root         33 jul 24 17:51 initrd.img -&gt; boot/initrd.img-4.15.0-55-generic
@@ -618,9 +634,9 @@ file TIB2019-T3</code></pre>
 ## drwxr-xr-x   3 root root       4096 jun 26 18:32 media
 ## drwxr-xr-x   2 root root       4096 abr 26  2018 mnt
 ## drwxr-xr-x   4 root root       4096 ago  3 10:27 opt
-## dr-xr-xr-x 342 root root          0 ago  9 17:55 proc
+## dr-xr-xr-x 352 root root          0 ago 11 17:39 proc
 ## drwx------   5 root root       4096 jul  4 12:57 root
-## drwxr-xr-x  35 root root       1060 ago  9 17:56 run
+## drwxr-xr-x  35 root root       1100 ago 11 17:45 run
 ## drwxr-xr-x   2 root root      12288 ago  9 09:09 sbin</code></pre>
 </div>
 <div id="veamos-las-primeras-5-entradas-y-ultimas-5-del-directorio-bin" class="section level4">
@@ -707,7 +723,7 @@ ls /bin/c??</code></pre>
 <div id="de-nuevo-donde-estoy-imprime-directorio-actual-con-pwd" class="section level3">
 <h3><span class="header-section-number">2.3.1</span> de nuevo, ¿dónde estoy?: imprime directorio actual con <b>pwd</b></h3>
 <pre class="bash"><code>pwd </code></pre>
-<pre><code>## /home/vinuesa/Cursos/Taller_CG-FC/sesion1_intro2linux</code></pre>
+<pre><code>## /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux</code></pre>
 </div>
 <div id="sube-un-directorio-usando-ruta-relativa-cd-.." class="section level3">
 <h3><span class="header-section-number">2.3.2</span> sube un directorio usando RUTA RELATIVA: <b>cd ..</b></h3>
@@ -716,7 +732,7 @@ ls /bin/c??</code></pre>
 <li>donde estoy?</li>
 </ul>
 <pre class="bash"><code>pwd </code></pre>
-<pre><code>## /home/vinuesa/Cursos/Taller_CG-FC/sesion1_intro2linux</code></pre>
+<pre><code>## /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux</code></pre>
 </div>
 <div id="regresa-a-tu-home-con-cd" class="section level3">
 <h3><span class="header-section-number">2.3.3</span> regresa a tu home con <b>cd</b></h3>
@@ -748,16 +764,16 @@ pwd</code></pre>
 <li>y lista los contenidos</li>
 </ul>
 <pre class="bash"><code>ls | head</code></pre>
-<pre><code>## assembly_summary.txt.gz
+<pre><code>## 800px-Evolución_UNIX.png
+## assembly_summary.txt.gz
+## Evolución_UNIX.png
 ## fetch_recA_bradys_vinuesa_nuccore_screenshot.png
+## github_TIB-filoinfo_screenshot.png
 ## intro_biocomputo_Linux_pt1.odp
 ## Intro_biocomputo_Linux_pt1.pdf
 ## linux_basic_commands.tab
 ## linux_commands.tab
-## linux_very_basic_commands_table.csv
-## pics
-## recA_Bradyrhizobium_vinuesa.fna
-## recA_Byuanmingense.fna</code></pre>
+## linux_very_basic_commands_table.csv</code></pre>
 </div>
 </div>
 <div id="generacion-de-directorios-comando-mkdir" class="section level2">
@@ -774,7 +790,7 @@ fi</code></pre>
 <li>comprueba los <strong>permisos</strong> del nuevo directorio</li>
 </ul>
 <pre class="bash"><code>ls -ld TIB2019-T3</code></pre>
-<pre><code>## drwxr-xr-x 3 vinuesa vinuesa 4096 ago  8 18:33 TIB2019-T3</code></pre>
+<pre><code>## drwxr-xr-x 3 vinuesa vinuesa 4096 ago  8 19:13 TIB2019-T3</code></pre>
 <ul>
 <li>generemos un subdirectorio por debajo del que acabamos de crear:</li>
 </ul>
@@ -842,16 +858,16 @@ fi
 
 # confirmamos que se generaron las ligas
 ls -l | head</code></pre>
-<pre><code>## total 17424
-## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago  8 18:05 assembly_summary.txt.gz
-## lrwxrwxrwx 1 vinuesa vinuesa      78 ago  9 20:14 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
-## lrwxrwxrwx 1 vinuesa vinuesa      53 ago  9 20:00 fetch_recA_bradys_vinuesa_nuccore_screenshot.png -&gt; pics/fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## -rw-r--r-- 1 vinuesa vinuesa 6280842 ago  9 09:42 intro_biocomputo_Linux_pt1.odp
-## -rw-r--r-- 1 vinuesa vinuesa 3128839 ago  8 18:05 Intro_biocomputo_Linux_pt1.pdf
-## -rwxr-xr-x 1 vinuesa vinuesa   10193 ago  8 18:05 linux_basic_commands.tab
-## lrwxrwxrwx 1 vinuesa vinuesa      78 ago  9 20:09 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
-## -rwxr-xr-x 1 vinuesa vinuesa    1705 ago  8 18:05 linux_very_basic_commands_table.csv
-## drwxr-xr-x 3 vinuesa vinuesa    4096 ago  9 20:00 pics</code></pre>
+<pre><code>## total 16096
+## -rw-r--r-- 1 vinuesa vinuesa  110128 jul 24 18:14 800px-Evolución_UNIX.png
+## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
+## lrwxrwxrwx 1 vinuesa vinuesa      78 ago 11 20:17 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## -rw-r--r-- 1 vinuesa vinuesa  438308 jul 24 18:21 Evolución_UNIX.png
+## -rw-r--r-- 1 vinuesa vinuesa  222602 jul 23 20:19 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
+## -rw-r--r-- 1 vinuesa vinuesa   87065 jul 22 20:59 github_TIB-filoinfo_screenshot.png
+## -rw-r--r-- 1 vinuesa vinuesa 3534816 jul 28 22:46 intro_biocomputo_Linux_pt1.odp
+## -rw-r--r-- 1 vinuesa vinuesa 3128839 jul 24 20:38 Intro_biocomputo_Linux_pt1.pdf
+## -rwxr-xr-x 1 vinuesa vinuesa   10193 jul 21 11:21 linux_basic_commands.tab</code></pre>
 <div id="renombramos-la-liga-o-cualquier-archivo-o-directorio" class="section level3">
 <h3><span class="header-section-number">2.6.1</span> renombramos la liga (o cualquier archivo o directorio)</h3>
 <pre class="bash"><code>  mv comandos_de_linux.tab linux_commands.tab</code></pre>
@@ -1148,7 +1164,7 @@ zgrep -E 'Acinetobacter|Pseudomonas|Klebsiella' assembly_summary.txt.gz | cut -f
 <h2><span class="header-section-number">2.12</span> Manual de cada comando: <b>man command</b></h2>
 <pre class="bash"><code># mira las opciones de cut y sort en la manpage
 man cut | head -30</code></pre>
-<pre><code>## CUT(1)                                                                       User Commands                                                                      CUT(1)
+<pre><code>## CUT(1)                                                                     User Commands                                                                     CUT(1)
 ## 
 ## NAME
 ##        cut - remove sections from each line of files
@@ -1232,10 +1248,10 @@ cut --help</code></pre>
 </div>
 </div>
 <div id="inicios-de-programacion-en-bash" class="section level1">
-<h1><span class="header-section-number">3</span> Inicios de programación en Bash</h1>
-<p>Vermos aquí unas pocas construcciones muy básicas de probramación Shell</p>
-<div id="asignacion-de-variables" class="section level2">
-<h2><span class="header-section-number">3.1</span> Asignación de variables</h2>
+<h1><span class="header-section-number">3</span> Inicios de programación en <span class="math inline">\(Bash\)</span></h1>
+<p>Vamos a aprender algunos de los elementos esenciales del lenguaje <span class="math inline">\(Bash\)</span> de programación Shell</p>
+<div id="asignacion-y-uso-de-variables" class="section level2">
+<h2><span class="header-section-number">3.1</span> Asignación y uso de <strong>variables</strong></h2>
 <ul>
 <li>La sintaxis básica de asignación es:</li>
 </ul>
@@ -1246,17 +1262,16 @@ cut --help</code></pre>
 <pre class="bash"><code>archivo_de_comandos_linux=linux_commands.tab
 echo &quot;$archivo_de_comandos_linux&quot;</code></pre>
 <pre><code>## linux_commands.tab</code></pre>
-<ul>
-<li>para capturar la salida de un comando usammos <b>$(comando)</b></li>
-</ul>
+<div id="captura-de-la-salida-de-un-comando-con-comando" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Captura de la salida de un comando con <b>$(comando)</b></h3>
 <pre class="bash"><code>wkdir=$(pwd)
 date=$(date | awk '{print $3,$2,$6}' | sed 's/ //g')
 h=$(hostname)
 echo &quot;&gt;&gt;&gt; working in: $wkdir at &lt;$h&gt; on &lt;$date&gt;&quot;</code></pre>
-<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/Taller_CG-FC/sesion1_intro2linux at &lt;alisio&gt; on &lt;9ago2019&gt;</code></pre>
-<ul>
-<li>Modificación de variables y operaciones con ellas</li>
-</ul>
+<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux at &lt;alisio&gt; on &lt;11ago2019&gt;</code></pre>
+</div>
+<div id="modificacion-de-variables-y-operaciones-con-ellas" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Modificación de variables y operaciones con ellas</h3>
 <pre class="bash"><code>wkdir=$(pwd)
 echo &quot;wkdir: $wkdir&quot;
 
@@ -1270,13 +1285,14 @@ echo &quot;path to basedir: ${wkdir%/*}  # \${wkdir%/*}&quot;
 # 3. contar el número de caracteres (longitud) de la variable
 echo &quot;basedir has ${#basedir} characters  # \${#basedir}&quot;
 </code></pre>
-<pre><code>## wkdir: /home/vinuesa/Cursos/Taller_CG-FC/sesion1_intro2linux
+<pre><code>## wkdir: /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux
 ## basedir: sesion1_intro2linux  # ${wkdir##*/}
-## path to basedir: /home/vinuesa/Cursos/Taller_CG-FC  # ${wkdir%/*}
+## path to basedir: /home/vinuesa/Cursos/TIB/TIB19-T3  # ${wkdir%/*}
 ## basedir has 19 characters  # ${#basedir}</code></pre>
 </div>
+</div>
 <div id="condicionales" class="section level2">
-<h2><span class="header-section-number">3.2</span> Condicionales</h2>
+<h2><span class="header-section-number">3.2</span> <strong>Condicionales</strong></h2>
 <ul>
 <li>La sintaxis básica de un condicional simple en formato de una línea es así</li>
 </ul>
@@ -1338,21 +1354,21 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 ago  9 20:14 empty_file
-## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago  8 18:05 assembly_summary.txt.gz
+<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 ago 11 20:17 empty_file
+## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty
 ## assembly_summary.txt.gz exists and has size: 6.5M</code></pre>
-<div id="la-version-corta-de-test-condicion-ejecuta-orden1-ejecuta-orden2" class="section level4">
-<h4><span class="header-section-number">3.2.3.1</span> La versión corta de test [ condición ] &amp;&amp; ejecuta orden1 &amp;&amp; ejecuta orden2 …</h4>
+</div>
+<div id="la-version-corta-de-test-condicion-comando1-comando2" class="section level3">
+<h3><span class="header-section-number">3.2.4</span> La versión corta de test <strong>[ condición ] &amp;&amp; comando1 &amp;&amp; comando2</strong> …</h3>
 <pre class="bash"><code># también podemos usar la versión corta del test:
 f=$(ls *gz)
 [ -s &quot;$f&quot; ] &amp;&amp; echo &quot;$f exists and is non-empty&quot;</code></pre>
 <pre><code>## assembly_summary.txt.gz exists and is non-empty</code></pre>
 </div>
-</div>
 <div id="if-elif-else" class="section level3">
-<h3><span class="header-section-number">3.2.4</span> if; elif; else</h3>
+<h3><span class="header-section-number">3.2.5</span> <strong>if; elif; else</strong></h3>
 <pre class="bash"><code>  if [[ &quot;$OSTYPE&quot; == &quot;linux-gnu&quot; ]]
   then
     OS='linux'
@@ -1374,12 +1390,12 @@ f=$(ls *gz)
 </div>
 </div>
 <div id="bucles-for" class="section level2">
-<h2><span class="header-section-number">3.3</span> Bucles for</h2>
-<p>la sintaxis general de un bucle for en Bash es:</p>
+<h2><span class="header-section-number">3.3</span> <strong>Bucles for</strong></h2>
+<p>la sintaxis general de un bucle for en <span class="math inline">\(Bash\)</span> es:</p>
 <p><code>for ALIAS in LIST; do CMD1; CMD2; done</code></p>
-<p>donde el usuario tiene que cambiar los términos en mayúsculas por opciones concretas. ALIAS es el nombre de una variable a la que se asigna secuencialmente cada valor de LIST.</p>
-<p>Así por ejemplo, si tuviéramos muchos archivos de secuencias homólogas con la extensión *.faa en un directorio, podríamos alinearlas secuencialmente con un comando como el siguiente:</p>
-<p><code>for file in *.faa; do clustalo -i $file -o ${file%.faa}_cluoAln.faa; done</code></p>
+<p>donde el usuario tiene que cambiar los términos en mayúsculas por opciones concretas. ALIAS es el nombre de una variable temporal a la que se asigna secuencialmente cada valor de LIST.</p>
+<p>Así por ejemplo, si tuviéramos muchos archivos de secuencias homólogas con la extensión *.faa en un directorio, podríamos alinearlas secuencialmente con <span class="math inline">\(clustalo\)</span> con un comando como el siguiente:</p>
+<p><code>for file in <em>.faa; do clustalo -i $file -o ${file%.</em>}_cluoAln.faa; done</code></p>
 <p>donde ALIAS=file, LIST=*.faa y CMD1 es una llamada al programa de alineamientos múltiples clustalo que veremos más adelante en este taller.</p>
 <div id="ejemplo-de-bucle-for-acoplado-a-las-herramientas-de-filtrado-y-de-manipulacion-de-variables" class="section level3">
 <h3><span class="header-section-number">3.3.1</span> Ejemplo de bucle for, acoplado a las herramientas de filtrado y de manipulación de variables</h3>
@@ -1471,6 +1487,140 @@ cat programming.cmds</code></pre>
 ## yacc     C programming   Yet another compiler compiler   PWB UNIX</code></pre>
 <pre class="bash"><code># finalmente borremos los nuevos archivos generados
 rm *.cmds</code></pre>
+</div>
+</div>
+<div id="bash-scripts---primeros-pasos" class="section level2">
+<h2><span class="header-section-number">3.4</span> <strong><span class="math inline">\(Bash\)</span> scripts</strong> - primeros pasos</h2>
+<p>Para finalizar esta sección, voy a mostrarles dos ejemplos muy sencillos de <strong>Shell scripts</strong> escritos en <span class="math inline">\(Bash\)</span>, que integran varios de las estructuras de control arriba descritas.</p>
+<div id="la-shebang-line-usrbinenv-bash-y-permisos-de-ejecucion---el-script-ls_dir" class="section level3">
+<h3><span class="header-section-number">3.4.1</span> la “<strong>shebang line</strong>” (#!/usr/bin/env bash) y permisos de ejecución - el script <em>ls_dir</em></h3>
+<p>Se conocen como <em>scripts</em> a archivos de texto plano (codificación ASCII) que contienen los comandos a ser ejecutados secuencialmente por un <strong>intérprete de comandos</strong> particular, como <span class="math inline">\(bash\)</span>, <span class="math inline">\(perl\)</span>, <span class="math inline">\(R\)</span> …</p>
+<p>Les muestro abajo el código del script <em>ls_dir</em>.</p>
+<pre><code>#!/usr/bin/env bash
+
+#  the 1st line in a script is the so-called shebang line
+#  which indicates the system which command interpreter 
+#  should read and execute the following code, bash in this case
+#  The shebang line shown above, is a portable version for bash scripts
+
+# AUTHOR: Pablo Vinuesa
+# AIM: learning basic BASH-programming constructs for TIB2019-T3
+# https://github.com/vinuesa/TIB-filoinfo
+
+for file in $(ls)
+do 
+    if [ -d &quot;$file&quot; ]
+    then 
+        echo &quot;$file&quot;
+    fi
+done</code></pre>
+<p>Puedes copiar el código a un archivo que vas a nombrar como ls_dir. Usa para ello el comando <span class="math inline">\(cat\)</span>, de la manera abajo indicada:</p>
+<pre><code>cat &gt; ls_dir
+PEGA AQUÍ EL CÓDIGO ARRIBA MOSTRADO
+CTRL-D</code></pre>
+<p>El script <em>ls_dir</em> busca los directorios presentes en el directorio actual usando un bucle for para analizar cada archivo econtrado por <span class="math inline">\(ls\)</span>, evaluando seguidamente si el archivo en turno es un directorio con un condicional <code>if [ -d “$file” ]</code></p>
+<p>Noten que la primera línea inicia con lo que se conoce como una <strong>shebang line</strong>:</p>
+<p><code>#!/usr/bin/env bash</code></p>
+<p>Esta línea, en la cabecera del archivo (¡sin dejar especios a la izquierda o arriba de la línea!), le indica al sistema operativo qué <strong>intérprete de comandos</strong> usar para la ejecución del código que sigue. En este caso se llama al intérprete de comandos <span class="math inline">\(bash\)</span></p>
+<p>Noten también que cualquier línea que inicie con <span class="math inline">\(#\)</span> después de la shebang line, representa un comentario, es decir, que el texto que sigue al gato no es interpretado por <span class="math inline">\(bash\)</span></p>
+<p>Para ejecutar el script como si fuera un comando cualquiera de <span class="math inline">\(Linux\)</span>, le damos <strong>permisos de ejecución</strong>:</p>
+<pre><code>chmod 755 ls_dir</code></pre>
+<p>Comprueba los permisos:</p>
+<p><code>$ ls -l ls_dir</code></p>
+<pre><code>-rwxr-xr-x 1 vinuesa vinuesa 493 ago 11 18:37 ls_dir</code></pre>
+<p>Como puedes ver el usuario, el grupo al que pertenece y todos los demás pueden ejecutarlo (<span class="math inline">\(x\)</span>)</p>
+<p>Finalmente copia o mueve el script a un directorio que esté en el <span class="math inline">\(PATH\)</span>, típicamente a <span class="math inline">\(HOME/bin\)</span></p>
+<pre><code>mv ls_dir ~/bin</code></pre>
+<p>y ya puedes usarlo:</p>
+<pre class="bash"><code>ls_dir</code></pre>
+<pre><code>## MobaXterm_screen_shots
+## recA_seq_data
+## TIB2019-T3</code></pre>
+<p>Nota: el script <em>ls_dir</em> funciona perfectamente, pero no es la manera más eficiente de buscar directorios. La función <span class="math inline">\(find\)</span> de <span class="math inline">\(Linux\)</span> es mucho más eficiente.</p>
+</div>
+<div id="funciones-y-argumentos-posicionales-en-bash---el-script-find_dir" class="section level3">
+<h3><span class="header-section-number">3.4.2</span> <strong>Funciones</strong> y <strong>argumentos posicionales</strong> en <span class="math inline">\(Bash\)</span> - el script <em>find_dir</em></h3>
+<p>Los scripts pueden recibir opciones dadas por los usuarios para comportarse acorde a ellas. Esto les da gran versatilidad.</p>
+<p>La manera más sencialla de pasarle opciones al script es mediante <strong>argumentos posicionales</strong>, como los usados por <em>find_dir</em></p>
+<pre><code>#!/usr/bin/env bash
+
+#  The 1st line in a script is the so-called shebang line
+#  which indicates the system which command interpreter 
+#  should read and execute the following code, bash in this case
+#  The shebang line shown above, is a portable version for bash scripts
+
+# AUTHOR: Pablo Vinuesa
+# AIM: learning basic BASH-programming constructs for TIB2019-T3
+# https://github.com/vinuesa/TIB-filoinfo
+
+# global variables
+progname=${0##*/}      # find_dir
+VERSION='0.1_29Jul19' 
+
+# Function definition
+function print_help()
+{
+   # this is a so-called HERE-DOC, to easily print out formatted text
+   cat &lt;&lt; HELP
+
+    $progname v$VERSION usage synopsis:
+
+    $progname &lt;int [maximal search depth for (sub)directories, e.g.:1&gt;
+
+    AIM: find directories below the current one with the desired max_depth 
+
+    USAGE EXAMPLES:
+          $progname 1
+          $progname 2
+
+HELP
+
+exit 1
+}
+
+# capture user-provided arguments in variables $1, $2 ... $9
+# and save them to named variables, for better readability
+max_depth=$1
+type=${2:-d}  # if not provided, the second argument is set to 'd' by default.
+
+# check arguments
+[ -z $max_depth ] &amp;&amp; print_help
+
+# execute find command with the provided arguments
+find . -maxdepth $max_depth -type $type</code></pre>
+<p>Guarda el código arriba mostrado en un archivo llamado <em>find_dir</em>, dale permisos de ejecución, y cópialo a <span class="math inline">\(HOME/bin\)</span>, como se mostró en el ejemplo anterior.</p>
+<p><em>find_dir</em> hace la siguiente llamada a <span class="math inline">\(find\)</span></p>
+<p><code>find . -maxdepth $max_depth -type $type</code></p>
+<p>para encontrar directorios y subdirectorios por debajo del acutal, al nivel de profundidad indicado por el usuario, quien pasa un íntegro al script como único argumento</p>
+<p><em>find_dir</em> introduce la función <em>print_help()</em>,</p>
+<pre><code>function print_help(){
+  YOUR CODE GOES INHERE ...
+}</code></pre>
+<p>que simplemente imprime un mensaje de ayuda si es llamado sin argumentos</p>
+<p><code>[ -z $max_depth ] &amp;&amp; print_help</code></p>
+<p>Probemos el script:</p>
+<ul>
+<li>primero llamando al script sin argumento:</li>
+</ul>
+<p><code>find_dir</code></p>
+<pre><code>    find_dir v0.1_29Jul19 usage synopsis:
+
+    find_dir &lt;int [maximal search depth for (sub)directories, e.g.:1&gt;
+
+    AIM: find directories below the current one at the desired max_depth 
+
+    USAGE EXAMPLES
+          find_dir 1
+          find_dir 2
+</code></pre>
+<ul>
+<li>ahora pasándole un argumento:</li>
+</ul>
+<pre class="bash"><code>  find_dir 1</code></pre>
+<pre><code>## .
+## ./TIB2019-T3
+## ./recA_seq_data
+## ./MobaXterm_screen_shots</code></pre>
 <hr />
 </div>
 </div>

@@ -87,7 +87,7 @@ perl -pe 'if( /^>/ ){ $c++; s/>/>gnl|16S_DB|$c / }' 16S_seqs4_blastDB.fna > 16S_
 
 ## 2) run formatdb, generating an indexed DB
 formatdb -i 16S_seqs4_blastDB.fnaed -p F -o T
-132.248.220.35
+
 # 2.1) run blastn (blastall -p blastn), and get only the best hit (-b 1) in tabular format (-m 8).
 blastall -p blastn -i 16S_problema.fna -b 1 -a 6 -d 16S_seqs4_blastDB.fnaed -m 8
 blastall -p blastn -i 16S_problema.fna -b 1 -a 6 -d 16S_seqs4_blastDB.fnaed -m 8 > 16S_problema_blastN_b1_m8.tab

@@ -406,10 +406,12 @@ $(document).ready(function () {
 <li><a href="#regresa-a-tu-home-con-cd"><span class="toc-section-number">2.3.3</span> regresa a tu home con <b>cd</b></a></li>
 </ul></li>
 <li><a href="#generacion-de-directorios-comando-mkdir"><span class="toc-section-number">2.4</span> Generación de directorios: comando <b>mkdir</b></a></li>
-<li><a href="#copiar-mover-renombrar-y-borrar-archivos-con-cp-mv-y-rm"><span class="toc-section-number">2.5</span> Copiar, mover, renombrar y borrar archivos con: <b>cp</b>, <b>mv</b> y <b>rm</b></a><ul>
+<li><a href="#copiar-mover-renombrar-y-borrar-archivos-con-cp-mv-rm-scp-y-sftp"><span class="toc-section-number">2.5</span> Copiar, mover, renombrar y borrar archivos con: <b>cp</b>, <b>mv</b>, <b>rm</b>, <b>scp</b> y <b>sftp</b></a><ul>
 <li><a href="#copia-de-archivo-simple-cp-file-."><span class="toc-section-number">2.5.1</span> copia de archivo simple: <b> cp file .</b></a></li>
 <li><a href="#copiado-de-directorio-cp--r-dir-."><span class="toc-section-number">2.5.2</span> copiado de directorio: <b> cp -r dir . </b></a></li>
 <li><a href="#eliminar-un-directorio-rm--rf-recursively--r-and-force--f"><span class="toc-section-number">2.5.3</span> Eliminar un directorio: <b>rm -rf</b> [recursively -r and force -f]</a></li>
+<li><a href="#scp-copia-de-archivos-entre-maquinas-via-internet"><span class="toc-section-number">2.5.4</span> <b>scp</b> copia de archivos entre máquinas vía Internet</a></li>
+<li><a href="#sftp-descarga-de-archivos-de-una-maquina-remota-a-tu-laptop"><span class="toc-section-number">2.5.5</span> <b>sftp</b> descarga de archivos de una máquina remota a tu laptop</a></li>
 </ul></li>
 <li><a href="#generacion-de-ligas-simbolicas-a-archivos-comando-ln--s-rutaalarchivofuente-nombre_la_liga"><span class="toc-section-number">2.6</span> Generación de ligas simbólicas a archivos: comando <b>ln -s /ruta/al/archivo/fuente nombre_la_liga</b></a><ul>
 <li><a href="#renombramos-la-liga-o-cualquier-archivo-o-directorio"><span class="toc-section-number">2.6.1</span> renombramos la liga (o cualquier archivo o directorio)</a></li>
@@ -549,60 +551,45 @@ pwd</code></pre>
 ls | head</code></pre>
 <pre><code>## 800px-Evolución_UNIX.png
 ## assembly_summary.txt.gz
-## Batch_utilities.cmds
-## Category.cmds
-## C_programming.cmds
-## empty_file
 ## Evolución_UNIX.png
 ## fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## Filesystem.cmds
-## FORTRAN77_programming.cmds</code></pre>
+## github_TIB-filoinfo_screenshot.png
+## intro_biocomputo_Linux_pt1.odp
+## Intro_biocomputo_Linux_pt1.pdf
+## linux_basic_commands.tab
+## linux_commands.tab
+## linux_very_basic_commands_table.csv</code></pre>
 <pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos, y sus propiedades
 ls -al </code></pre>
-<pre><code>## total 16336
-## drwxr-xr-x  5 vinuesa vinuesa    4096 sep  4 19:28 .
+<pre><code>## total 16268
+## drwxr-xr-x  5 vinuesa vinuesa    4096 sep  4 19:53 .
 ## drwxr-xr-x 11 vinuesa vinuesa    4096 ago  1 22:54 ..
 ## -rw-r--r--  1 vinuesa vinuesa  110128 jul 24 18:14 800px-Evolución_UNIX.png
 ## -rw-r--r--  1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
-## -rw-r--r--  1 vinuesa vinuesa       0 sep  4 19:28 Batch_utilities.cmds
-## -rw-r--r--  1 vinuesa vinuesa      75 sep  4 19:28 Category.cmds
-## -rw-r--r--  1 vinuesa vinuesa       0 sep  4 19:28 C_programming.cmds
-## -rw-r--r--  1 vinuesa vinuesa       0 sep  4 19:28 empty_file
 ## -rw-r--r--  1 vinuesa vinuesa  438308 jul 24 18:21 Evolución_UNIX.png
 ## -rw-r--r--  1 vinuesa vinuesa  222602 jul 23 20:19 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## -rw-r--r--  1 vinuesa vinuesa    1814 sep  4 19:28 Filesystem.cmds
-## -rw-r--r--  1 vinuesa vinuesa       0 sep  4 19:28 FORTRAN77_programming.cmds
 ## -rw-r--r--  1 vinuesa vinuesa   87065 jul 22 20:59 github_TIB-filoinfo_screenshot.png
 ## -rw-r--r--  1 vinuesa vinuesa 3534816 jul 28 22:46 intro_biocomputo_Linux_pt1.odp
 ## -rw-r--r--  1 vinuesa vinuesa 3128839 jul 24 20:38 Intro_biocomputo_Linux_pt1.pdf
 ## -rwxr-xr-x  1 vinuesa vinuesa   10193 jul 21 11:21 linux_basic_commands.tab
-## lrwxrwxrwx  1 vinuesa vinuesa      78 sep  4 19:28 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## lrwxrwxrwx  1 vinuesa vinuesa      78 sep  4 19:52 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
 ## -rwxr-xr-x  1 vinuesa vinuesa    1024 jul 21 11:21 .linux_commands.tab.swp
 ## -rwxr-xr-x  1 vinuesa vinuesa    1705 jul 21 11:21 linux_very_basic_commands_table.csv
-## -rw-r--r--  1 vinuesa vinuesa    2133 sep  4 19:28 Misc.cmds
 ## -rw-rw-r--  1 vinuesa vinuesa  106127 jul 24 19:10 MobaXTerm_plugins_page_screenshot.png
 ## drwxr-xr-x  2 vinuesa vinuesa    4096 jul 24 18:12 MobaXterm_screen_shots
-## -rw-r--r--  1 vinuesa vinuesa     215 sep  4 19:28 Network.cmds
-## -rw-r--r--  1 vinuesa vinuesa       0 sep  4 19:28 Process_management.cmds
-## -rw-r--r--  1 vinuesa vinuesa      81 sep  4 19:28 Programming.cmds
 ## -rw-r--r--  1 vinuesa vinuesa   77803 ago  8 20:46 recA_Bradyrhizobium_vinuesa.fna
-## -rw-r--r--  1 vinuesa vinuesa   17704 ago 11 20:52 recA_Byuanmingense.fna
+## -rw-r--r--  1 vinuesa vinuesa   17704 sep  4 19:53 recA_Byuanmingense.fna
 ## drwxr-xr-x  2 vinuesa vinuesa    4096 ago  8 19:50 recA_seq_data
 ## -rwxr-xr-x  1 vinuesa vinuesa       8 ago 11 20:53 .Rhistory
-## -rw-r--r--  1 vinuesa vinuesa     528 sep  4 19:28 SCCS.cmds
 ## -rw-rw-r--  1 vinuesa vinuesa   51271 jul 22 18:55 sesion_local_capt_pantalla.png
 ## -rw-r--r--  1 vinuesa vinuesa   40746 jul 22 18:56 sesion_remota_bonampak_capt_pantalla1.png
 ## -rw-r--r--  1 vinuesa vinuesa    4468 jul 22 18:57 sesion_remota_bonampak_capt_pantalla2.png
 ## -rw-rw-r--  1 vinuesa vinuesa  408580 jul 22 18:51 sesion_remota_bonampak_capt_pantalla.png
-## -rw-r--r--  1 vinuesa vinuesa       0 sep  4 19:28 Shell_programming.cmds
-## -rw-r--r--  1 vinuesa vinuesa   47651 sep  4 19:28 Stenotrophomonas_complete_genomes_and_ftp_paths.txt
-## -rw-r--r--  1 vinuesa vinuesa       0 sep  4 19:28 System_administration.cmds
-## -rw-r--r--  1 vinuesa vinuesa       0 sep  4 19:28 Text_processing.cmds
 ## drwxr-xr-x  3 vinuesa vinuesa    4096 ago  8 19:13 TIB2019-T3
 ## -rwxr-xr-x  1 vinuesa vinuesa    6047 jul 21 11:21 working_with_linux_commands.code
-## -rw-r--r--  1 vinuesa vinuesa 1121351 ago 11 20:52 working_with_linux_commands.html
+## -rw-r--r--  1 vinuesa vinuesa 1123314 sep  4 19:53 working_with_linux_commands.html
 ## -rw-r--r--  1 vinuesa vinuesa  382402 ago 11 20:54 working_with_linux_commands.pdf
-## -rw-r--r--  1 vinuesa vinuesa   53351 sep  4 19:30 working_with_linux_commands.Rmd</code></pre>
+## -rw-r--r--  1 vinuesa vinuesa   54521 sep  4 19:54 working_with_linux_commands.Rmd</code></pre>
 </div>
 <div id="file-nos-indica-las-propiedades-de-un-archivo" class="section level3">
 <h3><span class="header-section-number">2.2.3</span> <strong>file</strong> nos indica las propiedades de un archivo</h3>
@@ -651,7 +638,7 @@ file TIB2019-T3</code></pre>
 ## drwxr-xr-x   3 root root       4096 jun 26 18:32 media
 ## drwxr-xr-x   2 root root       4096 abr 26  2018 mnt
 ## drwxr-xr-x   4 root root       4096 ago  3 10:27 opt
-## dr-xr-xr-x 378 root root          0 sep  4 17:38 proc
+## dr-xr-xr-x 379 root root          0 sep  4 17:38 proc
 ## drwx------   5 root root       4096 jul  4 12:57 root
 ## drwxr-xr-x  35 root root       1140 sep  4 17:43 run
 ## drwxr-xr-x   2 root root      12288 sep  3 19:51 sbin</code></pre>
@@ -783,14 +770,14 @@ pwd</code></pre>
 <pre class="bash"><code>ls | head</code></pre>
 <pre><code>## 800px-Evolución_UNIX.png
 ## assembly_summary.txt.gz
-## Batch_utilities.cmds
-## Category.cmds
-## C_programming.cmds
-## empty_file
 ## Evolución_UNIX.png
 ## fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## Filesystem.cmds
-## FORTRAN77_programming.cmds</code></pre>
+## github_TIB-filoinfo_screenshot.png
+## intro_biocomputo_Linux_pt1.odp
+## Intro_biocomputo_Linux_pt1.pdf
+## linux_basic_commands.tab
+## linux_commands.tab
+## linux_very_basic_commands_table.csv</code></pre>
 </div>
 </div>
 <div id="generacion-de-directorios-comando-mkdir" class="section level2">
@@ -818,8 +805,8 @@ fi</code></pre>
 <pre class="bash"><code>cd /home/vinuesa &amp;&amp; mkdir -p TIB2019-T3/sesion1_linux</code></pre>
 <p>No puedes escribir en mi directorio, porque no te he otorgado permiso para ello ;)</p>
 </div>
-<div id="copiar-mover-renombrar-y-borrar-archivos-con-cp-mv-y-rm" class="section level2">
-<h2><span class="header-section-number">2.5</span> Copiar, mover, renombrar y borrar archivos con: <b>cp</b>, <b>mv</b> y <b>rm</b></h2>
+<div id="copiar-mover-renombrar-y-borrar-archivos-con-cp-mv-rm-scp-y-sftp" class="section level2">
+<h2><span class="header-section-number">2.5</span> Copiar, mover, renombrar y borrar archivos con: <b>cp</b>, <b>mv</b>, <b>rm</b>, <b>scp</b> y <b>sftp</b></h2>
 <pre class="bash"><code># cambia a tu home, y luego a TIB2019-T3/sesion1_linux
 cd &amp;&amp; cd TIB2019-T3/sesion1_linux</code></pre>
 <div id="copia-de-archivo-simple-cp-file-." class="section level3">
@@ -857,6 +844,40 @@ rm -rf borrame</code></pre>
 <p>¿Cómo tengo que borrar un directorio? <code>rm -rf directorio</code></p>
 <pre><code>rm -rf data</code></pre>
 </div>
+<div id="scp-copia-de-archivos-entre-maquinas-via-internet" class="section level3">
+<h3><span class="header-section-number">2.5.4</span> <b>scp</b> copia de archivos entre máquinas vía Internet</h3>
+<ul>
+<li>descarga el archivo <a href="https://github.com/vinuesa/TIB-filoinfo/blob/master/docs/sesion1_intro2linux/data/linux_basic_commands.tab">linux_basic_commands.tab</a> del repositorio GitHub a tu máquina</li>
+<li>cópialo a tu $HOME en el servidor</li>
+</ul>
+<pre><code># asegúrate de estar en el directorio que contiene el archvo descargado:
+ls linux_basic_commands.tab
+
+scp linux_basic_commands.tab USUARIO@ip.maquina:/home/USUARIO/ruta/al/dir/destino/</code></pre>
+</div>
+<div id="sftp-descarga-de-archivos-de-una-maquina-remota-a-tu-laptop" class="section level3">
+<h3><span class="header-section-number">2.5.5</span> <b>sftp</b> descarga de archivos de una máquina remota a tu laptop</h3>
+<pre><code># asegúrate de estar en el directorio de tu máquina local donde quieres depositar el archivo a descargar del servidor:
+
+cd $HOME/ruta/dir/destino
+
+# ahora establecemos una sesión de ftp segura (sftp) a la máquina remoata
+sftp USUARIO@ip.maquina:/home/USUARIO/ruta/al/dir/destino/
+
+# podemos hacer un ls para buscar el/los archivo(s) que queremos descargar
+ls *tab
+
+# con la orden get, recuperamos los archivos deseados
+get linux_basic_commands.tab
+get *tab
+get -r directorio
+
+# cerrar la sesión sftp al serivdor
+quit
+
+# ésto nos regresa a $HOME/ruta/dir/destino
+ls </code></pre>
+</div>
 </div>
 <div id="generacion-de-ligas-simbolicas-a-archivos-comando-ln--s-rutaalarchivofuente-nombre_la_liga" class="section level2">
 <h2><span class="header-section-number">2.6</span> Generación de ligas simbólicas a archivos: comando <b>ln -s /ruta/al/archivo/fuente nombre_la_liga</b></h2>
@@ -875,16 +896,16 @@ fi
 
 # confirmamos que se generaron las ligas
 ls -l | head</code></pre>
-<pre><code>## total 16324
+<pre><code>## total 16256
 ## -rw-r--r-- 1 vinuesa vinuesa  110128 jul 24 18:14 800px-Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
-## -rw-r--r-- 1 vinuesa vinuesa       0 sep  4 19:28 Batch_utilities.cmds
-## -rw-r--r-- 1 vinuesa vinuesa      75 sep  4 19:28 Category.cmds
-## lrwxrwxrwx 1 vinuesa vinuesa      78 sep  4 19:30 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
-## -rw-r--r-- 1 vinuesa vinuesa       0 sep  4 19:28 C_programming.cmds
-## -rw-r--r-- 1 vinuesa vinuesa       0 sep  4 19:28 empty_file
+## lrwxrwxrwx 1 vinuesa vinuesa      78 sep  4 19:54 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
 ## -rw-r--r-- 1 vinuesa vinuesa  438308 jul 24 18:21 Evolución_UNIX.png
-## -rw-r--r-- 1 vinuesa vinuesa  222602 jul 23 20:19 fetch_recA_bradys_vinuesa_nuccore_screenshot.png</code></pre>
+## -rw-r--r-- 1 vinuesa vinuesa  222602 jul 23 20:19 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
+## -rw-r--r-- 1 vinuesa vinuesa   87065 jul 22 20:59 github_TIB-filoinfo_screenshot.png
+## -rw-r--r-- 1 vinuesa vinuesa 3534816 jul 28 22:46 intro_biocomputo_Linux_pt1.odp
+## -rw-r--r-- 1 vinuesa vinuesa 3128839 jul 24 20:38 Intro_biocomputo_Linux_pt1.pdf
+## -rwxr-xr-x 1 vinuesa vinuesa   10193 jul 21 11:21 linux_basic_commands.tab</code></pre>
 <div id="renombramos-la-liga-o-cualquier-archivo-o-directorio" class="section level3">
 <h3><span class="header-section-number">2.6.1</span> renombramos la liga (o cualquier archivo o directorio)</h3>
 <pre class="bash"><code>  mv comandos_de_linux.tab linux_commands.tab</code></pre>
@@ -1371,7 +1392,7 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 sep  4 19:30 empty_file
+<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 sep  4 19:54 empty_file
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty
@@ -1461,28 +1482,21 @@ done
 ls *.cmds</code></pre>
 <pre><code>## administration.cmds
 ## Batch.cmds
-## Batch_utilities.cmds
 ## Category.cmds
 ## C.cmds
-## C_programming.cmds
 ## Filesystem.cmds
 ## FORTRAN77.cmds
-## FORTRAN77_programming.cmds
 ## management.cmds
 ## Misc.cmds
 ## Network.cmds
 ## Process.cmds
 ## processing.cmds
-## Process_management.cmds
 ## programming.cmds
 ## Programming.cmds
 ## SCCS.cmds
 ## Shell.cmds
-## Shell_programming.cmds
-## System_administration.cmds
 ## System.cmds
 ## Text.cmds
-## Text_processing.cmds
 ## utilities.cmds</code></pre>
 <pre class="bash"><code># veamos el contenido de uno de los nuevos archivos generados
 cat programming.cmds</code></pre>

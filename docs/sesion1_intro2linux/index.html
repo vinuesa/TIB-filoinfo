@@ -398,7 +398,7 @@ $(document).ready(function () {
 <li><a href="#pwd-imprime-la-ruta-absoluta-del-directorio-actual"><span class="toc-section-number">2.2.1</span> <strong>pwd</strong> imprime la ruta absoluta del directorio actual</a></li>
 <li><a href="#ls-lista-contenidos-del-directorio"><span class="toc-section-number">2.2.2</span> <strong>ls</strong> lista contenidos del directorio</a></li>
 <li><a href="#file-nos-indica-las-propiedades-de-un-archivo"><span class="toc-section-number">2.2.3</span> <strong>file</strong> nos indica las propiedades de un archivo</a></li>
-<li><a href="#expansion-de-caracteres-con-y"><span class="toc-section-number">2.2.4</span> Expansión de caracteres con * y ?</a></li>
+<li><a href="#expansion-de-caracteres-con-y"><span class="toc-section-number">2.2.4</span> Expansión de caracteres con <b>*</b> y <b>?</b></a></li>
 </ul></li>
 <li><a href="#moviendonos-por-el-sistema-de-archivos-comando-cd"><span class="toc-section-number">2.3</span> Moviéndonos por el sistema de archivos: comando <b>cd</b></a><ul>
 <li><a href="#de-nuevo-donde-estoy-imprime-directorio-actual-con-pwd"><span class="toc-section-number">2.3.1</span> de nuevo, ¿dónde estoy?: imprime directorio actual con <b>pwd</b></a></li>
@@ -562,7 +562,7 @@ ls | head</code></pre>
 <pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos, y sus propiedades
 ls -al </code></pre>
 <pre><code>## total 16268
-## drwxr-xr-x  5 vinuesa vinuesa    4096 sep  4 19:53 .
+## drwxr-xr-x  5 vinuesa vinuesa    4096 sep  4 19:54 .
 ## drwxr-xr-x 11 vinuesa vinuesa    4096 ago  1 22:54 ..
 ## -rw-r--r--  1 vinuesa vinuesa  110128 jul 24 18:14 800px-Evolución_UNIX.png
 ## -rw-r--r--  1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
@@ -572,13 +572,13 @@ ls -al </code></pre>
 ## -rw-r--r--  1 vinuesa vinuesa 3534816 jul 28 22:46 intro_biocomputo_Linux_pt1.odp
 ## -rw-r--r--  1 vinuesa vinuesa 3128839 jul 24 20:38 Intro_biocomputo_Linux_pt1.pdf
 ## -rwxr-xr-x  1 vinuesa vinuesa   10193 jul 21 11:21 linux_basic_commands.tab
-## lrwxrwxrwx  1 vinuesa vinuesa      78 sep  4 19:52 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## lrwxrwxrwx  1 vinuesa vinuesa      78 sep  4 19:54 linux_commands.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
 ## -rwxr-xr-x  1 vinuesa vinuesa    1024 jul 21 11:21 .linux_commands.tab.swp
 ## -rwxr-xr-x  1 vinuesa vinuesa    1705 jul 21 11:21 linux_very_basic_commands_table.csv
 ## -rw-rw-r--  1 vinuesa vinuesa  106127 jul 24 19:10 MobaXTerm_plugins_page_screenshot.png
 ## drwxr-xr-x  2 vinuesa vinuesa    4096 jul 24 18:12 MobaXterm_screen_shots
 ## -rw-r--r--  1 vinuesa vinuesa   77803 ago  8 20:46 recA_Bradyrhizobium_vinuesa.fna
-## -rw-r--r--  1 vinuesa vinuesa   17704 sep  4 19:53 recA_Byuanmingense.fna
+## -rw-r--r--  1 vinuesa vinuesa   17704 sep  4 19:54 recA_Byuanmingense.fna
 ## drwxr-xr-x  2 vinuesa vinuesa    4096 ago  8 19:50 recA_seq_data
 ## -rwxr-xr-x  1 vinuesa vinuesa       8 ago 11 20:53 .Rhistory
 ## -rw-rw-r--  1 vinuesa vinuesa   51271 jul 22 18:55 sesion_local_capt_pantalla.png
@@ -587,9 +587,9 @@ ls -al </code></pre>
 ## -rw-rw-r--  1 vinuesa vinuesa  408580 jul 22 18:51 sesion_remota_bonampak_capt_pantalla.png
 ## drwxr-xr-x  3 vinuesa vinuesa    4096 ago  8 19:13 TIB2019-T3
 ## -rwxr-xr-x  1 vinuesa vinuesa    6047 jul 21 11:21 working_with_linux_commands.code
-## -rw-r--r--  1 vinuesa vinuesa 1123314 sep  4 19:53 working_with_linux_commands.html
+## -rw-r--r--  1 vinuesa vinuesa 1123382 sep  4 19:54 working_with_linux_commands.html
 ## -rw-r--r--  1 vinuesa vinuesa  382402 ago 11 20:54 working_with_linux_commands.pdf
-## -rw-r--r--  1 vinuesa vinuesa   54521 sep  4 19:54 working_with_linux_commands.Rmd</code></pre>
+## -rw-r--r--  1 vinuesa vinuesa   54535 sep  4 20:09 working_with_linux_commands.Rmd</code></pre>
 </div>
 <div id="file-nos-indica-las-propiedades-de-un-archivo" class="section level3">
 <h3><span class="header-section-number">2.2.3</span> <strong>file</strong> nos indica las propiedades de un archivo</h3>
@@ -638,7 +638,7 @@ file TIB2019-T3</code></pre>
 ## drwxr-xr-x   3 root root       4096 jun 26 18:32 media
 ## drwxr-xr-x   2 root root       4096 abr 26  2018 mnt
 ## drwxr-xr-x   4 root root       4096 ago  3 10:27 opt
-## dr-xr-xr-x 379 root root          0 sep  4 17:38 proc
+## dr-xr-xr-x 394 root root          0 sep  4 17:38 proc
 ## drwx------   5 root root       4096 jul  4 12:57 root
 ## drwxr-xr-x  35 root root       1140 sep  4 17:43 run
 ## drwxr-xr-x   2 root root      12288 sep  3 19:51 sbin</code></pre>
@@ -683,7 +683,7 @@ ls -ltr /bin | head -20</code></pre>
 </div>
 </div>
 <div id="expansion-de-caracteres-con-y" class="section level3">
-<h3><span class="header-section-number">2.2.4</span> Expansión de caracteres con * y ?</h3>
+<h3><span class="header-section-number">2.2.4</span> Expansión de caracteres con <b>*</b> y <b>?</b></h3>
 <pre class="bash"><code># lista los archivos en /bin que empiezan por las letras b y c
 ls /bin/b* 
 ls /bin/c*</code></pre>
@@ -899,7 +899,7 @@ ls -l | head</code></pre>
 <pre><code>## total 16256
 ## -rw-r--r-- 1 vinuesa vinuesa  110128 jul 24 18:14 800px-Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
-## lrwxrwxrwx 1 vinuesa vinuesa      78 sep  4 19:54 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
+## lrwxrwxrwx 1 vinuesa vinuesa      78 sep  4 20:09 comandos_de_linux.tab -&gt; /home/vinuesa/Cursos/TIB/TIB19-T3/sesion1_intro2linux/linux_basic_commands.tab
 ## -rw-r--r-- 1 vinuesa vinuesa  438308 jul 24 18:21 Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa  222602 jul 23 20:19 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
 ## -rw-r--r-- 1 vinuesa vinuesa   87065 jul 22 20:59 github_TIB-filoinfo_screenshot.png
@@ -1392,7 +1392,7 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 sep  4 19:54 empty_file
+<pre><code>## -rw-r--r-- 1 vinuesa vinuesa 0 sep  4 20:09 empty_file
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 21 19:26 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty

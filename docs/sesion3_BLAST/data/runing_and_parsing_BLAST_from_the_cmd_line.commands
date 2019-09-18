@@ -1,5 +1,5 @@
 ## >>> TIB2019-T3, CCG-UNAM: 29 Jul - 2 Ago 2019 <<<
-## NOTES: V6, July 26th, 2019
+## NOTES: V6.1, Sept 17th, 2019
 ## Author: Pablo Vinuesa, CCG-UNAM, Mexico
 ## http://www.ccg.unam.mx~/vinuesa/
 ## https://github.com/vinuesa/TIB-filoinfo
@@ -293,9 +293,9 @@ head -1 100blastX_hits_m6_header2.tab | sed 's/\t/\n/g' | cat -n
 
 #>>> This 1liner generates a non-redundant list of the qstart qend positions for each of the query sequences. 
 #    These are extracted from the full table with $(cut -f1 100blastX_hits_m6_header2.tab | grep -v qseqid | sort -u)
-#    Then, for each query, we grep them out of the table with grep $query 100blastX_hits_m6_header2.tab and keep only the fields 6,7, qstart, qend
+#    Then, for each query, grep it out of the table with grep $query 100blastX_hits_m6_header2.tab and keep only the fields 6,7: qstart, qend
 #    We separte and label the results corresponding to each query sequence using the echo "#>>> $query"; as header 
-#    and end the corresponding rerport with echo '------------------------';
+#    End the corresponding rerport with echo '------------------------';
 for query in $(cut -f1 100blastX_hits_m6_header2.tab | grep -v qseqid | sort -u)
 do 
      echo "#>>> $query"; grep $query 100blastX_hits_m6_header2.tab | cut -f6,7 | sort -u
@@ -335,7 +335,7 @@ blastdbcmd -db integron_cassettes4blastdb.faaED -entry_batch Am1_qs899_qe1699_hi
 #    This, as you will agree, is very convenient when we have large lits of hits 
 #    matching on different parts of our query sequence, exactly our case:
 
-# lets split the multifasta into the individual souce sequence files, 
+# lets split the multifasta into the individual soruce sequence files, 
 # that is, generate single fasta files from the multifasta source file
 split_fasta.pl 3cass_amplicons.fna
 

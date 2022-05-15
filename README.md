@@ -1,4 +1,4 @@
-# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2022-FILO" width="115" height="115" align="middle"> <b>TIB2022</b>
+# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2022-FILO" width="115" height="115" align="middle"> <b>TIB2022-FILO</b>
 
 <img src="docs/pics/TIB19-T3_foto_de_grupo1.png" alt="TIB2022-T3 foto de grupo" width="400" height="300" align="middle">
 

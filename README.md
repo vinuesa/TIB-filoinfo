@@ -1,21 +1,21 @@
-# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2022" width="115" height="115" align="middle"> <b>TIB2022</b>
+# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2022-FILO" width="115" height="115" align="middle"> <b>TIB2022</b>
 
 <img src="docs/pics/TIB19-T3_foto_de_grupo1.png" alt="TIB2022-T3 foto de grupo" width="400" height="300" align="middle">
 
-# <b>Talleres Internacionales de Bioinformática - Centro de Ciencias Genómicas, UNAM, Cuernavaca, México</b>
-Después de una interrupción de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la última en 2019 (TIB2019-T3).
+# <b>Talleres Internacionales de Bioinformática - Centro de Ciencias Genómicas, UNAM, Cuernavaca, México (TIB022-FILO)</b>
+Después de una interrupción de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/) (#TIB2022-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la última en 2019 (TIB2019-T3). 
 
  
 ## Presentaci&oacute;n
 Este taller de nivel básico-intermedio te proporcionará una sólida base de conocimientos teóricos y prácticos sobre aspectos fundamentales de biocómputo para inferencia filogenética, evolución molecular y genómica microbiana, con énfasis en análisis pangenómicos y filogenómicos.
 
 ### Descripción
-En el taller (40 hrs) tendremos sesiones teóricas y prácticas que cubrirán un amplio espectro de aspectos básicos del tópico como:
+En el taller (40 hrs) tendremos sesiones teóricas y prácticas que cubrirán un amplio espectro del tópico como:
 
-- escrutinio de bases de datos mediante BLAST
+- formateo y escrutinio de bases de datos locales de secuencias mediante BLAST
 - determinación e interpretación de homología
 - alineamiento de múltiples secuencias y conversión de formatos 
-- inferencia filogenética
+- inferencia filogenética estadística bajo criterios de optimización de máxima verosimilitud y bayesiano
 - análisis pangenómico y filogenómico de genomas microbianos
 
 Se darán presentaciones detalladas del uso de programas clave (todos de “open source”) para estos análisis, usando datos tomados de las bases de datos. También se presentará el uso de algunos scripts de Bash y Perl muy sencillos, con el objetivo de aprender los aspectos básicos de estos lenguajes para el análisis de datos genómicos.
@@ -89,9 +89,7 @@ El material del [Taller, TIB-filoinfo](https://www.nnb.unam.mx/EBM2022/pangenomi
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0</a>
 
 
-
 ***
-
 
 ## Agradecimientos
 Quiero agradecer expresamente al [Nodo Nacional de Bioinform&aacute;tica - UNAM](https://www.nnb.unam.mx/) por el apoyo y facilidades prestadas para poder impartir este taller. Quiero explícitamente agradecer, de manera muy especial, a la Dra. Irma Martínez Flores, la M.T.I. Shirley Alquicira Hernández y al M.A.D. Alfredo Hernández Alvarez por hacer posible estos Talleres.
@@ -234,6 +232,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 - [clustal omega](http://www.clustal.org/omega/)
 - [seaview](http://doua.prabi.fr/software/seaview)
 - [PhyML](https://github.com/stephaneguindon/phyml)
+- [MrBayes](http://nbisweden.github.io/MrBayes/)
 - [FigTree](https://github.com/rambaut/figtree/releases/tag/v1.4.4)
 - [GET_HOMOLOGUES](https://github.com/eead-csic-compbio/get_homologues/releases)
 - [GET_PHYLOMARKERS](https://github.com/vinuesa/get_phylomarkers)

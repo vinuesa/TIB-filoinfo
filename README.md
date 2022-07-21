@@ -99,7 +99,7 @@ Quiero agradecer expresamente al [Nodo Nacional de Bioinform&aacute;tica - UNAM]
 ## <b>Sesiones y material asociado</b>
 ### Horario y lugar de impartici&oacute;n de las sesiones
 Las clases se imparten del 1 al 5 de Agosto en el auditorio Guillermo Sober&oacute;n del [CCG-UNAM](http://www.ccg.unam.mx/), Cuernavaca, Morelos
-de 9 a 17:30 hrs, seg&uacute;n el [programa del TIB2022](https://www.nnb.unam.mx/EBM2022/#talleres)
+de 9 a 17:00 hrs, seg&uacute;n el [programa del TIB2022](https://www.nnb.unam.mx/EBM2022/#talleres)
 
 <img src="docs/pics/PV_impartiendo_clases_TIB19_2.png" alt="TIB2022-T3 foto de grupo" width="400" height="300">
 

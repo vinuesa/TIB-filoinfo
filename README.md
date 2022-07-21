@@ -33,6 +33,8 @@ Es necesario que el alumno traiga su computadora personal, de preferencia con Li
 
 Aqu&iacute; tienen [instrucciones para la instalaci&oacute;n de MobaXterm en Windows](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/Instalaci&oacute;n_de_mobaXterm_en_Windows.pdf)
 
+- Otra opci&oacute;n, para quienes tengan <b>Windows 10 o superior corriendo en una m&aacute;quina de 64 bits</b>, es [instalar Bash para Windows, como se explica aqu&iacute;](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/).
+
 ### Sobre el profesor
 Hola, me llamo [Pablo Vinuesa](http://www.ccg.unam.mx/~vinuesa/). Soy investigador titular del 
 [Centro de Ciencias Gen&oacute;micas](http://www.ccg.unam.mx) de la 

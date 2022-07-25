@@ -2,7 +2,7 @@
 
 <img src="docs/pics/TIB19-T3_foto_de_grupo1.png" alt="TIB2022-T3 foto de grupo" width="400" height="300" align="middle">
 
-# <b>Talleres Internacionales de Bioinform&aacute;tica - Centro de Ciencias Gen&oacute;micas, UNAM, Cuernavaca, M&eacute;xico (TIB022-FILO)</b>
+# <b>Talleres Internacionales de Bioinform&aacute;tica - Centro de Ciencias Gen&oacute;micas, UNAM, Cuernavaca, M&eacute;xico (TIB2022-FILO)</b>
 Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/) (#TIB2022-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2019 (TIB2019-T3). 
 
  
@@ -33,7 +33,7 @@ Es necesario que el alumno traiga su computadora personal, de preferencia con Li
 
 Aqu&iacute; tienen [instrucciones para la instalaci&oacute;n de MobaXterm en Windows](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/Instalaci&oacute;n_de_mobaXterm_en_Windows.pdf)
 
-- Otra opci&oacute;n, para quienes tengan <b>Windows 10 o superior corriendo en una m&aacute;quina de 64 bits</b>, es [instalar Bash para Windows, habilitando "Windows Subsystem for Linux", como se explica aqu&iacute;](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/).
+<!-- - Otra opci&oacute;n, para quienes tengan <b>Windows 10 o superior corriendo en una m&aacute;quina de 64 bits</b>, es [instalar Bash para Windows, habilitando "Windows Subsystem for Linux", como se explica aqu&iacute;](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/). -->
 
 ### Sobre el profesor
 Hola, me llamo [Pablo Vinuesa](http://www.ccg.unam.mx/~vinuesa/). Soy investigador titular del 
@@ -48,7 +48,11 @@ la evoluci&oacute;n y emergencia de pat&oacute;genos oportunistas a partir de mi
 Tenemos el privilegio de contar con la M.C.Bioq. <b>Stefany Argueta</b> y al M.C.Biol. <b>Julio Valerdi Negrero</b> como ayudantes del [Taller](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/). Ambos son personas con un excelente trato, adem&aacute;s de ser alumn@s de posgardo de la UNAM con amplia experiencia en bionform&aacute;tica y filogen&eacute;tica.
 
 ### Sobre medidas de seguridad sanitaria para minimizar riesgo de infecci&oacute;n por SARS-CoV-2
-Seguiremos estrictas medidas de seguridad para minimizar el riesgo latente de contraer COVID-19: tendremos un aforo muy reducido, a < 25% de capaciad del auditorio, el cual cuenta con excelente ventilaci&oacute;n. El uso correcto de cubrebocas KN95 o superior ser&aacute; obligatorio. Se instalar&aacute;n adem&aacute;s varias [unidades de filtraci&oacute;n de aire Corsi-Rosenthal](https://aghealth.ucdavis.edu/es/news/la-caja-corsi-rosenthal-filtro-de-aire-casero-con-ventilador-de-caja-para-covid-19-y-el-humo). 
+Seguiremos estrictas medidas de seguridad para minimizar el riesgo latente de contraer COVID-19
+- tendremos un aforo muy reducido, a < 25% de capaciad del auditorio, el cual cuenta con excelente ventilaci&oacute;n. 
+- el uso correcto de cubrebocas KN95 o superior ser&aacute; obligatorio. 
+- contaremos con varias [unidades de filtraci&oacute;n de aire Corsi-Rosenthal](https://aghealth.ucdavis.edu/es/news/la-caja-corsi-rosenthal-filtro-de-aire-casero-con-ventilador-de-caja-para-covid-19-y-el-humo)
+<!-- - vamos a pedir prueba r&aacute;pida de ant&iacute;geno hecha < 48 hrs del inicio del taller --> 
 
 
 *** 

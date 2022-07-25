@@ -238,11 +238,10 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 - [clustal omega](http://www.clustal.org/omega/)
 - [seaview](http://doua.prabi.fr/software/seaview)
 - [PhyML](https://github.com/stephaneguindon/phyml)
-<!--- [MrBayes](http://nbisweden.github.io/MrBayes/)-->
 - [FigTree](https://github.com/rambaut/figtree/releases/tag/v1.4.4)
 - [GET_HOMOLOGUES](https://github.com/eead-csic-compbio/get_homologues/releases)
 - [GET_PHYLOMARKERS](https://github.com/vinuesa/get_phylomarkers)
 
 
-
+<!--- [MrBayes](http://nbisweden.github.io/MrBayes/)-->
 

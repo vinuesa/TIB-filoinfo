@@ -1,17 +1,25 @@
 ######################
-# >>> TIB2019-T3 <<< #
+# >>> TIB2022 <<< #
 ######################
 # Practicas de alineamiento multiple usando programas de la familia clustal
 # Autor: Pablo Vinuesa; CCG-UNAM; http://www.ccg.unam.mx:/~vinuesa/
 # https://github.com/vinuesa/TIB-filoinfo
-# V2: Julio 2019
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# V4: Julio 2022
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #======================================================================================
 # uso basico de clustalw
+
+# imprime la ayuda
+man clustalw
+
+clustalw -help
+clustalw -fullhelp
+
+# línea de invocación estándar
 clustalw -infile=fasta_no_alineado -align -output=fasta -outfile=archivo_cluwaln.fasta
 
+# con modificación de parámetros
 clustalw -infile=archivo.fasta -align -pwmatrix=blosum -pwgapopen=12
 -pwgapext=0.2 -matrix=blosum -gapopen=12 -gapext=0.2 -outorder=aligned 
 -convert -outfile=archivo_aln1.phy -output=phylip
@@ -125,7 +133,7 @@ leuA-Bacillales_cluoAln.fas
 
 
 ######################################
-#>>> III) Conversión de formatos <<< #
+#>>> III) Conversion de formatos <<< #
 ######################################
 
 # explora el script ./convert_alnFormats_using_clustalw.sh para que entiendas lo que hace
@@ -134,7 +142,7 @@ leuA-Bacillales_cluoAln.fas
 
 # una solucion mas genral y poderosa
 convert_aln_format_batch_bp.pl 
-Usage: /home/vinuesa/bin/convert_aln_format_batch_bp.pl inputformat infile_ext outputformat outputfile_ext
+Usage: /path/to/convert_aln_format_batch_bp.pl inputformat infile_ext outputformat outputfile_ext
 
 	          Supported formats include:
 

@@ -208,7 +208,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ### Jueves 4 de Agosto
 #### <b>C&oacute;mputo de familias de genes hom&oacute;logos con datos gen&oacute;micos usando GET_HOMOLOGUES(teor&iacute;a)</b>
-- [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion7_pangenomica_GET_HOMOLOGUES/pangenomica_microbiana_y_GET_HOMOLOGUES_TIB19.pdf)
+- [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion7_pangenomica_GET_HOMOLOGUES/pangenomica_microbiana_y_GET_HOMOLOGUES.pdf)
 - [pr&aacute;ctica GET_HOMOLOUGES+GET_PHYLOMARKERS- html](https://vinuesa.github.io/TIB-filoinfo/sesion7_pangenomica_GET_HOMOLOGUES/) 
 <!--- [An&aacute;lisis pangen&oacute;mico con GET_HOMOLOGUES (c&oacute;digo) - txt](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion7_pangenomica_GET_HOMOLOGUES/data/code4_GET_HOMOLOGUES_TIB19-T3.txt)-->
 - [An&aacute;lisis pangen&oacute;mico con GET_HOMOLOGUES (secuencias) - tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion7_pangenomica_GET_HOMOLOGUES/data/pIncAC.tgz)

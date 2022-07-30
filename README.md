@@ -223,7 +223,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ### Viernes 5 de Agosto
 #### <b>Estrategias para la estima de filogenias gen&oacute;micas</b>
-- [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion8_filogenomica_GET_PHYLOMARKERS/get_phylomarkers_overview_TIB2022-T3.pdf)
+- [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion8_filogenomica_GET_PHYLOMARKERS/get_phylomarkers_overview.pdf)
 - [tutorial GET_PHYLOMARKERS - html](https://github.com/vinuesa/get_phylomarkers/blob/master/docs/GET_PHYLOMARKERS_manual.md#get_phylomarkers-tutorial)
 - [pr&aacute;ctica GET_HOMOLOUGES+GET_PHYLOMARKERS- html](https://vinuesa.github.io/TIB-filoinfo/sesion7_pangenomica_GET_HOMOLOGUES/)
 #### <b>Estima de filogenias gen&oacute;micas con GET_PHYLOMARKERS (pr&aacute;cticas)</b>

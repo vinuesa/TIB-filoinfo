@@ -12,10 +12,11 @@ Este taller de nivel b&aacute;sico-intermedio te proporcionar&aacute; una s&oacu
 ### Descripci&oacute;n
 En el taller (40 hrs) tendremos sesiones te&oacute;ricas y pr&aacute;cticas que cubrir&aacute;n un amplio espectro del t&oacute;pico como:
 
+- introducci&oacute;n al bioc&oacute;mputo en sistemas Linux para procesamiento eficiente de secuencias y datos moleculares
 - formateo y escrutinio de bases de datos locales de secuencias mediante BLAST
 - determinaci&oacute;n e interpretaci&oacute;n de homolog&iacute;a
 - alineamiento de m&uacute;ltiples secuencias y conversi&oacute;n de formatos 
-- inferencia filogen&eacute;tica estad&iacute;stica bajo criterios de optimizaci&oacute;n de m&aacute;xima verosimilitud y bayesiano
+- inferencia filogen&eacute;tica estad&iacute;stica bajo criterios de optimizaci&oacute;n de m&aacute;xima verosimilitud
 - an&aacute;lisis pangen&oacute;mico y filogen&oacute;mico de genomas microbianos
 
 Se dar&aacute;n presentaciones detalladas del uso de programas clave (todos de “open source”) para estos an&aacute;lisis, usando datos tomados de las bases de datos. Tambi&eacute;n se presentar&aacute; el uso de algunos scripts de Bash y Perl muy sencillos, con el objetivo de aprender los aspectos b&aacute;sicos de estos lenguajes para el an&aacute;lisis de datos gen&oacute;micos.
@@ -71,11 +72,11 @@ Este repositorio contiene el material para el [Taller sobre Pangen&oacute;mica y
 ### Clonaci&oacute;n del repositorio
 - Si tienes instalado [git](https://git-scm.com/) en tu computadora, puedes clonar el repositorio con el comando:
 
-   <code>git clone https://github.com/vinuesa/TIBS-filoinfo.git</code>
+   <code>git clone https://github.com/vinuesa/TIB-filoinfo.git</code>
 
 - Para actualizar el repositorio, ejecuta este comando desde dentro del directorio TIBS-filoinfo
   
-   <code>git pull https://github.com/vinuesa/TIBS-filoinfo.git</code>
+   <code>git pull https://github.com/vinuesa/TIB-filoinfo.git</code>
 
 En [ubuntu](https://www.ubuntu.com/) y [MobaXterm](https://mobaxterm.mobatek.net/download-home-edition.html) es muy f&aacute;cil instalar git: 
 
@@ -98,7 +99,7 @@ El material del [Taller, TIB-filoinfo](https://www.nnb.unam.mx/EBM2022/pangenomi
 ***
 
 ## Agradecimientos
-Quiero agradecer expresamente al [Nodo Nacional de Bioinform&aacute;tica - UNAM](https://www.nnb.unam.mx/) por el apoyo y facilidades prestadas para poder impartir este taller. Quiero expl&iacute;citamente agradecer, de manera muy especial, a la Dra. Irma Mart&iacute;nez Flores, la M.T.I. Shirley Alquicira Hern&aacute;ndez y al M.A.D. Alfredo Hern&aacute;ndez Alvarez por hacer posible estos Talleres.
+Quiero agradecer al [Nodo Nacional de Bioinform&aacute;tica - UNAM](https://www.nnb.unam.mx/) por el apoyo y facilidades prestadas para poder impartir este taller. Quiero expl&iacute;citamente agradecer, de manera muy especial, a la Dra. Irma Mart&iacute;nez Flores, la M.T.I. Shirley Alquicira Hern&aacute;ndez, al M.A.D. Alfredo Hern&aacute;ndez Alvarez e Iván Uhthoff Aguilera por su extraordinaria labor y capacidad.
 
 ***
 

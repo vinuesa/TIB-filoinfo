@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, Centro de Ciencias Genómicas - UNAM" />
 
-<meta name="date" content="2022-07-21" />
+<meta name="date" content="2022-07-31" />
 
 <title>Sesión 1. Introducción al biocómputo en sistemas GNU/Linux</title>
 
@@ -367,7 +367,7 @@ pre code {
 sistemas GNU/Linux</h1>
 <h4 class="author">Pablo Vinuesa, Centro de Ciencias Genómicas -
 UNAM</h4>
-<h4 class="date">2022-07-21</h4>
+<h4 class="date">2022-07-31</h4>
 
 </div>
 
@@ -411,74 +411,86 @@ para dicho comando</a></li>
 <li><a href="#expansión-de-caracteres-con-y"><span class="toc-section-number">2.2.4</span> Expansión de caracteres con
 <b>*</b> y <b>?</b></a></li>
 </ul></li>
-<li><a href="#moviéndonos-por-el-sistema-de-archivos-comando-cd-y-haciendo-uso-de-ruta-absoluta-fullpathtofile-or-relativa-..file"><span class="toc-section-number">2.3</span> Moviéndonos por el sistema de
+<li><a href="#permisos-modo-de-un-archivo"><span class="toc-section-number">2.3</span> <strong>Permisos</strong> (modo de
+un archivo)</a>
+<ul>
+<li><a href="#usuario-grupo-y-resto-del-mundo-user-group-others-y-permisos-rwx"><span class="toc-section-number">2.3.1</span> Usuario, grupo y resto del mundo
+(User, Group, Others …) y permisos <span class="math inline">\(rwx\)</span></a></li>
+<li><a href="#tabla-de-atributos-de-los-permisos"><span class="toc-section-number">2.3.2</span> Tabla de atributos de los
+permisos</a></li>
+<li><a href="#chmod---cambiar-el-modo-permisos-de-un-archivo-o-directorio"><span class="toc-section-number">2.3.3</span> <strong>chmod</strong> - cambiar
+el modo (permisos) de un archivo o directorio</a></li>
+<li><a href="#file-nos-indica-las-propiedades-de-un-archivo"><span class="toc-section-number">2.3.4</span> <strong>file</strong> nos indica
+las propiedades de un archivo</a></li>
+</ul></li>
+<li><a href="#moviéndonos-por-el-sistema-de-archivos-comando-cd-y-haciendo-uso-de-ruta-absoluta-fullpathtofile-or-relativa-..file"><span class="toc-section-number">2.4</span> Moviéndonos por el sistema de
 archivos: comando <b>cd</b> y haciendo uso de ruta absoluta
 <code>/full/path/to/file</code> or relativa <code>../file</code></a>
 <ul>
-<li><a href="#dónde-estoy-imprime-directorio-actual-con-pwd"><span class="toc-section-number">2.3.1</span> ¿dónde estoy?: imprime
+<li><a href="#dónde-estoy-imprime-directorio-actual-con-pwd"><span class="toc-section-number">2.4.1</span> ¿dónde estoy?: imprime
 directorio actual con <b>pwd</b></a></li>
-<li><a href="#sube-un-directorio-usando-ruta-relativa-cd-.."><span class="toc-section-number">2.3.2</span> sube un directorio usando RUTA
+<li><a href="#sube-un-directorio-usando-ruta-relativa-cd-.."><span class="toc-section-number">2.4.2</span> sube un directorio usando RUTA
 RELATIVA: <b>cd ..</b></a></li>
-<li><a href="#regresa-a-tu-home-con-cd"><span class="toc-section-number">2.3.3</span> regresa a tu home con
+<li><a href="#regresa-a-tu-home-con-cd"><span class="toc-section-number">2.4.3</span> regresa a tu home con
 <b>cd</b></a></li>
 </ul></li>
-<li><a href="#generación-de-directorios-comando-mkdir"><span class="toc-section-number">2.4</span> Generación de directorios: comando
+<li><a href="#generación-de-directorios-comando-mkdir"><span class="toc-section-number">2.5</span> Generación de directorios: comando
 <b>mkdir</b></a></li>
-<li><a href="#copiar-mover-renombrar-y-borrar-archivos-con-cp-mv-rm-scp-y-sftp"><span class="toc-section-number">2.5</span> Copiar, mover, renombrar y borrar
+<li><a href="#copiar-mover-renombrar-y-borrar-archivos-con-cp-mv-rm-scp-y-sftp"><span class="toc-section-number">2.6</span> Copiar, mover, renombrar y borrar
 archivos con: <b>cp</b>, <b>mv</b>, <b>rm</b>, <b>scp</b> y
 <b>sftp</b></a>
 <ul>
-<li><a href="#copia-de-archivo-simple-cp-file-."><span class="toc-section-number">2.5.1</span> copia de archivo simple: <b> cp
+<li><a href="#copia-de-archivo-simple-cp-file-."><span class="toc-section-number">2.6.1</span> copia de archivo simple: <b> cp
 file .</b></a></li>
-<li><a href="#copiado-de-directorio-cp--r-dir-."><span class="toc-section-number">2.5.2</span> copiado de directorio: <b> cp -r
+<li><a href="#copiado-de-directorio-cp--r-dir-."><span class="toc-section-number">2.6.2</span> copiado de directorio: <b> cp -r
 dir . </b></a></li>
-<li><a href="#eliminar-un-directorio-rm--rf-recursively--r-and-force--f"><span class="toc-section-number">2.5.3</span> Eliminar un directorio: <b>rm
+<li><a href="#eliminar-un-directorio-rm--rf-recursively--r-and-force--f"><span class="toc-section-number">2.6.3</span> Eliminar un directorio: <b>rm
 -rf</b> [recursively -r and force -f]</a></li>
-<li><a href="#scp-copia-de-archivos-entre-máquinas-vía-internet"><span class="toc-section-number">2.5.4</span> <b>scp</b> copia de archivos
+<li><a href="#scp-copia-de-archivos-entre-máquinas-vía-internet"><span class="toc-section-number">2.6.4</span> <b>scp</b> copia de archivos
 entre máquinas vía Internet</a></li>
-<li><a href="#sftp-descarga-de-archivos-de-una-máquina-remota-a-tu-laptop"><span class="toc-section-number">2.5.5</span> <b>sftp</b> descarga de archivos
+<li><a href="#sftp-descarga-de-archivos-de-una-máquina-remota-a-tu-laptop"><span class="toc-section-number">2.6.5</span> <b>sftp</b> descarga de archivos
 de una máquina remota a tu laptop</a></li>
 </ul></li>
-<li><a href="#derterminar-el-tipo-de-archivo-con-file"><span class="toc-section-number">2.6</span> Derterminar el tipo de archivo con
+<li><a href="#derterminar-el-tipo-de-archivo-con-file"><span class="toc-section-number">2.7</span> Derterminar el tipo de archivo con
 <strong>file</strong></a></li>
-<li><a href="#generación-de-ligas-simbólicas-a-archivos-comando-ln--s-rutaalarchivofuente-nombre_la_liga"><span class="toc-section-number">2.7</span> Generación de ligas simbólicas a
+<li><a href="#generación-de-ligas-simbólicas-a-archivos-comando-ln--s-rutaalarchivofuente-nombre_la_liga"><span class="toc-section-number">2.8</span> Generación de ligas simbólicas a
 archivos: comando <b>ln -s /ruta/al/archivo/fuente
 nombre_la_liga</b></a>
 <ul>
-<li><a href="#renombramos-la-liga-o-cualquier-archivo-o-directorio"><span class="toc-section-number">2.7.1</span> renombramos la liga (o cualquier
+<li><a href="#renombramos-la-liga-o-cualquier-archivo-o-directorio"><span class="toc-section-number">2.8.1</span> renombramos la liga (o cualquier
 archivo o directorio)</a></li>
 </ul></li>
-<li><a href="#visualización-de-contenidos-de-archivos-comando-head-tail-cat-less-more"><span class="toc-section-number">2.8</span> Visualización de contenidos de
+<li><a href="#visualización-de-contenidos-de-archivos-comando-head-tail-cat-less-more"><span class="toc-section-number">2.9</span> Visualización de contenidos de
 archivos: comando <b>head</b>, <b>tail</b>, <b>cat</b>, <b>less</b>,
 <b>more</b></a>
 <ul>
-<li><a href="#uso-de-head-y-tail-para-desplegar-la-cabecera-y-cola-de-archivos"><span class="toc-section-number">2.8.1</span> uso de <b>head</b> y <b>tail</b>
+<li><a href="#uso-de-head-y-tail-para-desplegar-la-cabecera-y-cola-de-archivos"><span class="toc-section-number">2.9.1</span> uso de <b>head</b> y <b>tail</b>
 para desplegar la cabecera y cola de archivos</a></li>
-<li><a href="#cat-despliega-uno-o-más-archivos-concatenándolos"><span class="toc-section-number">2.8.2</span> <b>cat</b> despliega uno o más
+<li><a href="#cat-despliega-uno-o-más-archivos-concatenándolos"><span class="toc-section-number">2.9.2</span> <b>cat</b> despliega uno o más
 archivos, concatenándolos</a></li>
-<li><a href="#el-paginador-less-despliega-archivos-página-a-página"><span class="toc-section-number">2.8.3</span> el paginador <b>less</b>
+<li><a href="#el-paginador-less-despliega-archivos-página-a-página"><span class="toc-section-number">2.9.3</span> el paginador <b>less</b>
 despliega archivos página a página</a></li>
 </ul></li>
-<li><a href="#edición-de-archivos-con-los-editores-vim-o-gnedit"><span class="toc-section-number">2.9</span> Edición de archivos con los
+<li><a href="#edición-de-archivos-con-los-editores-vim-o-gnedit"><span class="toc-section-number">2.10</span> Edición de archivos con los
 editores <b>vim</b> o <b>[g|n]edit</b></a></li>
-<li><a href="#edición-de-archivos-con-el-editor-de-flujo-sed-stream-editor"><span class="toc-section-number">2.10</span> Edición de archivos con el editor
+<li><a href="#edición-de-archivos-con-el-editor-de-flujo-sed-stream-editor"><span class="toc-section-number">2.11</span> Edición de archivos con el editor
 de flujo <b>sed</b> (stream editor)</a>
 <ul>
-<li><a href="#ejemplos-de-uso-básico-de-sed"><span class="toc-section-number">2.10.1</span> Ejemplos de uso básico de
+<li><a href="#ejemplos-de-uso-básico-de-sed"><span class="toc-section-number">2.11.1</span> Ejemplos de uso básico de
 <b>sed</b>:</a></li>
 </ul></li>
-<li><a href="#uso-de-tuberias-de-herramientas-unixlinux-para-filtrado-de-texto-con-cut-grep-sort-uniq-wc-y"><span class="toc-section-number">2.11</span> Uso de tuberias de herramientas
+<li><a href="#uso-de-tuberias-de-herramientas-unixlinux-para-filtrado-de-texto-con-cut-grep-sort-uniq-wc-y"><span class="toc-section-number">2.12</span> Uso de tuberias de herramientas
 UNIX/Linux para filtrado de texto con <b>cut</b>, <b>grep</b>,
 <b>sort</b>, <b>uniq</b>, <b>wc</b> y <b>|</b></a>
 <ul>
-<li><a href="#ejemplos-de-herramientas-de-filtrado-de-texto-en-acción"><span class="toc-section-number">2.11.1</span> Ejemplos de herramientas de
+<li><a href="#ejemplos-de-herramientas-de-filtrado-de-texto-en-acción"><span class="toc-section-number">2.12.1</span> Ejemplos de herramientas de
 filtrado de texto en acción</a></li>
 </ul></li>
-<li><a href="#redireccionado-de-la-salida-stout-a-un-archivo-con-el-comando"><span class="toc-section-number">2.12</span> redireccionado de la salida STOUT
+<li><a href="#redireccionado-de-la-salida-stout-a-un-archivo-con-el-comando"><span class="toc-section-number">2.13</span> redireccionado de la salida STOUT
 a un archivo con el comando <b>&gt;</b></a></li>
-<li><a href="#manual-de-cada-comando-man-command"><span class="toc-section-number">2.13</span> Manual de cada comando: <b>man
+<li><a href="#manual-de-cada-comando-man-command"><span class="toc-section-number">2.14</span> Manual de cada comando: <b>man
 command</b></a></li>
-<li><a href="#ayuda-de-cada-comando-command-help"><span class="toc-section-number">2.14</span> Ayuda de cada comando: <b>command
+<li><a href="#ayuda-de-cada-comando-command-help"><span class="toc-section-number">2.15</span> Ayuda de cada comando: <b>command
 –help</b></a></li>
 </ul></li>
 <li><a href="#inicios-de-programación-en-bash"><span class="toc-section-number">3</span> Inicios de programación en <span class="math inline">\(Bash\)</span></a>
@@ -594,7 +606,7 @@ mediante herramientas de filtrado de UNIX</a></li>
 de Pagenómica y Filogenómica Microbiana</a> del <a href="https://www.nnb.unam.mx/EBM2022/">Encuentro de Bioinformática en
 México 2022 - EBM2022</a>, celebrados en el <a href="http://www.ccg.unam.mx">Centro de Ciencias Genómicas</a> de la <a href="http://www.ccg.unam.mx">Universidad Nacional Autónoma de
 México</a>, del 1 al 5 de agosto de 2022 por <a href="http://www.ccg.unan.mx/~vinuesa/">Pablo Vinuesa, CCG-UNAM</a> <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a>.</p>
-<p>Version: 2022-07-21</p>
+<p>Version: 2022-07-31</p>
 <p>Si éste es tu primer contacto con Linux, te recomiendo que leas
 primero esta <a href="https://github.com/vinuesa/TIB-filoinfo/blob/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf">presentación
 sobre introducción al biocómputo en sistemas Linux - PDF</a>.</p>
@@ -650,7 +662,7 @@ del directorio sesion1_intro2linux/data del sitio GitHub</a></p>
 <h3><span class="header-section-number">2.1.1</span>
 <strong>ssh</strong> establecer sesion remota encriptada (segura) via
 ssh al servidor con número dado de IP</h3>
-<pre><code>ssh -l $USER IP</code></pre>
+<pre><code>ssh -X $USER@IP</code></pre>
 </div>
 <div id="hostname-muestra-el-nombre-del-host-la-máquina-a-la-que-estoy-conectado-y-la-ip" class="section level3" number="2.1.2">
 <h3><span class="header-section-number">2.1.2</span>
@@ -749,9 +761,9 @@ las opciones disponibles para dicho comando</h3>
 ls --help</code></pre>
 <pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos, y sus propiedades (-l, long format)
 ls -al </code></pre>
-<pre><code>## total 15156
-## drwxr-xr-x  5 vinuesa vinuesa    4096 jul 21 13:53 .
-## drwxr-xr-x 11 vinuesa vinuesa    4096 jul 20 19:37 ..
+<pre><code>## total 15660
+## drwxr-xr-x  5 vinuesa vinuesa    4096 jul 31 21:13 .
+## drwxr-xr-x 11 vinuesa vinuesa    4096 jul 24 19:22 ..
 ## -rw-r--r--  1 vinuesa vinuesa  110128 jul 20 19:36 800px-Evolución_UNIX.png
 ## -rw-r--r--  1 vinuesa vinuesa 6780296 jul 20 19:36 assembly_summary.txt.gz
 ## -rw-rw-r--  1 vinuesa vinuesa    2000 jul 20 19:36 .cmds
@@ -759,8 +771,8 @@ ls -al </code></pre>
 ## -rw-r--r--  1 vinuesa vinuesa  438308 jul 20 19:36 Evolución_UNIX.png
 ## -rw-r--r--  1 vinuesa vinuesa  222602 jul 20 19:36 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
 ## -rw-r--r--  1 vinuesa vinuesa   87065 jul 20 19:36 github_TIB-filoinfo_screenshot.png
-## -rw-r--r--  1 vinuesa vinuesa 3035814 jul 21 12:20 intro_biocomputo_Linux_pt1.odp
-## -rw-r--r--  1 vinuesa vinuesa 2297145 jul 20 19:36 Intro_biocomputo_Linux_pt1.pdf
+## -rw-r--r--  1 vinuesa vinuesa 3199463 jul 31 21:13 intro_biocomputo_Linux_pt1.odp
+## -rw-r--r--  1 vinuesa vinuesa 2645459 jul 31 21:12 Intro_biocomputo_Linux_pt1.pdf
 ## -rwxr-xr-x  1 vinuesa vinuesa   10193 jul 20 19:36 linux_basic_commands.tab
 ## -rwxr-xr-x  1 vinuesa vinuesa   10193 jul 20 19:36 linux_commands.tab
 ## -rwxr-xr-x  1 vinuesa vinuesa    1024 jul 20 19:36 .linux_commands.tab.swp
@@ -768,7 +780,7 @@ ls -al </code></pre>
 ## -rw-rw-r--  1 vinuesa vinuesa  106127 jul 20 19:36 MobaXTerm_plugins_page_screenshot.png
 ## drwxr-xr-x  2 vinuesa vinuesa    4096 jul 20 19:36 MobaXterm_screen_shots
 ## -rw-r--r--  1 vinuesa vinuesa   77803 jul 20 19:36 recA_Bradyrhizobium_vinuesa.fna
-## -rw-r--r--  1 vinuesa vinuesa   17704 jul 21 13:53 recA_Byuanmingense.fna
+## -rw-r--r--  1 vinuesa vinuesa   17704 jul 21 14:05 recA_Byuanmingense.fna
 ## drwxr-xr-x  2 vinuesa vinuesa    4096 jul 20 19:36 recA_seq_data
 ## -rwxr-xr-x  1 vinuesa vinuesa       8 jul 20 19:36 .Rhistory
 ## -rw-rw-r--  1 vinuesa vinuesa   51271 jul 20 19:36 sesion_local_capt_pantalla.png
@@ -777,10 +789,10 @@ ls -al </code></pre>
 ## -rw-rw-r--  1 vinuesa vinuesa  408580 jul 20 19:36 sesion_remota_bonampak_capt_pantalla.png
 ## drwxr-xr-x  3 vinuesa vinuesa    4096 jul 20 19:36 TIB2019-T3
 ## -rwxr-xr-x  1 vinuesa vinuesa    6047 jul 20 19:36 working_with_linux_commands.code
-## -rw-r--r--  1 vinuesa vinuesa 1123168 jul 21 13:53 working_with_linux_commands.html
+## -rw-r--r--  1 vinuesa vinuesa 1123260 jul 21 14:05 working_with_linux_commands.html
 ## -rw-rw-r--  1 vinuesa vinuesa      30 jul 20 19:36 working_with_linux_commands.log
 ## -rw-r--r--  1 vinuesa vinuesa  382402 jul 20 19:36 working_with_linux_commands.pdf
-## -rw-r--r--  1 vinuesa vinuesa   57973 jul 21 14:05 working_with_linux_commands.Rmd
+## -rw-r--r--  1 vinuesa vinuesa   63721 jul 31 22:31 working_with_linux_commands.Rmd
 ## -rw-rw-r--  1 vinuesa vinuesa  152081 jul 20 19:36 working_with_linux_commands.tex</code></pre>
 <div id="veamos-el-contenido-del-directorio-raiz-salida-recortada-a-sólo-10-entradas-al-pasar-la-salida-de-ls-al-comando-head-mediante-un-pipe" class="section level4" number="2.2.3.1">
 <h4><span class="header-section-number">2.2.3.1</span> Veamos el
@@ -815,8 +827,8 @@ al <span class="math inline">\(directorio\ raíz\ /\)</span></li>
 ## lrwxrwxrwx   1 root root     7 oct  4  2020 bin -&gt; usr/bin
 ## drwxr-xr-x   4 root root  4096 jul 20 18:41 boot
 ## drwxr-xr-x   2 root root  4096 oct  4  2020 cdrom
-## drwxr-xr-x  20 root root  4820 jul 21 12:18 dev
-## drwxr-xr-x 163 root root 12288 jul 20 18:38 etc
+## drwxr-xr-x  21 root root  4800 jul 31 17:22 dev
+## drwxr-xr-x 163 root root 12288 jul 28 17:44 etc
 ## drwxr-xr-x   5 root root  4096 abr 15  2020 home
 ## lrwxrwxrwx   1 root root     7 oct  4  2020 lib -&gt; usr/lib
 ## lrwxrwxrwx   1 root root     9 oct  4  2020 lib32 -&gt; usr/lib32
@@ -826,9 +838,9 @@ al <span class="math inline">\(directorio\ raíz\ /\)</span></li>
 ## drwxr-xr-x   3 root root  4096 oct  5  2020 media
 ## drwxr-xr-x   2 root root  4096 jul 31  2020 mnt
 ## drwxr-xr-x   6 root root  4096 dic  8  2021 opt
-## dr-xr-xr-x 459 root root     0 jul 21 09:05 proc
+## dr-xr-xr-x 439 root root     0 jul 31 10:22 proc
 ## drwx------  13 root root  4096 jun 19 21:16 root
-## drwxr-xr-x  38 root root  1160 jul 21 12:59 run
+## drwxr-xr-x  39 root root  1180 jul 31 17:39 run
 ## lrwxrwxrwx   1 root root     8 oct  4  2020 sbin -&gt; usr/sbin
 ## drwxr-xr-x  16 root root  4096 nov 22  2021 snap</code></pre>
 <pre class="bash"><code># idem, pero ordenando los archivos por fechas de modificacion (-t), listando los mas recientes al final (-r), es decir, en orden reverso
@@ -851,8 +863,8 @@ ls -ltr / | head -20</code></pre>
 ## drwxr-xr-x   6 root root  4096 dic  8  2021 opt
 ## drwxr-xr-x  14 root root  4096 jun 18 23:52 usr
 ## drwx------  13 root root  4096 jun 19 21:16 root
-## drwxr-xr-x 163 root root 12288 jul 20 18:38 etc
-## drwxr-xr-x   4 root root  4096 jul 20 18:41 boot</code></pre>
+## drwxr-xr-x   4 root root  4096 jul 20 18:41 boot
+## drwxr-xr-x 163 root root 12288 jul 28 17:44 etc</code></pre>
 </div>
 </div>
 <div id="expansión-de-caracteres-con-y" class="section level3" number="2.2.4">
@@ -891,8 +903,287 @@ ls -d /b???</code></pre>
 ## /boot</code></pre>
 </div>
 </div>
-<div id="moviéndonos-por-el-sistema-de-archivos-comando-cd-y-haciendo-uso-de-ruta-absoluta-fullpathtofile-or-relativa-..file" class="section level2" number="2.3">
-<h2><span class="header-section-number">2.3</span> Moviéndonos por el
+<div id="permisos-modo-de-un-archivo" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span>
+<strong>Permisos</strong> (modo de un archivo)</h2>
+<p>Los sistemas UNIX y GNU/Linux, al contrario que los basados en
+MS-DOS, están diseñados desde un inicio para operar en modo
+<b>multiusuario</b> y <b>multitarea</b> (multitasking). Por ello el
+sistema operativo debe asegurar la privacidad de los archivos y
+directorios de cada usuario del sistema.</p>
+<div id="usuario-grupo-y-resto-del-mundo-user-group-others-y-permisos-rwx" class="section level3" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Usuario, grupo y
+resto del mundo (User, Group, Others …) y permisos <span class="math inline">\(rwx\)</span></h3>
+<p>En sistemas UNIX y GNU/Linux cada archivo y directorio tiene unos
+permisos determinados de <b>lectura=<span class="math inline">\(r\)</span></b> <b>escritura=<span class="math inline">\(w\)</span></b> y <b>ejecución=<span class="math inline">\(x\)</span></b> para el usuario, grupo y resto del
+mundo, asignados en ese orden (UGO).</p>
+<p>Un <b>archivo regular</b>, escrito por el usuario tiene los
+siguientes permisos por defecto, como muestra el comando <span class="math inline">\(ls -l\)</span></p>
+<pre><code>ls -l | grep odp
+-rw-r--r-- 1 vinuesa vinuesa 2993606 sep 30 10:52 intro_biocomputo_Linux_LCG.odp</code></pre>
+<p>Veamos lo que quiere decir. Para ello necesitamos separar la cadena
+de caracteres en los siguientes componentes</p>
+<pre><code>   U   G   O       usuario grupo
+1  2   3   4  5    6       7
+-|rw-|r--|r-- 1 vinuesa vinuesa
+</code></pre>
+<p>donde:</p>
+<pre><code>1. la posición 1 (-) indica que se trata de un archivo regular. Un directorio se indica con &quot;d&quot; y una liga simbólica con &quot;l&quot;
+2. El grupo 2,3 y 4 de caraceres indican el &quot;modo&quot; del archivo (permisos) para el usuario (U), grupo (G) y otros (resto del mundo O), 
+   separados por &quot;|&quot; para facilitar su visualización.
+   En este caso el usuario tiene permisos de lectura (r) y escritura (w) sobre el archivo que no es ejecutable (-)
+   El grupo y el resto del mundo sólo pueden leer el archivo, pero no modificarlo.
+   </code></pre>
+<p>Un <b>directorio</b> generado por el usuario con el comando estándar
+<span class="math inline">\(mkdir\)</span> tiene los siguientes permisos
+por defecto, como muestra el comando <span class="math inline">\(ls
+-l\)</span></p>
+<pre><code>ls -l | grep intro
+drwxr-xr-x 4 vinuesa vinuesa    4096 sep 29 22:56 intro2linux</code></pre>
+<ul>
+<li>Ejercicio: lista los permisos (modo) de este directorio para
+U|G|O</li>
+</ul>
+</div>
+<div id="tabla-de-atributos-de-los-permisos" class="section level3" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Tabla de atributos
+de los permisos</h3>
+<p>La siguiente tabla resume los atributos que tienen los permisos <span class="math inline">\(r\)</span>, <span class="math inline">\(w\)</span>, <span class="math inline">\(x\)</span>
+sobre archivos regulares y directorios:</p>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="44%" />
+<col width="43%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Atributo</th>
+<th align="left">Archivos</th>
+<th align="left">Directorios</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>r</td>
+<td align="left">abrir y leer</td>
+<td align="left">listar contenidos si tiene +x</td>
+</tr>
+<tr class="even">
+<td>w</td>
+<td align="left">editar pero no renombrar/borrar (atributo dir)</td>
+<td align="left">permite generar archivos en dir, si tiene +x</td>
+</tr>
+<tr class="odd">
+<td>x</td>
+<td align="left">permite ejecutra archivo (programa) si +r</td>
+<td align="left">permite entrar al directorio</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="chmod---cambiar-el-modo-permisos-de-un-archivo-o-directorio" class="section level3" number="2.3.3">
+<h3><span class="header-section-number">2.3.3</span>
+<strong>chmod</strong> - cambiar el modo (permisos) de un archivo o
+directorio</h3>
+<p>Hay dos maneras de hacerlo:</p>
+<ol style="list-style-type: decimal">
+<li>Usando <b>notación simbólica</b> para U|G|O y todos (a)</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th>Símbolo</th>
+<th align="left">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>u</td>
+<td align="left">usuario, el dueño del archivo o directorio</td>
+</tr>
+<tr class="even">
+<td>g</td>
+<td align="left">dueño del gruop</td>
+</tr>
+<tr class="odd">
+<td>o</td>
+<td align="left">otros (resto del mundo)</td>
+</tr>
+<tr class="even">
+<td>a</td>
+<td align="left">todos (all); combinación de u,g,o</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Ejemplos</li>
+</ul>
+<p><span class="math inline">\(chmod\ notación\ archivo|dir\)</span></p>
+<table>
+<thead>
+<tr class="header">
+<th>Notación</th>
+<th align="left">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>u+x</td>
+<td align="left">da permiso de ejecución a usuario</td>
+</tr>
+<tr class="even">
+<td>u-x</td>
+<td align="left">revoca permiso de ejecución a usuario</td>
+</tr>
+<tr class="odd">
+<td>o-r</td>
+<td align="left">otros (resto del mundo) no puede leer</td>
+</tr>
+<tr class="even">
+<td>+x</td>
+<td align="left">equivale a a+x</td>
+</tr>
+<tr class="odd">
+<td>o-rw</td>
+<td align="left">quitar a otros permisos de rw</td>
+</tr>
+<tr class="even">
+<td>u+x,go=-rx</td>
+<td align="left">asignar +x a U, revocar a O permisos de rx</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(chmod\ a+rx\ script.sh\)</span> hace el
+archivo script.sh leíble y ejecutable para todos</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Usando <b>representación octal</b></li>
+</ol>
+<p>Los sistemas de numeración <span class="math inline">\(octal\)</span>
+(base 8) y su primo el <span class="math inline">\(hexadecimal\)</span>
+(base 16) se usan frecuentemente para expresar números en
+computadoras.</p>
+<p>Los humanos usamos el sistama <span class="math inline">\(decimal\)</span> ya que (la mayoría) tenemos 10
+dedos. Las computadoras en cambio “nacieron con un solo dedo”, por lo
+que cuentan usando el sistema <span class="math inline">\(binario\)</span> (base 2) usando sólo 1s y 0s. Por
+tanto en binario, contamos así: 0,1, 10,11, 100,101, 110,111 …</p>
+<p>En <span class="math inline">\(octal\)</span>, contamos así:
+0,1,2,3,4,5,6,7, 10,11,12,13,14,15,16,17, 20,21 …</p>
+<p>Usando una cadena de tres dígitos octales, podemos de manera muy
+conveniente definir el modo de un archivo para U|G|O acorde a la
+siguiente tabla</p>
+<table>
+<thead>
+<tr class="header">
+<th>octal</th>
+<th align="left">binario</th>
+<th align="left">modo del archivo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td align="left">000</td>
+<td align="left">—</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td align="left">001</td>
+<td align="left">–x</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td align="left">010</td>
+<td align="left">-w-</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td align="left">011</td>
+<td align="left">-wx</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td align="left">100</td>
+<td align="left">r–</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td align="left">101</td>
+<td align="left">r-x</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td align="left">110</td>
+<td align="left">rw-</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td align="left">111</td>
+<td align="left">rwx</td>
+</tr>
+</tbody>
+</table>
+<p>De modo que combinando los octales</p>
+<p><strong>READ = 4</strong></p>
+<p><strong>WRITE = 2</strong></p>
+<p><strong>EXECUTE = 1</strong></p>
+<p>con las posiciones U|G|O, define los modos:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">USER</th>
+<th align="center">GROUP</th>
+<th align="center">OTHERS</th>
+<th align="center">MODE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">r w x</td>
+<td align="center">r w x</td>
+<td align="center">r w x</td>
+<td align="center">UGO</td>
+</tr>
+<tr class="even">
+<td align="center">4 2 0</td>
+<td align="center">0 0 0</td>
+<td align="center">0 0 0</td>
+<td align="center">600</td>
+</tr>
+<tr class="odd">
+<td align="center">4 2 1</td>
+<td align="center">4 0 1</td>
+<td align="center">4 0 1</td>
+<td align="center">755</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Ejemplos
+<ul>
+<li><span class="math inline">\(chmod\ 755\ script.sh\)</span> otorga a
+“script.sh” modo de: -rwxr-xr-x</li>
+<li><span class="math inline">\(chmod\ 700\ script.sh\)</span> otorga a
+“script.sh” modo de: -rwx——</li>
+<li><span class="math inline">\(chmod\ 644\ script.sh\)</span> otorga a
+“script.sh” modo de: -rw-r–r–</li>
+</ul></li>
+</ul>
+</div>
+<div id="file-nos-indica-las-propiedades-de-un-archivo" class="section level3" number="2.3.4">
+<h3><span class="header-section-number">2.3.4</span>
+<strong>file</strong> nos indica las propiedades de un archivo</h3>
+<pre class="bash"><code># mostrar las características de los archivos con file
+file assembly_summary.txt.gz
+file working_with_linux_commands.html
+file recA_seq_data</code></pre>
+<pre><code>## assembly_summary.txt.gz: gzip compressed data, was &quot;assembly_summary.txt&quot;, last modified: Mon Jul 22 00:26:11 2019, from Unix, original size modulo 2^32 48497020
+## working_with_linux_commands.html: HTML document, UTF-8 Unicode text, with very long lines
+## recA_seq_data: directory</code></pre>
+</div>
+</div>
+<div id="moviéndonos-por-el-sistema-de-archivos-comando-cd-y-haciendo-uso-de-ruta-absoluta-fullpathtofile-or-relativa-..file" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Moviéndonos por el
 sistema de archivos: comando <b>cd</b> y haciendo uso de ruta absoluta
 <code>/full/path/to/file</code> or relativa <code>../file</code></h2>
 <p>El sistema de archivos de una máquina Linux tiene una estructura
@@ -951,14 +1242,14 @@ vinuesa@alisio:~/bin/git$ tree -L 1 /home/vinuesa/bin/git
 a cualquier directorio del sistema haciendo uso de la <span class="math inline">\(ruta\ absolouta\)</span> o <span class="math inline">\(ruta\ relativa\)</span> a mi posicón actual, según
 sea más conveniente. Usaremos las rutas absolutas o relativas también
 para copiar o mover archivos por el sistema.</p>
-<div id="dónde-estoy-imprime-directorio-actual-con-pwd" class="section level3" number="2.3.1">
-<h3><span class="header-section-number">2.3.1</span> ¿dónde estoy?:
+<div id="dónde-estoy-imprime-directorio-actual-con-pwd" class="section level3" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> ¿dónde estoy?:
 imprime directorio actual con <b>pwd</b></h3>
 <pre class="bash"><code>pwd </code></pre>
 <pre><code>## /home/vinuesa/Cursos/TIB/TIB22/sesion1_intro2linux</code></pre>
 </div>
-<div id="sube-un-directorio-usando-ruta-relativa-cd-.." class="section level3" number="2.3.2">
-<h3><span class="header-section-number">2.3.2</span> sube un directorio
+<div id="sube-un-directorio-usando-ruta-relativa-cd-.." class="section level3" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> sube un directorio
 usando RUTA RELATIVA: <b>cd ..</b></h3>
 <pre class="bash"><code>cd ..</code></pre>
 <ul>
@@ -967,8 +1258,8 @@ usando RUTA RELATIVA: <b>cd ..</b></h3>
 <pre class="bash"><code>pwd </code></pre>
 <pre><code>## /home/vinuesa/Cursos/TIB/TIB22/sesion1_intro2linux</code></pre>
 </div>
-<div id="regresa-a-tu-home-con-cd" class="section level3" number="2.3.3">
-<h3><span class="header-section-number">2.3.3</span> regresa a tu home
+<div id="regresa-a-tu-home-con-cd" class="section level3" number="2.4.3">
+<h3><span class="header-section-number">2.4.3</span> regresa a tu home
 con <b>cd</b></h3>
 <pre class="bash"><code>cd $HOME
 
@@ -1011,8 +1302,8 @@ pwd</code></pre>
 ## linux_commands.tab</code></pre>
 </div>
 </div>
-<div id="generación-de-directorios-comando-mkdir" class="section level2" number="2.4">
-<h2><span class="header-section-number">2.4</span> Generación de
+<div id="generación-de-directorios-comando-mkdir" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Generación de
 directorios: comando <b>mkdir</b></h2>
 <pre class="bash"><code># vamos a $HOME y generamos el directorio TIB2019-T3
 cd
@@ -1040,14 +1331,14 @@ ahí</li>
 <p>No puedes escribir en mi directorio, porque no te he otorgado permiso
 para ello ;)</p>
 </div>
-<div id="copiar-mover-renombrar-y-borrar-archivos-con-cp-mv-rm-scp-y-sftp" class="section level2" number="2.5">
-<h2><span class="header-section-number">2.5</span> Copiar, mover,
+<div id="copiar-mover-renombrar-y-borrar-archivos-con-cp-mv-rm-scp-y-sftp" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> Copiar, mover,
 renombrar y borrar archivos con: <b>cp</b>, <b>mv</b>, <b>rm</b>,
 <b>scp</b> y <b>sftp</b></h2>
 <pre class="bash"><code># cambia a tu home, y luego a TIB2019-T3/sesion1_linux
 cd &amp;&amp; cd TIB2019-T3/sesion1_linux</code></pre>
-<div id="copia-de-archivo-simple-cp-file-." class="section level3" number="2.5.1">
-<h3><span class="header-section-number">2.5.1</span> copia de archivo
+<div id="copia-de-archivo-simple-cp-file-." class="section level3" number="2.6.1">
+<h3><span class="header-section-number">2.6.1</span> copia de archivo
 simple: <b> cp file .</b></h3>
 <ul>
 <li>copia el archivo
@@ -1061,8 +1352,8 @@ al directorio actual</li>
 </ul>
 <pre><code>cp /space31/PIG/vinuesa/TIB2019-T3/sesion1_Linux/data/linux_basic_commands.tab $HOME/TIB2019-T3/sesion1_linux/</code></pre>
 </div>
-<div id="copiado-de-directorio-cp--r-dir-." class="section level3" number="2.5.2">
-<h3><span class="header-section-number">2.5.2</span> copiado de
+<div id="copiado-de-directorio-cp--r-dir-." class="section level3" number="2.6.2">
+<h3><span class="header-section-number">2.6.2</span> copiado de
 directorio: <b> cp -r dir . </b></h3>
 <ul>
 <li>copiar el directorio
@@ -1071,8 +1362,8 @@ directorio: <b> cp -r dir . </b></h3>
 <pre><code># Noten el punto &#39;.&#39; y cp -r (recursively), necesario para copiar directorios completos
 cp -r /space31/PIG/vinuesa/TIB2019-T3/sesion1_Linux/data . </code></pre>
 </div>
-<div id="eliminar-un-directorio-rm--rf-recursively--r-and-force--f" class="section level3" number="2.5.3">
-<h3><span class="header-section-number">2.5.3</span> Eliminar un
+<div id="eliminar-un-directorio-rm--rf-recursively--r-and-force--f" class="section level3" number="2.6.3">
+<h3><span class="header-section-number">2.6.3</span> Eliminar un
 directorio: <b>rm -rf</b> [recursively -r and force -f]</h3>
 <pre class="bash"><code>mkdir borrame
 
@@ -1089,8 +1380,8 @@ rm -rf borrame</code></pre>
 directorio</code></p>
 <pre><code>rm -rf data</code></pre>
 </div>
-<div id="scp-copia-de-archivos-entre-máquinas-vía-internet" class="section level3" number="2.5.4">
-<h3><span class="header-section-number">2.5.4</span> <b>scp</b> copia de
+<div id="scp-copia-de-archivos-entre-máquinas-vía-internet" class="section level3" number="2.6.4">
+<h3><span class="header-section-number">2.6.4</span> <b>scp</b> copia de
 archivos entre máquinas vía Internet</h3>
 <ul>
 <li>descarga el archivo <a href="https://github.com/vinuesa/TIB-filoinfo/blob/master/docs/sesion1_intro2linux/data/linux_basic_commands.tab">linux_basic_commands.tab</a>
@@ -1102,8 +1393,8 @@ ls linux_basic_commands.tab
 
 scp linux_basic_commands.tab USUARIO@ip.maquina:/home/USUARIO/ruta/al/dir/destino/</code></pre>
 </div>
-<div id="sftp-descarga-de-archivos-de-una-máquina-remota-a-tu-laptop" class="section level3" number="2.5.5">
-<h3><span class="header-section-number">2.5.5</span> <b>sftp</b>
+<div id="sftp-descarga-de-archivos-de-una-máquina-remota-a-tu-laptop" class="section level3" number="2.6.5">
+<h3><span class="header-section-number">2.6.5</span> <b>sftp</b>
 descarga de archivos de una máquina remota a tu laptop</h3>
 <pre><code># asegúrate de estar en el directorio de tu máquina local donde quieres depositar el archivo a descargar del servidor:
 
@@ -1127,8 +1418,8 @@ quit
 ls </code></pre>
 </div>
 </div>
-<div id="derterminar-el-tipo-de-archivo-con-file" class="section level2" number="2.6">
-<h2><span class="header-section-number">2.6</span> Derterminar el tipo
+<div id="derterminar-el-tipo-de-archivo-con-file" class="section level2" number="2.7">
+<h2><span class="header-section-number">2.7</span> Derterminar el tipo
 de archivo con <strong>file</strong></h2>
 <pre class="bash"><code># mostrar las características de los archivos con file
 file .Rhistory
@@ -1140,8 +1431,8 @@ file TIB2019-T3</code></pre>
 ## linux_commands.tab: UTF-8 Unicode text
 ## TIB2019-T3: directory</code></pre>
 </div>
-<div id="generación-de-ligas-simbólicas-a-archivos-comando-ln--s-rutaalarchivofuente-nombre_la_liga" class="section level2" number="2.7">
-<h2><span class="header-section-number">2.7</span> Generación de ligas
+<div id="generación-de-ligas-simbólicas-a-archivos-comando-ln--s-rutaalarchivofuente-nombre_la_liga" class="section level2" number="2.8">
+<h2><span class="header-section-number">2.8</span> Generación de ligas
 simbólicas a archivos: comando <b>ln -s /ruta/al/archivo/fuente
 nombre_la_liga</b></h2>
 <p>Esto es muy importante, ya que permite ahorrar mucho espacio en disco
@@ -1162,28 +1453,28 @@ fi
 # confirmamos que se generaron las ligascomandos_de_linux.tab
 ls -l | head</code></pre>
 <pre><code>## ln: failed to create symbolic link &#39;comandos_de_linux.tab&#39;: File exists
-## total 15136
+## total 15640
 ## -rw-r--r-- 1 vinuesa vinuesa  110128 jul 20 19:36 800px-Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 20 19:36 assembly_summary.txt.gz
 ## -rwxr-xr-x 1 vinuesa vinuesa   10193 jul 20 19:36 comandos_de_linux.tab
 ## -rw-r--r-- 1 vinuesa vinuesa  438308 jul 20 19:36 Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa  222602 jul 20 19:36 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
 ## -rw-r--r-- 1 vinuesa vinuesa   87065 jul 20 19:36 github_TIB-filoinfo_screenshot.png
-## -rw-r--r-- 1 vinuesa vinuesa 3035814 jul 21 12:20 intro_biocomputo_Linux_pt1.odp
-## -rw-r--r-- 1 vinuesa vinuesa 2297145 jul 20 19:36 Intro_biocomputo_Linux_pt1.pdf
+## -rw-r--r-- 1 vinuesa vinuesa 3199463 jul 31 21:13 intro_biocomputo_Linux_pt1.odp
+## -rw-r--r-- 1 vinuesa vinuesa 2645459 jul 31 21:12 Intro_biocomputo_Linux_pt1.pdf
 ## -rwxr-xr-x 1 vinuesa vinuesa   10193 jul 20 19:36 linux_basic_commands.tab</code></pre>
-<div id="renombramos-la-liga-o-cualquier-archivo-o-directorio" class="section level3" number="2.7.1">
-<h3><span class="header-section-number">2.7.1</span> renombramos la liga
+<div id="renombramos-la-liga-o-cualquier-archivo-o-directorio" class="section level3" number="2.8.1">
+<h3><span class="header-section-number">2.8.1</span> renombramos la liga
 (o cualquier archivo o directorio)</h3>
 <pre><code>  mv comandos_de_linux.tab linux_commands.tab</code></pre>
 </div>
 </div>
-<div id="visualización-de-contenidos-de-archivos-comando-head-tail-cat-less-more" class="section level2" number="2.8">
-<h2><span class="header-section-number">2.8</span> Visualización de
+<div id="visualización-de-contenidos-de-archivos-comando-head-tail-cat-less-more" class="section level2" number="2.9">
+<h2><span class="header-section-number">2.9</span> Visualización de
 contenidos de archivos: comando <b>head</b>, <b>tail</b>, <b>cat</b>,
 <b>less</b>, <b>more</b></h2>
-<div id="uso-de-head-y-tail-para-desplegar-la-cabecera-y-cola-de-archivos" class="section level3" number="2.8.1">
-<h3><span class="header-section-number">2.8.1</span> uso de <b>head</b>
+<div id="uso-de-head-y-tail-para-desplegar-la-cabecera-y-cola-de-archivos" class="section level3" number="2.9.1">
+<h3><span class="header-section-number">2.9.1</span> uso de <b>head</b>
 y <b>tail</b> para desplegar la cabecera y cola de archivos</h3>
 <pre class="bash"><code>head linux_commands.tab </code></pre>
 <pre><code>## IEEE Std 1003.1-2008 utilities Name  Category    Description     First appeared
@@ -1216,8 +1507,8 @@ head -3 linux_commands.tab</code></pre>
 </code></pre>
 <pre><code>## zcat     Text processing     Expand and concatenate data     4.3BSD</code></pre>
 </div>
-<div id="cat-despliega-uno-o-más-archivos-concatenándolos" class="section level3" number="2.8.2">
-<h3><span class="header-section-number">2.8.2</span> <b>cat</b>
+<div id="cat-despliega-uno-o-más-archivos-concatenándolos" class="section level3" number="2.9.2">
+<h3><span class="header-section-number">2.9.2</span> <b>cat</b>
 despliega uno o más archivos, concatenándolos</h3>
 <pre class="bash"><code>cat linux_commands.tab | head</code></pre>
 <pre><code>## IEEE Std 1003.1-2008 utilities Name  Category    Description     First appeared
@@ -1244,8 +1535,8 @@ desplegados</p>
 ##      9   batch   Process management  Schedule commands to be executed in a batch queue   
 ##     10   bc  Misc    Arbitrary-precision arithmetic language     Version 6 AT&amp;T UNIX</code></pre>
 </div>
-<div id="el-paginador-less-despliega-archivos-página-a-página" class="section level3" number="2.8.3">
-<h3><span class="header-section-number">2.8.3</span> el paginador
+<div id="el-paginador-less-despliega-archivos-página-a-página" class="section level3" number="2.9.3">
+<h3><span class="header-section-number">2.9.3</span> el paginador
 <b>less</b> despliega archivos página a página</h3>
 <pre class="bash"><code>less linux_commands.tab | head</code></pre>
 <pre><code>## IEEE Std 1003.1-2008 utilities Name  Category    Description     First appeared
@@ -1266,8 +1557,8 @@ less -L linux_commands.tab
 # usa less --help para ver más opciones</code></pre>
 </div>
 </div>
-<div id="edición-de-archivos-con-los-editores-vim-o-gnedit" class="section level2" number="2.9">
-<h2><span class="header-section-number">2.9</span> Edición de archivos
+<div id="edición-de-archivos-con-los-editores-vim-o-gnedit" class="section level2" number="2.10">
+<h2><span class="header-section-number">2.10</span> Edición de archivos
 con los editores <b>vim</b> o <b>[g|n]edit</b></h2>
 <p><b>vim</b> (vi improved) es un poderoso editor programable presente
 en todos los sistemas UNIX. La principal característica tanto de Vim
@@ -1297,8 +1588,8 @@ o similar</p>
 gedit linux_commands.tab &amp;
 </code></pre>
 </div>
-<div id="edición-de-archivos-con-el-editor-de-flujo-sed-stream-editor" class="section level2" number="2.10">
-<h2><span class="header-section-number">2.10</span> Edición de archivos
+<div id="edición-de-archivos-con-el-editor-de-flujo-sed-stream-editor" class="section level2" number="2.11">
+<h2><span class="header-section-number">2.11</span> Edición de archivos
 con el editor de flujo <b>sed</b> (stream editor)</h2>
 <p>sed (stream editor) es un editor de flujo, una potente herramienta de
 tratamiento de texto para el sistema operativo Unix que acepta como
@@ -1314,8 +1605,8 @@ Posee muchas características de ed y ex.</p>
 <pre><code>-n indica que se suprima la salida estándar.
 -e indica que se ejecute el script que viene a continuación. Si no se emplea la opción -f se puede omitir -e.
 -f indica que las órdenes se tomarán de un archivo</code></pre>
-<div id="ejemplos-de-uso-básico-de-sed" class="section level3" number="2.10.1">
-<h3><span class="header-section-number">2.10.1</span> Ejemplos de uso
+<div id="ejemplos-de-uso-básico-de-sed" class="section level3" number="2.11.1">
+<h3><span class="header-section-number">2.11.1</span> Ejemplos de uso
 básico de <b>sed</b>:</h3>
 <ul>
 <li>Cambia todas las minúsculas a mayúsculas de archivo:</li>
@@ -1355,8 +1646,8 @@ instancias</li>
 ##      4   First appeared</code></pre>
 </div>
 </div>
-<div id="uso-de-tuberias-de-herramientas-unixlinux-para-filtrado-de-texto-con-cut-grep-sort-uniq-wc-y" class="section level2" number="2.11">
-<h2><span class="header-section-number">2.11</span> Uso de tuberias de
+<div id="uso-de-tuberias-de-herramientas-unixlinux-para-filtrado-de-texto-con-cut-grep-sort-uniq-wc-y" class="section level2" number="2.12">
+<h2><span class="header-section-number">2.12</span> Uso de tuberias de
 herramientas UNIX/Linux para filtrado de texto con <b>cut</b>,
 <b>grep</b>, <b>sort</b>, <b>uniq</b>, <b>wc</b> y <b>|</b></h2>
 <p>UNIX y Linux ofrecen una gran cantidad de herramientas para todo tipo
@@ -1381,8 +1672,8 @@ zcat assembly_summary.txt.gz | head -5</code></pre>
 ## GCF_000010525.1  PRJNA224116 SAMD00060925        representative genome   438753  7   Azorhizobium caulinodans ORS 571    strain=ORS 571      latest  Complete Genome Major   Full    2007/10/16  ASM1052v1   University of Tokyo GCA_000010525.1 identical   ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/010/525/GCF_000010525.1_ASM1052v1        assembly from type material
 ## GCF_000007365.1  PRJNA224116 SAMN02604269        representative genome   198804  9   Buchnera aphidicola str. Sg (Schizaphis graminum)   strain=Sg       latest  Complete Genome Major   Full    2002/07/02  ASM736v1    Uppsala Univ.   GCA_000007365.1 identical   ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/007/365/GCF_000007365.1_ASM736v1     
 ## GCF_000007725.1  PRJNA224116 SAMN02604289        representative genome   224915  9   Buchnera aphidicola str. Bp (Baizongia pistaciae)   strain=Bp (Baizongia pistaciae)     latest  Complete Genome Major   Full    2003/01/29  ASM772v1    Valencia Univ.  GCA_000007725.1 identical   ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/007/725/GCF_000007725.1_ASM772v1     </code></pre>
-<div id="ejemplos-de-herramientas-de-filtrado-de-texto-en-acción" class="section level3" number="2.11.1">
-<h3><span class="header-section-number">2.11.1</span> Ejemplos de
+<div id="ejemplos-de-herramientas-de-filtrado-de-texto-en-acción" class="section level3" number="2.12.1">
+<h3><span class="header-section-number">2.12.1</span> Ejemplos de
 herramientas de filtrado de texto en acción</h3>
 <ul>
 <li><p><code>cut</code> corta líneas de texto/tablas por delimitadores
@@ -1517,8 +1808,8 @@ zgrep -E &#39;Acinetobacter|Pseudomonas|Klebsiella&#39; assembly_summary.txt.gz 
 ##    8951 Pseudomonas</code></pre>
 </div>
 </div>
-<div id="redireccionado-de-la-salida-stout-a-un-archivo-con-el-comando" class="section level2" number="2.12">
-<h2><span class="header-section-number">2.12</span> redireccionado de la
+<div id="redireccionado-de-la-salida-stout-a-un-archivo-con-el-comando" class="section level2" number="2.13">
+<h2><span class="header-section-number">2.13</span> redireccionado de la
 salida STOUT a un archivo con el comando <b>&gt;</b></h2>
 <pre class="bash"><code>zgrep Stenotrophomonas assembly_summary.txt.gz | cut -f8,20 &gt; Stenotrophomonas_complete_genomes_and_ftp_paths.txt</code></pre>
 <ul>
@@ -1532,12 +1823,12 @@ salida STOUT a un archivo con el comando <b>&gt;</b></h2>
 comandos para el procesamiento de archivos de secuencias en un ejercicio
 más adelante.</p>
 </div>
-<div id="manual-de-cada-comando-man-command" class="section level2" number="2.13">
-<h2><span class="header-section-number">2.13</span> Manual de cada
+<div id="manual-de-cada-comando-man-command" class="section level2" number="2.14">
+<h2><span class="header-section-number">2.14</span> Manual de cada
 comando: <b>man command</b></h2>
 <pre class="bash"><code># mira las opciones de cut y sort en la manpage
 man cut | head -30</code></pre>
-<pre><code>## CUT(1)                                                                            User Commands                                                                            CUT(1)
+<pre><code>## CUT(1)                                                                               User Commands                                                                              CUT(1)
 ## 
 ## NAME
 ##        cut - remove sections from each line of files
@@ -1568,8 +1859,8 @@ man cut | head -30</code></pre>
 ## 
 ##        --complement</code></pre>
 </div>
-<div id="ayuda-de-cada-comando-command-help" class="section level2" number="2.14">
-<h2><span class="header-section-number">2.14</span> Ayuda de cada
+<div id="ayuda-de-cada-comando-command-help" class="section level2" number="2.15">
+<h2><span class="header-section-number">2.15</span> Ayuda de cada
 comando: <b>command –help</b></h2>
 <pre class="bash"><code># mira las opciones de cut y sort en la manpage
 cut --help</code></pre>
@@ -1620,7 +1911,7 @@ cut --help</code></pre>
 <h1><span class="header-section-number">3</span> Inicios de programación
 en <span class="math inline">\(Bash\)</span></h1>
 <p>Vamos a aprender algunos de los elementos esenciales del lenguaje
-<span class="math inline">\(Bash\)</span> de programación Shell</p>
+<span class="math inline">\(Bash\)</span> de programación Shell.</p>
 <div id="asignación-y-uso-de-variables" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Asignación y uso de
 <strong>variables</strong></h2>
@@ -1643,7 +1934,7 @@ salida de un comando con <b>$(comando)</b></h3>
 date=$(date | awk &#39;{print $3,$2,$6}&#39; | sed &#39;s/ //g&#39;)
 h=$(hostname)
 echo &quot;&gt;&gt;&gt; working in: $wkdir at &lt;$h&gt; on &lt;$date&gt;&quot;</code></pre>
-<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/TIB/TIB22/sesion1_intro2linux at &lt;alisio&gt; on &lt;jul21CDT&gt;</code></pre>
+<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/TIB/TIB22/sesion1_intro2linux at &lt;alisio&gt; on &lt;jul31CDT&gt;</code></pre>
 </div>
 <div id="modificación-de-variables-y-operaciones-con-ellas" class="section level3" number="3.1.2">
 <h3><span class="header-section-number">3.1.2</span> Modificación de
@@ -1737,7 +2028,7 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 jul 21 14:05 empty_file
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 jul 31 22:31 empty_file
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 jul 20 19:36 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty

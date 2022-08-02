@@ -1,5 +1,4 @@
-## >>> TIB2019-T3, CCG-UNAM: 29 Jul - 2 Ago 2019 <<<
-## NOTES: V8.2, Jul 22, 2022. Adapted for EBM2022/TIB22
+## NOTES: V8.3, August 1st, 2022. Adapted for EBM2022/TIB22
 ## https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/
 ## https://github.com/vinuesa/TIB-filoinfo
 
@@ -29,6 +28,16 @@
 # i) download or copy the sequence data to your working directories for this practice
 
 mkdir BLAST_practice && cd  BLAST_practice
+
+# Dowload data
+#  go to the github page of the content you want and right-click to get the [raw] link for each file
+https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/16S_4blastN.tgz
+https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/gene_discovery_and_annotation_using_blastx.tgz
+
+# or
+wget -c https://github.com/vinuesa/TIB-filoinfo/raw/master/docs/sesion3_BLAST/data/16S_4blastN.tgz
+wget https://github.com/vinuesa/TIB-filoinfo/raw/master/docs/sesion3_BLAST/data/gene_discovery_and_annotation_using_blastx.tgz
+
 
 # ii) Lets generate two subdirectories
 mkdir BLAST_DB_AA BLAST_DB_NT
@@ -250,7 +259,7 @@ cat header1.tab
 
 # add the header to the output table
 cat header1.tab blastp_10hits.out > blastp_10hits.tsv
-cat blastp_10hits.tsv
+column -t blastp_10hits.tsv
 
 # filter out only hits with qcov >= 97%
 sed 's/\t/\n/g' header1.tab | cat -n
@@ -262,15 +271,17 @@ echo -e 'qseqid\tsseqid\tqlen\tslen\tstitle\tlength\tpident\tpositive\tmismatch\
 blastp -query unknown_prot.faa -db integron_cassettes4blastdb.faaED -outfmt '6 qseqid sseqid qlen slen stitle length pident positive mismatch gaps evalue bitscore qcovs' -num_alignments 10 > blastp_10hits.out
 
 cat header1.tab blastp_10hits.out > blastp_10hits.tsv
+column -t blastp_10hits.tsv | head
 
 # get only hits with % sequence identity >= 95 and query coverage >= 97%
 sed 's/\t/\n/g' header1.tab | cat -n
-awk 'BEGIN{FS="\t"; OFS="\t"} $7 >= 95 && $13 >= 97' blastp_10hits.tsv
+awk 'BEGIN{FS="\t"; OFS="\t"} $7 >= 95 && $13 >= 97' blastp_10hits.tsv 
 
 #>>> lets retrieve the best hit found for each input gene
 blastp -query unknown_prot.faa -db integron_cassettes4blastdb.faaED -outfmt '6 qseqid sseqid qlen slen stitle length pident positive mismatch gaps evalue bitscore qcovs' -num_alignments 1 > blastp_tophits.out
 
 cat header1.tab blastp_tophits.out > blastp_tophits.tsv
+column -t blastp_tophits.tsv | head
 
 # get the sseqids only for the top hits with % sequence identity >= 95 and query coverage >= 97%
 awk 'BEGIN{FS="\t"; OFS="\t"} NR > 1 && $7 >= 95 && $13 >= 97' blastp_tophits.tsv | cut -f2  > sseqids_for_top_hits_with_ge95pident_ge97qcovs.list

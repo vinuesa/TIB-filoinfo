@@ -1,4 +1,4 @@
-## NOTES: V8.3, August 1st, 2022. Adapted for EBM2022/TIB22
+## NOTES: V8.4, August 2cnd, 2022. Adapted for EBM2022/TIB22
 ## https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/
 ## https://github.com/vinuesa/TIB-filoinfo
 
@@ -128,7 +128,7 @@ head 16S_problema_blastN_maln1_m6.tab
 #-------------------------------------------------------------------------------------
 
 # The default m6 blast output fields; print to file and append to 16S_problema_blastN_maln1_m6.tab
-echo -e "qseqid\tsseqid\tpident\tlength\tmismatch\tgapopen\tqstart\tqend\tsstart\tsend\tevalue\tbitscore" > standard_blast_fields.tsvŧ�ŧ
+echo -e "qseqid\tsseqid\tpident\tlength\tmismatch\tgapopen\tqstart\tqend\tsstart\tsend\tevalue\tbitscore" > standard_blast_fields.tsv
 cat standard_blast_fields.tsv 16S_problema_blastN_maln1_m6.tab > t && mv t 16S_problema_blastN_maln1_m6.tab
 
 head -20 16S_problema_blastN_maln1_m6.tab | column -t
@@ -138,7 +138,7 @@ head -20 16S_problema_blastN_maln1_m6.tab | column -t
 cut -f 2 16S_problema_blastN_maln1_m6.tab | sort | uniq -c
 
 # 3) retrieve all hits from the db using fastacmd
-cut -f2 16S_problema_blastN_maln1_m6.tab > IDs4fastacmd.txt
+cut -f2 16S_problema_blastN_maln1_m6.tab | sed '1d' > IDs4fastacmd.txt
 
 #blastdbcmd -i IDs4fastacmd.txt -d 16S_seqs4_blastDB.fnaed | grep '>' |cut -d\| -f3 | cut -d' ' -f2 > hit_sequences_b1.fna
 blastdbcmd -entry_batch IDs4fastacmd.txt -db 16S_seqs4_blastDB.fnaed > best-hit_sequences.fna
@@ -147,13 +147,18 @@ blastdbcmd -entry_batch IDs4fastacmd.txt -db 16S_seqs4_blastDB.fnaed > best-hit_
 grep '>' best-hit_sequences.fna | cut -d' ' -f2 > hit_sequence_headers.txt
 
 # 4) Lets classify our query sequences, based on the subject headers of each best hit, using a simple tabular output format
-cut -f1 16S_problema_blastN_maln1_m6.tab > problem_seqs.txt
+cut -f1 16S_problema_blastN_maln1_m6.tab | sed '1d' > problem_seqs.txt
 paste problem_seqs.txt hit_sequence_headers.txt > classified_16S_problema_sequences.tab
 
 cat classified_16S_problema_sequences.tab
 
+# 4.1) add columns 3 & 4 (pident & length)
+cut -f3,4 16S_problema_blastN_maln1_m6.tab | sed '1d' > pident_and_length.tsv
+paste problem_seqs.txt hit_sequence_headers.txt pident_and_length.tsv | column -t
+
+
 #=================================================================================================================================
-# >>> EXERCISE 2: get the 10 best hits and filter out only those with >= 98.5% sequence identity and > 1000 alingment length <<< #
+# >>> EXERCISE 2: get the 10 best hits and filter out only those with >= 98.5% sequence identity and > 1000 alignment length <<< #
 #=================================================================================================================================
 
 blastn -query 16S_problema.fna -db 16S_seqs4_blastDB.fnaed -num_alignments 10 -outfmt 6 > 16S_problema_blastN_10hits.tab
@@ -199,7 +204,7 @@ tar -xvzf gene_discovery_and_annotation_using_blastx.tgz
 
 
 #========================================================================================
-#>>> EXERCISE 4: PROTEIN IDENTIFICATION AND GENE_DISCOVERY using BLAST+ 
+#>>> EXERCISE 4: PROTEIN IDENTIFICATION/Annotation AND GENE_DISCOVERY using BLAST+ 
 #
 # AIMS: 
 #  1. run blastp to annotate a protein with its most likely function
@@ -212,7 +217,7 @@ tar -xvzf gene_discovery_and_annotation_using_blastx.tgz
 grep '^>' integron_cassettes4blastdb.faa | head -20
 
 # Lets change >gi|17026026 |[Acinetobacter baumannii]|ABI1... ==> 
-#           >gnl|casseteDB|17026026 |[Acinetobacter baumannii]|ABI1...
+#             >gnl|casseteDB|17026026 |[Acinetobacter baumannii]|ABI1...
 # A sed (or Perl) 1-liner makes this an easy task
 sed 's/^>gi/>gnl\|casseteDB/' integron_cassettes4blastdb.faa | grep '^>' | head
 sed 's/^>gi/>gnl\|casseteDB/' integron_cassettes4blastdb.faa > integron_cassettes4blastdb.faaED
@@ -298,11 +303,11 @@ cat top_hits_with_ge95pident_ge97qcovs.faa
 #   using Linux commands
 
 
-# ============================================================ #
-# >>>>>>>>>>>>>>>>>> OPTIONAL EXERCISE <<<<<<<<<<<<<<<<<<<<<<< #
-# ------------------------------------------------------------ #
-# 4) >>> run blastx to identify CDSs within a DNA sequence <<< #
-# ------------------------------------------------------------ #
+# ============================================================= #
+# >>>>>>>>>>>>>>>>>> OPTIONAL EXERCISES <<<<<<<<<<<<<<<<<<<<<<< #
+# ------------------------------------------------------------- #
+# 4)  >>> run blastx to identify CDSs within a DNA sequence <<< #
+# ------------------------------------------------------------- #
 #LEGACY BLAST: blastall -p blastx -d integron_cassetteDB -i 3cass_amplicons.fna -b 1 -m 8
 
 # Read the help: there are many options.
@@ -332,7 +337,7 @@ blastx -query 3cass_amplicons.fna -db integron_cassettes4blastdb.faaED -evalue 1
 
 [ -s 100blastX_hits_m6_header2.tab ] && cat header2.tab 100blastX_hits_m6_header2.tab > ed && mv ed 100blastX_hits_m6_header2.tab
 
-head 100blastX_hits_m6_header2.tab
+head 100blastX_hits_m6_header2.tab | column -t
 
 #>>> lets get the positional indexes of each column
 head -1 100blastX_hits_m6_header2.tab | sed 's/\t/\n/g' | cat -n
@@ -344,7 +349,8 @@ head -1 100blastX_hits_m6_header2.tab | sed 's/\t/\n/g' | cat -n
 #    End the corresponding rerport with echo '------------------------';
 for query in $(cut -f1 100blastX_hits_m6_header2.tab | grep -v qseqid | sort -u)
 do 
-     echo "#>>> $query"; grep $query 100blastX_hits_m6_header2.tab | cut -f6,7 | sort -u
+     echo "#>>> $query"
+     grep $query 100blastX_hits_m6_header2.tab | cut -f6,7 | sort -u
      echo '------------------------'
 done
 
@@ -367,6 +373,9 @@ grep Am1 100blastX_hits_m6_header2.tab | cut -f7 | sort -u | sort -nrk1
 #    note the use of a regular expression '3[[:space:]]500' which denotes a 3 followed by a space or tab, 
 #    followed by a 500 (i.e. our qstart qend coordinates)
 grep Am1 100blastX_hits_m6_header2.tab | grep '3[[:space:]]500'
+
+# Or using awk
+grep Am1 100blastX_hits_m6_header2.tab | awk 'BEGIN{FS=OFS="\t"}$6 == 3 && $7 == 500'
 
 #>>> lets retrieve the best hit gnl|casseteDB|10444105 found by the search in the previous step
 blastdbcmd -db integron_cassettes4blastdb.faaED -entry 'gnl|casseteDB|10444105' -dbtype prot -out S_marcescens_dhrXII_casseteDB-10444105.faa
@@ -395,7 +404,7 @@ split_fasta.pl 3cass_amplicons.fna
 #done
 
 # ii) or directly to the graph, by piping the blastx oputput directly into the blast-imager script like so:
-#for file in *fa; do blastx -query $file -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | ./blast-imager.pl > ${file%.*}.png; done
+#for file in *fa; do blastx -query $file -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | ../../blast-imager.pl > ${file%.*}.png; done
 
 # Let's run again, imposing some filtering to remove the poorest hits: pident > 98%; mismatches < 4; gaps < 3 
 # which will render a better figure
@@ -403,10 +412,11 @@ for file in *fa; do blastx -query $file -db integron_cassettes4blastdb.faaED -ev
 
 # now lets have a look at the results for the Am1 sequence
 eog Am1.png &
+eog Ap18.png &
+eog Ap26.png &
 
-
-# how many possible CDSs do you recognize?
-# I'd say 3
+# how many possible CDSs do you recognize in Am1.png?
+# seems like 3
 
 # write a table with the possible coordinates (at DNA level; see upper coordinate lines)
 #start	end	strand	Notes
@@ -464,7 +474,7 @@ blastx -query $file -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6
 
 
 ### TBLASTN
-# As we have seen blastx will search your DNA sequence tranlated in all 6 reading frames against a protein database 
+# As we have seen blastx will search youfasta_toolkit.awkr DNA sequence tranlated in all 6 reading frames against a protein database 
 #   while tblastn will search in a nucleotide database with a protein input. The DNA DB in this case is translated in all 6 frames
 blastx -query Ap18_check_region.fas -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | awk '$3 > 80 && $5 < 15 && $6 < 3' | awk 'NR == 1 {print $2}'
 
@@ -495,6 +505,7 @@ cat header1.tab Ap18_ORF2_blastp_10hits.out > ed && mv ed Ap18_ORF2_blastp_10hit
 # * re-write the whole blastx stuff as a tblastn search
 # * add a block describing the blast-imager.pl output
 # * use fasta_toolkit.awk
+# * htmlize the file
 
 # what do you think is potentially interesting about this output?
 awk 'BEGIN{FS="\t"; OFS=","}{print $1,$3,$4,$5,$7,$12,$13}' Ap18_ORF2_blastp_10hits.out 

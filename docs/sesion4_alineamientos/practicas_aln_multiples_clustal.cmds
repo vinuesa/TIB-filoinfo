@@ -1,11 +1,12 @@
-######################
+###################
 # >>> TIB2022 <<< #
-######################
+###################
 # Practicas de alineamiento multiple usando programas de la familia clustal
-# Autor: Pablo Vinuesa; CCG-UNAM; http://www.ccg.unam.mx:/~vinuesa/
+# Autor: Pablo Vinuesa; CCG-UNAM; https://www.ccg.unam.mx:/~vinuesa/ @pvinmex
 # https://github.com/vinuesa/TIB-filoinfo
-# V4: Julio 2022
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# V3: 2022-08-02
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 #======================================================================================
 # uso basico de clustalw
@@ -114,9 +115,14 @@ for file in *ualn.faa; do clustalo -i $file -o ${file%.*}_cluOaln.phy --outfmt p
 clustalo --profile1 6_GDP_eucar_ualn_cluOaln.phy --profile2 4_GDP_procar_ualn_cluOaln.phy --infmt phy --outfmt fa -o 10_GDP_eucar_prokar_cluO_prof2prof.faa
 
 # 3) genera alineamiento de codones a partir de los archivos leuA-Bacillales.fas y leuA-Bacillales_translated.faa
-clustalo -ileuA-Bacillales_translated.faa -o leuA-Bacillales_translated_cluo.faa --output-order input-order
+# 3.1 traducir archivo multifasta de nucleotidos a proteina
+translate_fastas.pl -e fas -t 11 
+cat leuA-Bacillales_translated.faa
 
-# 3.1 usar el alineamiento multiple de proteinas para guiar el alineamiento de codones
+# 3.2 alinea el archivo de proteinas, manteniendo el orden del archivo de entrada
+clustalo -i leuA-Bacillales_translated.faa -o leuA-Bacillales_translated_cluo.faa --output-order input-order
+
+# 3.3 usar el alineamiento multiple de proteinas para guiar el alineamiento de codones
 ./prot2cdnAlns.pl leuA-Bacillales.fas leuA-Bacillales_translated_cluo.faa
 
 # 3.2 visualiza el resultado
@@ -133,7 +139,7 @@ leuA-Bacillales_cluoAln.fas
 
 
 ######################################
-#>>> III) Conversion de formatos <<< #
+#>>> III) Conversión de formatos <<< #
 ######################################
 
 # explora el script ./convert_alnFormats_using_clustalw.sh para que entiendas lo que hace
@@ -142,7 +148,7 @@ leuA-Bacillales_cluoAln.fas
 
 # una solucion mas genral y poderosa
 convert_aln_format_batch_bp.pl 
-Usage: /path/to/convert_aln_format_batch_bp.pl inputformat infile_ext outputformat outputfile_ext
+Usage: /home/vinuesa/bin/convert_aln_format_batch_bp.pl inputformat infile_ext outputformat outputfile_ext
 
 	          Supported formats include:
 

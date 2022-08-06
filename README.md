@@ -152,6 +152,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 #### <b>Sesi&oacute;n 3: B&uacute;squeda de hom&oacute;logos usando BLAST desde la l&iacute;nea de comandos (teor&iacute;a y pr&aacute;cticas)</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/Tema3_BLAST_OVERVIEW.pdf)
 - pr&aacute;ctica
+  - [comandos, html](https://vinuesa.github.io/TIB-filoinfo/sesion3_BLAST)
   - [comandos, txt](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/running_and_parsing_BLAST_from_the_cmd_line.commands)
   - [16S_4blastN.tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/16S_4blastN.tgz)
   - [gene_discovery_and_annotation_using_blastx.tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/gene_discovery_and_annotation_using_blastx.tgz)

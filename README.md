@@ -1,6 +1,8 @@
 # <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2022-FILO" width="115" height="115" align="middle"> <b>TIB2022-FILO</b>
 
-<img src="docs/pics/TIB19-T3_foto_de_grupo1.png" alt="TIB2022-T3 foto de grupo" width="400" height="300" align="middle">
+<img src="docs/pics/foto_grupo_TIB22.png" alt="TIB2022 foto de grupo" align="middle">
+
+**TIB22 participants, 2022-08-03"**
 
 # <b>Talleres Internacionales de Bioinform&aacute;tica - Centro de Ciencias Gen&oacute;micas, UNAM, Cuernavaca, M&eacute;xico (TIB2022-FILO)</b>
 Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/) (#TIB2022-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2019 (TIB2019-T3). 
@@ -109,7 +111,7 @@ Las clases se imparten del 1 al 5 de Agosto en el auditorio Guillermo Sober&oacu
 de 9 a 17:00 hrs, seg&uacute;n el [programa del TIB2022](https://www.nnb.unam.mx/EBM2022/#talleres)
 
 <img src="docs/pics/PV_impartiendo_clases_TIB19_2.png" alt="TIB2022-T3 foto de grupo" width="400" height="300">
-
+**Sesión del Taller TIB2019 en el Auditorio Guillermo Soberón del CCG-UNAM**
 
 ### Lunes 1 de Agosto
 

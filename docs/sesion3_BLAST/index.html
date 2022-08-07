@@ -237,6 +237,10 @@ window.buildTabsets = function(tocID) {
 
 
 
+<style type="text/css">pre {
+background: AliceBlue;
+}
+</style>
 
 
 
@@ -845,14 +849,14 @@ positions identified by <b>BLASTX</b> in the three class-1 integron
 gene-cassette amplicons</p>
 <pre><code># Read the blastx help: there are many options.
 blastx -h
-blastx --help
+blastx -help
 
 # run blastx asking for the top 3 hits in tabular output format and an evalue cutoff set at 1e-10
-blastx -query 3cass_amplicons.fna -db integron_cassettes4blastdb.faaED -evalue 1e-10 -outfmt 6 -num_alignments 3 
+blastx -query 3cass_amplicons.fna -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-10 -outfmt 6 -num_alignments 3 
 
 #&gt;&gt;&gt; Lets add some interesting information to the table, missing in the standard -m 6 output
 echo -e &#39;qseqid\tsseqid\tqlen\tslen\tqstart\tqend\tqframe\tsstart\tsend\tlength\tpident\tpositive\tmismatch\tgaps\tevalue\tbitscore\tqcovs&#39; &gt; header1.tab
-blastx -query 3cass_amplicons.fna -db integron_cassettes4blastdb.faaED -evalue 1e-100 -outfmt &#39;6 qseqid sseqid qlen slen qstart qend qframe sstart send length pident positive mismatch gaps evalue bitscore qcovs&#39; -num_alignments 3 -out 3blastX_hits_m6_header1.tab
+blastx -query 3cass_amplicons.fna -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-100 -outfmt &#39;6 qseqid sseqid qlen slen qstart qend qframe sstart send length pident positive mismatch gaps evalue bitscore qcovs&#39; -num_alignments 3 -out 3blastX_hits_m6_header1.tab
 
 # if 3blastX_hits_m6_header1.tab exists and has a non-zero size, then execute the following commands ...
 [ -s 3blastX_hits_m6_header1.tab ] &amp;&amp; cat header1.tab 3blastX_hits_m6_header1.tab &gt; ed &amp;&amp; mv ed 3blastX_hits_m6_header1.tab
@@ -865,7 +869,7 @@ head 3blastX_hits_m6_header1.tab
 
 echo -e &#39;qseqid\tsseqid\tstitle\tqlen\tslen\tqstart\tqend\tsstart\tsend\tlength\tpident\tpositive\tmismatch\tgaps\tevalue\tbitscore\tqcovs\tqframe&#39; &gt; header2.tab
 
-blastx -query 3cass_amplicons.fna -db integron_cassettes4blastdb.faaED -evalue 1e-10 -outfmt &#39;6 qseqid sseqid stitle qlen slen qstart qend sstart send length pident positive mismatch gaps evalue bitscore qcovs qframe&#39; -num_alignments 100 -out 100blastX_hits_m6_header2.tab
+blastx -query 3cass_amplicons.fna -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-10 -outfmt &#39;6 qseqid sseqid stitle qlen slen qstart qend sstart send length pident positive mismatch gaps evalue bitscore qcovs qframe&#39; -num_alignments 100 -out 100blastX_hits_m6_header2.tab
 
 [ -s 100blastX_hits_m6_header2.tab ] &amp;&amp; cat header2.tab 100blastX_hits_m6_header2.tab &gt; ed &amp;&amp; mv ed 100blastX_hits_m6_header2.tab
 
@@ -1031,17 +1035,17 @@ split_fasta.pl 3cass_amplicons.fna
 # i) first writing the tables to file
 #for file in *fa
 #do 
-#   blastx -query $file -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 -out ${file%.fa}_blastxout.tab; 
+#   blastx -query $file -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 -out ${file%.fa}_blastxout.tab; 
 #   ./blast-imager.pl ${file%.fa}_blastxout.tab &gt; ${file%.*}.png
 #   rm ${file%.fa}_blastxout.tab
 #done
 
 # ii) or directly to the graph, by piping the blastx oputput directly into the blast-imager script like so:
-#for file in *fa; do blastx -query $file -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | ../../blast-imager.pl &gt; ${file%.*}.png; done
+#for file in *fa; do blastx -query $file -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | ../../blast-imager.pl &gt; ${file%.*}.png; done
 
 # Let&#39;s run again, imposing some filtering to remove the poorest hits: pident &gt; 98%; mismatches &lt; 4; gaps &lt; 3 
 # which will render a better figure
-for file in *fa; do blastx -query $file -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | awk &#39;$3 &gt; 98 &amp;&amp; $5 &lt; 4 &amp;&amp; $6 &lt; 3&#39; | ../../blast-imager.pl &gt; ${file%.*}.png; done
+for file in *fa; do blastx -query $file -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | awk &#39;$3 &gt; 98 &amp;&amp; $5 &lt; 4 &amp;&amp; $6 &lt; 3&#39; | ../../blast-imager.pl &gt; ${file%.*}.png; done
 
 # now lets have a look at the results for the three query sequences using the &quot;eye of Gnome - eog&quot; 
 eog Am1.png &amp;

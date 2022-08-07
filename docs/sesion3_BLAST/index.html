@@ -529,7 +529,7 @@ Commons Attribution-NonCommercial 4.0</a></p>
 <div id="preliminaries-running-on-buluc" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> PRELIMINARIES: (running
 on buluc)</h1>
-<pre><code># i) download or copy the sequence data to your working directories for this practice
+<pre style="background: Cornsilk;"><code># i) download or copy the sequence data to your working directories for this practice
 cd &amp;&amp; [ ! -d TIB2022 ] &amp;&amp; mkdir TIB2022 &amp;&amp; cd TIB2022
 
 mkdir sesion3_BLAST &amp;&amp; cd sesion3_BLAST
@@ -574,7 +574,7 @@ formatdb|makeblastdb indexing</p>
 <h3><span class="header-section-number">6.1.1</span> Exploring the query
 and reference sequences</h3>
 <p>Move into the directory holding the nucleotide sequences</p>
-<pre><code># We need to untar &amp; uncompress (gunzip) the compressed tar file
+<pre style="background: Cornsilk;"><code># We need to untar &amp; uncompress (gunzip) the compressed tar file
 cd BLAST_DB_NT/ &amp;&amp; tar -xvzf 16S_4blastN.tgz
 
 # 1) explore the fasta headers: 
@@ -591,7 +591,7 @@ grep &#39;&gt;&#39; 16S_seqs4_blastDB.fna | cut -d_ -f1,2 | sort | uniq -c | sor
 <h3><span class="header-section-number">6.1.2</span> Using Perl 1-liners
 to generate FASTA headers suitable for database indexing with
 makeblastdb</h3>
-<pre><code># 1.2) Are the sequences in a suitable format for formatdb indexing?
+<pre style="background: Cornsilk;"><code># 1.2) Are the sequences in a suitable format for formatdb indexing?
 #      What command would you use to inspect the sequences?
 
 # 1.2.1)  generate a proper fasta header for db indexing
@@ -604,7 +604,7 @@ perl -pe &#39;if( /^&gt;/ ){ $c++; s/&gt;/&gt;gnl|16S_DB|$c / }&#39; 16S_seqs4_b
 <p>Note: the commented command lines in the following blocks provide the
 code to run legacy blast. The exercises are demonstrated using the
 blast+ suite of programs</p>
-<pre><code>#formatdb -i 16S_seqs4_blastDB.fnaed -p F -o T
+<pre style="background: Cornsilk;"><code>#formatdb -i 16S_seqs4_blastDB.fnaed -p F -o T
 
 makeblastdb -h
 makeblastdb -help
@@ -614,7 +614,7 @@ makeblastdb -in 16S_seqs4_blastDB.fnaed -dbtype nucl -parse_seqids</code></pre>
 <div id="identify-the-single-best-hit-for-each-query-sequence" class="section level3" number="6.1.4">
 <h3><span class="header-section-number">6.1.4</span> Identify the single
 best-hit for each query sequence</h3>
-<pre><code># 2.1) run blastn (blastall -p blastn), and get only the best hit (-b 1) in tabular format (-m 8).
+<pre style="background: Cornsilk;"><code># 2.1) run blastn (blastall -p blastn), and get only the best hit (-b 1) in tabular format (-m 8).
 # blastall -p blastn -i 16S_problema.fna -b 1 -a 6 -d 16S_seqs4_blastDB.fnaed -m 8 &gt; 16S_problema_blastN_b1_m8.tab
 blastn -query 16S_problema.fna -db 16S_seqs4_blastDB.fnaed -outfmt 6 -num_alignments 1 &gt; 16S_problema_blastN_maln1_m6.tab
 
@@ -640,7 +640,7 @@ head 16S_problema_blastN_maln1_m6.tab</code></pre>
 #12.     bitscore    bit score
 #-------------------------------------------------------------------------------------
 </pre>
-<pre><code># 2.3 Add a header to the standard output; print to file and append to 16S_problema_blastN_maln1_m6.tab
+<pre style="background: Cornsilk;"><code># 2.3 Add a header to the standard output; print to file and append to 16S_problema_blastN_maln1_m6.tab
 echo -e &quot;qseqid\tsseqid\tpident\tlength\tmismatch\tgapopen\tqstart\tqend\tsstart\tsend\tevalue\tbitscore&quot; &gt; standard_blast_fields.tsv
 cat standard_blast_fields.tsv 16S_problema_blastN_maln1_m6.tab &gt; t &amp;&amp; mv t 16S_problema_blastN_maln1_m6.tab
 
@@ -652,7 +652,7 @@ cut -f 2 16S_problema_blastN_maln1_m6.tab | sed &#39;1d&#39; | sort | uniq -c</c
 <div id="retrieve-all-hits-from-the-db-using-fastacmd" class="section level3" number="6.1.5">
 <h3><span class="header-section-number">6.1.5</span> Retrieve all hits
 from the db using fastacmd</h3>
-<pre><code># 3.0) Generate the list of hit IDs for each query
+<pre style="background: Cornsilk;"><code># 3.0) Generate the list of hit IDs for each query
 cut -f2 16S_problema_blastN_maln1_m6.tab | sed &#39;1d&#39; &gt; IDs4fastacmd.txt
 
 #blastdbcmd -i IDs4fastacmd.txt -d 16S_seqs4_blastDB.fnaed | grep &#39;&gt;&#39; |cut -d\| -f3 | cut -d&#39; &#39; -f2 &gt; hit_sequences_b1.fna
@@ -675,7 +675,7 @@ paste problem_seqs.txt hit_sequence_headers.txt pident_and_length.tsv | column -
 <h3><span class="header-section-number">6.1.6</span> Retrieve the 10-top
 hits and filter out only those with &gt;= 98.5% sequence identity and
 &gt; 1000 alignment length</h3>
-<pre><code>blastn -query 16S_problema.fna -db 16S_seqs4_blastDB.fnaed -num_alignments 10 -outfmt 6 &gt; 16S_problema_blastN_10hits.tab
+<pre style="background: Cornsilk;"><code>blastn -query 16S_problema.fna -db 16S_seqs4_blastDB.fnaed -num_alignments 10 -outfmt 6 &gt; 16S_problema_blastN_10hits.tab
 wc -l 16S_problema_blastN_10hits.tab
 
 
@@ -700,7 +700,7 @@ tools used to annotate a proteome.</p>
 <ul>
 <li>extract the sequence data from the compressed tar file</li>
 </ul>
-<pre><code># Move into the BLAST_DB_AA dir and extract the sequences in the tgz file
+<pre style="background: Cornsilk;"><code># Move into the BLAST_DB_AA dir and extract the sequences in the tgz file
 cd $wkdir &amp;&amp; cd BLAST_DB_AA 
 
 tar -xvzf gene_discovery_and_annotation_using_blastx.tgz</code></pre>
@@ -719,7 +719,7 @@ integron_cassettes4blastdb.faa</li>
 <div id="exploring-and-fixing-fasta-headers-for-database-indexing" class="section level3" number="7.2.1">
 <h3><span class="header-section-number">7.2.1</span> Exploring and
 fixing FASTA headers for database indexing</h3>
-<pre><code>grep &#39;^&gt;&#39; integron_cassettes4blastdb.faa | head -20
+<pre style="background: Cornsilk;"><code>grep &#39;^&gt;&#39; integron_cassettes4blastdb.faa | head -20
 
 # Lets change &gt;gi|17026026 |[Acinetobacter baumannii]|ABI1... ==&gt; 
 #             &gt;gnl|casseteDB|17026026 |[Acinetobacter baumannii]|ABI1...
@@ -738,7 +738,7 @@ grep &#39;^&gt;&#39; integron_cassettes4blastdb.faaED | head -20</code></pre>
 <div id="formatting-a-protein-database" class="section level3" number="7.2.2">
 <h3><span class="header-section-number">7.2.2</span> Formatting a
 protein database</h3>
-<pre><code># 2) format DB with makeblastdb
+<pre style="background: Cornsilk;"><code># 2) format DB with makeblastdb
 # formatdb -i integron_cassettes4blastdb.faaED -p T -o T -n integron_cassetteDB
 makeblastdb -in integron_cassettes4blastdb.faaED -dbtype prot -parse_seqids
 
@@ -750,7 +750,7 @@ ls -ltr</code></pre>
 annotate proteins</h3>
 <p>Here we will try to assign function to the proteins in file
 <i>unknown_prot.faa</i></p>
-<pre><code># How many prots in unknown_prot.faa
+<pre style="background: Cornsilk;"><code># How many prots in unknown_prot.faa
 grep -c &#39;^&gt;&#39; unknown_prot.faa
 
 cat unknown_prot.faa
@@ -847,7 +847,7 @@ CDSs</h3>
 1-liners that will help us to identify the most-likely ORF start and end
 positions identified by <b>BLASTX</b> in the three class-1 integron
 gene-cassette amplicons</p>
-<pre><code># Read the blastx help: there are many options.
+<pre style="background: Cornsilk;"><code># Read the blastx help: there are many options.
 blastx -h
 blastx -help
 
@@ -901,7 +901,7 @@ head -1 100blastX_hits_m6_header2.tab | sed &#39;s/\t/\n/g&#39; | cat -n</code><
 <li>Generate a list of non-redundant <b>qstart &amp; qend positions</b>
 for each query sequence</li>
 </ul>
-<pre><code>#&gt;&gt;&gt; This 1liner generates a non-redundant list of the qstart qend positions for each of the query sequences. 
+<pre style="background: Cornsilk;"><code>#&gt;&gt;&gt; This 1liner generates a non-redundant list of the qstart qend positions for each of the query sequences. 
 #    These are extracted from the full table with $(cut -f1 100blastX_hits_m6_header2.tab | grep -v qseqid | sort -u)
 #    Then, for each query, grep it out of the table with grep $query 100blastX_hits_m6_header2.tab and keep only the fields 6,7: qstart, qend
 #    We separte and label the results corresponding to each query sequence using the echo &quot;#&gt;&gt;&gt; $query&quot;; as header 
@@ -985,7 +985,7 @@ done</code></pre>
 <li>Focus on the Am1 query sequence: How many genes may it encode
 for?</li>
 </ul>
-<pre><code># Identify the most likely gene start positions
+<pre style="background: Cornsilk;"><code># Identify the most likely gene start positions
 grep Am1 100blastX_hits_m6_header2.tab | cut -f6,7 | sort -u | sort -nk1
 grep Am1 100blastX_hits_m6_header2.tab | cut -f6 | sort -u | sort -nk1
 
@@ -1027,7 +1027,7 @@ exactly as in our case.</p>
 <p>To run the script, we will first split the multifasta of query
 sequences into individual sequences, to generate graphs the the hit
 table of individual queries.</p>
-<pre><code># Split the multifasta into the individual soruce sequence files, 
+<pre style="background: Cornsilk;"><code># Split the multifasta into the individual soruce sequence files, 
 # that is, generate single fasta files from the multifasta source file
 split_fasta.pl 3cass_amplicons.fna
 
@@ -1149,7 +1149,7 @@ ATGAACTCGGAATCAGTACGCATTTATCTCGTTGCTGCGATGGGAGCCAATCGGGTTATTGGCAATGGTCCTAATATCCC
 <ul>
 <li>Lets save the three CDSs to file</li>
 </ul>
-<pre><code># write first CDS to Am1_cassette_CDSs.fna, and append with 2cnd and 3rd to it using &gt;&gt;
+<pre style="background: Cornsilk;"><code># write first CDS to Am1_cassette_CDSs.fna, and append with 2cnd and 3rd to it using &gt;&gt;
 fasta_toolkit.awk -R 3 -s 3 -e 500 Am1.fa &gt; Am1_cassette_CDSs.fna
 fasta_toolkit.awk -R 3 -s 612 -e 902 Am1.fa &gt;&gt; Am1_cassette_CDSs.fna
 fasta_toolkit.awk -R 3 -s 908 -e 1699 Am1.fa &gt;&gt; Am1_cassette_CDSs.fna</code></pre>
@@ -1157,7 +1157,7 @@ fasta_toolkit.awk -R 3 -s 908 -e 1699 Am1.fa &gt;&gt; Am1_cassette_CDSs.fna</cod
 <li>We need to add consecutive ORF/gene names to distinguish them from
 one another</li>
 </ul>
-<pre><code>grep &#39;^&gt;&#39; Am1_cassette_CDSs.fna
+<pre style="background: Cornsilk;"><code>grep &#39;^&gt;&#39; Am1_cassette_CDSs.fna
 perl -pe &#39;if(/^&gt;(\S+)/){ $c++; $h=$1 . &quot;_ORF&quot; . $c; s/$1/$h/ }&#39; Am1_cassette_CDSs.fna
 perl -pe &#39;if(/^&gt;(\S+)/){ $c++; $h=$1 . &quot;_ORF&quot; . $c; s/$1/$h/ }&#39; Am1_cassette_CDSs.fna &gt; ed &amp;&amp; mv ed Am1_cassette_CDSs.fna</code></pre>
 </div>
@@ -1167,11 +1167,11 @@ to their conceptual translation products using the universal genetic
 code</h3>
 <p>This operation can be easily performed with the help of
 <code>fasta_toolkit.awk</code></p>
-<pre><code>fasta_toolkit.awk -R 4 Am1_cassette_CDSs.fna &gt; Am1_cassette_CDSs_translated.faa</code></pre>
+<pre style="background: Cornsilk;"><code>fasta_toolkit.awk -R 4 Am1_cassette_CDSs.fna &gt; Am1_cassette_CDSs_translated.faa</code></pre>
 <ul>
 <li>Visualize the resulting file</li>
 </ul>
-<pre><code>cat Am1_cassette_CDSs_translated.faa</code></pre>
+<pre style="background: Cornsilk;"><code>cat Am1_cassette_CDSs_translated.faa</code></pre>
 <pre style="background: AliceBlue;">
 &gt;Am1_ORF1
 MNSESVRIYLVAAMGANRVIGNGPNIPWKIPGEQKIFRRLTEGKVVVMGRKTFESIGKPLPNRHTLVISRQANYRATGCVVVSTLSHAIALASELGNELYVAGGAEIYTLALPHAHGVFLSEVHQTFEGDAFFPMLNETEFELVSTETIQAVIPYTHSVYARRNG*
@@ -1189,7 +1189,7 @@ cassettes</h2>
 <p>We will run <b>BLASTP</b> a final time to get the best functional
 annotations for the three ORFs (gene cassettes) identified via
 <b>BLASTX</b> in the Am1 amplicon.</p>
-<pre><code># 1. run blastp with the translated products and get 10 top hits
+<pre style="background: Cornsilk;"><code># 1. run blastp with the translated products and get 10 top hits
 echo -e &#39;qseqid\tsseqid\tqlen\tslen\tstitle\tlength\tpident\tpositive\tmismatch\tgaps\tevalue\tbitscore\tqcovs&#39; &gt; header1.tab
 blastp -query Am1_cassette_CDSs_translated.faa -db integron_cassettes4blastdb.faaED -outfmt &#39;6 qseqid sseqid qlen slen stitle length pident positive mismatch gaps evalue bitscore qcovs&#39; -num_alignments 10 &gt; blastp_10hits.out
 

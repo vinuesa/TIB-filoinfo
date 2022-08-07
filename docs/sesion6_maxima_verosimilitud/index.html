@@ -414,7 +414,7 @@ de aminoácidos</a>
 resultados de <span class="math inline">\(AIC\)</span> usando
 herramientas de filtrado del <span class="math inline">\(SHELL\)</span>
 y <span class="math inline">\(R\)</span></a></li>
-<li><a href="#conclusión-1" id="toc-conclusión-1"><span class="toc-section-number">1.7.3.2</span> CONCLUSIÓN:</a></li>
+<li><a href="#conclusión-1" id="toc-conclusión-1"><span class="toc-section-number">1.7.3.2</span> CONCLUSIÓN</a></li>
 <li><a href="#búsqueda-intensiva-bajo-el-mejor-modelo-usando-rearreglos-tipo-best-y-10-árboles-de-semilla" id="toc-búsqueda-intensiva-bajo-el-mejor-modelo-usando-rearreglos-tipo-best-y-10-árboles-de-semilla"><span class="toc-section-number">1.7.3.3</span> Búsqueda intensiva bajo el
 mejor modelo, usando rearreglos tipo BEST y 10 árboles de
 semilla</a></li>
@@ -652,8 +652,10 @@ paste fit.order model_fit.list | awk &#39;BEGIN{OFS=&quot;\t&quot;}{print $1, $4
 # limpiemos un poco el directorio de trabajo
 rm *list *fit *order</code></pre>
 <!-- {r chunk1, out.width = '800px', fig.retina = NULL, fig.align='center', echo=TRUE} -->
-<p>Vamos a usar <code>R</code> para evaluar el mérito relativo de los
-modelos HKY85+G vs HKY85+G+I haciendo uso de <b>LRTs</b></p>
+<ul>
+<li>Vamos a usar <code>R</code> para evaluar el mérito relativo de los
+modelos HKY85+G vs HKY85+G+I haciendo uso de <b>LRTs</b></li>
+</ul>
 <pre style="background: Cornsilk;"><code># 6. Evaluacion del merito relativo de los modelos HKY85+G vs HKY85+G+I 
 #    mediante la prueba de cocientes de verosimilitud (LRT), en R
 
@@ -690,12 +692,15 @@ dev.off()</code></pre>
 <p><strong>Figura 1</strong> Dotchart mostrando resultados ordenados de
 puntuación de lnL para los modelos indicados, estimados sobre una
 filogenia <span class="math inline">\(NJ-JC\)</span> y el alineamiento
-primates.phy</p>
-<ul>
-<li>Evaluación formal de ajuste relativo entre pares de modelos anidados
-con grado creciente de parametrización, mediante <b>pruebas de razones
-de verosimilitud</b> (<span class="math inline">\(LRTs\)</span>)</li>
-</ul>
+primates.phy. La gráfica revela claramente la importancia los parámetros
+de frecuencia de bases, ti/tv y heterogeneidad de tasas entre sitios,
+reflejados en los incrementos altamente significativos de <span class="math inline">\(lnL\)</span> de los modelos de complejidad
+creciente analizados</p>
+<div id="evaluación-formal-de-ajuste-relativo-entre-pares-de-modelos-anidados-con-grado-creciente-de-parametrización-mediante-pruebas-de-razones-de-verosimilitud-lrts" class="section level5" number="1.7.1.1.1">
+<h5><span class="header-section-number">1.7.1.1.1</span> Evaluación
+formal de ajuste relativo entre pares de modelos anidados con grado
+creciente de parametrización, mediante <b>pruebas de razones de
+verosimilitud</b> (<span class="math inline">\(LRTs\)</span>)</h5>
 <pre style="background: Cornsilk;"><code># 6.3 Entre los dos modelos que parecen empatados, veamos si existen o no diferencias significativas, 
 #     corriendo una prueba estadistica formal: dado que los modelos HKY+G u HKY+G+I estan anidados,
 #     podemos correr un simple LRT (prueba de razones de verosimilitudes): LRT = 2(lnL1 - lnL 0)
@@ -711,6 +716,7 @@ pchisq(xsq,1)      # 0.9877201;  este es el valor critico de la X2 para el estad
 
 q()         # para salir de R
             # decimos que NO quieren salvar sesion</code></pre>
+</div>
 </div>
 <div id="estima-de-la-filogenia-bajo-el-mejor-modelo-encontrado-hky85g" class="section level4" number="1.7.1.2">
 <h4><span class="header-section-number">1.7.1.2</span> Estima de la
@@ -927,9 +933,17 @@ rutinaria.</p>
 <div id="ii.-aics-para-selección-modelos-de-aminoácidos" class="section level3" number="1.7.3">
 <h3><span class="header-section-number">1.7.3</span> II. AICs para
 selección modelos de aminoácidos</h3>
-<p>Evaluaremos primeramente diferentes matrices empíricas, ajustando o
-no frecuencia de los residuos (<span class="math inline">\(-f\
-e\)</span>), <span class="math inline">\(+G\)</span> y <span class="math inline">\(+I\)</span> sobre un árbol NJ-Blosum62.</p>
+<p>Recuerden que para la inferencia de filogenias de proteínas bajo
+máxima verosimilitud se usan matrices empíricas de sustitución, como la
+<span class="math inline">\(BLOSUM62\)</span> o <span class="math inline">\(JTT\)</span> … Dado que estas matrices no están
+anidadas entre sí, necesitamos usar <b>criterios de información</b> como
+el <span class="math inline">\(AIC\)</span> o <span class="math inline">\(BIC\)</span> para evaluar su mérito relativo.</p>
+<p>En el siguiente ejercicio, evaluaremos primeramente diferentes
+matrices empíricas, ajustando o no frecuencia de los residuos (<span class="math inline">\(-f\ e\)</span>), distribución gamma (<span class="math inline">\(+G\)</span>) y/o proporción de invariantes (<span class="math inline">\(+I\)</span>) para modelado de la heterogeneidad de
+tasas entre los sitios o columnas del alineamiento. Como hicimos en
+ejemplos anteriores, para que minimizar el tiempo de cómputo,
+estimaremos un un árbol NJ-Blosum62 que pasaremos al programa como
+filogenia pre-definida por el usuario.</p>
 <pre style="background: Cornsilk;"><code># Evaluemos un subconjunto de los modelos empiricos (matrices de sustitución) implementados en phyml para proteínas
 # - Amino-acid based models : LG (default) | WAG | JTT | MtREV | Dayhoff | DCMut | RtREV | CpREV | VT | AB
 #                     Blosum62 | MtMam | MtArt | HIVw |  HIVb | custom
@@ -939,7 +953,7 @@ e\)</span>), <span class="math inline">\(+G\)</span> y <span class="math inline"
 # NOTA: copia todo el bloque, hasta pasado el done, y pégalo en tu consola
 
 # primero estimemos un árbol rápido 
-phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -c 1 -b 0 &amp;&gt; /dev/null
+phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -c 1 -b 0 -o n &amp;&gt; /dev/null
 
 # y renombrémoslo, para su uso como usertree
 mv primates_21_AA.phy_phyml_tree.txt primates_Blosum62.ph
@@ -1069,7 +1083,7 @@ cat (&quot;deltaAIC&quot;, &quot;\t&quot;, &quot;value&quot;, &quot;\n&quot;, &q
 </div>
 </div>
 <div id="conclusión-1" class="section level4" number="1.7.3.2">
-<h4><span class="header-section-number">1.7.3.2</span> CONCLUSIÓN:</h4>
+<h4><span class="header-section-number">1.7.3.2</span> CONCLUSIÓN</h4>
 <p>El análisis de AIC claramente muestra que por mucho el mejor modelo
 de los evaluados es JTT+f+G. Noten que aunque con <span class="math inline">\(-f\ e\)</span> se tuvieron que estimar 19
 parámetros libres, el incremento del ajuste fue mayor que la

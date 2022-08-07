@@ -2,7 +2,7 @@
 
 <img src="docs/pics/foto_grupo_TIB22.png" alt="TIB2022 foto de grupo" align="middle">
 
-**TIB22 participants, 2022-08-03"**
+**TIB22 participants, 2022-08-03**
 
 # <b>Talleres Internacionales de Bioinform&aacute;tica - Centro de Ciencias Gen&oacute;micas, UNAM, Cuernavaca, M&eacute;xico (TIB2022-FILO)</b>
 Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/) (#TIB2022-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2019 (TIB2019-T3). 

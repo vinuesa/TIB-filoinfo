@@ -111,6 +111,7 @@ Las clases se imparten del 1 al 5 de Agosto en el auditorio Guillermo Sober&oacu
 de 9 a 17:00 hrs, seg&uacute;n el [programa del TIB2022](https://www.nnb.unam.mx/EBM2022/#talleres)
 
 <img src="docs/pics/PV_impartiendo_clases_TIB19_2.png" alt="TIB2022-T3 foto de grupo" width="400" height="300">
+
 **Sesión del Taller TIB2019 en el Auditorio Guillermo Soberón del CCG-UNAM**
 
 ### Lunes 1 de Agosto

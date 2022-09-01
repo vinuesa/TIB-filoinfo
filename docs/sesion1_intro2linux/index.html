@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, Centro de Ciencias Genómicas - UNAM" />
 
-<meta name="date" content="2022-08-30" />
+<meta name="date" content="2022-08-31" />
 
 <title>Sesión 1. Introducción al biocómputo en sistemas GNU/Linux</title>
 
@@ -367,7 +367,7 @@ pre code {
 sistemas GNU/Linux</h1>
 <h4 class="author">Pablo Vinuesa, Centro de Ciencias Genómicas -
 UNAM</h4>
-<h4 class="date">2022-08-30</h4>
+<h4 class="date">2022-08-31</h4>
 
 </div>
 
@@ -491,8 +491,21 @@ filtrado de texto en acción</a></li>
 a un archivo con el comando <b>&gt;</b></a></li>
 <li><a href="#manual-de-cada-comando-man-command" id="toc-manual-de-cada-comando-man-command"><span class="toc-section-number">2.15</span> Manual de cada comando: <b>man
 command</b></a></li>
-<li><a href="#ayuda-de-cada-comando-command-help" id="toc-ayuda-de-cada-comando-command-help"><span class="toc-section-number">2.16</span> Ayuda de cada comando: <b>command
-–help</b></a></li>
+<li><a href="#ayuda-de-comandos-del-shell-command-help" id="toc-ayuda-de-comandos-del-shell-command-help"><span class="toc-section-number">2.16</span> Ayuda de comandos del <span class="math inline">\(Shell\)</span>: <b>command –help</b></a></li>
+<li><a href="#el-poderoso-comando-find" id="toc-el-poderoso-comando-find"><span class="toc-section-number">2.17</span> El poderoso comando <span class="math inline">\(find\)</span></a>
+<ul>
+<li><a href="#find---tests" id="toc-find---tests"><span class="toc-section-number">2.17.1</span> <span class="math inline">\(find\)</span> - tests</a></li>
+<li><a href="#find---operadores" id="toc-find---operadores"><span class="toc-section-number">2.17.2</span> <span class="math inline">\(find\)</span> - operadores</a></li>
+<li><a href="#find--exec-o-find--xargs-y-acciones-definidas-por-el-usuario" id="toc-find--exec-o-find--xargs-y-acciones-definidas-por-el-usuario"><span class="toc-section-number">2.17.3</span> <span class="math inline">\(find\ -exec\)</span> o <span class="math inline">\(find\ -xargs\)</span> y acciones definidas por el
+usuario</a></li>
+</ul></li>
+<li><a href="#cuánto-espacio-queda-en-disco---comandos-df-y-du" id="toc-cuánto-espacio-queda-en-disco---comandos-df-y-du"><span class="toc-section-number">2.18</span> ¿Cuánto espacio queda en disco? -
+comandos <strong>df</strong> y <strong>du</strong></a>
+<ul>
+<li><a href="#la-utilidad-df-disc-free" id="toc-la-utilidad-df-disc-free"><span class="toc-section-number">2.18.1</span> La utilidad <span class="math inline">\(df\)</span> (disc free)</a></li>
+<li><a href="#opciones-más-comunes-de-df" id="toc-opciones-más-comunes-de-df"><span class="toc-section-number">2.18.2</span> Opciones más comunes de
+<strong>df</strong></a></li>
+</ul></li>
 </ul></li>
 <li><a href="#inicios-de-programación-en-bash" id="toc-inicios-de-programación-en-bash"><span class="toc-section-number">3</span> Inicios de programación en <span class="math inline">\(Bash\)</span></a>
 <ul>
@@ -605,7 +618,7 @@ mediante herramientas de filtrado de UNIX</a></li>
 de Pagenómica y Filogenómica Microbiana</a> del <a href="https://www.nnb.unam.mx/EBM2022/">Encuentro de Bioinformática en
 México 2022 - EBM2022</a>, celebrados en el <a href="http://www.ccg.unam.mx">Centro de Ciencias Genómicas</a> de la <a href="http://www.ccg.unam.mx">Universidad Nacional Autónoma de
 México</a>, del 1 al 5 de agosto de 2022 por <a href="http://www.ccg.unan.mx/~vinuesa/">Pablo Vinuesa, CCG-UNAM</a> <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a>.</p>
-<p>Version: 2022-08-30</p>
+<p>Version: 2022-08-31</p>
 <p>Si éste es tu primer contacto con Linux, te recomiendo que leas
 primero esta <a href="https://github.com/vinuesa/TIB-filoinfo/blob/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf">presentación
 sobre introducción al biocómputo en sistemas Linux - PDF</a>.</p>
@@ -760,8 +773,8 @@ las opciones disponibles para dicho comando</h3>
 ls --help</code></pre>
 <pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos, y sus propiedades (-l, long format)
 ls -al </code></pre>
-<pre><code>## total 15744
-## drwxr-xr-x  6 vinuesa vinuesa    4096 ago  5 18:52 .
+<pre><code>## total 15712
+## drwxr-xr-x  6 vinuesa vinuesa    4096 ago 31 19:30 .
 ## drwxr-xr-x 13 vinuesa vinuesa    4096 ago  7 12:35 ..
 ## -rw-r--r--  1 vinuesa vinuesa  110128 ago  5 18:52 800px-Evolución_UNIX.png
 ## -rw-r--r--  1 vinuesa vinuesa 6780296 ago  5 18:52 assembly_summary.txt.gz
@@ -779,8 +792,7 @@ ls -al </code></pre>
 ## -rw-rw-r--  1 vinuesa vinuesa  106127 ago  5 18:52 MobaXTerm_plugins_page_screenshot.png
 ## drwxr-xr-x  2 vinuesa vinuesa    4096 ago  5 18:52 MobaXterm_screen_shots
 ## -rw-r--r--  1 vinuesa vinuesa   77803 ago  5 18:52 recA_Bradyrhizobium_vinuesa.fna
-## -rw-rw-r--  1 vinuesa vinuesa   69311 ago  5 18:52 recA_Bradyrhizobium_vinuesa.fnaed
-## -rw-r--r--  1 vinuesa vinuesa   17704 ago  5 18:52 recA_Byuanmingense.fna
+## -rw-r--r--  1 vinuesa vinuesa   17704 ago 31 19:30 recA_Byuanmingense.fna
 ## drwxr-xr-x  2 vinuesa vinuesa    4096 ago  5 18:52 recA_seq_data
 ## -rwxr-xr-x  1 vinuesa vinuesa       8 ago  5 18:52 .Rhistory
 ## -rw-rw-r--  1 vinuesa vinuesa   51271 ago  5 18:52 sesion_local_capt_pantalla.png
@@ -790,10 +802,10 @@ ls -al </code></pre>
 ## drwxr-xr-x  3 vinuesa vinuesa    4096 ago  5 18:52 TIB2019-T3
 ## drwxrwxr-x  3 vinuesa vinuesa    4096 ago  5 18:52 TIB-filo
 ## -rwxr-xr-x  1 vinuesa vinuesa    6047 ago  5 18:52 working_with_linux_commands.code
-## -rw-r--r--  1 vinuesa vinuesa 1132977 ago  5 18:52 working_with_linux_commands.html
+## -rw-r--r--  1 vinuesa vinuesa 1161641 ago 31 19:30 working_with_linux_commands.html
 ## -rw-rw-r--  1 vinuesa vinuesa      30 ago  5 18:52 working_with_linux_commands.log
 ## -rw-r--r--  1 vinuesa vinuesa  382402 ago  5 18:52 working_with_linux_commands.pdf
-## -rw-r--r--  1 vinuesa vinuesa   65539 ago 30 07:05 working_with_linux_commands.Rmd
+## -rw-r--r--  1 vinuesa vinuesa   75190 ago 31 19:31 working_with_linux_commands.Rmd
 ## -rw-rw-r--  1 vinuesa vinuesa  152081 ago  5 18:52 working_with_linux_commands.tex</code></pre>
 <div id="veamos-el-contenido-del-directorio-raiz-salida-recortada-a-sólo-10-entradas-al-pasar-la-salida-de-ls-al-comando-head-mediante-un-pipe" class="section level4" number="2.2.3.1">
 <h4><span class="header-section-number">2.2.3.1</span> Veamos el
@@ -828,7 +840,7 @@ al <span class="math inline">\(directorio\ raíz\ /\)</span></li>
 ## lrwxrwxrwx   1 root root     7 oct  4  2020 bin -&gt; usr/bin
 ## drwxr-xr-x   4 root root  4096 ago 25 16:44 boot
 ## drwxr-xr-x   2 root root  4096 oct  4  2020 cdrom
-## drwxr-xr-x  21 root root  4840 ago 30 06:23 dev
+## drwxr-xr-x  21 root root  4840 ago 31 15:55 dev
 ## drwxr-xr-x 163 root root 12288 ago 25 16:44 etc
 ## drwxr-xr-x   5 root root  4096 abr 15  2020 home
 ## lrwxrwxrwx   1 root root     7 oct  4  2020 lib -&gt; usr/lib
@@ -839,9 +851,9 @@ al <span class="math inline">\(directorio\ raíz\ /\)</span></li>
 ## drwxr-xr-x   3 root root  4096 oct  5  2020 media
 ## drwxr-xr-x   2 root root  4096 jul 31  2020 mnt
 ## drwxr-xr-x   6 root root  4096 dic  8  2021 opt
-## dr-xr-xr-x 445 root root     0 ago 30 06:21 proc
+## dr-xr-xr-x 428 root root     0 ago 31 15:53 proc
 ## drwx------  13 root root  4096 ago 12 18:26 root
-## drwxr-xr-x  39 root root  1180 ago 30 06:38 run
+## drwxr-xr-x  39 root root  1180 ago 31 17:57 run
 ## lrwxrwxrwx   1 root root     8 oct  4  2020 sbin -&gt; usr/sbin
 ## drwxr-xr-x  17 root root  4096 ago 23 16:39 snap</code></pre>
 <pre class="bash"><code># idem, pero ordenando los archivos por fechas de modificacion (-t), listando los mas recientes al final (-r), es decir, en orden reverso
@@ -1482,7 +1494,7 @@ fi
 # confirmamos que se generaron las ligascomandos_de_linux.tab
 ls -l | head</code></pre>
 <pre><code>## ln: failed to create symbolic link &#39;comandos_de_linux.tab&#39;: File exists
-## total 15724
+## total 15692
 ## -rw-r--r-- 1 vinuesa vinuesa  110128 ago  5 18:52 800px-Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago  5 18:52 assembly_summary.txt.gz
 ## -rwxr-xr-x 1 vinuesa vinuesa   10193 ago  5 18:52 comandos_de_linux.tab
@@ -1861,7 +1873,7 @@ más adelante.</p>
 comando: <b>man command</b></h2>
 <pre class="bash"><code># mira las opciones de cut y sort en la manpage
 man cut | head -30</code></pre>
-<pre><code>## CUT(1)                                                                    User Commands                                                                   CUT(1)
+<pre><code>## CUT(1)                                                                          User Commands                                                                          CUT(1)
 ## 
 ## NAME
 ##        cut - remove sections from each line of files
@@ -1892,9 +1904,10 @@ man cut | head -30</code></pre>
 ## 
 ##        --complement</code></pre>
 </div>
-<div id="ayuda-de-cada-comando-command-help" class="section level2" number="2.16">
-<h2><span class="header-section-number">2.16</span> Ayuda de cada
-comando: <b>command –help</b></h2>
+<div id="ayuda-de-comandos-del-shell-command-help" class="section level2" number="2.16">
+<h2><span class="header-section-number">2.16</span> Ayuda de comandos
+del <span class="math inline">\(Shell\)</span>: <b>command
+–help</b></h2>
 <pre class="bash"><code># mira las opciones de cut y sort en la manpage
 cut --help</code></pre>
 <pre><code>## Usage: cut OPTION... [FILE]...
@@ -1932,12 +1945,425 @@ cut --help</code></pre>
 ## GNU coreutils online help: &lt;https://www.gnu.org/software/coreutils/&gt;
 ## Full documentation at: &lt;https://www.gnu.org/software/coreutils/cut&gt;
 ## or available locally via: info &#39;(coreutils) cut invocation&#39;</code></pre>
+</div>
+<div id="el-poderoso-comando-find" class="section level2" number="2.17">
+<h2><span class="header-section-number">2.17</span> El poderoso comando
+<span class="math inline">\(find\)</span></h2>
+<p><code>&gt;locate</code> sólo localiza archivos en base a su nombre.
+El comando <b>find</b> es mucho más poderoso, ya que busca en un
+determinado direcotorio ( y sus subdirectorios) por archivos en base a
+una serie de atributos del mismo, como temaño o tiempo de
+modifiación.</p>
+<p>Find tiene muchísimas opciones, que puedes consultar con <code>man
+find</code> o en el <a href="https://www.gnu.org/software/findutils/manual/html_mono/find.html">GNU
+findutils manual</a> en línea, con ejemplos muy interesantes.</p>
+<p>Aquí sólo mostraré algunas de las opciones más comunes en el trabajo
+cotidiano en la terminal y en <span class="math inline">\(scripts\)</span>,</p>
+<p>En su invocación más simple, <span class="math inline">\(find\)</span> produce una lista del directorio
+indicado, como por ejemplo</p>
+<p><code>find ~/bin | wc -l</code></p>
+<pre><code>7712</code></pre>
+<p>El poder y belleza de <span class="math inline">\(find\)</span>
+radica en que puede usarse para identificar archivos por que cumplen
+ciertos criterios (atributos), aplicando <span class="math inline">\(tests\)</span>, <span class="math inline">\(acciones\)</span> y <span class="math inline">\(opciones\)</span>.</p>
+<div id="find---tests" class="section level3" number="2.17.1">
+<h3><span class="header-section-number">2.17.1</span> <span class="math inline">\(find\)</span> - tests</h3>
+<ul>
+<li>Cuenta los directorios y subdirecotorios en ~/bin <code>find ~/bin
+-type d | wc -l</code></li>
+</ul>
+<pre><code>1316</code></pre>
+<ul>
+<li>Cuenta los archivos en ~/bin y sus y subdirecotorios <code>find
+~/bin -type f | wc -l</code></li>
+</ul>
+<pre><code>6300</code></pre>
+<p>Siguen unas tablas con algunos de los tests más importantes</p>
+<ul>
+<li>Tests por atributos (una pequeña selección)</li>
+</ul>
+<table>
+<colgroup>
+<col width="6%" />
+<col width="93%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>caracter</th>
+<th align="left">descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-cmin [+-]n</td>
+<td align="left">encuentra archivos o directorios cuyo contenido o
+atributos fueron modificados exactamente <span class="math inline">\(n\)</span> minutos antes. Podemos usar <span class="math inline">\(-n\)</span> o <span class="math inline">\(+n\)</span> para especificar &lt; ó &gt; de <span class="math inline">\(n\)</span> minutos</td>
+</tr>
+<tr class="even">
+<td>-mmin [+-]n</td>
+<td align="left">encuentra archivos o directorios cuyo contenido fueron
+modificados exactamente <span class="math inline">\(n\)</span> minutos
+antes. Podemos usar <span class="math inline">\(-n\)</span> o <span class="math inline">\(+n\)</span> para especificar &lt; ó &gt; de <span class="math inline">\(n\)</span> minutos</td>
+</tr>
+<tr class="odd">
+<td>-ctime [+-]n</td>
+<td align="left">encuentra archivos o directorios cuyo contenido o
+atributos fueron modificados exactamente <span class="math inline">\(n\)</span> días antes. Podemos usar <span class="math inline">\(-n\)</span> o <span class="math inline">\(+n\)</span> para especificar &lt; ó &gt; de <span class="math inline">\(n\)</span> días</td>
+</tr>
+<tr class="even">
+<td>-perm modo</td>
+<td align="left">encuentra archivos o directorios con cierto modo de
+permisos en codificación octal, como 777, 755, 644</td>
+</tr>
+<tr class="odd">
+<td>-name</td>
+<td align="left">encuentra archivos o directorios con el nombre
+‘<em>nombre</em>.ext’; noten el uso de comillas sencillas para que el
+Shell no expanda los asteriscos</td>
+</tr>
+<tr class="even">
+<td>-empty</td>
+<td align="left">encuentra archivos o directorios vacíos (0 bytes)</td>
+</tr>
+<tr class="odd">
+<td>-size [+-]n</td>
+<td align="left">encuentra archivos o directorios de un cierto
+tamaño</td>
+</tr>
+<tr class="even">
+<td>-type c</td>
+<td align="left">encuentra archivos o directorios de tipo d, f … ver
+siguiente tabla</td>
+</tr>
+<tr class="odd">
+<td>-user USER</td>
+<td align="left">encuentra archivos o directorios que pertenecen al
+usuario USER</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Tipos de archivo</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Tipo de archivo</th>
+<th align="left">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>b</td>
+<td align="left">ispositivos orientados a bloques</td>
+</tr>
+<tr class="even">
+<td>c</td>
+<td align="left">dispositivos orientados a caracteres</td>
+</tr>
+<tr class="odd">
+<td>d</td>
+<td align="left">directorio</td>
+</tr>
+<tr class="even">
+<td>f</td>
+<td align="left">archivo regular</td>
+</tr>
+<tr class="odd">
+<td>l</td>
+<td align="left">liga simbólica</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Tamaños de archivo</li>
+</ul>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="88%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>caracter</th>
+<th align="left">unidad de tamaño</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>b</td>
+<td align="left">bloques de 512-bytes (por defecto, si no se especifican
+unidades)</td>
+</tr>
+<tr class="even">
+<td>c</td>
+<td align="left">bytes</td>
+</tr>
+<tr class="odd">
+<td>w</td>
+<td align="left">palabras de 2-bytes</td>
+</tr>
+<tr class="even">
+<td>k</td>
+<td align="left">Kilobytes (unidad de 1024 bytes)</td>
+</tr>
+<tr class="odd">
+<td>M</td>
+<td align="left">Megabytes (uniades de 1,048,576 bytes; 1024^2)</td>
+</tr>
+<tr class="even">
+<td>G</td>
+<td align="left">Gigabytes (uniades de 1,073,471,824 bytes; 1024^3)</td>
+</tr>
+</tbody>
+</table>
+<p>Podemos buscar archivos por tipo, nombre, tamaño y fecha de
+modificación. El siguiente ejemplo encuentra <span class="math inline">\(scripts\)</span> de Bash con extensión <span class="math inline">\(*sh\)</span> en el directorio ~/bin, de al menos
+25 Kilobites de tamaño, modificados en las últimas 96 horas</p>
+<pre><code>find ~/bin -type f -name &#39;*.sh&#39; -size +25k -mtime -96
+/home/vinuesa/bin/git/get_phylomarkers/run_get_phylomarkers_pipeline.sh</code></pre>
+</div>
+<div id="find---operadores" class="section level3" number="2.17.2">
+<h3><span class="header-section-number">2.17.2</span> <span class="math inline">\(find\)</span> - operadores</h3>
+<p>Para describir y combinar relaciones lógicas entre los tests arriba
+mencionados, usaremos los <b>operadores Booleanos</b> listados en la
+siguiente tabla</p>
+<table>
+<colgroup>
+<col width="16%" />
+<col width="83%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operador</th>
+<th align="left">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-and</td>
+<td align="left">encuentra archivos que satisfacen ambas condiciones a
+izq. y derecha de -and</td>
+</tr>
+<tr class="even">
+<td>-or</td>
+<td align="left">encuentra archivos que satisfacen una de las
+condiciones a izq. y derecha de -or</td>
+</tr>
+<tr class="odd">
+<td>-not</td>
+<td align="left">encuentra archivos que no satisfacen la condición a la
+derecha de -not (o -!)</td>
+</tr>
+<tr class="even">
+<td>( )</td>
+<td align="left">agrupa tests y operadores for definir expresiones más
+complejas</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo: quiero encontrar archivos regulares en el directorio ~/bin
+que no tienen el modo octal 0755 estándar para scripts ejecutables.</p>
+<pre><code>find ~/bin -type f -name &#39;*.*&#39; -and -not -perm 0755
+/home/vinuesa/bin/perl_code_Teide_May10/collapse2haplotypes.pl
+/home/vinuesa/bin/run_entropy_saturation_test.sh
+
+# confirmamos
+ls -l /home/vinuesa/bin/perl_code_Teide_May10/collapse2haplotypes.pl
+-rwxrwxrwx 1 vinuesa vinuesa 966 oct 16  2011 /home/vinuesa/bin/perl_code_Teide_May10/collapse2haplotypes.pl
+
+ls -l /home/vinuesa/bin/run_entropy_saturation_test.sh
+-rwxr--r-- 1 vinuesa vinuesa 4298 jul 20 18:55 /home/vinuesa/bin/run_entropy_saturation_test.sh</code></pre>
+</div>
+<div id="find--exec-o-find--xargs-y-acciones-definidas-por-el-usuario" class="section level3" number="2.17.3">
+<h3><span class="header-section-number">2.17.3</span> <span class="math inline">\(find\ -exec\)</span> o <span class="math inline">\(find\ -xargs\)</span> y acciones definidas por el
+usuario</h3>
+<p>Podemos combinar la versatilidad de <span class="math inline">\(find\)</span> con la ejecución de comandos de
+<span class="math inline">\(Shell\)</span> o <span class="math inline">\(scripts\)</span> de nuestra elección, lo cual es
+muy poderoso.</p>
+<p>Generemos primero 100 directorios, cada uno con 26 archivos, bajo el
+directorio “borrame”</p>
+<pre class="bash"><code>mkdir -p borrame/dir-{00{1..9},0{10..99},100}
+touch borrame/dir-{00{1..9},0{10..99},100}/arch-{A..Z}</code></pre>
+<ul>
+<li>Cuenta todos los archivos de nombre ‘arch-A’</li>
+</ul>
+<pre class="bash"><code>find borrame/ -type f -name &#39;arch-A&#39; | wc -l</code></pre>
+<pre><code>## 100</code></pre>
+<ul>
+<li>borra todos los archivos de nombre ‘arch-A’ y verifica</li>
+</ul>
+<pre class="bash"><code>find borrame/ -type f -name &#39;arch-A&#39; -delete
+find borrame/ -type f -name &#39;arch-A&#39; | wc -l</code></pre>
+<pre><code>## 0</code></pre>
+<ul>
+<li>lista en formato largo los primeros 5 archivos arch-B haciendo uso
+de <code>-exec ls -l</code></li>
+</ul>
+<pre class="bash"><code>find borrame/ -type f -name arch-B -exec ls -l &#39;{}&#39; + | head -5</code></pre>
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 borrame/dir-001/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 borrame/dir-002/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 borrame/dir-003/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 borrame/dir-004/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 borrame/dir-005/arch-B</code></pre>
+<ul>
+<li>lista en formato largo los primeros 5 archivos arch-B haciendo uso
+de <code>xargs ls -l</code></li>
+</ul>
+<pre class="bash"><code>find borrame/ -type f -name arch-B | xargs ls -l | head -5</code></pre>
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 borrame/dir-001/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 borrame/dir-002/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 borrame/dir-003/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 borrame/dir-004/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 borrame/dir-005/arch-B</code></pre>
+<p>-¿qué hace este comando?</p>
+<pre><code>find borrame/ -type f -name &#39;arch-*&#39; | xargs ls -l | tail -3</code></pre>
+<p>-¿qué hace este comando?</p>
+<pre><code>find borrame/ -type f -name &#39;dir-??9&#39; | xargs ls -l | tail -3</code></pre>
+<p>-¿qué hace este comando?</p>
+<pre><code>find borrame/ -maxdepth 1 -type d -name &#39;dir-00*&#39;</code></pre>
+<ul>
+<li>$find# combinado con expresiones regulares</li>
+</ul>
+<pre class="bash"><code>find borrame/ -maxdepth 1 -type d -name &#39;dir-001&#39; -or -name &#39;dir-01[1-3]&#39;</code></pre>
+<pre><code>## borrame/dir-012
+## borrame/dir-011
+## borrame/dir-013
+## borrame/dir-001</code></pre>
+<pre class="bash"><code>rm -rf borrame</code></pre>
+</div>
+</div>
+<div id="cuánto-espacio-queda-en-disco---comandos-df-y-du" class="section level2" number="2.18">
+<h2><span class="header-section-number">2.18</span> ¿Cuánto espacio
+queda en disco? - comandos <strong>df</strong> y
+<strong>du</strong></h2>
+<p>En cualquier sistema de cómputo es crítico saber cuánto espacio de
+disco está ocupado y cuánto queda libre. Las utilidades <span class="math inline">\(df\)</span> y <span class="math inline">\(du\)</span> nos ayudan en estas tareas.</p>
+<div id="la-utilidad-df-disc-free" class="section level3" number="2.18.1">
+<h3><span class="header-section-number">2.18.1</span> La utilidad <span class="math inline">\(df\)</span> (disc free)</h3>
+<p>Si se invoca directamente sin argumentos, reporta el espacio total
+disponible en el sistema y en cada partición o dispositivo montados en
+el sistema de archivos.</p>
+<pre class="bash"><code>df        </code></pre>
+<pre><code>## Filesystem      1K-blocks      Used Available Use% Mounted on
+## udev             16364748         0  16364748   0% /dev
+## tmpfs             3280648      2224   3278424   1% /run
+## /dev/nvme0n1p3  465816208  79839872 362240684  19% /
+## tmpfs            16403224      5052  16398172   1% /dev/shm
+## tmpfs                5120         4      5116   1% /run/lock
+## tmpfs            16403224         0  16403224   0% /sys/fs/cgroup
+## /dev/loop0            128       128         0 100% /snap/bare/5
+## /dev/loop2          56960     56960         0 100% /snap/core18/2409
+## /dev/loop3          56960     56960         0 100% /snap/core18/2538
+## /dev/loop1         144512    144512         0 100% /snap/chromium/2064
+## /dev/loop4          63488     63488         0 100% /snap/core20/1611
+## /dev/loop11        106880    106880         0 100% /snap/standard-notes/224
+## /dev/loop9          48128     48128         0 100% /snap/snapd/16292
+## /dev/loop8          48128     48128         0 100% /snap/snapd/16010
+## /dev/loop5         224256    224256         0 100% /snap/gnome-3-34-1804/72
+## /dev/loop7         153856    153856         0 100% /snap/okular/109
+## /dev/loop6          83328     83328         0 100% /snap/gtk-common-themes/1534
+## /dev/loop12         55552     55552         0 100% /snap/snap-store/558
+## /dev/loop15        224256    224256         0 100% /snap/gnome-3-34-1804/77
+## /dev/loop13        166784    166784         0 100% /snap/gnome-3-28-1804/145
+## /dev/loop14        168832    168832         0 100% /snap/gnome-3-28-1804/161
+## /dev/loop19         93952     93952         0 100% /snap/gtk-common-themes/1535
+## /dev/loop16        354688    354688         0 100% /snap/gnome-3-38-2004/115
+## /dev/loop21         63488     63488         0 100% /snap/core20/1593
+## /dev/loop17        331392    331392         0 100% /snap/kde-frameworks-5-qt-5-15-core20/14
+## /dev/loop18         52224     52224         0 100% /snap/snap-store/547
+## /dev/loop20        192256    192256         0 100% /snap/okular/115
+## /dev/loop23        446848    446848         0 100% /snap/kde-frameworks-5-96-qt-5-15-5-core20/7
+## /dev/loop24        410496    410496         0 100% /snap/gnome-3-38-2004/112
+## /dev/nvme0n1p1    1994928      5356   1989572   1% /boot/efi
+## /dev/sda1      1921724608 888958320 935074232  49% /home
+## tmpfs             3280644        20   3280624   1% /run/user/125
+## tmpfs             3280644        68   3280576   1% /run/user/1000
+## /dev/loop25        106880    106880         0 100% /snap/standard-notes/226
+## /dev/loop10        145664    145664         0 100% /snap/chromium/2076</code></pre>
+<p>Si le pasamos como argumento un directorio o partición, nos da la
+información correspondiente al espacio disponible.</p>
+<pre class="bash"><code>df /</code></pre>
+<pre><code>## Filesystem     1K-blocks     Used Available Use% Mounted on
+## /dev/nvme0n1p3 465816208 79839872 362240684  19% /</code></pre>
+</div>
+<div id="opciones-más-comunes-de-df" class="section level3" number="2.18.2">
+<h3><span class="header-section-number">2.18.2</span> Opciones más
+comunes de <strong>df</strong></h3>
+<p>Como cualquier comando, le podemos pasar opciones para adecuar mejor
+la salida a nuestra necesidad.</p>
+<p>Va una selección de entradas de la página <span class="math inline">\(man\)</span> para <span class="math inline">\(df\)</span> que uso con más frecuencia</p>
+<pre>
+-a, --all
+              include pseudo, duplicate, inaccessible file systems
+
+-B, --block-size=SIZE
+              scale  sizes by SIZE before printing them; e.g., &#39;-BM&#39; prints sizes in units of 1,048,576 bytes; see SIZE format be‐
+              low
+
+-h, --human-readable
+              print sizes in powers of 1024 (e.g., 1023M)
+
+-i, --inodes
+              list inode information instead of block usage
+
+--total
+              elide all entries insignificant to available space, and produce a grand total              
+
+</pre>
+<p>y algunos ejemplos de su efecto sobre la salida</p>
+<pre class="bash"><code>df --total -BM
+echo
+echo
+df -h /home</code></pre>
+<pre><code>## Filesystem     1M-blocks    Used Available Use% Mounted on
+## udev              15982M      0M    15982M   0% /dev
+## tmpfs              3204M      3M     3202M   1% /run
+## /dev/nvme0n1p3   454899M  77969M   353751M  19% /
+## tmpfs             16019M      5M    16014M   1% /dev/shm
+## tmpfs                 5M      1M        5M   1% /run/lock
+## tmpfs             16019M      0M    16019M   0% /sys/fs/cgroup
+## /dev/loop0            1M      1M        0M 100% /snap/bare/5
+## /dev/loop2           56M     56M        0M 100% /snap/core18/2409
+## /dev/loop3           56M     56M        0M 100% /snap/core18/2538
+## /dev/loop1          142M    142M        0M 100% /snap/chromium/2064
+## /dev/loop4           62M     62M        0M 100% /snap/core20/1611
+## /dev/loop11         105M    105M        0M 100% /snap/standard-notes/224
+## /dev/loop9           47M     47M        0M 100% /snap/snapd/16292
+## /dev/loop8           47M     47M        0M 100% /snap/snapd/16010
+## /dev/loop5          219M    219M        0M 100% /snap/gnome-3-34-1804/72
+## /dev/loop7          151M    151M        0M 100% /snap/okular/109
+## /dev/loop6           82M     82M        0M 100% /snap/gtk-common-themes/1534
+## /dev/loop12          55M     55M        0M 100% /snap/snap-store/558
+## /dev/loop15         219M    219M        0M 100% /snap/gnome-3-34-1804/77
+## /dev/loop13         163M    163M        0M 100% /snap/gnome-3-28-1804/145
+## /dev/loop14         165M    165M        0M 100% /snap/gnome-3-28-1804/161
+## /dev/loop19          92M     92M        0M 100% /snap/gtk-common-themes/1535
+## /dev/loop16         347M    347M        0M 100% /snap/gnome-3-38-2004/115
+## /dev/loop21          62M     62M        0M 100% /snap/core20/1593
+## /dev/loop17         324M    324M        0M 100% /snap/kde-frameworks-5-qt-5-15-core20/14
+## /dev/loop18          51M     51M        0M 100% /snap/snap-store/547
+## /dev/loop20         188M    188M        0M 100% /snap/okular/115
+## /dev/loop23         437M    437M        0M 100% /snap/kde-frameworks-5-96-qt-5-15-5-core20/7
+## /dev/loop24         401M    401M        0M 100% /snap/gnome-3-38-2004/112
+## /dev/nvme0n1p1     1949M      6M     1943M   1% /boot/efi
+## /dev/sda1       1876685M 868124M   913159M  49% /home
+## tmpfs              3204M      1M     3204M   1% /run/user/125
+## tmpfs              3204M      1M     3204M   1% /run/user/1000
+## /dev/loop25         105M    105M        0M 100% /snap/standard-notes/226
+## /dev/loop10         143M    143M        0M 100% /snap/chromium/2076
+## total           2394877M 949816M  1326480M  42% -
+## 
+## 
+## Filesystem      Size  Used Avail Use% Mounted on
+## /dev/sda1       1.8T  848G  892G  49% /home</code></pre>
 <!-- ### >>> AVANZADO -->
 <!--  ahora con un bucle for, con la sintaxis: [for ALIAS in LIST; do YOUR_CODE; done] -->
 <!-- for letter in b c d e f; do echo ">>> $letter"; ls /bin/${letter}*; echo '--------------'; done -->
 <!-- # ahora para todas las letras -->
 <!-- for letter in {a..z}; do echo ">>> $letter"; ls /bin/${letter}*; echo '--------------'; done -->
 <hr />
+</div>
 </div>
 </div>
 <div id="inicios-de-programación-en-bash" class="section level1" number="3">
@@ -1967,7 +2393,7 @@ salida de un comando con <b>$(comando)</b></h3>
 date=$(date | awk &#39;{print $3,$2,$6}&#39; | sed &#39;s/ //g&#39;)
 h=$(hostname)
 echo &quot;&gt;&gt;&gt; working in: $wkdir at &lt;$h&gt; on &lt;$date&gt;&quot;</code></pre>
-<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/TIB/TIB22/sesion1_intro2linux at &lt;alisio&gt; on &lt;ago30CDT&gt;</code></pre>
+<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/TIB/TIB22/sesion1_intro2linux at &lt;alisio&gt; on &lt;ago31CDT&gt;</code></pre>
 </div>
 <div id="modificación-de-variables-y-operaciones-con-ellas" class="section level3" number="3.1.2">
 <h3><span class="header-section-number">3.1.2</span> Modificación de
@@ -2061,7 +2487,7 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 30 07:05 empty_file
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 31 19:31 empty_file
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago  5 18:52 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty

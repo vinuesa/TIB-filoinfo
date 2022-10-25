@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México; @pvinmex" />
 
-<meta name="date" content="2022-08-07" />
+<meta name="date" content="2022-10-25" />
 
 <title>Running and parsing BLAST+ using the Linux command line</title>
 
@@ -353,7 +353,7 @@ pre code {
 <h1 class="title toc-ignore">Running and parsing BLAST+ using the Linux
 command line</h1>
 <h4 class="author">Pablo Vinuesa, CCG-UNAM, Cuernavaca, México; <span class="citation">@pvinmex</span></h4>
-<h4 class="date">2022-08-07</h4>
+<h4 class="date">2022-10-25</h4>
 
 </div>
 
@@ -367,8 +367,8 @@ OVERVIEW OF PROGRAM SELECTION</a>
 <li><a href="#related-resources" id="toc-related-resources"><span class="toc-section-number">3.1</span> RELATED RESOURCES</a></li>
 </ul></li>
 <li><a href="#license" id="toc-license"><span class="toc-section-number">4</span> LICENSE</a></li>
-<li><a href="#preliminaries-running-on-buluc" id="toc-preliminaries-running-on-buluc"><span class="toc-section-number">5</span> PRELIMINARIES: (running on
-buluc)</a></li>
+<li><a href="#preliminaries-running-on-buluctepeu" id="toc-preliminaries-running-on-buluctepeu"><span class="toc-section-number">5</span> PRELIMINARIES: (running on
+buluc|tepeu)</a></li>
 <li><a href="#searching-a-dna-database-with-dna-queries-blastn" id="toc-searching-a-dna-database-with-dna-queries-blastn"><span class="toc-section-number">6</span> Searching a DNA database with DNA
 queries (BLASTN)</a>
 <ul>
@@ -383,11 +383,15 @@ FASTA headers suitable for database indexing with makeblastdb</a></li>
 to generate an indexed blast database</a></li>
 <li><a href="#identify-the-single-best-hit-for-each-query-sequence" id="toc-identify-the-single-best-hit-for-each-query-sequence"><span class="toc-section-number">6.1.4</span> Identify the single best-hit for
 each query sequence</a></li>
-<li><a href="#retrieve-all-hits-from-the-db-using-fastacmd" id="toc-retrieve-all-hits-from-the-db-using-fastacmd"><span class="toc-section-number">6.1.5</span> Retrieve all hits from the db
-using fastacmd</a></li>
-<li><a href="#retrieve-the-10-top-hits-and-filter-out-only-those-with-98.5-sequence-identity-and-1000-alignment-length" id="toc-retrieve-the-10-top-hits-and-filter-out-only-those-with-98.5-sequence-identity-and-1000-alignment-length"><span class="toc-section-number">6.1.6</span> Retrieve the 10-top hits and
-filter out only those with &gt;= 98.5% sequence identity and &gt; 1000
-alignment length</a></li>
+<li><a href="#retrieve-all-the-hits-from-the-database-using-blastdbcmd" id="toc-retrieve-all-the-hits-from-the-database-using-blastdbcmd"><span class="toc-section-number">6.1.5</span> Retrieve all the hits from the
+database using <span class="math inline">\(blastdbcmd\)</span></a></li>
+<li><a href="#generate-a-table-containing-the-query-sequence-ids-the-subject-headers-and-basic-alignment-statistics" id="toc-generate-a-table-containing-the-query-sequence-ids-the-subject-headers-and-basic-alignment-statistics"><span class="toc-section-number">6.1.6</span> Generate a table containing the
+query sequence IDs, the subject headers and basic alignment
+statistics</a></li>
+<li><a href="#filter-out-high-confidence-classifications-alignment-with-pident-95-length-500-bp" id="toc-filter-out-high-confidence-classifications-alignment-with-pident-95-length-500-bp"><span class="toc-section-number">6.1.7</span> Filter out high-confidence
+classifications (alignment with pident &gt;= 95% &amp;&amp; length &gt;=
+500 bp)</a></li>
+<li><a href="#homework-1" id="toc-homework-1"><span class="toc-section-number">6.1.8</span> HOMEWORK 1</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#blast-with-protein-queries-against-a-protein-database-blastp" id="toc-blast-with-protein-queries-against-a-protein-database-blastp"><span class="toc-section-number">7</span> BLAST+ with protein queries against
@@ -402,8 +406,12 @@ headers for database indexing</a></li>
 <li><a href="#formatting-a-protein-database" id="toc-formatting-a-protein-database"><span class="toc-section-number">7.2.2</span> Formatting a protein
 database</a></li>
 <li><a href="#running-blastp-to-annotate-proteins" id="toc-running-blastp-to-annotate-proteins"><span class="toc-section-number">7.2.3</span> Running blastp to annotate
-proteins</a></li>
-<li><a href="#homework-exercise" id="toc-homework-exercise"><span class="toc-section-number">7.2.4</span> HOMEWORK exercise</a></li>
+proteins</a>
+<ul>
+<li><a href="#annotate-the-query-proteins-using-the-single-best-hit" id="toc-annotate-the-query-proteins-using-the-single-best-hit"><span class="toc-section-number">7.2.3.1</span> Annotate the query proteins
+using the single best hit</a></li>
+</ul></li>
+<li><a href="#homework-2" id="toc-homework-2"><span class="toc-section-number">7.2.4</span> HOMEWORK 2</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#translating-blast-blastx---translate-a-dna-sequence-to-search-a-protein-database" id="toc-translating-blast-blastx---translate-a-dna-sequence-to-search-a-protein-database"><span class="toc-section-number">8</span> Translating BLAST (BLASTX) -
@@ -412,8 +420,8 @@ translate a DNA sequence to search a protein database</a>
 <li><a href="#exercise-3-identification-of-cdss-in-dna-sequences-using-blastx" id="toc-exercise-3-identification-of-cdss-in-dna-sequences-using-blastx"><span class="toc-section-number">8.1</span> EXERCISE 3: Identification of CDSs
 in DNA sequences using BLASTX</a>
 <ul>
-<li><a href="#running-blastx-and-parsing-the-output-with-shell-text-processing-tools-to-identify-the-cdss" id="toc-running-blastx-and-parsing-the-output-with-shell-text-processing-tools-to-identify-the-cdss"><span class="toc-section-number">8.1.1</span> Running blastx and parsing the
-output with shell text-processing tools to identify the CDSs</a></li>
+<li><a href="#generate-a-list-of-non-redundant-qstart-qend-positions-for-each-query-sequence" id="toc-generate-a-list-of-non-redundant-qstart-qend-positions-for-each-query-sequence"><span class="toc-section-number">8.1.1</span> Generate a list of non-redundant
+<b>qstart &amp; qend positions</b> for each query sequence</a></li>
 <li><a href="#graphical-exploration-of-standard--outfmt-6-output-using-the-with-blast-imager.pl-script" id="toc-graphical-exploration-of-standard--outfmt-6-output-using-the-with-blast-imager.pl-script"><span class="toc-section-number">8.1.2</span> Graphical exploration of
 standard -outfmt 6 output using the with blast-imager.pl script</a></li>
 <li><a href="#write-a-table-with-the-likely-gene-coordinates-for-am1" id="toc-write-a-table-with-the-likely-gene-coordinates-for-am1"><span class="toc-section-number">8.1.3</span> Write a table with the likely
@@ -427,7 +435,7 @@ code</a></li>
 <li><a href="#assign-functional-annotations-to-the-3-cdss-encoded-in-the-am1-class-i-integron-gene-cassettes" id="toc-assign-functional-annotations-to-the-3-cdss-encoded-in-the-am1-class-i-integron-gene-cassettes"><span class="toc-section-number">8.2</span> Assign functional annotations to
 the 3 CDSs encoded in the Am1 class-I integron gene cassettes</a>
 <ul>
-<li><a href="#homework-2" id="toc-homework-2"><span class="toc-section-number">8.2.1</span> HOMEWORK 2</a></li>
+<li><a href="#homework-3" id="toc-homework-3"><span class="toc-section-number">8.2.1</span> HOMEWORK 3</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -435,9 +443,10 @@ the 3 CDSs encoded in the Am1 class-I integron gene cassettes</a>
 
 <div id="aim" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> AIM</h1>
-<p>The following tutorials teache how to run NCBI legacy-blast and
-blast+ from the command line along with useful shell idioms and 1-liners
-to effectively parse results.</p>
+<p>The following tutorials teach how to run NCBI [legacy-blast and] <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&amp;DOC_TYPE=Download"><b>BLAST+</b></a>
+from the command line along with useful <a href="https://www.gnu.org/software/gawk/manual/gawk.html">AWK</a>, <a href="https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html">Bash</a>
+and <a href="https://www.perl.org/">Perl</a> idioms and <a href="https://en.wikipedia.org/wiki/One-liner_program">1-liner
+programs</a> to effectively parse results.</p>
 </div>
 <div id="assumptions" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> ASSUMPTIONS</h1>
@@ -445,7 +454,7 @@ to effectively parse results.</p>
 the standard bash shell installed, as well as the legacy- and blast+
 software suites, which are freely available for download from the <a href="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/">NCBI ftp
 server</a></p>
-<p>For further instruction on the installation and usage of the blast+
+<p>For further instruction on the installation and usage of the <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&amp;DOC_TYPE=Download"><b>BLAST+</b></a>
 suite, read <a href="https://www.ncbi.nlm.nih.gov/books/NBK279671/">NCBI’s BLAST
 Book</a></p>
 </div>
@@ -526,19 +535,17 @@ work is licensed under a
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative
 Commons Attribution-NonCommercial 4.0</a></p>
 </div>
-<div id="preliminaries-running-on-buluc" class="section level1" number="5">
+<div id="preliminaries-running-on-buluctepeu" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> PRELIMINARIES: (running
-on buluc)</h1>
+on buluc|tepeu)</h1>
+<p>The following code will setup our working directories for the
+tutorials.</p>
 <pre style="background: Cornsilk;"><code># i) download or copy the sequence data to your working directories for this practice
-cd &amp;&amp; [ ! -d TIB2022 ] &amp;&amp; mkdir TIB2022 &amp;&amp; cd TIB2022
+cd &amp;&amp; [ ! -d sesion2_blast ] &amp;&amp; mkdir sesion2_blast &amp;&amp; cd sesion2_blast
 
-mkdir sesion3_BLAST &amp;&amp; cd sesion3_BLAST
-
-# ii) Download data
-
-- Navigate to the following GitHub pages and right-click to get the [raw] link for each file
-https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/16S_4blastN.tgz
-https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/gene_discovery_and_annotation_using_blastx.tgz
+# ii) Copy the data from my home directory
+cp /home/vinuesa/cursos/intro_biocomp/sesion2_blast/16S_4blastN.tgz .
+cp /home/vinuesa/cursos/intro_biocomp/sesion2_blast/gene_discovery_and_annotation_using_blastx.tgz .
 
 # or use wget to fetch the directly from the command line
 wget -c https://github.com/vinuesa/TIB-filoinfo/raw/master/docs/sesion3_BLAST/data/16S_4blastN.tgz
@@ -554,6 +561,8 @@ echo $wkdir
 # v) Move each *tgz file to the proper dir
 mv 16S_4blastN.tgz BLAST_DB_NT
 mv gene_discovery_and_annotation_using_blastx.tgz BLAST_DB_AA</code></pre>
+<p>Now we are set to start the hands-on tutorials on running
+<b>BLAST</b> from the command line</p>
 </div>
 <div id="searching-a-dna-database-with-dna-queries-blastn" class="section level1" number="6">
 <h1><span class="header-section-number">6</span> Searching a DNA
@@ -563,9 +572,14 @@ database with DNA queries (BLASTN)</h1>
 novel 16S rDNA sequences using blastn</h2>
 <p>We will use the following data for the exercise.</p>
 <ul>
-<li>Query sequences in file: 16S_problema.fna</li>
-<li>Reference sequences to build a blastn-searchable DB:
-16S_seqs4_blastDB.fna</li>
+<li><b>Query sequences</b>: <i>16S_problema.fna</i>, which correspond to
+partial 16S sequences generated in our lab from environmental microbes
+recovered contaminated soils and rivers in <a href="https://en.wikipedia.org/wiki/Morelos">Morelos, Mexico</a>. Part
+of these sequences were reported in <a href="https://www.frontiersin.org/articles/10.3389/fmicb.2017.01548/full">Ocha-Sánchez
+&amp; Vinuesa, 2017</a>.</li>
+<li><b>Reference sequences</b> to build a blastn-searchable DB:
+<i>16S_seqs4_blastDB.fna</i>. This is a tiny portion of the bacterial
+type strain 16S rRNA sequences fetched from <a href="http://rdp.cme.msu.edu/">RDPII</a>.</li>
 </ul>
 <p>We will also explore each of these files using standard shell
 filtering tools and modify the FASTA headers to make them suitable for
@@ -649,44 +663,151 @@ head -20 16S_problema_blastN_maln1_m6.tab | column -t
 # 2.4) how many unique hits are there?
 cut -f 2 16S_problema_blastN_maln1_m6.tab | sed &#39;1d&#39; | sort | uniq -c</code></pre>
 </div>
-<div id="retrieve-all-hits-from-the-db-using-fastacmd" class="section level3" number="6.1.5">
-<h3><span class="header-section-number">6.1.5</span> Retrieve all hits
-from the db using fastacmd</h3>
-<pre style="background: Cornsilk;"><code># 3.0) Generate the list of hit IDs for each query
-cut -f2 16S_problema_blastN_maln1_m6.tab | sed &#39;1d&#39; &gt; IDs4fastacmd.txt
+<div id="retrieve-all-the-hits-from-the-database-using-blastdbcmd" class="section level3" number="6.1.5">
+<h3><span class="header-section-number">6.1.5</span> Retrieve all the
+hits from the database using <span class="math inline">\(blastdbcmd\)</span></h3>
+<pre style="background: Cornsilk;"><code>#   Generate the list of hit IDs for each query
+#      NOTE: the hits are in the same order as the query sequences
+cut -f2 16S_problema_blastN_maln1_m6.tab | sed &#39;1d&#39; &gt; IDs4blastdbcmd.txt
 
-#blastdbcmd -i IDs4fastacmd.txt -d 16S_seqs4_blastDB.fnaed | grep &#39;&gt;&#39; |cut -d\| -f3 | cut -d&#39; &#39; -f2 &gt; hit_sequences_b1.fna
-blastdbcmd -entry_batch IDs4fastacmd.txt -db 16S_seqs4_blastDB.fnaed &gt; best-hit_sequences.fna
-
-# 3.1) Generate a list of the hits from the fasta headers
+#blastdbcmd -i IDs4blastdbcmd.txt -d 16S_seqs4_blastDB.fnaed | grep &#39;&gt;&#39; |cut -d\| -f3 | cut -d&#39; &#39; -f2 &gt; hit_sequences_b1.fna
+blastdbcmd -entry_batch IDs4blastdbcmd.txt -db 16S_seqs4_blastDB.fnaed &gt; best-hit_sequences.fna</code></pre>
+</div>
+<div id="generate-a-table-containing-the-query-sequence-ids-the-subject-headers-and-basic-alignment-statistics" class="section level3" number="6.1.6">
+<h3><span class="header-section-number">6.1.6</span> Generate a table
+containing the query sequence IDs, the subject headers and basic
+alignment statistics</h3>
+<pre style="background: Cornsilk;"><code># 1) Generate a list of the hits from the FASTA headers
 grep &#39;&gt;&#39; best-hit_sequences.fna | cut -d&#39; &#39; -f2 &gt; hit_sequence_headers.txt
 
-# 4) Classify our query sequences, based on the subject headers of each best hit, using a simple tabular output format
+# 2) Classify our query sequences, based on the subject headers of each best hit, using a simple tabular output format
 cut -f1 16S_problema_blastN_maln1_m6.tab | sed &#39;1d&#39; &gt; problem_seqs.txt
 paste problem_seqs.txt hit_sequence_headers.txt &gt; classified_16S_problema_sequences.tab
 
-cat classified_16S_problema_sequences.tab
-
-# 4.1) add columns 3 &amp; 4 (pident &amp; length)
+head -5 classified_16S_problema_sequences.tab</code></pre>
+<pre style="background: AliceBlue;">
+13  Mycobacterium_nonchromogenicum_T|ATCC_19530.|X52928
+18  Mycobacterium_smegmatis_T|ATCC_19420|AJ131761
+2   Mycobacterium_peregrinum_T|CIP_105382T|AY457069
+27  Mycobacterium_fortuitum_T|CIP_104534T|AY457066
+36  Mycobacterium_nonchromogenicum_T|ATCC_19530.|X52928
+</pre>
+<pre style="background: Cornsilk;"><code># 3) add also columns 3 &amp; 4 (pident &amp; length) to the tabular output
 cut -f3,4 16S_problema_blastN_maln1_m6.tab | sed &#39;1d&#39; &gt; pident_and_length.tsv
-paste problem_seqs.txt hit_sequence_headers.txt pident_and_length.tsv | column -t</code></pre>
+paste problem_seqs.txt hit_sequence_headers.txt pident_and_length.tsv | column -t </code></pre>
+<pre style="background: AliceBlue;">
+13       Mycobacterium_nonchromogenicum_T|ATCC_19530.|X52928  99.485   1359
+18       Mycobacterium_smegmatis_T|ATCC_19420|AJ131761        99.033   1344
+2        Mycobacterium_peregrinum_T|CIP_105382T|AY457069      99.552   1340
+...
+</pre>
 </div>
-<div id="retrieve-the-10-top-hits-and-filter-out-only-those-with-98.5-sequence-identity-and-1000-alignment-length" class="section level3" number="6.1.6">
-<h3><span class="header-section-number">6.1.6</span> Retrieve the 10-top
-hits and filter out only those with &gt;= 98.5% sequence identity and
-&gt; 1000 alignment length</h3>
-<pre style="background: Cornsilk;"><code>blastn -query 16S_problema.fna -db 16S_seqs4_blastDB.fnaed -num_alignments 10 -outfmt 6 &gt; 16S_problema_blastN_10hits.tab
+<div id="filter-out-high-confidence-classifications-alignment-with-pident-95-length-500-bp" class="section level3" number="6.1.7">
+<h3><span class="header-section-number">6.1.7</span> Filter out
+high-confidence classifications (alignment with pident &gt;= 95%
+&amp;&amp; length &gt;= 500 bp)</h3>
+<p>It is important to realize that finding a hit in the database does
+not necessarily mean that it is suitable to perform a reliable
+identification or classification of the query sequence. In order to have
+a reasonably high confidence in the classification of 16S rDNA sequences
+at the genus level based on a best blastn hit, it should at least
+satisfy the following conditions:</p>
+<ul>
+<li>alignment of at least 500 bp</li>
+<li>pident &gt;= 95%</li>
+</ul>
+<pre style="background: Cornsilk;"><code># 4 Evaluate the hits by pident and alignment length: find hits with pident &lt; 95% and|or alignment length &lt; 500
+paste problem_seqs.txt hit_sequence_headers.txt pident_and_length.tsv | awk &#39;BEGIN{FS=OFS=&quot;\t&quot;}$3 &lt; 95&#39; | column -t</code></pre>
+<pre style="background: AliceBlue;">
+1367SAA005_14Cip-FD1.b1.ab1_638  Escherichia/Shigella_flexneri_T|X96963      93.218  634
+1367SAA005_S13-FD1.b1.ab1_121    Mycobacterium_fallax_T|ATCC_35219|AF480600  88.333  120
+1367SAA005_VNP1-FD1.b1.ab1_578   Rhizobium_oryzae_T|Alt_505|EU056823         94.965  576
+</pre>
+<pre style="background: Cornsilk;"><code>paste problem_seqs.txt hit_sequence_headers.txt pident_and_length.tsv | awk &#39;BEGIN{FS=OFS=&quot;\t&quot;}$4 &lt; 500&#39; | column -t</code></pre>
+<pre style="background: AliceBlue;">
+1367SAA005_A17Cip-FD1.b1.ab1_171  Escherichia/Shigella_flexneri_T|X96963              95.930   172
+1367SAA005_A6BSm-FD1.b1.ab1_477   Escherichia/Shigella_flexneri_T|X96963              98.745   478
+1367SAA005_S13-FD1.b1.ab1_121     Mycobacterium_fallax_T|ATCC_35219|AF480600          88.333   120
+1367SAA005_S2CbTm-FD1.b1.ab1_84   Pseudomonas_taiwanensis_T|BCRC_17751|EU103629       97.647   85
+1367SAA005_S4CbTm-FD1.b1.ab1_172  Pseudomonas_taiwanensis_T|BCRC_17751|EU103629       100.000  172
+1367SAA005_S6Sm-FD1.b1.ab1_347    Pseudomonas_monteilii_T|CIP_104883|AF064458         99.143   350
+1367SAA005_S9b-FD1.b1.ab1_142     Cellulosimicrobium_funkei_T|W6122|AY501364          97.887   142
+1367SAA005_Tm203-FD1.b1.ab1_491   Aeromonas_veronii_T|type_strain:_ATCC_35624|X60414  97.942   486
+</pre>
+<pre style="background: Cornsilk;"><code># 5 In order to get a confident blastn-based classification of our problem sequences at the genus level, 
+#     we should probably use only hits with pident &gt;= 95% and a good alignment length &gt;= 500 bp.
+paste problem_seqs.txt hit_sequence_headers.txt pident_and_length.tsv | awk &#39;BEGIN{FS=OFS=&quot;\t&quot;; print &quot;qseqid\tsseqid\tpident\tlength&quot; }$3 &gt;= 95 &amp;&amp; $4 &gt;= 500&#39; &gt; 16S_problema_blastN_best-hit_classification_pidentGT95_alnGT500.tsv
+
+column -t 16S_problema_blastN_best-hit_classification_pidentGT95_alnGT500.tsv | tail</code></pre>
+<pre style="background: AliceBlue;">
+1367SAA005_S11Sm-FD1.b1.ab1_1049       Pseudomonas_monteilii_T|CIP_104883|AF064458          98.763   1051
+1367SAA005_S12-FD1.b1.ab1_899          Microbacterium_testaceum_T|DSM_20166|X77445          98.210   894
+1367SAA005_S15-FD1.b1.ab1_1111         Microbacterium_testaceum_T|DSM_20166|X77445          98.115   1114
+1367SAA005_S1CbTm-FD1.b1.ab1_683       Pseudomonas_monteilii_T|CIP_104883|AF064458          99.227   647
+1367SAA005_S1-FD1.b1.ab1_542           Pseudomonas_plecoglossicida_T|FPC951|AB009457        99.815   542
+1367SAA005_S7CbTm-FD1.b1.ab1_961       Citrobacter_freundii_T|DSM_30039|AJ233408            98.954   956
+1367SAA005_S9-FD1.b1.ab1_1091          Cellulosimicrobium_funkei_T|W6122|AY501364           99.451   1092
+1367SAA005_VNC15-FD1.b1.ab1_1062       Rhizobium_alamii_T|type_strain:GBV016|AM931436       99.052   1055
+1367SAA005_VRP15_bis-FD1.b1.ab1_1124   Ensifer_terangae_T|type_strain:_LMG_7834|X68388      99.822   1125
+1367SAA005_VRP15-FD1.b1.ab1_1112       Ensifer_terangae_T|type_strain:_LMG_7834|X68388      99.012   1113
+</pre>
+<pre style="background: Cornsilk;"><code># 6 How many sequences could be classified with high confidence?
+sed &#39;1d&#39; 16S_problema_blastN_best-hit_classification_pidentGT95_alnGT500.tsv | wc -l # 42 
+
+# 7 How many sequences per genus could be classified with high confidence?
+sed &#39;1d&#39; 16S_problema_blastN_best-hit_classification_pidentGT95_alnGT500.tsv | cut -f2 | sed &#39;s/_.*$//&#39; | sort | uniq -c | sort -nrk1</code></pre>
+<pre style="background: AliceBlue;">
+     14 Mycobacterium
+      5 Rhizobium
+      5 Ensifer
+      4 Pseudomonas
+      2 Microbacterium
+      2 Escherichia/Shigella
+      2 Beijerinckia
+      1 Sphingomonas
+      1 Sinorhizobium
+      1 Shinella
+      1 Isoptericola
+      1 Citrobacter
+      1 Cellulosimicrobium
+      1 Brevundimonas
+      1 Acinetobacter
+</pre>
+</div>
+<div id="homework-1" class="section level3" number="6.1.8">
+<h3><span class="header-section-number">6.1.8</span> HOMEWORK 1</h3>
+<p>Repeat the classification exercise, using 5 hits per query, imposing
+the same filters applied in the previous exercise.</p>
+<ul>
+<li>Are the results of both blastn runs consistent?</li>
+<li>How many sequences remain unclassified, and what is the reason they
+were excluded by the filters?</li>
+<li>Are there sequences that remain unclassified that have a pident &gt;
+90% &amp;&amp; &lt; 95%?
+<ul>
+<li>If so, how many?</li>
+<li>Based on the evidence gathered from the 5 hits/query, how would you
+classify these sequences?</li>
+</ul></li>
+</ul>
+<!--
+### Retrieve the 10-top hits and filter out only those with >= 98.5% sequence identity and alignment length > 1000
+```{style="background: Cornsilk;"}
+blastn -query 16S_problema.fna -db 16S_seqs4_blastDB.fnaed -num_alignments 10 -outfmt 6 > 16S_problema_blastN_10hits.tab
 wc -l 16S_problema_blastN_10hits.tab
 
 
 # The simplest way to parse a table on the command line is using AWK:
 # see complete GNU/Linux and awk tutorial: https://github.com/vinuesa/intro2linux
-awk &#39;BEGIN{OFS=&quot;\t&quot;} $3 &gt; 98.5 &amp;&amp; $4 &gt; 1000 {print $1, $2}&#39; 16S_problema_blastN_10hits.tab | wc -l
-awk &#39;BEGIN{OFS=&quot;\t&quot;} $3 &gt; 98.5 &amp;&amp; $4 &gt; 1000 {print $1, $2}&#39; 16S_problema_blastN_10hits.tab | less
+awk 'BEGIN{OFS="\t"} $3 > 98.5 && $4 > 1000 {print $1, $2}' 16S_problema_blastN_10hits.tab | wc -l
+awk 'BEGIN{OFS="\t"} $3 > 98.5 && $4 > 1000 {print $1, $2}' 16S_problema_blastN_10hits.tab | less
 
-#perl -ne &#39;@f = split /\t/; print if $f[2] &gt;= 98.5&#39; 16S_problema_blastN_10hits.tab| less
-# like above, but imposing also aln len &gt; 1000 with implicit split -ane
-#perl -ane &#39;{print &quot;$F[0]\tF[1]&quot; if $F[2] &gt; 98.5 &amp;&amp; $F[3] &gt; 1000 }&#39; 16S_problema_blastN_10hits.tab</code></pre>
+#perl -ne '@f = split /\t/; print if $f[2] >= 98.5' 16S_problema_blastN_10hits.tab| less
+# like above, but imposing also aln len > 1000 with implicit split -ane
+#perl -ane '{print "$F[0]\tF[1]" if $F[2] > 98.5 && $F[3] > 1000 }' 16S_problema_blastN_10hits.tab
+```
+-->
+<hr />
 </div>
 </div>
 </div>
@@ -712,27 +833,84 @@ IDENTIFICATION/ANNOTATION using blastp</h2>
 <ol style="list-style-type: decimal">
 <li>run blastp to annotate a protein with its most likely function</li>
 <li>identify CDSs (genes) on anonymous DNA strands in the querey file:
-3cass_amplicons.fna by means of blastx. To do so, we need to format a
-blastx-searchable DB using the protein sequences provided in the file
-integron_cassettes4blastdb.faa</li>
+<i>3cass_amplicons.fna</i> by means of blastx. To do so, we need to
+format a blastx-searchable DB using the protein sequences provided in
+the file <i>integron_cassettes4blastdb.faa</i></li>
 </ol>
+<p><b>Background info</b>: The <i>3cass_amplicons.fna</i> sequences were
+generated in our laboratory from diverse multidrug-resistant <a href="https://en.wikipedia.org/wiki/Enterobacteriaceae">Enterobacteriaceae</a>
+isolates recovered from polluted rivers in <a href="https://en.wikipedia.org/wiki/Morelos">Morelos, Mexico</a>. We
+used PCR to screen our collection of isolates for the presence of the
+<i>intI</i> integrase gene, which is a hallmark of <a href="https://en.wikipedia.org/wiki/Integron">class-I integrons</a>.
+Positive isolates were then subjected to PCR with the conserved
+HS458/HS459 primers that amplify <a href="https://en.wikipedia.org/wiki/Gene_cassette">gene cassette</a>
+arrays captured by integrons.</p>
+<p>If you like, have a look at this nice video-protocol on <a href="Screening%20Foodstuffs%20for%20Class%201%20Integrons%20and%20Gene%20Cassettes">Screening
+Foodstuffs for Class 1 Integrons and Gene Cassettes</a> by Liette S.
+Waldron and Michael R. Gillings from the Department of Biological
+Sciences, Macquarie University. <a href="https://review.jove.com/es/t/52889/screening-foodstuffs-for-class-1-integrons-and-gene-cassettes">June
+19, 2015 in J Vis Exp. 2015; (100): 52889. doi: 10.3791/52889</a>.</p>
 <div id="exploring-and-fixing-fasta-headers-for-database-indexing" class="section level3" number="7.2.1">
 <h3><span class="header-section-number">7.2.1</span> Exploring and
 fixing FASTA headers for database indexing</h3>
-<pre style="background: Cornsilk;"><code>grep &#39;^&gt;&#39; integron_cassettes4blastdb.faa | head -20
+<pre style="background: Cornsilk;"><code># count sequences
+grep -c integron_cassettes4blastdb.faa  # 2297 sequences
 
-# Lets change &gt;gi|17026026 |[Acinetobacter baumannii]|ABI1... ==&gt; 
+# explore headers
+grep &#39;^&gt;&#39; integron_cassettes4blastdb.faa | head -20</code></pre>
+<pre style="background: AliceBlue;">
+&gt;gi|17026024 |[Achromobacter xylosoxidans]|AXI2|||||||Japan:Maebashi||clinical strain; synonym:Alcaligenes xylosoxidans||blaIMP-10|metallo-beta-lactamase IMP-10|741|AB074435|Iyobe_S.|Antimicrob.AgentsChemother.46_2014-2016_2002|12019129
+&gt;gi|17026026 |[Acinetobacter baumannii]|ABI1|||||||Japan:Maebashi||clinical strain||blaIMP-11|metallo-beta-lactamase IMP-11|738|AB074436|unpubl
+&gt;gi|34482004 |[Vibrio cholerae O1]||||||||||||aadA1|aminoglycoside adenyltransferase|792|AB107663|unpubl
+&gt;gi|38524487 |[Vibrio cholerae non-O1/non-O139]|||||Non O1/Non O139|||||||dfrA15|dihydrofolate reductase|474|AB113114|unpubl
+&gt;gi|51699488 |[Escherichia coli]|D49||feces|||||China: Guangzhou||patient||aadA1|aminoglycoside adenylyltransferase|792|AB189263|Su_J.|FEMSMicrobiol.Lett.254_75-80_2006|16451182
+...
+</pre>
+<pre style="background: Cornsilk;"><code># 1. change &gt;gi|17026026 |[Acinetobacter baumannii]|ABI1... ==&gt; 
 #             &gt;gnl|casseteDB|17026026 |[Acinetobacter baumannii]|ABI1...
-# A sed (or Perl) 1-liner makes this an easy task
-sed &#39;s/^&gt;gi/&gt;gnl\|casseteDB/&#39; integron_cassettes4blastdb.faa | grep &#39;^&gt;&#39; | head
-sed &#39;s/^&gt;gi/&gt;gnl\|casseteDB/&#39; integron_cassettes4blastdb.faa &gt; integron_cassettes4blastdb.faaED
+# and 
+# 2. simplify the header a bit, to avoid the many empty fields
 
-# The same, using Perl
-# perl -pe &#39;s/^&gt;gi/&gt;gnl\|casseteDB/&#39; integron_cassettes4blastdb.faa &gt; integron_cassettes4blastdb.faaED
-# Or with an if check
-# perl -pe &#39;if(/^&gt;gi/){s/&gt;gi/&gt;gnl\|casseteDB/ }&#39; integron_cassettes4blastdb.faa &gt; integron_cassettes4blastdb.faaED
+grep &#39;&gt;&#39; integron_cassettes4blastdb.faa | head -1 | sed &#39;s#|#\n#g&#39; | cat -n</code></pre>
+<pre style="background: AliceBlue;">
+     1  &gt;gi
+     2  17026024 
+     3  [Achromobacter xylosoxidans]
+     4  AXI2
+     5  
+     6  
+     7  
+     8  
+     9  
+    10  
+    11  Japan:Maebashi
+    12  
+    13  clinical strain; synonym:Alcaligenes xylosoxidans
+    14  
+    15  blaIMP-10
+    16  metallo-beta-lactamase IMP-10
+    17  741
+    18  AB074435
+    19  Iyobe_S.
+    20  Antimicrob.AgentsChemother.46_2014-2016_2002
+    21  12019129
+</pre>
+<pre style="background: Cornsilk;"><code># use an AWK one-liner to do the complete job. Use the list of |-delimited fields listed above to select some of the most relevant ones
+# NOTE that we add an extra field in the following transformation: &gt;gi|17026026 =&gt; &gt;gnl|casseteDB|17026026; 
+#  therefore we need to add one to the field numbers listed above in order to get the desired ones
+awk &#39;BEGIN{FS=OFS=&quot;|&quot;}/&gt;/{sub(/^&gt;gi/, &quot;&gt;gnl|casseteDB&quot;); print $1,$2,$3,$4,$16,$17,$18,$19,$22}!/&gt;/{print $1}&#39; integron_cassettes4blastdb.faa | grep &#39;^&gt;&#39; | head -5</code></pre>
+<pre style="background: AliceBlue;">
+&gt;gnl|casseteDB|17026024 |[Achromobacter xylosoxidans]|blaIMP-10|metallo-beta-lactamase IMP-10|741|AB074435|12019129
+&gt;gnl|casseteDB|17026026 |[Acinetobacter baumannii]|blaIMP-11|metallo-beta-lactamase IMP-11|738|AB074436|
+&gt;gnl|casseteDB|34482004 |[Vibrio cholerae O1]|aadA1|aminoglycoside adenyltransferase|792|AB107663|
+&gt;gnl|casseteDB|38524487 |[Vibrio cholerae non-O1/non-O139]|dfrA15|dihydrofolate reductase|474|AB113114|
+&gt;gnl|casseteDB|51699488 |[Escherichia coli]|aadA1|aminoglycoside adenylyltransferase|792|AB189263|16451182
 
-# lets check the result
+</pre>
+<pre style="background: Cornsilk;"><code># save the edited faa file as integron_cassettes4blastdb.faaED
+awk &#39;BEGIN{FS=OFS=&quot;|&quot;}/&gt;/{sub(/^&gt;gi/, &quot;&gt;gnl|casseteDB&quot;); print $1,$2,$3,$4,$16,$17,$18,$19,$22}!/&gt;/{print $1}&#39; integron_cassettes4blastdb.faa &gt; integron_cassettes4blastdb.faaED
+
+# lets check the result a final time
 grep &#39;^&gt;&#39; integron_cassettes4blastdb.faaED | head -20</code></pre>
 </div>
 <div id="formatting-a-protein-database" class="section level3" number="7.2.2">
@@ -740,17 +918,42 @@ grep &#39;^&gt;&#39; integron_cassettes4blastdb.faaED | head -20</code></pre>
 protein database</h3>
 <pre style="background: Cornsilk;"><code># 2) format DB with makeblastdb
 # formatdb -i integron_cassettes4blastdb.faaED -p T -o T -n integron_cassetteDB
-makeblastdb -in integron_cassettes4blastdb.faaED -dbtype prot -parse_seqids
-
-# List the output generated by makeblastdb, sorted by modification time in reverse manner
+makeblastdb -in integron_cassettes4blastdb.faaED -dbtype prot -parse_seqids</code></pre>
+<pre style="background: AliceBlue;">
+Building a new DB, current time: 10/18/2022 19:04:31
+New DB name:   /home/vinuesa/cursos/intro_biocomp/sesion2_blast/BLAST_DB_AA/integron_cassettes4blastdb.faaED
+New DB title:  integron_cassettes4blastdb.faaED
+Sequence type: Protein
+Deleted existing Protein BLAST database named /home/vinuesa/cursos/intro_biocomp/sesion2_blast/BLAST_DB_AA/integron_cassettes4blastdb.faaED
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 2297 sequences in 0.490659 seconds.
+</pre>
+<pre style="background: Cornsilk;"><code># List the output generated by makeblastdb, sorted by modification time in reverse manner
 ls -ltr</code></pre>
+<pre style="background: AliceBlue;">
+-rw-r--r--. 1 vinuesa faculty   4505 ago 31  2011 3cass_amplicons.fna
+-rw-r--r--. 1 vinuesa faculty 924971 ago 31  2011 integron_cassettes4blastdb.faa
+-rw-r--r--. 1 vinuesa faculty   1129 jul 26  2019 unknown_prot.faa
+-rw-r--r--. 1 vinuesa faculty 751713 oct 10 20:15 gene_discovery_and_annotation_using_blastx.tgz
+-rw-r--r--. 1 vinuesa faculty 803081 oct 18 19:03 integron_cassettes4blastdb.faaED
+-rw-r--r--. 1 vinuesa faculty 566907 oct 18 19:04 integron_cassettes4blastdb.faaED.psq
+-rw-r--r--. 1 vinuesa faculty   9220 oct 18 19:04 integron_cassettes4blastdb.faaED.pog
+-rw-r--r--. 1 vinuesa faculty  18520 oct 18 19:04 integron_cassettes4blastdb.faaED.pin
+-rw-r--r--. 1 vinuesa faculty 329297 oct 18 19:04 integron_cassettes4blastdb.faaED.phr
+-rw-r--r--. 1 vinuesa faculty   9192 oct 18 19:04 integron_cassettes4blastdb.faaED.pto
+-rw-r--r--. 1 vinuesa faculty  27572 oct 18 19:04 integron_cassettes4blastdb.faaED.pot
+-rw-r--r--. 1 vinuesa faculty  16384 oct 18 19:04 integron_cassettes4blastdb.faaED.ptf
+-rw-r--r--. 1 vinuesa faculty  63027 oct 18 19:04 integron_cassettes4blastdb.faaED.pos
+-rw-r--r--. 1 vinuesa faculty 188416 oct 18 19:04 integron_cassettes4blastdb.faaED.pdb
+</pre>
 </div>
 <div id="running-blastp-to-annotate-proteins" class="section level3" number="7.2.3">
 <h3><span class="header-section-number">7.2.3</span> Running blastp to
 annotate proteins</h3>
-<p>Here we will try to assign function to the proteins in file
-<i>unknown_prot.faa</i></p>
-<pre style="background: Cornsilk;"><code># How many prots in unknown_prot.faa
+<p>The aim of the exercise is to <b>assign functions or annotations</b>
+to the problem proteins found in file <i>unknown_prot.faa</i></p>
+<pre style="background: Cornsilk;"><code># How many proteins sequences are stored in unknown_prot.faa
 grep -c &#39;^&gt;&#39; unknown_prot.faa
 
 cat unknown_prot.faa
@@ -759,8 +962,8 @@ cat unknown_prot.faa
 blastp -h     # short format
 blastp -help  # long  format
 
-# launch a standard blastp search, asking the program to provide a tabular format for the top 20 hits
-blastp -query unknown_prot.faa -db integron_cassettes4blastdb.faaED -outfmt 6 -num_alignments 20
+# launch a standard blastp search, asking the program to provide a tabular format for the top 10 hits
+blastp -query unknown_prot.faa -db integron_cassettes4blastdb.faaED -outfmt 6 -num_alignments 10
 
 #&gt;&gt;&gt; Lets add some interesting information to the table, missing in the standard -outfmt 6 output
 # run blastp using outfmt 6 and passing a user-specified formatting string
@@ -772,111 +975,227 @@ cat header1.tab
 
 # add the header to the output table
 cat header1.tab blastp_10hits.out &gt; blastp_10hits.tsv
-column -t blastp_10hits.tsv
-
-# filter out only hits with qcov &gt;= 97%
-sed &#39;s/\t/\n/g&#39; header1.tab | cat -n
-awk &#39;BEGIN{FS=&quot;\t&quot;; OFS=&quot;\t&quot;} $16 &gt;= 97&#39; blastp_10hits.tsv 
-
-# add a subject title (stitle), to get the description line of the proteins we are finding as top hits
+column -t blastp_10hits.tsv | head -20 </code></pre>
+<pre style="background: AliceBlue;">
+qseqid                                sseqid                   qlen  slen  qstart  qend  sstart  send  length  pident   positive  mismatch  gaps  evalue     bitscore  qcovs
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|87128428   266   267   1       266   1       266   266     100.000  266       0         0     0.0        537       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|145321080  266   267   1       266   1       266   266     99.624   266       1         0     0.0        536       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|44844209   266   267   1       266   1       266   266     99.624   266       1         0     0.0        536       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|102231612  266   267   1       266   1       266   266     99.248   266       2         0     0.0        535       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|38492196   266   267   1       266   1       266   266     90.226   256       26        0     0.0        497       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|118402723  266   267   1       266   1       266   266     89.850   255       27        0     0.0        494       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|66277418   266   267   1       266   1       266   266     89.098   252       29        0     3.06e-179  489       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|148455769  266   267   1       266   1       266   266     87.594   248       33        0     1.83e-176  483       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|30014072   266   266   1       266   1       265   266     73.684   223       69        1     6.02e-146  405       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|17026024   266   247   43      252   24      227   211     33.175   120       133       8     1.82e-37   128       79
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|56691997   390   387   5       390   1       386   386     99.482   384       2         0     0.0        789       99
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|146151072  390   383   5       388   1       382   388     45.361   251       202       10    2.45e-114  335       98
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|40287460   390   382   13      387   5       381   379     39.314   232       224       6     7.18e-96   287       96
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|133905118  390   410   13      387   33      409   379     39.578   231       223       6     5.97e-95   286       96
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|76057210   390   380   1       387   1       379   396     38.131   232       219       26    4.63e-88   267       99
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|146151112  390   276   316     380   99      165   67      22.388   34        50        2     2.4        25.8      17
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|133905089  390   126   4       37    2       35    34      38.235   22        21        0     5.8        23.9      9
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|161087277  390   80    133     201   15      78    79      25.316   34        34        25    6.9        23.1      18
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|133905132  390   101   255     287   71      98    33      36.364   18        16        5     7.4        23.1      8
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|133905029  390   337   100     154   247     287   55      21.818   24        29        14    7.8        24.3      14
+</pre>
+<pre style="background: Cornsilk;"><code># Print numbered list of fasta header fields to filter hits with pident &gt;= 95% and qcovs &gt;= 97%
+sed &#39;s/\t/\n/g&#39; header1.tab | cat -n</code></pre>
+<pre style="background: AliceBlue;">
+     1  qseqid
+     2  sseqid
+     3  qlen
+     4  slen
+     5  qstart
+     6  qend
+     7  sstart
+     8  send
+     9  length
+    10  pident
+    11  positive
+    12  mismatch
+    13  gaps
+    15  bitscore
+    16  qcovs
+</pre>
+<pre style="background: Cornsilk;"><code># Filter out hits with &gt;= 95% pident &amp;&amp; qcovs &gt;= 97%
+awk &#39;BEGIN{FS=OFS=&quot;\t&quot;} $10 &gt;= 95 &amp;&amp; $16 &gt;= 97&#39; blastp_10hits.tsv | column -t</code></pre>
+<pre style="background: AliceBlue;">
+qseqid                                sseqid                   qlen  slen  qstart  qend  sstart  send  length  pident   positive  mismatch  gaps  evalue  bitscore  qcovs
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|87128428   266   267   1       266   1       266   266     100.000  266       0         0     0.0     537       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|145321080  266   267   1       266   1       266   266     99.624   266       1         0     0.0     536       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|44844209   266   267   1       266   1       266   266     99.624   266       1         0     0.0     536       100
+gi|11037699|gb|AAG27703.1|AF300454_1  gnl|casseteDB|102231612  266   267   1       266   1       266   266     99.248   266       2         0     0.0     535       100
+gi|9294830|gb|AAF86698.1|AF180959_1   gnl|casseteDB|56691997   390   387   5       390   1       386   386     99.482   384       2         0     0.0     789       99  
+</pre>
+<pre style="background: Cornsilk;"><code># add a subject title (stitle), to get the description line of the proteins we are finding as top hits
 echo -e &#39;qseqid\tsseqid\tqlen\tslen\tstitle\tlength\tpident\tpositive\tmismatch\tgaps\tevalue\tbitscore\tqcovs&#39; &gt; header1.tab
 
 blastp -query unknown_prot.faa -db integron_cassettes4blastdb.faaED -outfmt &#39;6 qseqid sseqid qlen slen stitle length pident positive mismatch gaps evalue bitscore qcovs&#39; -num_alignments 10 &gt; blastp_10hits.out
 
 cat header1.tab blastp_10hits.out &gt; blastp_10hits.tsv
-column -t blastp_10hits.tsv | head
-
-# get only hits with % sequence identity &gt;= 95 and query coverage &gt;= 97%
-sed &#39;s/\t/\n/g&#39; header1.tab | cat -n
-awk &#39;BEGIN{FS=&quot;\t&quot;; OFS=&quot;\t&quot;} $7 &gt;= 95 &amp;&amp; $13 &gt;= 97&#39; blastp_10hits.tsv 
-
-#&gt;&gt;&gt; retrieve the best hit found for each input gene
+cut -f1,5,7,13 blastp_10hits.tsv | head -20 | column -ts $&#39;\t&#39;</code></pre>
+<pre style="background: AliceBlue;">
+qseqid                                stitle                                                                                                                      pident   qcovs
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Pseudomonas aeruginosa]|blaVIM-3|VIM-3 metallo-beta-lactamase|801|DQ342344|                                               100.000  100
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Pseudomonas putida]|blaVIM-6|metallo-beta-lactamase VIM-6|801|EF522838|18757180                                           99.624   100
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Pseudomonas aeruginosa]|blaVIM|class B beta-lactamase|801|AJ628983|                                                       99.624   100
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Pseudomonas aeruginosa]|blaVIM-2|metallo-beta-lactamase VIM-2|801|DQ522233|                                               99.248   100
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Pseudomonas aeruginosa]|blaVIM-4|metallo-beta-lactamase VIM-4|801|AY460181|                                               90.226   100
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Pseudomonas aeruginosa]|blaVIM-1|VIM-1 metallo-beta-lactamase|801|AJ969237|                                               89.850   100
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Enterobacter cloacae]|blaVIM-5|metallo-beta-lactamase VIM-5|801|DQ023222|16189133                                         89.098   100
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Pseudomonas aeruginosa]|blaVIM-13|class B carbapenemase VIM-13|801|EF577407|18644957                                      87.594   100
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Pseudomonas aeruginosa]|blaVIM-7|metallo-b-lactamase|798|AJ536835|14693560                                                73.684   100
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Achromobacter xylosoxidans]|blaIMP-10|metallo-beta-lactamase IMP-10|741|AB074435|12019129                                 33.175   79
+gi|9294830|gb|AAF86698.1|AF180959_1   |[Klebsiella pneumoniae]|acc-1|beta-lactamase|1161|AJ870923|16982793                                                        99.482   99
+gi|9294830|gb|AAF86698.1|AF180959_1   |[Klebsiella pneumoniae]||cmy-8|1149|EF382672|17526756                                                                      45.361   98
+gi|9294830|gb|AAF86698.1|AF180959_1   |[Escherichia coli]|cmy-13|CMY-13|1146|AY339625|16048979                                                                    39.314   96
+gi|9294830|gb|AAF86698.1|AF180959_1   |[Salmonella enterica subsp. enterica serovar Newport str. SL254]|blaCMY-2-1|CMY-2 beta-lactamase 1|1230|CP000604|17375195  39.578   96
+gi|9294830|gb|AAF86698.1|AF180959_1   |[Klebsiella pneumoniae]|ampC|beta-lactamase class C DHA-1|1140|AJ971343|16436717                                           38.131   99
+gi|9294830|gb|AAF86698.1|AF180959_1   |[Klebsiella pneumoniae]||sfpB|828|EF382672|17526756                                                                        22.388   17
+gi|9294830|gb|AAF86698.1|AF180959_1   |[Salmonella enterica subsp. enterica serovar Newport str. SL254]||hypothetical protein|378|CP000604|17375195               38.235   9
+gi|9294830|gb|AAF86698.1|AF180959_1   |[Salmonella enterica subsp. enterica serovar Choleraesuis]|orf20|Orf20|240|EU219534|                                       25.316   18
+gi|9294830|gb|AAF86698.1|AF180959_1   |[Salmonella enterica subsp. enterica serovar Newport str. SL254]||conserved hypothetical protein|303|CP000604|17375195     36.364   8
+</pre>
+<ul>
+<li>What can we learn from the output above? Examine for example the
+first two hits.</li>
+</ul>
+<div id="annotate-the-query-proteins-using-the-single-best-hit" class="section level4" number="7.2.3.1">
+<h4><span class="header-section-number">7.2.3.1</span> Annotate the
+query proteins using the single best hit</h4>
+<pre style="background: Cornsilk;"><code>#&gt;&gt;&gt; retrieve the best hit found for each input gene
 blastp -query unknown_prot.faa -db integron_cassettes4blastdb.faaED -outfmt &#39;6 qseqid sseqid qlen slen stitle length pident positive mismatch gaps evalue bitscore qcovs&#39; -num_alignments 1 &gt; blastp_tophits.out
 
 cat header1.tab blastp_tophits.out &gt; blastp_tophits.tsv
-column -t blastp_tophits.tsv | head
-
-# get the sseqids only for the top hits with % sequence identity &gt;= 95 and query coverage &gt;= 97%
-awk &#39;BEGIN{FS=&quot;\t&quot;; OFS=&quot;\t&quot;} NR &gt; 1 &amp;&amp; $7 &gt;= 95 &amp;&amp; $13 &gt;= 97&#39; blastp_tophits.tsv | cut -f2  &gt; sseqids_for_top_hits_with_ge95pident_ge97qcovs.list
+cut -f1,5,7,13 blastp_tophits.tsv | head | column -ts $&#39;\t&#39;</code></pre>
+<pre style="background: AliceBlue;">
+qseqid                                stitle                                                                                        pident   qcovs
+gi|11037699|gb|AAG27703.1|AF300454_1  |[Pseudomonas aeruginosa]|blaVIM-3|VIM-3 metallo-beta-lactamase|801|DQ342344|                 100.000  100
+gi|9294830|gb|AAF86698.1|AF180959_1   |[Klebsiella pneumoniae]|acc-1|beta-lactamase|1161|AJ870923|16982793                          99.482   99
+gi|15705413|gb|AAL05630.1|AF395881_1  |[Klebsiella pneumoniae]|bla|extended-spectrum beta-lactamase CTX-M-19|876|AF458080|12936998  52.158   95
+</pre>
+</div>
+</div>
+<div id="homework-2" class="section level3" number="7.2.4">
+<h3><span class="header-section-number">7.2.4</span> HOMEWORK 2</h3>
+<ul>
+<li>Based on the discussion on the blast output in the previous section,
+what would you conclude about the classification of the third query
+sequence?</li>
+<li>Run a <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi">blastp
+search on the NCBI portal</a> against the nr database, restricting the
+number of hits to 10.
+<ul>
+<li>Based on these results, how would you classify protein
+AAL05630.1?</li>
+<li>Explore the different output format and data download options</li>
+<li>Upload the “Hit Table (text)” to moodle</li>
+<li>convert the Descriptions Table (CSV) to TSV, skipping the last field
+(with the url) and upload both files to moodle</li>
+</ul></li>
+<li>Based on the tabular output field formatting options we’ve learned
+about in this section, simplify the blastn call from exercise 6.1.4 to
+generate a table with the following fields: qseqid stitle qlen slen
+length pident</li>
+</ul>
+<pre style="background: Cornsilk;"><code># get the sseqids only for the top hits with % sequence identity &gt;= 95 and query coverage &gt;= 97%
+awk &#39;BEGIN{FS=OFS=&quot;\t&quot;}NR &gt; 1 &amp;&amp; $7 &gt;= 95 &amp;&amp; $13 &gt;= 97{print $2}&#39; blastp_tophits.tsv &gt; sseqids_for_top_hits_with_ge95pident_ge97qcovs.list
 
 # finally retrieve the sequences for the sseqids_for_top_hits_with_ge95pident_ge97qcovs.list from the integron_cassettes4blastdb
 blastdbcmd -db integron_cassettes4blastdb.faaED -entry_batch sseqids_for_top_hits_with_ge95pident_ge97qcovs.list -dbtype prot -out top_hits_with_ge95pident_ge97qcovs.faa
 
 cat top_hits_with_ge95pident_ge97qcovs.faa</code></pre>
-</div>
-<div id="homework-exercise" class="section level3" number="7.2.4">
-<h3><span class="header-section-number">7.2.4</span> HOMEWORK
-exercise</h3>
-<p>Generate a table containing the subject ID for each query sequence in
-the first column, followed by key fields (at your consideration) of the
-corresponding best hit, using <code>Shell</code> commands</p>
+<pre style="background: AliceBlue;">
+
+&gt;casseteDB:87128428 |[Pseudomonas aeruginosa]|blaVIM-3|VIM-3 metallo-beta-lactamase|801|DQ342344|
+MFKLLSKLLVYLTASIMAIASPLAFSVDSSGEYPTVSEIPVGEVRLYQIADGVWSHIATKSFDGAVYPSNGLIVRDGDEL
+LLIDTAWGAKNTAALLAEIEKQIGLPVTRAVSTHFHDDRVGGVDVLRAAGVATYASPSTRRLAEVEGSEIPTHSLEGLSS
+SGDAVRFGPVELFYPGAAHSTDNLVVYVPSASVLYGGCAIYELSRTSAGNVADADLAEWPTSIERIQQHYPEAQFVIPGH
+GLPGGLDLLKHTTNVVKAHTNRSVVE*
+&gt;casseteDB:56691997 |[Klebsiella pneumoniae]|acc-1|beta-lactamase|1161|AJ870923|16982793
+MQNTLKLLSVITCLAATVQGALAANIDESKIKDTVDDLIQPLMQKNNIPGMSVAVTVNGKNYIYNYGLAAKQPQQPVTEN
+TLFEVGSLSKTFAATLASYAQVSGKLSLDQSVSHYVPELRGSSFDHVSVLNVGTHTSGLQLFMPEDIKNTTQLMAYLKAW
+KPADAAGTHRVYSNIGTGLLGMIAAKSLGVSYEDAIEKTLLPQLGMHHSYLKVPADQMENYAWGYNKKDEPVHVNMEILG
+NEAYGIKTTSSDLLRYVQANMGQLKLDANAKMQQALTATHTGYFKSGEITQDLMWEQLPYPVSLPNLLTGNDMAMTKSVA
+TPIVPPLPPQENVWINKTGSTNGFGAYIAFVPAKKMGIVMLANKNYSIDQRVTVAYKILSSLEGNK*
+
+</pre>
+<!--
+### HOMEWORK exercise
+Generate a table containing the subject ID for each query sequence in the first column, followed by key fields (at your consideration) of the corresponding best hit, using <code>Shell</code> commands
+-->
 </div>
 </div>
 </div>
 <div id="translating-blast-blastx---translate-a-dna-sequence-to-search-a-protein-database" class="section level1" number="8">
 <h1><span class="header-section-number">8</span> Translating BLAST
 (BLASTX) - translate a DNA sequence to search a protein database</h1>
+<p>The aim here is to identify the possible <a href="https://en.wikipedia.org/wiki/Gene_cassette">gene-cassettes</a>
+encoded in the PCR amplicons collected in <i>3cass_amplicons.fna</i>, as
+<a href="#exercise-2-protein-identificationannotation-using-blastp">explained
+in the previous background info section</a>.</p>
 <div id="exercise-3-identification-of-cdss-in-dna-sequences-using-blastx" class="section level2" number="8.1">
 <h2><span class="header-section-number">8.1</span> EXERCISE 3:
 Identification of CDSs in DNA sequences using BLASTX</h2>
 <p><b>BLASTX</b> is generally used to find CDSs (protein-coding
 sequences) in genomic DNA or transcripts. As we will see, <b>BLASTX</b>
 is a powerful gene-finding tool, but we will need to examine many
-alignments to ensure that all CDSs on a DNA segment are found. For large
-DNA strings (&gt;5-10 kb), I would recommend to segment the string into
-shorter, overlapping ones, before running <b>BLASTX</b></p>
+alignments to ensure that all CDSs encoded on a given DNA segment are
+found. For large DNA strings (&gt;5-10 kb), I would recommend to segment
+the string into shorter, overlapping pieces, before running
+<b>BLASTX</b></p>
 <p>Remember that <b>BLASTX</b> uses a <b>DNA query, which is translated
 in its 6 frames</b> using by default the universal code, and the
 resulting products are used <b>to interrogate a protein
 database</b>.</p>
-<p>AIM of the exercise: learn how to run <b>blastx</b> to identify CDSs
-within a DNA sequence and the importance of analyzing many hits in order
-to be able to discover regions with low-scoring hits.</p>
-<ul>
-<li>query: 3cass_amplicons.fna, which contains class-I integron cassette
-PCR amplicons generated in our group from enteric bacteria recovered
-from rivers in Morelos, Mexico.</li>
-<li>database: a manually-compiled database of integron cassette
-proteins</li>
-</ul>
-<div id="running-blastx-and-parsing-the-output-with-shell-text-processing-tools-to-identify-the-cdss" class="section level3" number="8.1.1">
-<h3><span class="header-section-number">8.1.1</span> Running blastx and
-parsing the output with shell text-processing tools to identify the
-CDSs</h3>
-<p>The following code snippets will demonstrate the use of simple Shell
-1-liners that will help us to identify the most-likely ORF start and end
-positions identified by <b>BLASTX</b> in the three class-1 integron
-gene-cassette amplicons</p>
-<pre style="background: Cornsilk;"><code># Read the blastx help: there are many options.
-blastx -h
-blastx -help
-
-# run blastx asking for the top 3 hits in tabular output format and an evalue cutoff set at 1e-10
-blastx -query 3cass_amplicons.fna -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-10 -outfmt 6 -num_alignments 3 
-
-#&gt;&gt;&gt; Lets add some interesting information to the table, missing in the standard -m 6 output
+<pre style="background: Cornsilk;"><code># run blastx asking for the top 3 hits in tabular output format and an evalue cutoff set at 1e-10
+blastx -query 3cass_amplicons.fna -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-10 -outfmt 6 -num_alignments 3 | column -t</code></pre>
+<pre style="background: AliceBlue;">
+Am1   casseteDB:146151084  98.897  272  2   1  887  1699  2   273  0.0        536
+Am1   casseteDB:157674384  99.625  267  1   0  899  1699  4   270  0.0        533
+Am1   casseteDB:161087337  99.625  267  1   0  899  1699  2   268  0.0        533
+Ap18  casseteDB:90265366   95.865  266  11  0  39   836   11  276  0.0        508
+Ap18  casseteDB:84095097   95.489  266  12  0  39   836   19  284  3.97e-180  506
+Ap18  casseteDB:156628012  95.113  266  13  0  39   836   19  284  2.43e-179  504
+Ap26  casseteDB:156628012  99.649  285  1   0  16   870   1   285  0.0        573
+Ap26  casseteDB:133905080  97.241  290  8   0  1    870   47  336  0.0        572
+Ap26  casseteDB:84095097   99.649  285  1   0  16   870   1   285  0.0        572
+</pre>
+<pre style="background: Cornsilk;"><code>#&gt;&gt;&gt; Lets add some interesting information to the table, missing in the standard -m 6 output
 echo -e &#39;qseqid\tsseqid\tqlen\tslen\tqstart\tqend\tqframe\tsstart\tsend\tlength\tpident\tpositive\tmismatch\tgaps\tevalue\tbitscore\tqcovs&#39; &gt; header1.tab
 blastx -query 3cass_amplicons.fna -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-100 -outfmt &#39;6 qseqid sseqid qlen slen qstart qend qframe sstart send length pident positive mismatch gaps evalue bitscore qcovs&#39; -num_alignments 3 -out 3blastX_hits_m6_header1.tab
 
 # if 3blastX_hits_m6_header1.tab exists and has a non-zero size, then execute the following commands ...
 [ -s 3blastX_hits_m6_header1.tab ] &amp;&amp; cat header1.tab 3blastX_hits_m6_header1.tab &gt; ed &amp;&amp; mv ed 3blastX_hits_m6_header1.tab
 
-head 3blastX_hits_m6_header1.tab
-
-#&gt;&gt;&gt; What do you notice regarding the qcovs of Am1 and Ap18?
-#&gt;&gt;&gt; Lets try to improve the analysis by increasing the no. of hits to 100 
-#    for each sequence and adding the stitle column to the output table
+head 3blastX_hits_m6_header1.tab | column -t</code></pre>
+<pre style="background: AliceBlue;">
+qseqid  sseqid                   qlen  slen  qstart  qend  qframe  sstart  send  length  pident  positive  mismatch  gaps  evalue     bitscore  qcovs
+Am1     gnl|casseteDB|146151084  1706  273   887     1699  2       2       273   272     98.897  270       2         1     0.0        536       48
+Am1     gnl|casseteDB|157674384  1706  270   899     1699  2       4       270   267     99.625  266       1         0     0.0        533       47
+Am1     gnl|casseteDB|161087337  1706  268   899     1699  2       2       268   267     99.625  266       1         0     0.0        533       47
+Ap18    gnl|casseteDB|90265366   1762  277   39      836   3       11      276   266     95.865  258       11        0     0.0        508       45
+Ap18    gnl|casseteDB|84095097   1762  285   39      836   3       19      284   266     95.489  258       12        0     3.97e-180  506       45
+Ap18    gnl|casseteDB|156628012  1762  285   39      836   3       19      284   266     95.113  257       13        0     2.43e-179  504       45
+Ap26    gnl|casseteDB|156628012  945   285   16      870   1       1       285   285     99.649  285       1         0     0.0        573       90
+Ap26    gnl|casseteDB|133905080  945   336   1       870   1       47      336   290     97.241  285       8         0     0.0        572       92
+Ap26    gnl|casseteDB|84095097   945   285   16      870   1       1       285   285     99.649  284       1         0     0.0        572       90
+</pre>
+<ul>
+<li>Explore in detail the results in the qlen, slen, qstart, qend,
+length and qcovs columns</li>
+<li>What do you notice regarding the hits of Am1 and Ap18?</li>
+<li>In what important aspect do the former two sequence hits differ from
+those retrieved for Ap26?</li>
+</ul>
+<pre style="background: Cornsilk;"><code>#&gt;&gt;&gt; Lets try to improve the analysis by increasing the no. of hits for each sequence to 100
+#    and adding the stitle column to the output table
 
 echo -e &#39;qseqid\tsseqid\tstitle\tqlen\tslen\tqstart\tqend\tsstart\tsend\tlength\tpident\tpositive\tmismatch\tgaps\tevalue\tbitscore\tqcovs\tqframe&#39; &gt; header2.tab
 
-blastx -query 3cass_amplicons.fna -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-10 -outfmt &#39;6 qseqid sseqid stitle qlen slen qstart qend sstart send length pident positive mismatch gaps evalue bitscore qcovs qframe&#39; -num_alignments 100 -out 100blastX_hits_m6_header2.tab
-
-[ -s 100blastX_hits_m6_header2.tab ] &amp;&amp; cat header2.tab 100blastX_hits_m6_header2.tab &gt; ed &amp;&amp; mv ed 100blastX_hits_m6_header2.tab
-
-head 100blastX_hits_m6_header2.tab | column -t
-
-#&gt;&gt;&gt; lets get the positional indexes of each column
-head -1 100blastX_hits_m6_header2.tab | sed &#39;s/\t/\n/g&#39; | cat -n</code></pre>
+#&gt;&gt;&gt; print a numvered list of the positional indexes of each column
+sed &#39;s/\t/\n/g&#39; header2.tab | nl</code></pre>
 <pre style="background: AliceBlue;">
      1  qseqid
      2  sseqid
@@ -897,10 +1216,52 @@ head -1 100blastX_hits_m6_header2.tab | sed &#39;s/\t/\n/g&#39; | cat -n</code><
     17  qcovs
     18  qframe
 </pre>
+<pre style="background: Cornsilk;"><code>blastx -query 3cass_amplicons.fna -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-10 -outfmt &#39;6 qseqid sseqid stitle qlen slen qstart qend sstart send length pident positive mismatch gaps evalue bitscore qcovs qframe&#39; -num_alignments 100 -out 100blastX_hits_m6_header2.tab
+
+[ -s 100blastX_hits_m6_header2.tab ] &amp;&amp; cat header2.tab 100blastX_hits_m6_header2.tab &gt; ed &amp;&amp; mv ed 100blastX_hits_m6_header2.tab
+
+# print relevant table fields
+cut -f1,2,6,7,11,17,18 100blastX_hits_m6_header2.tab | column -t
+</code></pre>
+<pre style="background: AliceBlue;">
+Am1     gnl|casseteDB|146151084  887     1699  98.897   48     2
+Am1     gnl|casseteDB|157674384  899     1699  99.625   47     2
+Am1     gnl|casseteDB|161087337  899     1699  99.625   47     2
+Am1     gnl|casseteDB|10444107   908     1699  100.000  46     2
+Am1     gnl|casseteDB|21898659   908     1699  99.621   46     2
+...
+Am1     gnl|casseteDB|38491398   908     1693  72.137   46     2
+Am1     gnl|casseteDB|45502091   908     1516  87.685   36     2
+Am1     gnl|casseteDB|10444105   3       500   100.000  29     3
+Am1     gnl|casseteDB|115605632  3       500   99.398   29     3
+Am1     gnl|casseteDB|48526059   3       500   99.398   29     3
+Am1     gnl|casseteDB|56541576   3       500   98.795   29     3
+Am1     gnl|casseteDB|110084170  899     1678  60.769   46     2
+Am1     gnl|casseteDB|161087327  3       488   100.000  28     3
+Am1     gnl|casseteDB|110588863  908     1678  60.311   45     2
+...
+Am1     gnl|casseteDB|10444106   612     902   98.969   17     3
+Am1     gnl|casseteDB|6003516    612     902   97.938   17     3
+Am1     gnl|casseteDB|56541577   612     902   97.938   17     3
+Am1     gnl|casseteDB|21898658   612     902   94.845   17     3
+Am1     gnl|casseteDB|14091025   588     902   78.095   18     3
+Am1     gnl|casseteDB|110588887  612     902   78.351   17     3
+Am1     gnl|casseteDB|38492198   588     887   77.000   18     3
+Am1     gnl|casseteDB|134035531  612     887   76.087   16     3
+Am1     gnl|casseteDB|82698267   612     875   76.136   15     3
+Am1     gnl|casseteDB|82698261   612     902   76.289   17     3
+Am1     gnl|casseteDB|111661582  18      488   36.709   28     3
+Am1     gnl|casseteDB|164449571  18      488   38.608   28     3
+...
+</pre>
 <ul>
-<li>Generate a list of non-redundant <b>qstart &amp; qend positions</b>
-for each query sequence</li>
+<li>What can we conclude from the selected output lines shown above for
+Am1 hits?</li>
 </ul>
+<div id="generate-a-list-of-non-redundant-qstart-qend-positions-for-each-query-sequence" class="section level3" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> Generate a list of
+non-redundant <b>qstart &amp; qend positions</b> for each query
+sequence</h3>
 <pre style="background: Cornsilk;"><code>#&gt;&gt;&gt; This 1liner generates a non-redundant list of the qstart qend positions for each of the query sequences. 
 #    These are extracted from the full table with $(cut -f1 100blastX_hits_m6_header2.tab | grep -v qseqid | sort -u)
 #    Then, for each query, grep it out of the table with grep $query 100blastX_hits_m6_header2.tab and keep only the fields 6,7: qstart, qend
@@ -985,27 +1346,55 @@ done</code></pre>
 <li>Focus on the Am1 query sequence: How many genes may it encode
 for?</li>
 </ul>
-<pre style="background: Cornsilk;"><code># Identify the most likely gene start positions
-grep Am1 100blastX_hits_m6_header2.tab | cut -f6,7 | sort -u | sort -nk1
-grep Am1 100blastX_hits_m6_header2.tab | cut -f6 | sort -u | sort -nk1
-
-# Identify the most likely gene end positions
-grep Am1 100blastX_hits_m6_header2.tab | cut -f6,7 | sort -u | sort -nk2 
-grep Am1 100blastX_hits_m6_header2.tab | cut -f7 | sort -u | sort -nk1 
-
-#&gt;&gt;&gt; Ahaaaa! What can you learn from this output?
-# * looks like if there are several genes encoded in each query sequence, particularly in the larger ones like Am1 (and Ap18, if you repeat the exercise for it)
-
-#&gt;&gt;&gt; Lets explore this in more detail. We&#39;ll start with the Am1 query
+<pre style="background: Cornsilk;"><code># Identify the most likely gene start|end positions
+grep Am1 100blastX_hits_m6_header2.tab | cut -f6,7 | sort | uniq -c | sort -nk2</code></pre>
+<pre style="background: AliceBlue;">
+      1 3   488
+      4 3   500
+      2 15  488
+     13 18  488
+      2 33  488
+      1 588 887
+      1 588 902
+      1 612 875
+      1 612 887
+      6 612 902
+      1 887 1699
+      1 899 1678
+      6 899 1699
+      1 908 1303
+      1 908 1516
+      2 908 1696
+     35 908 1699
+      3 908 1693
+      4 908 1684
+      6 908 1678
+      7 920 1699
+      1 1361    1699
+</pre>
+<ul>
+<li>Ahaaaa! What can you learn from this output?</li>
+<li>looks like if there are several genes encoded in each query
+sequence, particularly in the larger ones like Am1 (and Ap18, if you
+repeat the exercise for it)</li>
+</ul>
+<pre style="background: Cornsilk;"><code>#&gt;&gt;&gt; Lets explore this in more detail. We&#39;ll start with the Am1 query
 #    One class of hits seems to start at position 3, ending at around position 500
 #    What are the hits? Lets grep them out of the table; 
 #    note the use of a regular expression &#39;3[[:space:]]500&#39; which denotes a 3 followed by a space or tab, 
 #    followed by a 500 (i.e. our qstart qend coordinates)
-grep Am1 100blastX_hits_m6_header2.tab | grep &#39;3[[:space:]]500&#39;
+grep Am1 100blastX_hits_m6_header2.tab | grep &#39;3[[:space:]]500&#39; | cut -f1,3,6,7,11,17,18 | column -ts $&#39;\t&#39;
 
 # Or the same, using awk
-grep Am1 100blastX_hits_m6_header2.tab | awk &#39;BEGIN{FS=OFS=&quot;\t&quot;}$6 == 3 &amp;&amp; $7 == 500&#39;
-
+grep Am1 100blastX_hits_m6_header2.tab | awk &#39;BEGIN{FS=OFS=&quot;\t&quot;}$6 == 3 &amp;&amp; $7 == 500{print $1,$3,$6,$7,$17,$18}&#39; | column -ts $&#39;\t&#39;
+</code></pre>
+<pre style="background: AliceBlue;">
+Am1  |[Serratia marcescens]|dhfrXII|dihydrofolate reductase type XII|498|AF284063|                3  500  100.000  29  3
+Am1  |[Acinetobacter baumannii]|dhrfXII|dihydrofolate reductase|498|DQ995286|19365688             3  500  99.398   29  3
+Am1  |[Salmonella enterica subsp. enterica serovar Choleraesuis]|dhfr|Dhfr|498|AY551331|15145503  3  500  99.398   29  3
+Am1  |[Enterococcus faecalis]|dhfrXII|dihydrofolate reductase|498|AB196348|16451182               3  500  98.795   29  3
+</pre>
+<pre style="background: Cornsilk;"><code>
 #&gt;&gt;&gt; Retrieve the best hit gnl|casseteDB|10444105 found by the search in the previous step
 blastdbcmd -db integron_cassettes4blastdb.faaED -entry &#39;gnl|casseteDB|10444105&#39; -dbtype prot -out S_marcescens_dhrXII_casseteDB-10444105.faa
 
@@ -1027,11 +1416,36 @@ exactly as in our case.</p>
 <p>To run the script, we will first split the multifasta of query
 sequences into individual sequences, to generate graphs the the hit
 table of individual queries.</p>
-<pre style="background: Cornsilk;"><code># Split the multifasta into the individual soruce sequence files, 
+<ul>
+<li>Copy or fetch the scripts and place them in your $HOME/bin
+directory</li>
+</ul>
+<pre style="background: Cornsilk;"><code>
+# 1. If workin on tepeu or buluc, copy required scripts to your $HOME/bin directory
+[ ! -d $HOME/bin ] &amp;&amp; mkdir $HOME/bin
+cp /home/vinuesa/cursos/intro_biocomp/scripts/*.* $HOME/bin
+
+
+# 2. if you don&#39;t have access to the servers @ LCG, fetch the scripts directly from the command line
+wget -c https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/blast-imager.pl
+wget -c https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/fasta_toolkit.awk
+wget -c https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/split_fasta.pl
+
+chmod 755 blast-imager.pl fasta_toolkit.awk split_fasta.pl
+</code></pre>
+<ul>
+<li>Split multifasta into the individual source sequence files</li>
+</ul>
+<pre style="background: Cornsilk;"><code># Split the multifasta into the individual source sequence files, 
 # that is, generate single fasta files from the multifasta source file
 split_fasta.pl 3cass_amplicons.fna
-
-# Run the script
+ls -ltr | tail -3</code></pre>
+<pre style="background: AliceBlue;">
+-rw-r--r--. 1 vinuesa faculty    967 oct 18 21:54 Ap26.fa
+-rw-r--r--. 1 vinuesa faculty   1798 oct 18 21:54 Ap18.fa
+-rw-r--r--. 1 vinuesa faculty   1740 oct 18 21:54 Am1.fa
+</pre>
+<pre style="background: Cornsilk;"><code># Run the blast-imager.pl script
 # i) first writing the tables to file
 #for file in *fa
 #do 
@@ -1043,11 +1457,11 @@ split_fasta.pl 3cass_amplicons.fna
 # ii) or directly to the graph, by piping the blastx oputput directly into the blast-imager script like so:
 #for file in *fa; do blastx -query $file -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | ../../blast-imager.pl &gt; ${file%.*}.png; done
 
-# Let&#39;s run again, imposing some filtering to remove the poorest hits: pident &gt; 98%; mismatches &lt; 4; gaps &lt; 3 
+# Run again, imposing some filtering to remove the poorest hits: pident &gt; 98%; mismatches &lt; 4; gaps &lt; 3 
 # which will render a better figure
-for file in *fa; do blastx -query $file -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | awk &#39;$3 &gt; 98 &amp;&amp; $5 &lt; 4 &amp;&amp; $6 &lt; 3&#39; | ../../blast-imager.pl &gt; ${file%.*}.png; done
+for file in *fa; do blastx -query $file -query_gencode 11 -db integron_cassettes4blastdb.faaED -evalue 1e-20 -outfmt 6 -num_alignments 100 | awk &#39;$3 &gt; 98 &amp;&amp; $5 &lt; 4 &amp;&amp; $6 &lt; 3&#39; | blast-imager.pl &gt; ${file%.*}.png; done
 
-# now lets have a look at the results for the three query sequences using the &quot;eye of Gnome - eog&quot; 
+# Have a look at the results for the three query sequences using the &quot;eye of GNOME - eog&quot; 
 eog Am1.png &amp;
 eog Ap18.png &amp;
 eog Ap26.png &amp;
@@ -1066,30 +1480,28 @@ coordinates extracted previously from the hit table, strongly suggest
 that there are 3 gene cassettes encoded in the amplicon generated for
 Am1.</p>
 <pre style="background: AliceBlue;">
-#&gt;&gt;&gt; Am1
-1361    1699
-15  488
-18  488
-33  488
-3   488
-3   500
-588 887
-588 902
-612 875
-612 887
-612 902
-887 1699
-899 1678
-899 1699
-908 1303
-908 1516
-908 1678
-908 1684
-908 1693
-908 1696
-908 1699
-920 1699
-------------------------
+      1 3   488
+      4 3   500
+      2 15  488
+     13 18  488
+      2 33  488
+      1 588 887
+      1 588 902
+      1 612 875
+      1 612 887
+      6 612 902
+      1 887 1699
+      1 899 1678
+      6 899 1699
+      1 908 1303
+      1 908 1516
+      2 908 1696
+     35 908 1699
+      3 908 1693
+      4 908 1684
+      6 908 1678
+      7 920 1699
+      1 1361    1699
 </pre>
 <p>Looking closely at the coordinates and figure, we can write the
 following table with the likely gene coordinates</p>
@@ -1140,8 +1552,9 @@ with fasta_toolkit.awk and check for possible start and end condons</h3>
 three gene cassettes from the corresponding DNA string using the their
 coordinates, as defined in <b>Table 1</b>.</p>
 <ul>
-<li>1st gene <code>fasta_toolkit.awk -R 3 -s 3 -e 500 Am1.fa</code></li>
+<li>1st gene</li>
 </ul>
+<pre style="background: Cornsilk;"><code>fasta_toolkit.awk -R 3 -s 3 -e 500 Am1.fa</code></pre>
 <pre style="background: AliceBlue;">
 &gt;Am1
 ATGAACTCGGAATCAGTACGCATTTATCTCGTTGCTGCGATGGGAGCCAATCGGGTTATTGGCAATGGTCCTAATATCCCCTGGAAAATTCCGGGTGAGCAGAAGATTTTTCGCAGACTCACTGAGGGAAAAGTCGTTGTCATGGGGCGAAAGACCTTTGAGTCTATCGGCAAGCCTCTACCGAACCGTCACACATTGGTAATCTCACGCCAAGCTAACTACCGCGCCACTGGCTGCGTAGTTGTTTCAACGCTGTCGCACGCTATCGCTTTGGCATCCGAACTCGGCAATGAACTCTACGTCGCGGGCGGAGCTGAGATATACACTCTGGCACTACCTCACGCCCACGGCGTGTTTCTATCTGAGGTACATCAAACCTTCGAGGGTGACGCCTTCTTCCCAATGCTCAACGAAACAGAATTCGAGCTTGTCTCAACCGAAACCATTCAAGCTGTAATTCCGTACACCCACTCCGTTTATGCGCGTCGAAACGGCTAA
@@ -1157,9 +1570,25 @@ fasta_toolkit.awk -R 3 -s 908 -e 1699 Am1.fa &gt;&gt; Am1_cassette_CDSs.fna</cod
 <li>We need to add consecutive ORF/gene names to distinguish them from
 one another</li>
 </ul>
-<pre style="background: Cornsilk;"><code>grep &#39;^&gt;&#39; Am1_cassette_CDSs.fna
-perl -pe &#39;if(/^&gt;(\S+)/){ $c++; $h=$1 . &quot;_ORF&quot; . $c; s/$1/$h/ }&#39; Am1_cassette_CDSs.fna
-perl -pe &#39;if(/^&gt;(\S+)/){ $c++; $h=$1 . &quot;_ORF&quot; . $c; s/$1/$h/ }&#39; Am1_cassette_CDSs.fna &gt; ed &amp;&amp; mv ed Am1_cassette_CDSs.fna</code></pre>
+<pre style="background: Cornsilk;"><code>grep &#39;^&gt;&#39; Am1_cassette_CDSs.fna</code></pre>
+<pre style="background: AliceBlue;">
+&gt;Am1
+&gt;Am1
+&gt;Am1
+
+</pre>
+<pre style="background: Cornsilk;"><code>perl -pe &#39;if(/^&gt;(\S+)/){ $c++; $h=$1 . &quot;_ORF&quot; . $c; s/$1/$h/ }&#39; Am1_cassette_CDSs.fna
+perl -pe &#39;if(/^&gt;(\S+)/){ $c++; $h=$1 . &quot;_ORF&quot; . $c; s/$1/$h/ }&#39; Am1_cassette_CDSs.fna &gt; ed &amp;&amp; mv ed Am1_cassette_CDSs.fna
+
+cat Am1_cassette_CDSs.fna</code></pre>
+<pre style="background: AliceBlue;">
+&gt;Am1_ORF1
+ATGAACTCGGAATCAGTACGCATTTATCTCGTTGCTGCGATGGGAGCCAATCGGGTTATTGGCAATGGTCCTAATATCCCCTGGAAAATTCCGGGTGAGCAGAAGATTTTTCGCAGACTCACTGAGGGAAAAGTCGTTGTCATGGGGCGAAAGACCTTTGAGTCTATCGGCAAGCCTCTACCGAACCGTCACACATTGGTAATCTCACGCCAAGCTAACTACCGCGCCACTGGCTGCGTAGTTGTTTCAACGCTGTCGCACGCTATCGCTTTGGCATCCGAACTCGGCAATGAACTCTACGTCGCGGGCGGAGCTGAGATATACACTCTGGCACTACCTCACGCCCACGGCGTGTTTCTATCTGAGGTACATCAAACCTTCGAGGGTGACGCCTTCTTCCCAATGCTCAACGAAACAGAATTCGAGCTTGTCTCAACCGAAACCATTCAAGCTGTAATTCCGTACACCCACTCCGTTTATGCGCGTCGAAACGGCTAA
+&gt;Am1_ORF2
+ATGTTTATTCAAACGGCATTTAGCTTTTCAGGCGTTATTCAGTGCCTGTTTTGCCTTTTTTCCGGGCTTCGCCTGCATGGGCTGCGCAGGTTTTCAGTCTTTTTGGCCTCTAGCCCTTGCGTAGCAAGCGCAAGCAGCTATCGTTTTTGCAGTGCTGTGCCGCCTCGGTGGCGCAGCGTTTTTTCACGGTTAGCGCCCGTCGCCAAATTCAAGTTATCCGTTTTGGCTTCTGGGTCTAACATTTCGGTCAAGCCGACCGCCATTCTGCGGTCGGCTTACCTCGCCCGTTAG
+&gt;Am1_ORF3
+ATGAGGGAAGCGGTGACCATCGAAATTTCGAACCAACTATCAGAGGTGCTAAGCGTCATTGAGCGCCATCTGGAATCAACGTTGCTGGCCGTGCATTTGTACGGCTCCGCAGTGGATGGCGGCCTGAAGCCATACAGCGATATTGATTTGTTGGTTACTGTGGCCGTAAAGCTTGATGAAACGACGCGGCGAGCATTGCTCAATGACCTTATGGAGGCTTCGGCTTTCCCTGGCGAGAGCGAGACGCTCCGCGCTATAGAAGTCACCCTTGTCGTGCATGACGACATCATCCCGTGGCGTTATCCGGCTAAGCGCGAGCTGCAATTTGGAGAATGGCAGCGCAATGACATTCTTGCGGGTATCTTCGAGCCAGCCATGATCGACATTGATCTAGCTATCCTGCTTACAAAAGCAAGAGAACATAGCGTTGCCTTGGTAGGTCCGGCAGCGGAGGAATTCTTTGACCCGGTTCCTGAACAGGATCTATTCGAGGCGCTGAGGGAAACCTTGAAGCTATGGAACTCGCAGCCCGACTGGGCCGGCGATGAGCGAAATGTAGTGCTTACGTTGTCCCGCATTTGGTACAGCGCAATAACCGGCAAAATCGCGCCGAAGGATGTCGCTGCCGACTGGGCAATAAAACGCCTACCTGCCCAGTATCAGCCCGTCTTACTTGAAGCTAAGCAAGCTTATCTGGGACAAAAAGAAGATCACTTGGCCTCACGCGCAGATCACTTGGAAGAATTTATTCGCTTTGTGAAAGGCGAGATCATCAAGTCAGTTGGTAAATGA
+</pre>
 </div>
 <div id="translate-the-cdss-to-their-conceptual-translation-products-using-the-universal-genetic-code" class="section level3" number="8.1.5">
 <h3><span class="header-section-number">8.1.5</span> Translate the CDSs
@@ -1196,10 +1625,24 @@ blastp -query Am1_cassette_CDSs_translated.faa -db integron_cassettes4blastdb.fa
 cat header1.tab blastp_10hits.out &gt; ed &amp;&amp; mv ed blastp_10hits.out
 
 # 2. reduce the output table to relevant fields for easier visualization
-sed &#39;s/\t/\n/g&#39; header1.tab | cat -n
-
-awk &#39;BEGIN{FS=&quot;\t&quot;; OFS=&quot;,&quot;; print &quot;qseqid,qlen,slen,stitle,pident,bitscore,qcovs&quot;}{print $1,$3,$4,$5,$7,$12,$13}&#39; blastp_10hits.out | sed &#39;s#||||##g&#39; &gt; Am1_top10_blastp_hits_for_3ORFs.csv
-awk &#39;BEGIN{FS=OFS=&quot;\t&quot;; print &quot;qseqid\tqlen\tslen\tstitle\tpident\tbitscore\tqcovs&quot;}{print $1,$3,$4,$5,$7,$12,$13}&#39; blastp_10hits.out | sed &#39;s#||||##g&#39; &gt; Am1_top10_blastp_hits_for_3ORFs.tsv</code></pre>
+sed &#39;s/\t/\n/g&#39; header1.tab | cat -n</code></pre>
+<pre style="background: AliceBlue;">
+     1  qseqid
+     2  sseqid
+     3  qlen
+     4  slen
+     5  stitle
+     6  length
+     7  pident
+     8  positive
+     9  mismatch
+    10  gaps
+    11  evalue
+    12  bitscore
+    13  qcovs
+</pre>
+<pre style="background: Cornsilk;"><code>awk &#39;BEGIN{FS=&quot;\t&quot;; OFS=&quot;,&quot;; print &quot;qseqid,qlen,slen,stitle,pident,bitscore,qcovs&quot;}{print $1,$3,$4,$5,$7,$12,$13}&#39; blastp_10hits.out &gt; Am1_top10_blastp_hits_for_3ORFs.csv
+awk &#39;BEGIN{FS=OFS=&quot;\t&quot;; print &quot;qseqid\tqlen\tslen\tstitle\tpident\tbitscore\tqcovs&quot;}{print $1,$3,$4,$5,$7,$12,$13}&#39; blastp_10hits.out &gt; Am1_top10_blastp_hits_for_3ORFs.tsv</code></pre>
 <pre style="background: AliceBlue;">
 qseqid,qlen,slen,stitle,pident,bitscore,qcovs
 Am1_ORF1,166,166,|[Serratia marcescens]dhfrXII|dihydrofolate reductase type XII|498|AF284063|unpubl,100.000,340,100
@@ -1282,8 +1725,8 @@ the Am1 amplicon</p>
 </tbody>
 </table>
 <hr />
-<div id="homework-2" class="section level3" number="8.2.1">
-<h3><span class="header-section-number">8.2.1</span> HOMEWORK 2</h3>
+<div id="homework-3" class="section level3" number="8.2.1">
+<h3><span class="header-section-number">8.2.1</span> HOMEWORK 3</h3>
 <p>Repeat the <b>BLASTX</b> based identification of gene cassettes for
 the Ap18 and Ap26 amplicons, extract the corresponding CDSs, translate
 them and annotate them with <b>BLASTP</b>, writing a table with the

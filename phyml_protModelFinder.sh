@@ -4,6 +4,7 @@
 #: Author: Pablo Vinuesa, CCG-UNAM, @pvinmex
 #: AIM: simple wraper script around phyml, to select a good model for protein alignments
 #:      compute AIC, BIC, delta_BIC and BICw, and estimate a ML phylogeny using the best-fitting model
+#: LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
  
 #: Desgin:  phyml_protModelFinder.sh evaluates a set of the named empirical substitution matices 
 #      currently implemented in phml v3.*, combining them or not with +G and/or +f
@@ -99,20 +100,24 @@ function compute_BIC()
 function print_help(){
 
    cat <<-EoH
+
+   $progname v${version} requires two arguments provided on the command line:
    
-       $progname v${version} requires two arguments provided on the command line:
+   $progname <string [input phylip file (aligned PROTEIN sequences)> <int [1-4; default=1]>
+    
+      # model sets to choose from: 
+      1 -> nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
+      2 -> organellar genes (CpREV MTMAM MtREV MtArt)
+      3 -> nuclear and organellar (1 + 2)
+      4 -> retroviral genes (HIVw HIVb RtREV)
+      5 -> all (1+2+3+4)
    
-       $progname <string [input phylip file (aligned PROTEIN sequences)> <int [1-4; default=1]>
-        
-	  # model sets to choose from: 
-	  1 -> nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
-	  2 -> organellar genes (CpREV MTMAM MtREV MtArt)
-	  3 -> nuclear and organellar (1 + 2)
-	  4 -> retroviral genes (HIVw HIVb RtREV)
-	  5 -> all (1+2+3+4)
-   
-       AIM: $progname v${version} will evaluate the fit of the the seleced 
-             model set, combined or not with +G and/or +f   
+   AIM: $progname v${version} will evaluate the fit of the the seleced 
+   	 model set, combined or not with +G and/or +f, computing AIC, BIC
+	 deltaBIC, BICw and inferring the ML tree under the BIC-selected
+	 model	
+    	 
+   LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE     
 
 EoH
    
@@ -290,6 +295,7 @@ print_start_time
 
 echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s BEST  &> /dev/null"
 
+# note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail ??!!
 phyml -i "$infile" -d aa -m "${model_cmds[$best_model]}" -o tlr -s BEST  &> /dev/null
 
 # 7.1 Check and rename final phyml output files

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #: phyml_protModelFinder.sh
-#: Author: Pablo Vinuesa, CCG-UNAM, @pvinmex
+#: Author: Pablo Vinuesa, CCG-UNAM, @pvinmex, https://www.ccg.unam.mx/~vinuesa/
 #: AIM: simple wraper script around phyml, to select a good model for protein alignments
 #:      compute AIC, BIC, delta_BIC and BICw, and estimate a ML phylogeny using the best-fitting model
 #: LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
@@ -18,17 +18,18 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version=0.3 # 2022-11-25;
+version=0.4 # 2022-11-25;
 min_bash_vers=4.3 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
 		  #    by setting the -n attribute
 		  #    see https://stackoverflow.com/questions/16461656/how-to-pass-array-as-an-argument-to-a-function-in-bash
 
-declare -a models       # array holding the base models (empirical substitution matrices to be evaluated)
-declare -A model_cmds   # hash holding the commands for each model 
-declare -A model_scores # hash holding the model lnL scores and AICi values 
-declare -A model_options
+# declare array and hash variables
+declare -a models        # array holding the base models (empirical substitution matrices to be evaluated)
+declare -A model_cmds    # hash holding the commands for each model 
+declare -A model_scores  # hash holding the model lnL scores and AICi values 
+declare -A model_options # hash mapping option => model_set
 
 # array of models to evaluate
 nuclear_genome_models=(AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
@@ -66,6 +67,42 @@ function check_is_phylip()
        echo "FATAL ERROR: input file $phylip does not seem to by a canonical phylip alingment"
        print_help
    fi
+}
+#-----------------------------------------------------------------------------------------
+
+function compute_AA_freq_in_phylip()
+{
+  local phylip
+  phylip=$1
+ 
+  awk '
+  BEGIN{print "idx\tAA\tobs_freq"}
+  # only count a-z, ignore A-Z and any other characters
+  {
+    # ignore first row and column
+    if( NR > 1 && NF > 1){
+       # remove empty spaces
+       gsub(/[ ]+/," ")
+       l=length($0)
+
+       for(i=1; i<=l; i++){
+          c = substr($0, i, 1)
+         
+	  # count only standard amino acids
+	  if (c ~ /[ARNDCQEGHILKMFPSTWYV]/){
+              ccounts[c]++
+              letters++
+          }
+       }
+    }
+  }
+  # print relative frequency of each residue
+  END {
+     for (c in ccounts){ 
+        aa++ 
+        printf "%i\t%s\t%.4f\n", aa, c, (ccounts[c] / letters )
+     }	
+  }' "$phylip"
 }
 #-----------------------------------------------------------------------------------------
 
@@ -133,7 +170,7 @@ function print_help(){
 
    $progname v${version} requires two arguments provided on the command line:
    
-   $progname <string [input phylip file (aligned PROTEIN sequences)> <int [1-4; default=1]>
+   $progname <string [input phylip file (aligned PROTEIN sequences)> <int [model sets:1-5]>
     
       # model sets to choose from: 
       1 -> nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
@@ -177,16 +214,29 @@ check_is_phylip "$infile"
 
 # OK, ready to start the analysis ...
 start_time=$SECONDS
-echo "================================================================================"
+echo "========================================================================================="
 check_bash_version "$min_bash_vers"
-echo -n "# $progname v$version run on $host started on: "; printf '%(%F at %T)T\n' '-1'
-echo "================================================================================"
+echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
+echo "========================================================================================="
 echo
 
 # 1. get sequence stats
+print_start_time
+echo " # 1. Computing sequence stats for ${infile}:"
+
 no_seq=$(awk 'NR == 1{print $1}' "$infile") 
+echo "- number of sequences: $no_seq"
+
 no_sites=$(awk 'NR == 1{print $2}' "$infile") 
+echo "- number of sites: $no_sites"
+
 no_branches=$((2 * no_seq - 3))
+echo "- number of branches: $no_branches"
+
+echo "- observed amino acid frequencies:"
+compute_AA_freq_in_phylip "$infile"
+echo '--------------------------------------------------------------------------------'
+echo 
 
 # 2. set the selected model set, making a copy of the set array into the models array
 case "$model_set" in
@@ -213,9 +263,10 @@ fi
 
 # 4. run a for loop to combine all base models with (or not) +G and or +f
 #     and fill the model_scores and model_cmds hashes
-echo "2. running in a for loop to combine all base models in model_set ${model_set}=>${model_options[$model_set]}, with (or not) +G and or +f"
+echo "2. running in a for loop to combine all base models in model_set ${model_set}=>${model_options[$model_set]}, 
+     with (or not) +G and or +f, and compute the model lnL, after optimizing branch lengths and rates"
 for mat in "${models[@]}"; do
-     print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -u ${infile}_LG-NJ.nwk -c 1 -v 0 -o lr &> /dev/null"
+     print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -u ${infile}_LG-NJ.nwk -c 1 -v 0 -o lr"
      phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -c 1 -o lr &> /dev/null 
      extra_params=0 
      total_params=$((no_branches + extra_params))
@@ -228,7 +279,7 @@ for mat in "${models[@]}"; do
      model_scores["${mat}"]="$model_string"
      model_cmds["${mat}"]="$mat"
 
-     print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -c 4 -a e -u ${infile}_LG-NJ.nwk -o lr &> /dev/null"
+     print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -c 4 -a e -u ${infile}_LG-NJ.nwk -o lr"
      phyml -i "$infile" -d aa -m "${mat}" -c 4 -a e -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
      extra_params=1 
      total_params=$((no_branches + extra_params))
@@ -241,7 +292,7 @@ for mat in "${models[@]}"; do
      model_scores["${mat}+G"]="$model_string"
      model_cmds["${mat}+G"]="$mat -c 4 -a e"
 
-     print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -f e -c 1 -u ${infile}_LG-NJ.nwk -o lr &> /dev/null"
+     print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -f e -c 1 -u ${infile}_LG-NJ.nwk -o lr"
      phyml -i "$infile" -d aa -m "$mat" -f e -c 1 -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
      extra_params=19 #19 from AA frequencies
      total_params=$((no_branches + extra_params))
@@ -254,7 +305,7 @@ for mat in "${models[@]}"; do
      model_scores["${mat}+f"]="$model_string"
      model_cmds["${mat}+f"]="$mat -f e"
 
-     print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -u ${infile}_LG-NJ.nwk -f e -a e -o lr &> /dev/null"
+     print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -u ${infile}_LG-NJ.nwk -f e -a e -o lr"
      phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -f e -a e -c 4 -o lr &> /dev/null     
      extra_params=20 #19 from AA frequencies + 1 gamma 
      total_params=$((no_branches + extra_params))
@@ -267,6 +318,7 @@ for mat in "${models[@]}"; do
      model_scores["${mat}+f+G"]="$model_string"
      model_cmds["${mat}+f+G"]="$mat -f e -c 4 -a e"
 done
+
 echo '--------------------------------------------------------------------------------------------------'
 echo
 
@@ -302,7 +354,7 @@ BICw_sums=0
 for i in "${BIC_deltas_a[@]}"; do 
    BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }')  
    #echo "num:$BICw_numerator"
-   BICw_sums=$(bc <<< $BICw_sums'+'$BICw_numerator)
+   BICw_sums=$(bc <<< "$BICw_sums"'+'"$BICw_numerator")
 done
 #echo BICw_sums:$BICw_sums
 
@@ -346,22 +398,23 @@ echo "... will estimate the ML tree under best-fitting model $best_model selecte
 
 print_start_time
 
-echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s BEST  &> /dev/null"
+echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s BEST"
 
-# note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail ??!!
-phyml -i "$infile" -d aa -m "${model_cmds[$best_model]}" -o tlr -s BEST  &> /dev/null
+# note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail
+phyml -i "$infile" -d aa -m "${model_cmds[$best_model]}" -o tlr -s BEST &> /dev/null
 
 # 7.1 Check and rename final phyml output files
 if [[ -s "${infile}"_phyml_stats.txt ]]; then
      mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_phyml_stats.txt
-     echo "# wrote ${infile}_${best_model}_phyml_stats.txt"
+     echo "# Your results:"
+     echo "  - ${infile}_${best_model}_phyml_stats.txt"
 else
      echo "FATAL ERROR: ${infile}_phyml_stats.txt was not generated!"
 fi
 
 if [[ -s "${infile}"_phyml_tree.txt ]]; then
      mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_phyml_tree.txt
-     echo "# wrote ${infile}_${best_model}_phyml_tree.txt"
+     echo "  - ${infile}_${best_model}_phyml_tree.txt"
 else
      echo "FATAL ERROR: ${infile}_phyml_tree.txt was not generated!"
 fi
@@ -374,5 +427,7 @@ elapsed=$(( SECONDS - start_time ))
 eval "echo Elapsed time: $(date -ud "@$elapsed" +'$((%s/3600/24)) days, %H hr, %M min, %S sec')"
 
 echo 'Done!'
+
 echo
+
 exit 0

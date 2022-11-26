@@ -18,7 +18,7 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version=0.4 # 2022-11-25;
+version=0.5 # 2022-11-26;
 min_bash_vers=4.3 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
@@ -37,6 +37,7 @@ organelle_genemome_models=(CpREV MTMAM MtREV MtArt)
 nuclear_and_organellar=(AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG CpREV MTMAM MtREV MtArt)
 viral_genome_models=(HIVw HIVb RtREV)
 all_models=(AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG CpREV MTMAM MtREV MtArt HIVw HIVb RtREV)
+test_models=(JTT LG)
 
 # hash mapping option => model_set
 model_options['1']='nuclear_genome_models'
@@ -44,10 +45,59 @@ model_options['2']='organelle_genemome_models'
 model_options['3']='nuclear_and_organellar_models'
 model_options['4']='viral_genome_models'
 model_options['5']='all_models'
+model_options['6']='test_models'
+
+mpi_OK=0 # flag set in check_dependencies, if mpirun and phyml-mpi are available
 
 #==============================#
 # >>> FUNCTION DEFINITIONS <<< #
 #------------------------------#
+
+function check_dependencies()
+{
+    #bash_scripts=()
+    #perl_scripts=()
+    #R_scripts=$()  # Rab_ML_classifier.R,
+    
+    declare -a progs required_binaries optional_binaries
+    local p programname bin
+    
+    required_binaries=(awk bc sed perl phyml)
+    optional_binaries=(mpirun phyml-mpi)
+    
+    for p in "${optional_binaries[@]}"
+    do
+          if type -P "$p" >/dev/null
+	  then
+	      progs=("${optional_binaries[@]}")
+	      mpi_OK=1
+	  else
+	      mpi_OK=0
+	      progs=()
+	  fi
+    done
+    
+    progs+=("${required_binaries[@]}")
+    
+    for programname in "${progs[@]}"
+    do
+       if ! type -P "$programname"; then  # NOTE: will print paths of binaries to STDOUT (no >/dev/null)
+          echo
+          echo "$# ERROR: $programname not in place!"
+          echo "  ... you will need to install \"$programname\" first, or include it in \$PATH"
+          echo "  ... exiting"
+          exit 1
+       else
+          continue
+       fi
+    done
+    
+    echo
+    echo '# Run check_dependencies() ... looks good: all required binaries are in place.'
+    echo
+}
+#-----------------------------------------------------------------------------------------
+
 function check_bash_version()
 {
    local bash_vers min_bash_vers
@@ -77,7 +127,6 @@ function compute_AA_freq_in_phylip()
  
   awk '
   BEGIN{print "idx\tAA\tobs_freq"}
-  # only count a-z, ignore A-Z and any other characters
   {
     # ignore first row and column
     if( NR > 1 && NF > 1){
@@ -178,14 +227,17 @@ function print_help(){
       3 -> nuclear and organellar (1 + 2)
       4 -> retroviral genes (HIVw HIVb RtREV)
       5 -> all (1+2+3+4)
+      6 -> test (JTT LG)
    
-   AIM: $progname v${version} will evaluate the fit of the the seleced 
-   	 model set, combined or not with +G and/or +f, computing AIC, BIC
-	 deltaBIC, BICw and inferring the ML tree under the BIC-selected
-	 model	
+   AIM: $progname v${version} will evaluate the fit of the the seleced model set,
+        combined or not with +G and/or +f, computing AIC, BICm, deltaBIC, BICw 
+	        and inferring the ML tree under the BIC-selected model	
     	 
-   LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE     
-
+   SOURCE: the latest version of the program is available on GitHub:
+            https://github.com/vinuesa/TIB-filoinfo
+   
+   LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
+   
 EoH
    
    exit 0
@@ -199,17 +251,22 @@ EoH
 # >>> MAIN <<<
 # ------------ #
 
+
+## Check environment
 # 0. Check that the input file was provided, and that the host runs bash >= v4.3
-(( $# != 2 )) && print_help
+(( $# < 2 )) || (( $# > 3 )) && print_help
+#(( $# < 2 )) && print_help
 
 infile="$1"
 model_set="$2"
+#num_threads=${3:-6}
 
 wkd=$(pwd)
 
 # verify input & bash vesion
 [[ ! -s "$infile" ]] && echo "FATAL ERROR: could not find $infile in $wkd" && exit 1
-(( model_set < 1 )) || ((model_set > 5 )) && print_help
+(( model_set < 1 )) || ((model_set > 6 )) && print_help
+#(( num_threads < 1 )) || ((num_threads > 12 )) && print_help
 check_is_phylip "$infile"
 
 # OK, ready to start the analysis ...
@@ -217,6 +274,8 @@ start_time=$SECONDS
 echo "========================================================================================="
 check_bash_version "$min_bash_vers"
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
+check_dependencies
+echo "# infile:$infile model_set:$model_set mpi_OK:$mpi_OK"
 echo "========================================================================================="
 echo
 
@@ -245,6 +304,7 @@ case "$model_set" in
    3) models=( "${nuclear_and_organellar[@]}" );;
    4) models=( "${viral_genome_models[@]}" );;
    5) models=( "${all_models[@]}" );;
+   6) models=( "${test_models[@]}" );;
    *) echo "unknown model set!" && print_help ;;
 esac
    
@@ -268,6 +328,8 @@ echo "2. running in a for loop to combine all base models in model_set ${model_s
 for mat in "${models[@]}"; do
      print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -u ${infile}_LG-NJ.nwk -c 1 -v 0 -o lr"
      phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -c 1 -o lr &> /dev/null 
+     #((mpi_OK < 1)) && phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -c 1 -o lr &> /dev/null 
+     #((mpi_OK > 0)) && mprirun -n "$num_threads" phyml-mpi -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -c 1 -o lr &> /dev/null 
      extra_params=0 
      total_params=$((no_branches + extra_params))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
@@ -280,7 +342,9 @@ for mat in "${models[@]}"; do
      model_cmds["${mat}"]="$mat"
 
      print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -c 4 -a e -u ${infile}_LG-NJ.nwk -o lr"
-     phyml -i "$infile" -d aa -m "${mat}" -c 4 -a e -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
+     phyml -i "$infile" -d aa -m "${mat}" -c 4 -a e -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null
+     #((mpi_OK < 1)) && phyml -i "$infile" -d aa -m "${mat}" -c 4 -a e -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
+     #[[ $mpi_OK ]] && mprirun -n "$num_threads" phyml-mpi -i "$infile" -d aa -m "${mat}" -c 4 -a e -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
      extra_params=1 
      total_params=$((no_branches + extra_params))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
@@ -293,7 +357,9 @@ for mat in "${models[@]}"; do
      model_cmds["${mat}+G"]="$mat -c 4 -a e"
 
      print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -f e -c 1 -u ${infile}_LG-NJ.nwk -o lr"
-     phyml -i "$infile" -d aa -m "$mat" -f e -c 1 -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
+     phyml -i "$infile" -d aa -m "$mat" -f e -c 1 -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null
+     #((mpi_OK < 1)) && phyml -i "$infile" -d aa -m "$mat" -f e -c 1 -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
+     #[[ $mpi_OK ]] && mprirun -n "$num_threads" phyml-mpi -i "$infile" -d aa -m "$mat" -f e -c 1 -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
      extra_params=19 #19 from AA frequencies
      total_params=$((no_branches + extra_params))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
@@ -306,7 +372,9 @@ for mat in "${models[@]}"; do
      model_cmds["${mat}+f"]="$mat -f e"
 
      print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -u ${infile}_LG-NJ.nwk -f e -a e -o lr"
-     phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -f e -a e -c 4 -o lr &> /dev/null     
+     phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -f e -a e -c 4 -o lr &> /dev/null
+     #((mpi_OK < 1)) && phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -f e -a e -c 4 -o lr &> /dev/null	  
+     #[[ $mpi_OK ]] && mprirun -n "$num_threads" phyml-mpi -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -f e -a e -c 4 -o lr &> /dev/null	  
      extra_params=20 #19 from AA frequencies + 1 gamma 
      total_params=$((no_branches + extra_params))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
@@ -345,11 +413,7 @@ do
      BIC_deltas_a+=( $( echo "$i" - "$min_BIC" | bc -l) )
 done
 
-# 6.2 paste the BIC_deltas_a values as a new column to "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
-paste "${infile}"_sorted_model_set_"${model_set}"_fits.tsv <(for i in "${BIC_deltas_a[@]}"; do echo "$i"; done) > t
-[[ -s t ]] && mv t "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
-
-# 6.3 Compute the BICw_sums (denominator) of BICw
+# 6.2 Compute the BICw_sums (denominator) of BICw
 BICw_sums=0
 for i in "${BIC_deltas_a[@]}"; do 
    BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }')  
@@ -358,7 +422,7 @@ for i in "${BIC_deltas_a[@]}"; do
 done
 #echo BICw_sums:$BICw_sums
 
-# 6.4 fill the BICw_a array
+# 6.3 fill the BICw_a array
 BICw_a=()
 for i in "${BIC_deltas_a[@]}"; do
    BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }' 2> /dev/null)   
@@ -366,12 +430,13 @@ for i in "${BIC_deltas_a[@]}"; do
    BICw_a+=( $(printf "%.2f" "$BICw") )
 done
 
-# 6.5 paste the BICw_a values as a new column to "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
-paste "${infile}"_sorted_model_set_"${model_set}"_fits.tsv <(for i in "${BICw_a[@]}"; do echo "$i"; done) > t
+# 6.4 paste the BIC_deltas_a & BICw_a values as a new column to "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
+paste "${infile}"_sorted_model_set_"${model_set}"_fits.tsv <(for i in "${BIC_deltas_a[@]}"; do echo "$i"; done) \
+                                                           <(for i in "${BICw_a[@]}"; do echo "$i"; done) > t
 [[ -s t ]] && mv t "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
 
 
-# 6.6 Display  the final "${infile}"_sorted_model_set_"${model_set}"_fits.tsv and extract the best model name
+# 6.5 Display  the final "${infile}"_sorted_model_set_"${model_set}"_fits.tsv and extract the best model name
 if [[ -s "${infile}"_sorted_model_set_"${model_set}"_fits.tsv ]]; then
     # display models sorted by BIC
     best_model=$(awk 'NR == 1{print $1}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv)
@@ -392,7 +457,8 @@ fi
 
 # 7. compute ML tree under best-fitting model
 echo '--------------------------------------------------------------------------------------------------'
-echo "* NOTE: when sites/K < 40, the AICc is recommended over AIC."
+echo "* NOTE 1: when sites/K < 40, the AICc is recommended over AIC."
+echo "* NOTE 2: Best model selected by BIC, because AIC is biased in favour of parameter-rich models."
 echo
 echo "... will estimate the ML tree under best-fitting model $best_model selected by BIC"
 
@@ -402,6 +468,8 @@ echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s 
 
 # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail
 phyml -i "$infile" -d aa -m "${model_cmds[$best_model]}" -o tlr -s BEST &> /dev/null
+#((mpi_OK < 1)) && phyml -i "$infile" -d aa -m "${model_cmds[$best_model]}" -o tlr -s BEST &> /dev/null
+#((mpi_OK > 0)) && mpirun -n "$num_threads" phyml -i "$infile" -d aa -m "${model_cmds[$best_model]}" -o tlr -s BEST &> /dev/null
 
 # 7.1 Check and rename final phyml output files
 if [[ -s "${infile}"_phyml_stats.txt ]]; then

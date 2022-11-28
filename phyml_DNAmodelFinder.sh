@@ -94,7 +94,7 @@ test_models=(HKY85 GTR)
 
 # hash mapping option => model_set
 model_options['1']='standard_models'
-model_options['2']='extebded_models'
+model_options['2']='extended_models'
 model_options['3']='test_models'
 
 #==============================#

@@ -25,7 +25,7 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version=0.2 # 2022-11-27;
+version='0.3_2022-11-28' 
 min_bash_vers=4.3 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
@@ -54,7 +54,7 @@ model_free_params['012230ef']=3  # TIMef
 model_free_params['012314ef']=4  # TVMef
 model_free_params['012310ef']=3  # TVM1ef 
 model_free_params['010213ef']=3  # TVM2ef
-model_free_params['123324ef']=3  # TVM3ef
+model_free_params['012213ef']=3  # TVM3ef
 model_free_params['012345ef']=5  # SYMef
 model_free_params['012013ef']=3  # TVM4ef
 model_free_params['010012ef']=2  # TVM5ef 
@@ -84,7 +84,7 @@ model_free_params['012232']=6  # TIM3
 # array of models to evaluate
 standard_models=(JC69 K80 F81 HKY85 TN93 GTR)
 
-#                    TNef   TIMef  TVMef TVM1ef TVM2ef TVM3ef SYMef  TVM4   TVM5   TVM6   TVM7   TVM8   TIM1   TIM2   TIM3
+#                    TNef   TIMef  TVMef TVM1ef TVM2ef TVM3ef SYMef  TVM4ef TVM5ef TVM6ef TVM7ef TVM8ef TIM1ef TIM2ef TIM3ef
 extended_models_ef=(010020 012230 012314 012310 010213 012213 012345 012013 010012 012012 010212 012313 010023 012234 012232)
 
 #                   K81uf   TIM    TVM   TVM1   TVM2   TVM3   TVM4   TVM5   TVM6   TVM7   TVM8   TIM1   TIM2   TIM3
@@ -145,8 +145,8 @@ function check_bash_version()
    local bash_vers min_bash_vers
    min_bash_vers=$1
    bash_vers=$(bash --version | head -1 | awk '{print $4}' | sed 's/(.*//' | cut -d. -f1,2)
-   awk -v bv="$bash_vers" -v mb="$min_bash_vers" \
-     'BEGIN { if (bv < mb){print "FATAL: you are running acient bash v"bv, "and version >=", mb, "is required"; exit 1}else{print "# Bash version", bv, "OK"} }'
+   
+   echo "$bash_vers"
 }
 #-----------------------------------------------------------------------------------------
 
@@ -270,6 +270,10 @@ function check_compositional_heterogeneity()
 
 function print_help(){
 
+   bash_vers=$(check_bash_version "$min_bash_vers")
+   bash_ge_5=$(awk -v bv="$bash_vers" 'BEGIN { if (bv >= 5.0){print 1}else{print 0} }')
+   
+   if ((bash_ge_5 > 0)); then 
    cat <<-EoH
 
    $progname v${version} requires two arguments provided on the command line:
@@ -305,6 +309,38 @@ function print_help(){
    LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
    
 EoH
+
+   else
+   cat <<-EoH
+
+   $progname v${version} requires two arguments provided on the command line:
+   
+   $progname <string [input phylip file (aligned DNA sequences)> <int [model sets:1|2]>
+    
+      # model sets to choose from: 
+      1 -> (JC69 K80 F81 HKY85 TN93 GTR)
+      2 -> WILL NOT RUN properly on Bash < v5.0, sorry (see NOTE below) 
+      3 -> minimal test set (K80 F81 HKY85 GTR)
+   
+   AIM: * $progname v${version} will evaluate the fit of the seleced model set,
+            combined or not with +G and/or +I, computing AIC, BICm, delta_BIC, BICw 
+	    and inferring the ML tree under the BIC-selected model	
+        * The models are fitted using a fixed NJ-JC tree, optimizing branch lenghts and rates, 
+	    in order to calculate each model\'s AIC, BIC, delta_BIC and BICw. 
+        * The best model is selected by BIC
+    	 
+   SOURCE: the latest version of the program is available on GitHub:
+            https://github.com/vinuesa/TIB-filoinfo
+   
+   LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
+   
+   NOTE: you are running the old Bash version $bash_vers. 
+         Update to v 5.0 or greater, to profit from the full set of models 
+	         and features implemented in $progname
+   
+EoH
+   
+   fi
    
    exit 0
 
@@ -332,7 +368,10 @@ check_is_phylip "$infile"
 # OK, ready to start the analysis ...
 start_time=$SECONDS
 echo "========================================================================================="
-check_bash_version "$min_bash_vers"
+bash_vers=$(check_bash_version "$min_bash_vers")
+awk -v bv="$bash_vers" -v mb="$min_bash_vers" \
+  'BEGIN { if (bv < mb){print "FATAL: you are running acient bash v"bv, "and version >=", mb, "is required"; exit 1}else{print "# Bash version", bv, "OK"} }'
+
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
 echo "# workding directory: $wkd"
 check_dependencies
@@ -473,7 +512,7 @@ if ((model_set == 2)); then
        compositional_heterogenety=$(check_compositional_heterogeneity "$JC_BICi" "$F81_BICi") 
        echo '--------------------------------------------------------------------------------'
        print_start_time
-       echo ' >>> Starting evaluation and automatic selection of extended model set'
+       echo '# Starting evaluation and automatic selection of extended model set'
        echo "# setting compositional_heterogenety flag to: $compositional_heterogenety"
    fi
 
@@ -498,9 +537,11 @@ if ((model_set == 2)); then
 
    # 5.2 loop over the set of extended models, passing the proper freq_cmd, based on the compositional_heterogenety flag
    for mat in "${models[@]}"; do
+     ((compositional_heterogenety == 0)) && mat="${mat%ef}"
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -u ${infile}_JC-NJ.nwk -c 1 -v 0 -o lr"
      phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -c 1 -o lr &> /dev/null 
      extra_params=0 
+     ((compositional_heterogenety == 0)) && mat="${mat}ef"
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-/{print $3}' "${infile}"_phyml_stats.txt)
@@ -511,9 +552,11 @@ if ((model_set == 2)); then
      model_scores["${mat}"]="$model_string"
      model_cmds["${mat}"]="$mat"
 
+     ((compositional_heterogenety == 0)) && mat="${mat%ef}"
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -c 4 -a e -u ${infile}_JC-NJ.nwk -o lr"
      phyml -i "$infile" -d nt -m "${mat}" "$freq_cmd" -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr &> /dev/null
      extra_params=1 # 1 gamma 
+     ((compositional_heterogenety == 0)) && mat="${mat}ef"
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-/{print $3}' "${infile}"_phyml_stats.txt)
@@ -524,9 +567,11 @@ if ((model_set == 2)); then
      model_scores["${mat}+G"]="$model_string"
      model_cmds["${mat}+G"]="$mat -c 4 -a e"
 
+     ((compositional_heterogenety == 0)) && mat="${mat%ef}"
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -v e -c 1 -u ${infile}_JC-NJ.nwk -o lr"
      phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr &> /dev/null
      extra_params=1 # 1 pInv
+     ((compositional_heterogenety == 0)) && mat="${mat}ef"
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-/{print $3}' "${infile}"_phyml_stats.txt)
@@ -537,9 +582,11 @@ if ((model_set == 2)); then
      model_scores["${mat}+I"]="$model_string"
      model_cmds["${mat}+I"]="$mat -v e"
 
+     ((compositional_heterogenety == 0)) && mat="${mat%ef}"
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -u ${infile}_JC-NJ.nwk -v e -a e -o lr"
      phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr &> /dev/null
      extra_params=2 # 1 pInv + 1 gamma 
+     ((compositional_heterogenety == 0)) && mat="${mat}ef"
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-/{print $3}' "${infile}"_phyml_stats.txt)
@@ -551,7 +598,9 @@ if ((model_set == 2)); then
      model_cmds["${mat}+I+G"]="$mat -v e -c 4 -a e"
    done
 fi # extended set
+
 echo '--------------------------------------------------------------------------------'
+
 echo
 ##### 
 
@@ -627,7 +676,7 @@ echo "* NOTE 1: when sites/K < 40, the AICc is recommended over AIC."
 echo "* NOTE 2: Best model selected by BIC, because AIC is biased in favour of parameter-rich models."
 echo
 echo '=================================================================================================='
-echo "# >>> Will estimate the ML tree under best-fitting model $best_model selected by BIC"
+echo '#  Will estimate the ML tree under best-fitting model $best_model selected by BIC'
 echo '--------------------------------------------------------------------------------------------------'
 
 print_start_time

@@ -315,7 +315,7 @@ EoH
 
    $progname v${version} requires two arguments provided on the command line:
    
-   $progname <string [input phylip file (aligned DNA sequences)> <int [model sets:1|2]>
+   $progname <string [input phylip file (aligned DNA sequences)> <int [model sets:1|3]>
     
       # model sets to choose from: 
       1 -> (JC69 K80 F81 HKY85 TN93 GTR)

@@ -13,17 +13,20 @@
 
 # set bash strict mode: http://redsymbol.net/articles/unofficial-bash-strict-mode/
 #set -euo pipefail # fails in some calls on tepeu with old phyml and bash; on buluc or tepeu use set -uo pipefail
-set -euo pipefail
+set -uo pipefail
 
 host=$(hostname)
 
 progname=${0##*/}
-version=0.5 # 2022-11-26;
-min_bash_vers=4.3 # required to write modern bash idioms:
+version=0.6 # 2022-12-01;
+min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
 		  #    by setting the -n attribute
 		  #    see https://stackoverflow.com/questions/16461656/how-to-pass-array-as-an-argument-to-a-function-in-bash
+
+# by default, use a single seed tree (BioNJ)
+n_starts=1
 
 # declare array and hash variables
 declare -a models        # array holding the base models (empirical substitution matrices to be evaluated)
@@ -34,9 +37,10 @@ declare -A model_options # hash mapping option => model_set
 # array of models to evaluate
 nuclear_genome_models=(AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
 organelle_genemome_models=(CpREV MTMAM MtREV MtArt)
-nuclear_and_organellar=(AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG CpREV MTMAM MtREV MtArt)
+nuclear_and_organellar=( ${nuclear_genome_models[@]} ${organelle_genemome_models[@]} )
 viral_genome_models=(HIVw HIVb RtREV)
-all_models=(AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG CpREV MTMAM MtREV MtArt HIVw HIVb RtREV)
+nuclear_and_viral_models=( ${nuclear_genome_models[@]} ${viral_genome_models[@]} )
+all_models=( ${nuclear_genome_models[@]} ${organelle_genemome_models[@]} ${viral_genome_models[@]})
 test_models=(JTT LG)
 
 # hash mapping option => model_set
@@ -44,8 +48,9 @@ model_options['1']='nuclear_genome_models'
 model_options['2']='organelle_genemome_models'
 model_options['3']='nuclear_and_organellar_models'
 model_options['4']='viral_genome_models'
-model_options['5']='all_models'
+model_options['5']='nuclear_and_viral'
 model_options['6']='test_models'
+model_options['7']='all_models'
 
 mpi_OK=0 # flag set in check_dependencies, if mpirun and phyml-mpi are available
 
@@ -55,10 +60,6 @@ mpi_OK=0 # flag set in check_dependencies, if mpirun and phyml-mpi are available
 
 function check_dependencies()
 {
-    #bash_scripts=()
-    #perl_scripts=()
-    #R_scripts=$()  # Rab_ML_classifier.R,
-    
     declare -a progs required_binaries optional_binaries
     local p programname bin
     
@@ -94,7 +95,7 @@ function check_dependencies()
     
     echo
     echo '# Run check_dependencies() ... looks good: all required binaries are in place.'
-    echo
+    echo ''
 }
 #-----------------------------------------------------------------------------------------
 
@@ -215,28 +216,38 @@ function compute_BIC()
 
 function print_help(){
 
-   cat <<-EoH
+   cat <<EoH
 
-   $progname v${version} requires two arguments provided on the command line:
-   
-   $progname <string [input phylip file (aligned PROTEIN sequences)> <int [model sets:1-5]>
-    
-      # model sets to choose from: 
-      1 -> nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
-      2 -> organellar genes (CpREV MTMAM MtREV MtArt)
-      3 -> nuclear and organellar (1 + 2)
-      4 -> retroviral genes (HIVw HIVb RtREV)
-      5 -> all (1+2+3+4)
-      6 -> test (JTT LG)
-   
-   AIM: $progname v${version} will evaluate the fit of the the seleced model set,
-        combined or not with +G and/or +f, computing AIC, BICm, deltaBIC, BICw 
-	        and inferring the ML tree under the BIC-selected model	
-    	 
-   SOURCE: the latest version of the program is available on GitHub:
-            https://github.com/vinuesa/TIB-filoinfo
-   
-   LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
+$progname v${version} requires two arguments provided on the command line:
+
+$progname <string [input phylip file (aligned PROTEIN sequences)> <int [model sets:1-7]> <int [num random seed trees; default:$n_starts]>
+ 
+   # model sets to choose from: 
+   1 -> nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
+   2 -> organellar genes (CpREV MTMAM MtREV MtArt)
+   3 -> nuclear and organellar (1 + 2)
+   4 -> retroviral genes (HIVw HIVb RtREV)
+   5 -> nuclear + retroviral genes (1 + 4)
+   6 -> all (1+2+3+4+5)
+   7 -> test (JTT LG)
+
+EXAMPLE: $progname primates_21_AA.phy 5 10
+
+AIM:  $progname v${version} will evaluate the fit of the the seleced model set,
+	combined or not with +G and/or +f, computing AICi, BICi, deltaBIC, BICw 
+     	  and inferring the ML tree under the BIC-selected model  
+
+PROCEDURE
+     - Models are fitted using a fixed NJ-LG tree, optimizing branch lenghts and rates 
+     	  to calculate their AICi, BICi, delta_BIC and BICw
+     - The best model is selected by BIC
+     - SPR searches can be launched starting from multiple random trees
+     - Default single seed tree searches use a BioNJ with BEST moves     
+
+SOURCE: the latest version of the program is available from GitHub at:
+	 https://github.com/vinuesa/TIB-filoinfo
+
+LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
    
 EoH
    
@@ -255,18 +266,16 @@ EoH
 ## Check environment
 # 0. Check that the input file was provided, and that the host runs bash >= v4.3
 (( $# < 2 )) || (( $# > 3 )) && print_help
-#(( $# < 2 )) && print_help
 
 infile="$1"
 model_set="$2"
-#num_threads=${3:-6}
+n_starts="${3:-1}"
 
 wkd=$(pwd)
 
 # verify input & bash vesion
 [[ ! -s "$infile" ]] && echo "FATAL ERROR: could not find $infile in $wkd" && exit 1
-(( model_set < 1 )) || ((model_set > 6 )) && print_help
-#(( num_threads < 1 )) || ((num_threads > 12 )) && print_help
+(( model_set < 1 )) || ((model_set > 7 )) && print_help
 check_is_phylip "$infile"
 
 # OK, ready to start the analysis ...
@@ -275,9 +284,9 @@ echo "==========================================================================
 check_bash_version "$min_bash_vers"
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
 check_dependencies
-echo "# infile:$infile model_set:$model_set mpi_OK:$mpi_OK"
+echo "# infile:$infile; model_set:$model_set; mpi_OK:$mpi_OK; seed trees: $n_starts"
 echo "========================================================================================="
-echo
+echo ''
 
 # 1. get sequence stats
 print_start_time
@@ -295,7 +304,7 @@ echo "- number of branches: $no_branches"
 echo "- observed amino acid frequencies:"
 compute_AA_freq_in_phylip "$infile"
 echo '--------------------------------------------------------------------------------'
-echo 
+echo '' 
 
 # 2. set the selected model set, making a copy of the set array into the models array
 case "$model_set" in
@@ -303,11 +312,13 @@ case "$model_set" in
    2) models=( "${organelle_genemome_models[@]}" ) ;;
    3) models=( "${nuclear_and_organellar[@]}" );;
    4) models=( "${viral_genome_models[@]}" );;
-   5) models=( "${all_models[@]}" );;
-   6) models=( "${test_models[@]}" );;
+   5) models=( "${nuclear_and_viral_models[@]}" );;
+   6) models=( "${all_models[@]}" );;
+   7) models=( "${test_models[@]}" );;
    *) echo "unknown model set!" && print_help ;;
 esac
    
+
 # 3. Compute a fast NJ tree estimating distances with the LG matrix 
 print_start_time 
 echo "1. Computing NJ-LG tree for input file $infile with $no_seq sequences"
@@ -325,15 +336,14 @@ fi
 #     and fill the model_scores and model_cmds hashes
 echo "2. running in a for loop to combine all base models in model_set ${model_set}=>${model_options[$model_set]}, 
      with (or not) +G and or +f, and compute the model lnL, after optimizing branch lengths and rates"
+echo '--------------------------------------------------------------------------------'
 for mat in "${models[@]}"; do
      print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -u ${infile}_LG-NJ.nwk -c 1 -v 0 -o lr"
      phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -c 1 -o lr &> /dev/null 
-     #((mpi_OK < 1)) && phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -c 1 -o lr &> /dev/null 
-     #((mpi_OK > 0)) && mprirun -n "$num_threads" phyml-mpi -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -c 1 -o lr &> /dev/null 
      extra_params=0 
      total_params=$((no_branches + extra_params))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-     score=$(awk '/Log-/{print $3}' "${infile}"_phyml_stats.txt)
+     score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
      AICi=$(compute_AICi "$score" "$no_branches" "$extra_params")
      AICc=$(compute_AICc "$score" "$no_branches" "$extra_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$no_branches" "$extra_params" "$no_sites")
@@ -343,12 +353,10 @@ for mat in "${models[@]}"; do
 
      print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -c 4 -a e -u ${infile}_LG-NJ.nwk -o lr"
      phyml -i "$infile" -d aa -m "${mat}" -c 4 -a e -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null
-     #((mpi_OK < 1)) && phyml -i "$infile" -d aa -m "${mat}" -c 4 -a e -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
-     #[[ $mpi_OK ]] && mprirun -n "$num_threads" phyml-mpi -i "$infile" -d aa -m "${mat}" -c 4 -a e -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
      extra_params=1 
      total_params=$((no_branches + extra_params))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-     score=$(awk '/Log-/{print $3}' "${infile}"_phyml_stats.txt)
+     score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
      AICi=$(compute_AICi "$score" "$no_branches" "$extra_params")
      AICc=$(compute_AICc "$score" "$no_branches" "$extra_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$no_branches" "$extra_params" "$no_sites")
@@ -358,12 +366,10 @@ for mat in "${models[@]}"; do
 
      print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -f e -c 1 -u ${infile}_LG-NJ.nwk -o lr"
      phyml -i "$infile" -d aa -m "$mat" -f e -c 1 -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null
-     #((mpi_OK < 1)) && phyml -i "$infile" -d aa -m "$mat" -f e -c 1 -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
-     #[[ $mpi_OK ]] && mprirun -n "$num_threads" phyml-mpi -i "$infile" -d aa -m "$mat" -f e -c 1 -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null     
      extra_params=19 #19 from AA frequencies
      total_params=$((no_branches + extra_params))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-     score=$(awk '/Log-/{print $3}' "${infile}"_phyml_stats.txt)
+     score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
      AICi=$(compute_AICi "$score" "$no_branches" "$extra_params")
      AICc=$(compute_AICc "$score" "$no_branches" "$extra_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$no_branches" "$extra_params" "$no_sites")
@@ -373,12 +379,10 @@ for mat in "${models[@]}"; do
 
      print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -u ${infile}_LG-NJ.nwk -f e -a e -o lr"
      phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -f e -a e -c 4 -o lr &> /dev/null
-     #((mpi_OK < 1)) && phyml -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -f e -a e -c 4 -o lr &> /dev/null	  
-     #[[ $mpi_OK ]] && mprirun -n "$num_threads" phyml-mpi -i "$infile" -d aa -m "$mat" -u "${infile}"_LG-NJ.nwk -f e -a e -c 4 -o lr &> /dev/null	  
      extra_params=20 #19 from AA frequencies + 1 gamma 
      total_params=$((no_branches + extra_params))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-     score=$(awk '/Log-/{print $3}' "${infile}"_phyml_stats.txt)
+     score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
      AICi=$(compute_AICi "$score" "$no_branches" "$extra_params")
      AICc=$(compute_AICc "$score" "$no_branches" "$extra_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$no_branches" "$extra_params" "$no_sites")
@@ -387,13 +391,13 @@ for mat in "${models[@]}"; do
      model_cmds["${mat}+f+G"]="$mat -f e -c 4 -a e"
 done
 
-echo '--------------------------------------------------------------------------------------------------'
-echo
+echo ''
 
 # 5. print a sorted summary table of model fits from the model_scores hash
 print_start_time
 
 echo "# writing ${infile}_sorted_model_set_${model_set}_fits.tsv, sorted by BIC"
+echo '--------------------------------------------------------------------------------------------------'
 for m in "${!model_scores[@]}"; do
     echo -e "$m\t${model_scores[$m]}"
 done | sort -nk7 > "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
@@ -453,49 +457,67 @@ fi
 # cleanup: remove phyml output files from the last pass through the loop
 [[ -s "${infile}"_phyml_stats.txt ]] && rm "${infile}"_phyml_stats.txt
 [[ -s "${infile}"_phyml_tree.txt ]] && rm "${infile}"_phyml_tree.txt
-
-
-# 7. compute ML tree under best-fitting model
 echo '--------------------------------------------------------------------------------------------------'
 echo "* NOTE 1: when sites/K < 40, the AICc is recommended over AIC."
 echo "* NOTE 2: Best model selected by BIC, because AIC is biased in favour of parameter-rich models."
-echo
+echo ''
+
+
+# 7. compute ML tree under best-fitting model
+echo '=================================================================================================='
+
 echo "... will estimate the ML tree under best-fitting model $best_model selected by BIC"
 
 print_start_time
 
-echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s BEST"
+if ((n_starts == 1)); then
+    echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s BEST"
 
-# note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail
-phyml -i "$infile" -d aa -m "${model_cmds[$best_model]}" -o tlr -s BEST &> /dev/null
-#((mpi_OK < 1)) && phyml -i "$infile" -d aa -m "${model_cmds[$best_model]}" -o tlr -s BEST &> /dev/null
-#((mpi_OK > 0)) && mpirun -n "$num_threads" phyml -i "$infile" -d aa -m "${model_cmds[$best_model]}" -o tlr -s BEST &> /dev/null
+    # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail
+    phyml -i "$infile" -d aa -m ${model_cmds[$best_model]} -o tlr -s BEST &> /dev/null
+else
+    echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s SPR --rand_start --n_rand_starts $n_starts"
+    
+    # note that on tepeu (Bash 4.4), the quotes around "${model_cmds[$best_model]}" make the comand fail
+    phyml -i "$infile" -d aa -m ${model_cmds[$best_model]} -o tlr -s SPR --rand_start --n_rand_starts "$n_starts" &> /dev/null
+
+fi
 
 # 7.1 Check and rename final phyml output files
 if [[ -s "${infile}"_phyml_stats.txt ]]; then
-     mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_phyml_stats.txt
-     echo "# Your results:"
-     echo "  - ${infile}_${best_model}_phyml_stats.txt"
+     
+     if ((n_starts == 1)); then
+         mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_BESTmoves_phyml_stats.txt
+         echo "# Your results:"
+         echo "  - ${infile}_${best_model}_BESTmoves_phyml_stats.txt"
+     else
+         mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_"${n_starts}"rdmStarts_SPRmoves_phyml_stats.txt
+         echo "# Your results:"
+         echo "  - ${infile}_${best_model}_${n_starts}rdmStarts_SPRmoves_phyml_stats.txt"
+     fi
 else
      echo "FATAL ERROR: ${infile}_phyml_stats.txt was not generated!"
 fi
 
 if [[ -s "${infile}"_phyml_tree.txt ]]; then
-     mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_phyml_tree.txt
-     echo "  - ${infile}_${best_model}_phyml_tree.txt"
+     if ((n_starts == 1)); then
+         mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_BESTmoves_phyml_tree.txt
+         echo "  - ${infile}_${best_model}_BESTmoves_phyml_tree.txt"
+     else
+         mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_"${n_starts}"rdmStarts_SPRmoves_phyml_tree.txt
+         echo "  - ${infile}_${best_model}_${n_starts}rdmStarts_SPRmoves_phyml_tree.txt"
+     fi
 else
      echo "FATAL ERROR: ${infile}_phyml_tree.txt was not generated!"
 fi
+
+if ((n_starts > 1)) && [[ -s "${infile}"_phyml_rand_trees.txt ]]; then
+    mv "${infile}"_phyml_rand_trees.txt "${infile}"_phyml_"${n_starts}"rand_trees.txt
+    echo "  - ${infile}_phyml_${n_starts}rand_trees.txt"
+fi 
+
 echo '--------------------------------------------------------------------------------------------------'
 
-echo
-
-elapsed=$(( SECONDS - start_time ))
-
-eval "echo Elapsed time: $(date -ud "@$elapsed" +'$((%s/3600/24)) days, %H hr, %M min, %S sec')"
-
-echo 'Done!'
-
-echo
+echo ''
 
 exit 0

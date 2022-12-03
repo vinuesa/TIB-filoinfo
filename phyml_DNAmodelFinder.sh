@@ -25,14 +25,15 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='0.6_2022-12-01' 
+version='0.7_2022-12-01' 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
 		  #    by setting the -n attribute
 		  #    see https://stackoverflow.com/questions/16461656/how-to-pass-array-as-an-argument-to-a-function-in-bash
 
-n_starts=1
+n_starts=1         # seed trees
+delta_BIC_cutoff=3 # to set compositional_heterogeneity, transitional_heterogeneity and pInv flags 
 
 # declare array and hash variables
 declare -a models             # array holding the base models (empirical substitution matrices to be evaluated)
@@ -41,7 +42,7 @@ declare -A model_scores       # hash holding the model lnL scores and AICi value
 declare -A model_options      # hash mapping option => model_set
 declare -A model_free_params  # hash mapping base models with their free parameters
 
-# standard_models
+# standard_models # 7
 model_free_params['JC69']=0
 model_free_params['K80']=1
 model_free_params['F81']=3
@@ -50,7 +51,7 @@ model_free_params['HKY85']=4
 model_free_params['TN93']=5
 model_free_params['GTR']=8
 
-### extended_models_ef - TVM*
+### extended_models_ef - TVM* # 10
 model_free_params['012314ef']=4  # TVMef
 model_free_params['012310ef']=3  # TVM1ef 
 model_free_params['010213ef']=3  # TVM2ef
@@ -60,8 +61,9 @@ model_free_params['010012ef']=2  # TVM5ef
 model_free_params['012012ef']=2  # TVM6ef 
 model_free_params['010212ef']=2  # TVM7ef 
 model_free_params['012313ef']=3  # TVM8ef 
+model_free_params['010011ef']=1  # TVM9ef
 
-### extended_models_ef - TNef|TIM*|SYM
+### extended_models_ef - TNef|TIM*|SYM # 14
 model_free_params['010020ef']=2  # TNef
 model_free_params['012230ef']=3  # TIMef
 model_free_params['010023ef']=3  # TIM1ef
@@ -72,9 +74,12 @@ model_free_params['012342ef']=4  # TIM5ef
 model_free_params['012343ef']=4  # TIM6ef
 model_free_params['012340ef']=4  # TIM7ef
 model_free_params['012345ef']=5  # SYMef
+model_free_params['010021ef']=2  # TIM8ef
+model_free_params['010022ef']=2  # TIM9ef
+model_free_params['011123ef']=3  # TIM10ef
+model_free_params['012223ef']=3  # TIM11ef
 
-
-## extended_models_uf TVM*
+## extended_models_uf TVM* # 11
 model_free_params['012210']=5  # K81uf 
 model_free_params['012314']=7  # TVM
 model_free_params['012310']=6  # TVM1
@@ -85,8 +90,9 @@ model_free_params['010012']=5  # TVM5
 model_free_params['012012']=5  # TVM6 
 model_free_params['010212']=5  # TVM7 
 model_free_params['012313']=6  # TVM8 
+model_free_params['010011']=4  # TVM9
 
-## extended_models_uf TIM*
+## extended_models_uf TIM* # 12
 model_free_params['012230']=6  # TIM
 model_free_params['010023']=6  # TIM1
 model_free_params['012234']=7  # TIM2
@@ -95,15 +101,19 @@ model_free_params['012332']=6  # TIM4
 model_free_params['012342']=7  # TIM5
 model_free_params['012343']=7  # TIM6
 model_free_params['012340']=7  # TIM7
+model_free_params['010021']=5  # TIM8
+model_free_params['010022']=5  # TIM9
+model_free_params['011123']=6  # TIM10
+model_free_params['012223']=6  # TIM11
 
 # array of models to evaluate
 standard_models=(JC69 K80 F81 HKY85 TN93 GTR)
 
-#                    TNef   TIMef  TVMef TVM1ef TVM2ef TVM3ef SYMef  TVM4ef TVM5ef TVM6ef TVM7ef TVM8ef TIM1ef TIM2ef TIM3ef TIM4ef TIM5ef TIM6ef TIM7ef
-extended_models_ef=(010020 012230 012314 012310 010213 012213 012345 012013 010012 012012 010212 012313 010023 012234 012232 012332 012342 012343 012340)
+#                    TNef   TIMef  TVMef TVM1ef TVM2ef TVM3ef SYMef  TVM4ef TVM5ef TVM6ef TVM7ef TVM8ef TVM9ef TIM1ef TIM2ef TIM3ef TIM4ef TIM5ef TIM6ef TIM7ef TIM8ef TIM9ef TIM10ef TIM11ef
+extended_models_ef=(010020 012230 012314 012310 010213 012213 012345 012013 010012 012012 010212 012313 010011 010023 012234 012232 012332 012342 012343 012340 010021 010022 011123 012223) # 24
 
-#                   K81uf   TIM    TVM   TVM1   TVM2   TVM3   TVM4   TVM5   TVM6   TVM7   TVM8   TIM1   TIM2   TIM3   TIM4  TIM5    TIM6   TIM7 
-extended_models_uf=(012210 012230 012314 012310 010213 012213 012013 010012 012012 010212 012313 010023 012234 012232 012332 012342 012343 012340)   
+#                   K81uf   TIM    TVM   TVM1   TVM2   TVM3   TVM4   TVM5   TVM6   TVM7   TVM8   TVM9   TIM1   TIM2   TIM3   TIM4  TIM5    TIM6   TIM7   TIM8   TIM9   TIM10  TIM11
+extended_models_uf=(012210 012230 012314 012310 010213 012213 012013 010012 012012 010212 012313 010011 010023 012234 012232 012332 012342 012343 012340 010021 010022 011123 012223) # 23
                                                        
 test_models=(HKY85 GTR)
 
@@ -126,19 +136,19 @@ function check_dependencies()
     
     for p in "${optional_binaries[@]}"
     do
-          if type -P "$p" >/dev/null
-	  then
-	      progs=("${optional_binaries[@]}")
-	  else
-	      progs=()
-	  fi
+        if type -P "$p" >/dev/null
+	then
+	    progs=("${optional_binaries[@]}")
+	else
+	    progs=()
+	fi
     done
     
     progs+=("${required_binaries[@]}")
     
     for programname in "${progs[@]}"
     do
-       if ! type -P "$programname"; then  # NOTE: will print paths of binaries to STDOUT (no >/dev/null)
+       if ! type -P "$programname"; then  # print paths of binaries to STDOUT
           echo
           echo "$# ERROR: $programname not in place!"
           echo "  ... you will need to install \"$programname\" first, or include it in \$PATH"
@@ -273,7 +283,7 @@ function check_compositional_heterogeneity()
     JC_BICi=$1
     F81_BICi=$2
     
-    if [[ $(echo "$JC_BICi - $F81_BICi" | bc -l | cut -d. -f1) -gt 2 ]]; then 
+    if [[ $(echo "$JC_BICi - $F81_BICi" | bc -l | cut -d. -f1) -gt "$delta_BIC_cutoff" ]]; then 
         uf_models_flag=1
     else
         uf_models_flag=0
@@ -291,7 +301,7 @@ function check_transitional_heterogeneity()
     HKY85_BICi=$1
     TN93_BICi=$2
     
-    if [[ $(echo "$HKY85_BICi - $TN93_BICi" | bc -l | cut -d. -f1) -gt 2 ]]; then 
+    if [[ $(echo "$HKY85_BICi - $TN93_BICi" | bc -l | cut -d. -f1) -gt "$delta_BIC_cutoff" ]]; then 
         ti_models_flag=1
     else
         ti_models_flag=0
@@ -310,13 +320,38 @@ function check_pInv()
     HKY85I_BICi=$1
     HKY85IG_BICi=$2
     
-    if [[ $(echo "$HKY85I_BICi - $HKY85IG_BICi" | bc -l | cut -d. -f1) -gt 2 ]]; then 
+    if [[ $(echo "$HKY85I_BICi - $HKY85IG_BICi" | bc -l | cut -d. -f1) -gt "$delta_BIC_cutoff" ]]; then 
         pInv_flag=1
     else
         pInv_flag=0
     fi
 
     echo "$pInv_flag"
+}
+#-----------------------------------------------------------------------------------------
+
+function print_model_details()
+{
+   cat <<EoH
+
+1 -> standard models (JC69 K80 F81 HKY85 TN93 GTR)
+
+     			      TNef     TIMef	TVMef	 TVM1ef   TVM2ef   TVM3ef   SYMef    TVM4ef   TVM5ef   TVM6ef
+2 -> 1 + extended_ef_models: (010020ef 012230ef 012314ef 123421ef 121324ef 123324ef 012345ef 012013ef 010012ef 012012ef 
+     			     TVM7ef   TVM8ef   TIM1ef	TIM2ef   TIM3ef   TIM4ef TIM5ef TIM6ef TIM7ef
+     			     010212ef 012313ef 010023ef 012234ef 012232ef 012332 012342 012343 012340)
+       OR  
+			      K81uf  TIM    TVM    TVM1   TVM2   TVM3	TVM4   TVM5   TVM6   TVM7   TVM8  
+     1 + extended_uf_models: (012210 012230 012314 012310 010213 012213 012013 010012 012012 010212 012313
+     			      TIM1   TIM2   TIM3   TIM4  TIM5	 TIM6	TIM7
+     			      010023 012234 012232 012332 012342 012343 012340)  
+			      
+			      NEEDS TO BE COMPLETED 
+
+EoH
+
+  exit 0
+
 }
 #-----------------------------------------------------------------------------------------
 
@@ -333,20 +368,12 @@ $progname v${version} requires two arguments provided on the command line, the t
 $progname <string [input phylip file (aligned DNA sequences)> <int [model sets:1-3]> <int [no_rdm_starts; default:$n_starts]>
  
 # model sets to choose from: 
-1 -> (JC69 K80 F81 HKY85 TN93 GTR)
+1 -> standard models (JC69 K80 F81 HKY85 TN93 GTR)
 
-     			      TNef     TIMef	TVMef	 TVM1ef   TVM2ef   TVM3ef   SYMef    TVM4ef   TVM5ef   TVM6ef
-2 -> 1 + extended_ef_models: (010020ef 012230ef 012314ef 123421ef 121324ef 123324ef 012345ef 012013ef 010012ef 012012ef 
-     			     TVM7ef   TVM8ef   TIM1ef	TIM2ef   TIM3ef   TIM4ef TIM5ef TIM6ef TIM7ef
-     			     010212ef 012313ef 010023ef 012234ef 012232ef 012332 012342 012343 012340)
-       OR  
-			      K81uf  TIM    TVM    TVM1   TVM2   TVM3	TVM4   TVM5   TVM6   TVM7   TVM8  
-     1 + extended_uf_models: (012210 012230 012314 012310 010213 012213 012013 010012 012012 010212 012313
-     			      TIM1   TIM2   TIM3   TIM4  TIM5	 TIM6	TIM7
-     			      010023 012234 012232 012332 012342 012343 012340)   
-
-     $progname automatically chooses the proper extended set (ef|uf) to evaluate, 
-     	   based on delta_BIC evaluation of compositional bias (JC69 vs F81)
+2 -> standard + 24 extended_ef_models OR  standard + 23 extended_uf_models 
+     			     
+NOTE: $progname automatically chooses the proper extended set (ef|uf) to evaluate, 
+        based on delta_BIC evaluation of compositional bias (JC69 vs F81)
  
 3 -> minimal test set (K80 F81 HKY85 GTR)
 
@@ -446,7 +473,7 @@ awk -v bv="$bash_vers" -v mb="$min_bash_vers" \
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
 echo "# workding directory: $wkd"
 check_dependencies
-echo "# infile:$infile; model_set:$model_set => ${model_options[$model_set]}; seed trees: $n_starts"
+echo "# infile:$infile; model_set:$model_set => ${model_options[$model_set]}; seed trees: $n_starts; delta_BIC_cutoff=$delta_BIC_cutoff" 
 echo "========================================================================================="
 echo ''
 
@@ -640,7 +667,7 @@ if ((model_set == 2)); then
    if ((compositional_heterogeneity == 1)); then
    	echo '# will evaluate models with unequal frequencies'
 	models=( "${extended_models_uf[@]}" )
-        freq_cmd="-f e"
+        freq_cmd="-f m"
    else
    	echo '# will evaluate models with equal frequencies'
    	models=( "${extended_models_ef[@]}" )	
@@ -745,6 +772,7 @@ done | sort -nk7 > "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
 declare -a BIC_a
 declare -a BIC_deltas_a
 declare -a BICw_a
+declare -a BICcumW_a
 BIC_a=( $(awk '{print $7}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv) )
 min_BIC="${BIC_a[0]}"
 
@@ -764,18 +792,25 @@ for i in "${BIC_deltas_a[@]}"; do
 done
 #echo BICw_sums:$BICw_sums
 
-# 7.3 fill the BICw_a array
+# 7.3 fill the BICw_a and BICcumW_a arrays
 BICw_a=()
+BICcumW_a=()
+BICcumW=0
 for i in "${BIC_deltas_a[@]}"; do
    BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }' 2> /dev/null)   
    BICw=$(echo "$BICw_numerator / $BICw_sums" | bc -l)
    BICw_a+=( $(printf "%.2f" "$BICw") )
+   BICcumW=$(echo "$BICcumW + $BICw" | bc)
+   BICcumW_a+=( $(printf "%.2f" "$BICcumW") )
 done
 
 # 7.4 paste the BIC_deltas_a & BICw_a values as a new column to "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
 paste "${infile}"_sorted_model_set_"${model_set}"_fits.tsv <(for i in "${BIC_deltas_a[@]}"; do echo "$i"; done) \
-                                                           <(for i in "${BICw_a[@]}"; do echo "$i"; done) > t
+                                                           <(for i in "${BICw_a[@]}"; do echo "$i"; done) \
+							   <(for i in "${BICcumW_a[@]}"; do echo "$i"; done) > t
+							   
 [[ -s t ]] && mv t "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
+
 
 # 7.5 Display  the final "${infile}"_sorted_model_set_"${model_set}"_fits.tsv and extract the best model name
 if [[ -s "${infile}"_sorted_model_set_"${model_set}"_fits.tsv ]]; then
@@ -784,8 +819,8 @@ if [[ -s "${infile}"_sorted_model_set_"${model_set}"_fits.tsv ]]; then
     [[ -z "$best_model" ]] && echo "FATAL ERROR: unbound \$best_model at $LINENO" && exit 1
 
     # print table with header to STDOUT and save to file
-    awk 'BEGIN{print "model\tK\tsites/K\tlnL\tAIC\tAICc\tBIC\tdeltaBIC\tBICw"}{print}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv | column -t
-    awk 'BEGIN{print "model\tK\tsites/K\tlnL\tAIC\tAICc\tBIC\tdeltaBIC\tBICw"}{print}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv > t
+    awk 'BEGIN{print "model\tK\tsites/K\tlnL\tAIC\tAICc\tBIC\tdeltaBIC\tBICw\tBICcumW"}{print}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv | column -t
+    awk 'BEGIN{print "model\tK\tsites/K\tlnL\tAIC\tAICc\tBIC\tdeltaBIC\tBICw\tBICcumW"}{print}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv > t
     mv t "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
 else
     echo "ERROR: could not write ${infile}_sorted_model_set_${model_set}_fits.tsv"
@@ -800,8 +835,8 @@ fi
 # 8. compute ML tree under best-fitting model
 #--------------------------------------------
 echo '--------------------------------------------------------------------------------------------------'
-echo "* NOTE 1: when sites/K < 40, the AICc is recommended over AIC."
-echo "* NOTE 2: Best model selected by BIC, because AIC is biased in favour of parameter-rich models."
+echo "* NOTE 1: when sites/K < 40, the AICc is recommended over AIC"
+echo "* NOTE 2: The best model is selected by BIC, because AIC is biased, favoring parameter-rich models"
 echo ''
 echo '=================================================================================================='
 echo '#  Will estimate the ML tree under best-fitting model $best_model selected by BIC'

@@ -407,6 +407,8 @@ done | sort -nk7 > "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
 declare -a BIC_a
 declare -a BIC_deltas_a
 declare -a BICw_a
+declare -a BICcumW_a
+
 BIC_a=( $(awk '{print $7}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv) )
 min_BIC="${BIC_a[0]}"
 
@@ -426,19 +428,24 @@ for i in "${BIC_deltas_a[@]}"; do
 done
 #echo BICw_sums:$BICw_sums
 
-# 6.3 fill the BICw_a array
+# 6.3 fill the BICw_a and BICcumW_a arrays
 BICw_a=()
+BICcumW_a=()
+BICcumW=0
 for i in "${BIC_deltas_a[@]}"; do
    BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }' 2> /dev/null)   
    BICw=$(echo "$BICw_numerator / $BICw_sums" | bc -l)
    BICw_a+=( $(printf "%.2f" "$BICw") )
+   BICcumW=$(echo "$BICcumW + $BICw" | bc)
+   BICcumW_a+=( $(printf "%.2f" "$BICcumW") )
 done
 
 # 6.4 paste the BIC_deltas_a & BICw_a values as a new column to "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
 paste "${infile}"_sorted_model_set_"${model_set}"_fits.tsv <(for i in "${BIC_deltas_a[@]}"; do echo "$i"; done) \
-                                                           <(for i in "${BICw_a[@]}"; do echo "$i"; done) > t
+                                                           <(for i in "${BICw_a[@]}"; do echo "$i"; done) \
+							   <(for i in "${BICcumW_a[@]}"; do echo "$i"; done) > t
+							   
 [[ -s t ]] && mv t "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
-
 
 # 6.5 Display  the final "${infile}"_sorted_model_set_"${model_set}"_fits.tsv and extract the best model name
 if [[ -s "${infile}"_sorted_model_set_"${model_set}"_fits.tsv ]]; then
@@ -447,8 +454,8 @@ if [[ -s "${infile}"_sorted_model_set_"${model_set}"_fits.tsv ]]; then
     [[ -z "$best_model" ]] && echo "FATAL ERROR: unbound \$best_model at $LINENO" && exit 1
 
     # print table with header to STDOUT and save to file
-    awk 'BEGIN{print "model\tK\tsites/K\tlnL\tAIC\tAICc\tBIC\tdeltaBIC\tBICw"}{print}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv | column -t
-    awk 'BEGIN{print "model\tK\tsites/K\tlnL\tAIC\tAICc\tBIC\tdeltaBIC\tBICw"}{print}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv > t
+    awk 'BEGIN{print "model\tK\tsites/K\tlnL\tAIC\tAICc\tBIC\tdeltaBIC\tBICw\tBICcumW"}{print}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv | column -t
+    awk 'BEGIN{print "model\tK\tsites/K\tlnL\tAIC\tAICc\tBIC\tdeltaBIC\tBICw\tBICcumW"}{print}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv > t
     mv t "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
 else
     echo "ERROR: could not write ${infile}_sorted_model_set_${model_set}_fits.tsv"
@@ -459,7 +466,7 @@ fi
 [[ -s "${infile}"_phyml_tree.txt ]] && rm "${infile}"_phyml_tree.txt
 echo '--------------------------------------------------------------------------------------------------'
 echo "* NOTE 1: when sites/K < 40, the AICc is recommended over AIC."
-echo "* NOTE 2: Best model selected by BIC, because AIC is biased in favour of parameter-rich models."
+echo "* NOTE 2: The best model is selected by BIC, because AIC is biased, favoring parameter-rich models."
 echo ''
 
 

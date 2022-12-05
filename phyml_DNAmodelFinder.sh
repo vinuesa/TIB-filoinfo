@@ -25,7 +25,7 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='0.7_2022-12-01' 
+version='0.8_2022-12-04' 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
@@ -33,7 +33,7 @@ min_bash_vers=4.4 # required to write modern bash idioms:
 		  #    see https://stackoverflow.com/questions/16461656/how-to-pass-array-as-an-argument-to-a-function-in-bash
 
 n_starts=1         # seed trees
-delta_BIC_cutoff=3 # to set compositional_heterogeneity, transitional_heterogeneity and pInv flags 
+delta_BIC_cutoff=2 # to set compositional_heterogeneity, transitional_heterogeneity and pInv flags 
 
 # declare array and hash variables
 declare -a models             # array holding the base models (empirical substitution matrices to be evaluated)
@@ -42,16 +42,42 @@ declare -A model_scores       # hash holding the model lnL scores and AICi value
 declare -A model_options      # hash mapping option => model_set
 declare -A model_free_params  # hash mapping base models with their free parameters
 
-# standard_models # 7
+declare -a TIMef TVMef TIMuf TVMuf # array holding the model codes
+
+# To be implemented
+#named_model_codes[JC]=000000
+#named_model_codes[F81]=000000
+#named_model_codes[K80]=010010
+#named_model_codes[HKY]=010010
+#named_model_codes[TN]=010020
+#named_model_codes[TNe]=010020
+#named_model_codes[K81]=012210  # TPM1
+#named_model_codes[K81u]=012210 # TPM1
+#named_model_codes[TPM2]=010212
+#named_model_codes[TPM2u]=010212
+#named_model_codes[TPM3]=012012
+#named_model_codes[TPM3u]=012012
+#named_model_codes[TIM]=012230
+#named_model_codes[TIMe]=012230
+#named_model_codes[TIM2]=010232
+#named_model_codes[TIM2e]=010232
+#named_model_codes[TIM3]=012032
+#named_model_codes[TIM3e]=012032
+#named_model_codes[TVM]=012314
+#named_model_codes[TVMe]=012314
+#named_model_codes[SYM]=012345
+#named_model_codes[GTR]=012345
+
+# standard_models # 6
 model_free_params['JC69']=0
 model_free_params['K80']=1
 model_free_params['F81']=3
-model_free_params['F84']=4
 model_free_params['HKY85']=4
 model_free_params['TN93']=5
 model_free_params['GTR']=8
 
-### extended_models_ef - TVM* # 10
+### extended_models_ef - TVM* # 15
+model_free_params['012210ef']=2  # K81
 model_free_params['012314ef']=4  # TVMef
 model_free_params['012310ef']=3  # TVM1ef 
 model_free_params['010213ef']=3  # TVM2ef
@@ -60,26 +86,85 @@ model_free_params['012013ef']=3  # TVM4ef
 model_free_params['010012ef']=2  # TVM5ef 
 model_free_params['012012ef']=2  # TVM6ef 
 model_free_params['010212ef']=2  # TVM7ef 
-model_free_params['012313ef']=3  # TVM8ef 
-model_free_params['010011ef']=1  # TVM9ef
+model_free_params['010210ef']=2  # TVM8ef 
+model_free_params['012313ef']=3  # TVM9ef 
+model_free_params['010011ef']=1  # TVM10ef
+model_free_params['012212ef']=2  # TVM11ef
+model_free_params['011010ef']=1  # TVM12ef
+model_free_params['001101ef']=1  # TVM13ef
 
-### extended_models_ef - TNef|TIM*|SYM # 14
+TVMef[0]=012210
+TVMef[1]=012314
+TVMef[2]=012310
+TVMef[3]=010213
+TVMef[4]=012213
+TVMef[5]=012013
+TVMef[6]=010012
+TVMef[7]=012012
+TVMef[8]=010212
+TVMef[9]=010210
+TVMef[10]=012313
+TVMef[11]=010011
+TVMef[12]=012212
+TVMef[13]=011010
+TVMef[14]=001101
+
+### extended_models_ef - TNef|TIM*|SYM # 26
 model_free_params['010020ef']=2  # TNef
 model_free_params['012230ef']=3  # TIMef
+model_free_params['012345ef']=5  # SYMef
 model_free_params['010023ef']=3  # TIM1ef
-model_free_params['012234ef']=4  # TIM2ef
+model_free_params['010232ef']=4  # TIM2ef
 model_free_params['012232ef']=3  # TIM3ef
 model_free_params['012332ef']=3  # TIM4ef
 model_free_params['012342ef']=4  # TIM5ef
 model_free_params['012343ef']=4  # TIM6ef
 model_free_params['012340ef']=4  # TIM7ef
-model_free_params['012345ef']=5  # SYMef
 model_free_params['010021ef']=2  # TIM8ef
 model_free_params['010022ef']=2  # TIM9ef
 model_free_params['011123ef']=3  # TIM10ef
 model_free_params['012223ef']=3  # TIM11ef
+model_free_params['010120ef']=2  # TIM12ef
+model_free_params['000120ef']=2  # TIM13ef
+model_free_params['000121ef']=2  # TIM14ef
+model_free_params['001021ef']=2  # TIM15ef
+model_free_params['012234ef']=4  # TIM16ef
+model_free_params['010231ef']=3  # TIM17ef
+model_free_params['011230ef']=3  # TIM18ef
+model_free_params['011020ef']=2  # TIM19ef
+model_free_params['012130ef']=3  # TIM20ef
+model_free_params['010121ef']=2  # TIM21ef
+model_free_params['010122ef']=2  # TIM22ef
+model_free_params['010123ef']=3  # TIM23ef
 
-## extended_models_uf TVM* # 11
+TIMef[0]=010020
+TIMef[1]=012230
+TIMef[2]=012345
+TIMef[3]=010023
+TIMef[4]=010232
+TIMef[5]=012232
+TIMef[6]=012332
+TIMef[7]=012342
+TIMef[8]=012343
+TIMef[9]=012340
+TIMef[10]=010021
+TIMef[11]=010022
+TIMef[12]=011123
+TIMef[13]=012223
+TIMef[14]=010120
+TIMef[15]=000120
+TIMef[16]=000121
+TIMef[17]=001021
+TIMef[18]=012234
+TIMef[19]=010231
+TIMef[20]=011230
+TIMef[21]=011020
+TIMef[22]=012130
+TIMef[23]=010121
+TIMef[24]=010122
+TIMef[25]=010123
+
+## extended_models_uf TVM* # 16
 model_free_params['012210']=5  # K81uf 
 model_free_params['012314']=7  # TVM
 model_free_params['012310']=6  # TVM1
@@ -91,11 +176,31 @@ model_free_params['012012']=5  # TVM6
 model_free_params['010212']=5  # TVM7 
 model_free_params['012313']=6  # TVM8 
 model_free_params['010011']=4  # TVM9
+model_free_params['012212']=5  # TVM10 
+model_free_params['010210']=5  # TVM11 
+model_free_params['011010']=4  # TVM12
+model_free_params['001101']=4  # TVM13 
 
-## extended_models_uf TIM* # 12
+TVMuf[0]=012210
+TVMuf[1]=012314
+TVMuf[2]=012310
+TVMuf[3]=010213
+TVMuf[4]=012213
+TVMuf[5]=012013
+TVMuf[6]=010012
+TVMuf[7]=012012
+TVMuf[8]=010212
+TVMuf[9]=012313
+TVMuf[10]=010011
+TVMuf[11]=012212
+TVMuf[12]=010210
+TVMuf[13]=011010
+TVMuf[14]=001101
+
+## extended_models_uf TIM* # 25
 model_free_params['012230']=6  # TIM
 model_free_params['010023']=6  # TIM1
-model_free_params['012234']=7  # TIM2
+model_free_params['010232']=7  # TIM2
 model_free_params['012232']=6  # TIM3
 model_free_params['012332']=6  # TIM4
 model_free_params['012342']=7  # TIM5
@@ -103,19 +208,57 @@ model_free_params['012343']=7  # TIM6
 model_free_params['012340']=7  # TIM7
 model_free_params['010021']=5  # TIM8
 model_free_params['010022']=5  # TIM9
-model_free_params['011123']=6  # TIM10
-model_free_params['012223']=6  # TIM11
+model_free_params['010120']=5  # TIM10
+model_free_params['011123']=6  # TIM11
+model_free_params['012223']=6  # TIM12
+model_free_params['012222']=5  # TIM13 
+model_free_params['000120']=5  # TIM14
+model_free_params['000121']=5  # TIM15
+model_free_params['001021']=5  # TIM16
+model_free_params['012234']=7  # TIM17
+model_free_params['010231']=6  # TIM18 
+model_free_params['011020']=5  # TIM19
+model_free_params['012130']=6  # TIM20
+model_free_params['010121']=5  # TIM21
+model_free_params['010122']=5  # TIM22
+model_free_params['010123']=6  # TIM23
+model_free_params['012345']=8  # GTR
+
+TIMuf[0]=012230
+TIMuf[1]=010023
+TIMuf[2]=010232
+TIMuf[3]=012232
+TIMuf[4]=012332
+TIMuf[5]=012342
+TIMuf[6]=012343
+TIMuf[7]=012340
+TIMuf[8]=010021
+TIMuf[9]=010022
+TIMuf[10]=010120
+TIMuf[11]=011123
+TIMuf[12]=012223
+TIMuf[13]=012222
+TIMuf[14]=000120
+TIMuf[15]=000121
+TIMuf[16]=001021
+TIMuf[17]=012234
+TIMuf[18]=010231
+TIMuf[19]=011020
+TIMuf[20]=012130
+TIMuf[21]=010121
+TIMuf[22]=010122
+TIMuf[23]=010123
+TIMuf[24]=012345
+
 
 # array of models to evaluate
 standard_models=(JC69 K80 F81 HKY85 TN93 GTR)
 
-#                    TNef   TIMef  TVMef TVM1ef TVM2ef TVM3ef SYMef  TVM4ef TVM5ef TVM6ef TVM7ef TVM8ef TVM9ef TIM1ef TIM2ef TIM3ef TIM4ef TIM5ef TIM6ef TIM7ef TIM8ef TIM9ef TIM10ef TIM11ef
-extended_models_ef=(010020 012230 012314 012310 010213 012213 012345 012013 010012 012012 010212 012313 010011 010023 012234 012232 012332 012342 012343 012340 010021 010022 011123 012223) # 24
+extended_models_ef=( "${TIMef[@]}" "${TVMef[@]}" ) # 26
 
-#                   K81uf   TIM    TVM   TVM1   TVM2   TVM3   TVM4   TVM5   TVM6   TVM7   TVM8   TVM9   TIM1   TIM2   TIM3   TIM4  TIM5    TIM6   TIM7   TIM8   TIM9   TIM10  TIM11
-extended_models_uf=(012210 012230 012314 012310 010213 012213 012013 010012 012012 010212 012313 010011 010023 012234 012232 012332 012342 012343 012340 010021 010022 011123 012223) # 23
+extended_models_uf=( "${TIMuf[@]}" "${TVMuf[@]}" ) # 26
                                                        
-test_models=(HKY85 GTR)
+test_models=(JC69 K80 F81 HKY85 TN93)
 
 # hash mapping option => model_set
 model_options['1']='standard_models'
@@ -283,7 +426,8 @@ function check_compositional_heterogeneity()
     JC_BICi=$1
     F81_BICi=$2
     
-    if [[ $(echo "$JC_BICi - $F81_BICi" | bc -l | cut -d. -f1) -gt "$delta_BIC_cutoff" ]]; then 
+    #if [[ $(echo "$JC_BICi - $F81_BICi" | bc -l | cut -d. -f1) -gt "$delta_BIC_cutoff" ]]; then 
+    if [[ "$(echo "if (${JC_BICi} - ${F81_BICi} >= ${delta_BIC_cutoff}) 1" | bc)" -eq 1 ]]; then 
         uf_models_flag=1
     else
         uf_models_flag=0
@@ -301,7 +445,10 @@ function check_transitional_heterogeneity()
     HKY85_BICi=$1
     TN93_BICi=$2
     
-    if [[ $(echo "$HKY85_BICi - $TN93_BICi" | bc -l | cut -d. -f1) -gt "$delta_BIC_cutoff" ]]; then 
+    ti_models_flag=''
+        
+    #if [[ $(echo "if (${HKY85_BICi - $TN93_BICi" | bc | cut -d. -f1) -gt "$delta_BIC_cutoff" ]]; then 
+    if [[ "$(echo "if (${HKY85_BICi} - ${TN93_BICi} >= ${delta_BIC_cutoff}) 1" | bc)" -eq 1 ]]; then 
         ti_models_flag=1
     else
         ti_models_flag=0
@@ -320,7 +467,8 @@ function check_pInv()
     HKY85I_BICi=$1
     HKY85IG_BICi=$2
     
-    if [[ $(echo "$HKY85I_BICi - $HKY85IG_BICi" | bc -l | cut -d. -f1) -gt "$delta_BIC_cutoff" ]]; then 
+    #if [[ $(echo "$HKY85I_BICi - $HKY85IG_BICi" | bc -l | cut -d. -f1) -gt "$delta_BIC_cutoff" ]]; then 
+    if [[ "$(echo "if (${HKY85I_BICi} - ${HKY85IG_BICi} >= ${delta_BIC_cutoff}) 1" | bc)" -eq 1 ]]; then 
         pInv_flag=1
     else
         pInv_flag=0
@@ -336,20 +484,19 @@ function print_model_details()
 
 1 -> standard models (JC69 K80 F81 HKY85 TN93 GTR)
 
-     			      TNef     TIMef	TVMef	 TVM1ef   TVM2ef   TVM3ef   SYMef    TVM4ef   TVM5ef   TVM6ef
-2 -> 1 + extended_ef_models: (010020ef 012230ef 012314ef 123421ef 121324ef 123324ef 012345ef 012013ef 010012ef 012012ef 
-     			     TVM7ef   TVM8ef   TIM1ef	TIM2ef   TIM3ef   TIM4ef TIM5ef TIM6ef TIM7ef
-     			     010212ef 012313ef 010023ef 012234ef 012232ef 012332 012342 012343 012340)
-       OR  
-			      K81uf  TIM    TVM    TVM1   TVM2   TVM3	TVM4   TVM5   TVM6   TVM7   TVM8  
-     1 + extended_uf_models: (012210 012230 012314 012310 010213 012213 012013 010012 012012 010212 012313
-     			      TIM1   TIM2   TIM3   TIM4  TIM5	 TIM6	TIM7
-     			      010023 012234 012232 012332 012342 012343 012340)  
-			      
-			      NEEDS TO BE COMPLETED 
-
+2 -> 1 + extended_ef_models and extended_uf_models
+     the corresponding model subset being automatically selected
 EoH
 
+  echo "# number of models in extended_models_ef = ${#extended_models_ef[@]}"
+  for m in "${!extended_models_ef[@]}"; do
+      echo "$m => ${extended_models_ef[$m]}"
+  done
+  echo '--------------------------'
+  echo "# number of models in extended_models_uf = ${#extended_models_uf[@]}"
+  for m in "${!extended_models_uf[@]}"; do
+      echo "$m => ${extended_models_uf[$m]}"
+  done
   exit 0
 
 }
@@ -365,17 +512,18 @@ if ((bash_ge_5 > 0)); then
 
 $progname v${version} requires two arguments provided on the command line, the third one being optional:
 
-$progname <string [input phylip file (aligned DNA sequences)> <int [model sets:1-3]> <int [no_rdm_starts; default:$n_starts]>
+$progname <string [input phylip of aligned DNA sequences)> <int [model sets:1-3]> <int [no_rdm_starts; default:$n_starts]>
  
 # model sets to choose from: 
 1 -> standard models (JC69 K80 F81 HKY85 TN93 GTR)
 
-2 -> standard + 24 extended_ef_models OR  standard + 23 extended_uf_models 
+2 -> standard + ${#extended_models_ef[@]} extended_ef_models, OR
+     standard + ${#extended_models_uf[@]} extended_uf_models 
      			     
 NOTE: $progname automatically chooses the proper extended set (ef|uf) to evaluate, 
         based on delta_BIC evaluation of compositional bias (JC69 vs F81)
  
-3 -> minimal test set (K80 F81 HKY85 GTR)
+3 -> minimal test set (JC69 F81 HKY85 TN93)
 
 EXAMPLE: $progname primates.phy 2
  
@@ -391,7 +539,7 @@ PROCEDURE:
       and comparisons between KHY85-TN93, to determine if models with two Ti rates should 
       be evaluated
  - pInv is automatically excluded in the extended model set, 
-	if the delta_BICi_HKY+G is =< 2 when compared with the BIC_HKY+G+I
+	if the delta_BICi_HKY+G is =< $delta_BIC_cutoff when compared with the BIC_HKY+G+I
  - The best model is selected by BIC
  - SPR searches can be launched starting from multiple random trees
  - Default single seed tree searches use a BioNJ with BEST moves
@@ -413,8 +561,7 @@ $progname <string [input phylip file (aligned DNA sequences)> <int [model sets:1
    # model sets to choose from: 
    1 -> (JC69 K80 F81 HKY85 TN93 GTR)
    2 -> WILL NOT RUN properly on Bash < v5.0, sorry (see NOTE below) 
-   3 -> minimal test set (K80 F81 HKY85 GTR)
-
+   3 -> minimal test set (JC K80 F81 HKY85 TN93)
 
 AIM:  $progname v${version} will evaluate the fit of the the seleced model set,
 	combined or not with +G and/or +f, computing AICi, BICi, deltaBIC, BICw 
@@ -499,7 +646,7 @@ echo ''
 # 2. set the selected model set, making a copy of the set array into the models array
 case "$model_set" in
    1) models=( "${standard_models[@]}" ) ;;
-   2) models=( "${standard_models[@]}" ) ;; # plus automatic selection of extended_models to evaluate
+   2) models=( "${test_models[@]}" ) ;; # plus automatic selection of extended_models to evaluate
    3) models=( "${test_models[@]}" ) ;;
    *) echo "unknown model set!" && print_help ;;
 esac
@@ -538,43 +685,42 @@ freq_cmd=''
     
 for mat in "${models[@]}"; do
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -u ${infile}_JC-NJ.nwk -c 1 -v 0 -o lr"
-     phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -c 1 -o lr &> /dev/null 
+     phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -c 1 -o lr --leave_duplicates --no_memory_check &> /dev/null 
      extra_params=0 
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-     score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
+     score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
      AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
-     
-     # save the JC_BICi to test for significant compositional heterogeneity (JC vs F81)
-     #  and transitional bias (HKY vs TN93
-     if ((model_set == 2)); then
-         if [[ "$mat" == 'JC69' ]]; then
-	     JC_BICi="$AICi"
-	     echo "JC_BICi: $JC_BICi"
-	 elif [[ "$mat" == 'F81' ]]; then
-	     F81_BICi="$AICi"
-	     echo "F81_BICi: $F81_BICi"
-	 elif [[ "$mat" == 'HKY85' ]]; then
-	     HKY85_BICi="$AICi"
-	     echo "HKY85_BICi: $HKY85_BICi"
-	 elif [[ "$mat" == 'TN93' ]]; then
-	     TN93_BICi="$AICi"
-	     echo "TN93_BICi: $TN93_BICi"
-	 fi
-     fi
-     
      printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
      model_scores["${mat}"]="$model_string"
      model_cmds["${mat}"]="$mat"
 
+     # save the JC_BICi to test for significant compositional heterogeneity (JC vs F81)
+     #  and transitional bias (HKY vs TN93
+     if ((model_set == 2)); then
+         if [[ "$mat" == 'JC69' ]]; then
+	     JC_BICi="$BICi"
+	     echo "JC_BICi: $JC_BICi"
+	 elif [[ "$mat" == 'F81' ]]; then
+	     F81_BICi="$BICi"
+	     echo "F81_BICi: $F81_BICi"
+	 elif [[ "$mat" == 'HKY85' ]]; then
+	     HKY85_BICi="$BICi"
+	     echo "HKY85_BICi: $HKY85_BICi"
+	 elif [[ "$mat" == 'TN93' ]]; then
+	     TN93_BICi="$BICi"
+	     echo "TN93_BICi: $TN93_BICi"
+	 fi
+     fi
+     
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -c 4 -a e -u ${infile}_JC-NJ.nwk -o lr"
-     phyml -i "$infile" -d nt -m "${mat}" -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr &> /dev/null
+     phyml -i "$infile" -d nt -m "${mat}" -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
      extra_params=1 
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-     score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
+     score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
      AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
@@ -591,11 +737,11 @@ for mat in "${models[@]}"; do
      fi
      
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -v e -c 1 -u ${infile}_JC-NJ.nwk -o lr"
-     phyml -i "$infile" -d nt -m "$mat" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr &> /dev/null
+     phyml -i "$infile" -d nt -m "$mat" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
      extra_params=1 # 1 pInv
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-     score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
+     score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
      AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
@@ -604,11 +750,11 @@ for mat in "${models[@]}"; do
      model_cmds["${mat}+I"]="$mat -v e"
           
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -u ${infile}_JC-NJ.nwk -v e -a e -o lr"
-     phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr &> /dev/null
+     phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --leave_duplicates --no_memory_check &> /dev/null
      extra_params=2 #19 from AA frequencies + 1 gamma 
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-     score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
+     score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
      AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
@@ -633,7 +779,6 @@ done
 ##### 5.2 if extended set, then compute and set the compositional_heterogeneity flag 
 #           and loop over corresponding set of extended models
 
-      
 # check_compositional_heterogeneity and set compositional_heterogeneity flag (1|0), accordingly
 if ((model_set == 2)); then
    if [[ -n "$JC_BICi" ]] && [[ -n "$F81_BICi" ]]; then
@@ -659,7 +804,6 @@ if ((model_set == 2)); then
        echo '# ... evaluation and automatic selection of extended model set'
        echo "# setting use_pInv flag to: $use_pInv"
    fi
-      
   
    # fill the models array with the proper ones, 
    #   based on the compositional_heterogeneity flag
@@ -667,11 +811,11 @@ if ((model_set == 2)); then
    if ((compositional_heterogeneity == 1)); then
    	echo '# will evaluate models with unequal frequencies'
 	models=( "${extended_models_uf[@]}" )
-        freq_cmd="-f m"
+        freq_cmd=' -f m '
    else
    	echo '# will evaluate models with equal frequencies'
    	models=( "${extended_models_ef[@]}" )	
-   	freq_cmd="-f 0.25,0.25,0.25,0.25"
+   	freq_cmd=' -f 0.25,0.25,0.25,0.25 '
    fi
 
    echo '--------------------------------------------------------------------------------'
@@ -684,68 +828,72 @@ if ((model_set == 2)); then
    for mat in "${models[@]}"; do
      # skip models with two transition rates if transitional_heterogeneity == 0
      ((transitional_heterogeneity == 0)) \
-       && [[ "$mat" =~ (01[0-6][0-6]2[0-6]|01[0-6][0-6]3[0-6]|01[0-6][0-6]4[0-6]) ]] \
+       && [[ "$mat" =~ (01[0-6][0-6]2[0-6]|01[0-6][0-6]3[0-6]|01[0-6][0-6]4[0-6]|00[0-1][0-6][1-6][1-6]|000[0-6][1-6][0-6]) ]] \
        && echo "skipping TN|TIM|SYM matrix $mat" && continue
      ((transitional_heterogeneity == 1)) \
-       && [[ "$mat" =~ (01[0-6][0-6]1[0-6]) ]] && echo "skipping TVM matrix $mat" && continue
+       && [[ "$mat" =~ (01[0-6][0-6]1[0-6]|00[0-6][0-6]0[0-6] ) ]] && echo "skipping TVM matrix $mat" && continue
      ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -u ${infile}_JC-NJ.nwk -c 1 -v 0 -o lr"
-     phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -c 1 -o lr &> /dev/null 
+     phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -c 1 -v 0 -o lr --leave_duplicates --no_memory_check &> /dev/null 
      extra_params=0 
      ((compositional_heterogeneity == 0)) && mat="${mat}ef"
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-     score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
+     score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
      AICi=$(compute_AICi "$score" "$no_branches" "$total_params")     
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
      printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
+     ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
      model_scores["${mat}"]="$model_string"
-     model_cmds["${mat}"]="$mat"
+     model_cmds["${mat}"]="$mat -c 1 -v 0"
 
      ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -c 4 -a e -u ${infile}_JC-NJ.nwk -o lr"
-     phyml -i "$infile" -d nt -m "${mat}" "$freq_cmd" -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr &> /dev/null
+     phyml -i "$infile" -d nt -m "${mat}" "$freq_cmd" -v 0 -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
      extra_params=1 # 1 gamma 
      ((compositional_heterogeneity == 0)) && mat="${mat}ef"
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-     score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
+     score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
      AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
      printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
+     ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
      model_scores["${mat}+G"]="$model_string"
-     model_cmds["${mat}+G"]="$mat -c 4 -a e"
+     model_cmds["${mat}+G"]="$mat -v 0 -c 4 -a e"
 
      if ((use_pInv > 0)); then
          ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
          print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -v e -c 1 -u ${infile}_JC-NJ.nwk -o lr"
-         phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr &> /dev/null
+         phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
          extra_params=1 # 1 pInv
          ((compositional_heterogeneity == 0)) && mat="${mat}ef"
          total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
          sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-         score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
+         score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
          AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
          AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
          BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
          printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
+	 ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
          model_scores["${mat}+I"]="$model_string"
-         model_cmds["${mat}+I"]="$mat -v e"
+         model_cmds["${mat}+I"]="$mat -v e -c 1"
 
          ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
          print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -u ${infile}_JC-NJ.nwk -v e -a e -o lr"
-         phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr &> /dev/null
+         phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --leave_duplicates --no_memory_check &> /dev/null
          extra_params=2 # 1 pInv + 1 gamma 
          ((compositional_heterogeneity == 0)) && mat="${mat}ef"
          total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
          sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
-         score=$(awk '/Log-/{print $NF}' "${infile}"_phyml_stats.txt)
+         score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
          AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
          AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
          BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
          printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
+	 ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
          model_scores["${mat}+I+G"]="$model_string"
          model_cmds["${mat}+I+G"]="$mat -v e -c 4 -a e"
      else
@@ -762,11 +910,28 @@ echo ''
 # 6. print a sorted summary table of model fits from the model_scores hash
 print_start_time
 
-echo "# writing ${infile}_sorted_model_set_${model_set}_fits.tsv, sorted by BIC"
+((compositional_heterogeneity == 1)) && echo "# writing ${infile}_sorted_model_set_${model_set}_fits.tsv, sorted by BIC; extmodels+F true"
+((compositional_heterogeneity == 0)) && echo "# writing ${infile}_sorted_model_set_${model_set}_fits.tsv, sorted by BIC; extmodels+F false"
 echo '--------------------------------------------------------------------------------'
-for m in "${!model_scores[@]}"; do
-    echo -e "$m\t${model_scores[$m]}"
-done | sort -nk7 > "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
+
+# Add the +F decoration to model codes when compositional_heterogeneity == 1
+#  Note: need to remove it later on, when calling phyml for the final phylogeny
+#   -m ${model_cmds[${best_model%+F}]}
+if ((compositional_heterogeneity == 1)) ; then
+     for m in "${!model_scores[@]}"; do
+          if [[ "$m" =~ (JC69|K80|F81|HKY85|TN93) ]]; then
+	        echo -e "$m\t${model_scores[$m]}"
+	  else
+	        echo -e "$m+F\t${model_scores[$m]}"
+	  fi	  
+    done | sort -gk7 > "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
+else
+    for m in "${!model_scores[@]}"; do
+        #m="${m%ef}"
+        echo -e "$m\t${model_scores[$m]}"
+    done | sort -gk7 > "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
+fi
+
 
 # 7. compute delta_BIC and BICw, based on "${infile}"_sorted_model_set_"${model_set}"_fits.tsv
 declare -a BIC_a
@@ -786,8 +951,9 @@ done
 # 7.2 Compute the BICw_sums (denominator) of BICw
 BICw_sums=0
 for i in "${BIC_deltas_a[@]}"; do 
+   #echo "DEBUG: delta=$i 'BEGIN{printf '%.10f', exp(-1/2 * delta) }')"
    BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }')  
-   #echo "num:$BICw_numerator"
+   #echo "DEBUG num:$BICw_numerator"
    BICw_sums=$(bc <<< "$BICw_sums"'+'"$BICw_numerator")
 done
 #echo BICw_sums:$BICw_sums
@@ -844,17 +1010,20 @@ echo '--------------------------------------------------------------------------
 
 print_start_time
 
+# Note: need to remove the +F or ef decoration from model codes, if present, to index the hash
+((compositional_heterogeneity == 1)) && best_model=${best_model%+F}
+((compositional_heterogeneity == 0)) && best_model=${best_model%ef}
+
 if ((n_starts == 1)); then
+    echo "# running: phyml -i $infile -d nt -m ${model_cmds[${best_model}]} -o tlr -s BEST"
 
-    echo "# running: phyml -i $infile -d nt -m ${model_cmds[$best_model]} -o tlr -s BEST"
-
-    # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail
-    phyml -i "$infile" -d nt -m ${model_cmds[$best_model]} -o tlr -s BEST &> /dev/null
+    # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail (Bash v4.4)
+    phyml -i "$infile" -d nt -m ${model_cmds[${best_model}]} -o tlr -s BEST &> /dev/null
 else
-    echo "# running: phyml -i $infile -d nt -m ${model_cmds[$best_model]} -o tlr -s SPR --rand_start --n_rand_starts $n_starts"
+    echo "# running: phyml -i $infile -d nt -m ${model_cmds[${best_model}]} -o tlr -s SPR --rand_start --n_rand_starts $n_starts"
 
-    # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail
-    phyml -i "$infile" -d nt -m ${model_cmds[$best_model]} -o tlr -s SPR --rand_start --n_rand_starts "$n_starts" &> /dev/null
+    # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail (Bash v4.4)
+    phyml -i "$infile" -d nt -m ${model_cmds[${best_model}]} -o tlr -s SPR --rand_start --n_rand_starts "$n_starts" &> /dev/null
 fi
 
 

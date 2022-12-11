@@ -3,7 +3,7 @@
 #: progname: compute_pw_blastp_BDBHs.sh
 
 progname=${0##*/}
-vers=0.1_2022-12-10
+vers=0.2_2022-12-11
 
 set -eo pipefail
 
@@ -113,9 +113,10 @@ function print_help()
    -h <flag> print this help
    -n <int> number of blast alignments [def:$num_aln]
    -q <int> minimum query coverage percentage cutoff [def:$qcov]
+   -t <int> number of threads for blastp runs [def:$threads]
    -v <flag> print version
    
-   AIM: Computes blastp-based BDBHs between a pair of proteome 
+   AIM: Compute blastp BDBHs between a pair of proteome 
         (protein FASTA) files
    
    SOURCE: the latest version can be fetched from 
@@ -123,7 +124,11 @@ function print_help()
 	   
    LICENSE: GPL v3.0. 
       See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
-        
+      
+   NOTE: for a full pan-genome analysis software package, 
+         consider using GET_HOMOLOGUES 
+	 https://github.com/eead-csic-compbio/get_homologues
+                 
 EOF
 
    check_dependencies
@@ -140,10 +145,11 @@ EOF
 a_file=''
 b_file=''
 runmode=''
+threads=4
 
 args=("$@")
 
-while getopts ':a:b:n:q:hDv?:' OPTIONS
+while getopts ':a:b:n:q:t:hDv?:' OPTIONS
 do
    case $OPTIONS in
 
@@ -151,11 +157,13 @@ do
         ;;
    b)   b_file=$OPTARG
         ;;
+   h)   print_help
+        ;;
    n)   num_aln=$OPTARG
         ;;
    q)   qcov=$OPTARG
         ;;
-   h)   print_help
+   t)   threads=$OPTARG
         ;;
    v)   print_version
         ;;
@@ -207,7 +215,7 @@ echo "
 $progname vers. $vers 
 -----------------------------------------------------------------------------------------------------
  run on $hostn at ${start/ /} with the following parameters: 
- - wkdir=$wkdir | num_aln=$num_aln | qcov=$qcov | DEBUG=$DEBUG 
+ - wkdir=$wkdir | num_aln=$num_aln | qcov=$qcov | threads=$threads | DEBUG=$DEBUG 
  - invocation: $progname ${args[*]}
 ===================================================================================================== 
  " >&2
@@ -234,11 +242,11 @@ do
 done
 
 # 3. Run pairwise blastp  
-print_start_time && echo "# running: blastp -query ${a_file}ed -db ${b_file}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads 10 > AvsB" >&2
-blastp -query "${a_file}"ed -db "${b_file}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads 10 > AvsB
+print_start_time && echo "# running: blastp -query ${a_file}ed -db ${b_file}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > AvsB" >&2
+blastp -query "${a_file}"ed -db "${b_file}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > AvsB
 
-print_start_time && echo "# runnign: blastp -query ${b_file}ed -db ${a_file}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads 10 > BvsA" >&2
-blastp -query "${b_file}"ed -db "${a_file}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads 10 > BvsA 
+print_start_time && echo "# runnign: blastp -query ${b_file}ed -db ${a_file}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > BvsA" >&2
+blastp -query "${b_file}"ed -db "${a_file}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > BvsA 
 
 
 # 4. Retrieve the highest-scoring hit out of the -num_alignments $num_aln hits
@@ -256,17 +264,13 @@ filter_best_hits BvsA | sed 's#lcl|##' > BvsA.best
 #    that will be used to to identify the reicprocal best hits (RBHs)
 declare -A AB_hits BA_hits 
 print_start_time && echo "# Computing A vs B reciprocal best hits @ qcov=$qcov" >&2
-while read -r l
+while read -r q subj rest
 do
-     q=$(echo "$l" | awk '{print $1}')
-     subj=$(echo "$l" | awk '{print $2}')
      AB_hits["$q"]="$subj"
 done < AvsB.best
 
-while read -r l
+while read -r q subj rest
 do
-     q=$(echo "$l" | awk '{print $1}')
-     subj=$(echo "$l" | awk '{print $2}')
      BA_hits["$subj"]="$q"
 done < BvsA.best
 
@@ -277,6 +281,7 @@ do
     if [[ "${BA_hits[$kA]}" == "${AB_hits[$kA]}" ]]
     then
          printf "%s\t%s\n" "$kA" "${AB_hits[$kA]}"
+	 continue
     fi
 done | sort -k1.6g > "$RBH_outfile"
 
@@ -288,7 +293,7 @@ RBH_outfile="$RBH_out"
 print_start_time && echo "# Found $num_RBHs reciprocal best hits between $a_file and $b_file at qcov=${qcov}%" >&2
 
 # 6. Write cluster fastas
-print_start_time && echo "# Generating cluster fastas"
+print_start_time && echo '# Generating cluster FASTA files'
 c=0
 while read -r A B; do 
     c=$((c + 1)) # note that simply c=$((c++)) or ((c++)) does not work; it won't even enter the loop

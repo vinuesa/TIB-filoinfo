@@ -14,18 +14,43 @@
 #     The models are fitted using a fixed NJ-JC tree, optimizing branch lenghts and rates, in order
 #        to calulate each model's AIC, BIC, delta_BIC and BICw. 
 #     The best model is selected by BIC
-
-
+#----------------------------------------------------------------------------------------
+#: LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
+#----------------------------------------------------------------------------------------
+#: DISCLAIMER 
+#: THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+#: APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+#: HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
+#: OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+#: THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+#: PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+#: IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+#: ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+#----------------------------------------------------------------------------------------
+#:   NOTES: 
+#:    1. For a versatile and highly customizable pan-genome analysis 
+#:       software package, consider using GET_HOMOLOGUES
+#:         https://doi.org/10.1128%2FAEM.02411-13
+#:	 https://github.com/eead-csic-compbio/get_homologues
+#:	 https://hub.docker.com/u/eeadcsiccompbio
+#:	 
+#:    2. To perform core- and/or pan-genome phylogenomic analyses
+#:       consider using the GET_PHYLOMARKERS package
+#:       https://doi.org/10.3389/fmicb.2018.00771 
+#:       https://github.com/vinuesa/get_phylomarkers
+#:       https://hub.docker.com/r/vinuesa/get_phylomarkers          
+#----------------------------------------------------------------------------------------
 #: GitHub repo: you can fetch the latest version of the script from:
 #   https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_DNAmodelFinder.sh
 # wget -c https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_DNAmodelFinder.sh
+#----------------------------------------------------------------------------------------
 
 # set Bash's unofficial strict mode
 set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='0.8_2022-12-04' 
+version='0.9_2022-12-12' # code nickname: Lupita
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
@@ -312,7 +337,16 @@ function check_bash_version()
 {
    local bash_vers min_bash_vers
    min_bash_vers=$1
-   bash_vers=$(bash --version | head -1 | awk '{print $4}' | sed 's/(.*//' | cut -d. -f1,2)
+   bash_vers=$(bash --version | awk 'NR==1{print $4}' | sed 's/(.*//' | cut -d. -f1,2)
+
+   # float comparisons using bc
+   if [[ 1 -eq "$(echo "$bash_vers < $min_bash_vers" | bc)" ]]
+   then
+      echo "# FATAL: you are using the old bash v.${bash_vers}
+               but $progname requires bash >= v${min_bash_vers}
+	       to use hashes and other goodies"
+      exit 1	       
+   fi
    
    echo "$bash_vers"
 }
@@ -501,6 +535,25 @@ EoH
 
 }
 #-----------------------------------------------------------------------------------------
+
+function print_end_message()
+{
+   cat <<EOF
+  ========================================================================================
+  If you use $progname v.$vers for your research,
+  I would appreciate that you:
+  
+  1. Cite the code in your work as:   
+  Pablo Vinuesa. $progname v.$vers 
+       https://github.com/vinuesa/TIB-filoinfo/blob/master/$progname
+  
+  2. Give it a like on the https://github.com/vinuesa/TIB-filoinfo/ repo
+  
+  Thanks!
+
+EOF
+}
+#----------------------------------------------------------------------------------------- 
 
 function print_help(){
 
@@ -938,7 +991,8 @@ declare -a BIC_a
 declare -a BIC_deltas_a
 declare -a BICw_a
 declare -a BICcumW_a
-BIC_a=( $(awk '{print $7}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv) )
+#BIC_a=( $(awk '{print $7}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv) )
+mapfile -t BIC_a < <(awk '{print $7}' "${infile}"_sorted_model_set_"${model_set}"_fits.tsv)
 min_BIC="${BIC_a[0]}"
 
 # 7.1 fill BIC_deltas_a array
@@ -1070,4 +1124,6 @@ eval "echo Elapsed time: $(date -ud "@$elapsed" +'$((%s/3600/24)) days, %H hr, %
 
 echo 'Done!'
 
-echo ''
+print_end_message
+
+exit 0

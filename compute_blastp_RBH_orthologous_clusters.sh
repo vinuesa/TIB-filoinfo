@@ -42,7 +42,8 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers=0.3_2022-12-13 
+vers=0.4_2023-01-14 # added -seg yes -soft_masking true to blastp call, as in get_hom       
+
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
@@ -359,7 +360,7 @@ $progname vers. $vers
 # ---------------------------------------
 
 print_start_time && echo "# working in $proteome_dir"
-cd "$proteome_dir" || { echo "# ERROR: could not cd into $proteome_dir"; exit 1 ; }       
+cd "$proteome_dir" || { echo "# ERROR: could not cd into $proteome_dir" >&2; exit 1 ; }       
 
 wkdir=$(pwd)
 
@@ -414,10 +415,10 @@ declare -A seen seen2
 
 for f in "${non_ref[@]}"; do
     genome_ID=$(( genome_ID + 1 ))
-    print_start_time && echo "# running: blastp -query ${ref}ed -db ${f}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > REFvsGENO${genome_ID}" >&2
-    blastp -query "${ref}"ed -db "${f}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > REFvsGENO"${genome_ID}"
+    print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${ref}ed -db ${f}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > REFvsGENO${genome_ID}"
+    blastp -seg yes -soft_masking true -query "${ref}"ed -db "${f}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > REFvsGENO"${genome_ID}"
 
-    print_start_time && echo "# running: blastp -query ${f}ed -db ${REF}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > GENO${genome_ID}vsREF" >&2
+    print_start_time && echo "# running: blastp -query ${f}ed -db ${REF}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > GENO${genome_ID}vsREF"
     blastp -query "${f}"ed -db "${ref}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > GENO"${genome_ID}"vsREF
 
 
@@ -425,17 +426,17 @@ for f in "${non_ref[@]}"; do
     # Note: makeblastdb with -parse_seqids produces sobject cols without the lcl| prfix: => lcl|A_DB_203	B_DB_166
     #        and therefore we remove them to have subject and query IDs with the same structure,
     #        required for hash key comparisons later in the code
-    print_start_time && echo "# filter_best_hits REFvsGENO${genome_ID} > REFvsGENO${genome_ID}.best" >&2
+    print_start_time && echo "# filter_best_hits REFvsGENO${genome_ID} > REFvsGENO${genome_ID}.best"
     filter_best_hits REFvsGENO"${genome_ID}" | sed 's#lcl|##' > REFvsGENO"${genome_ID}".best
 
-    print_start_time && echo "# filter_best_hits GENO${genome_ID}vsREF > GENO${genome_ID}vsREF.best" >&2
+    print_start_time && echo "# filter_best_hits GENO${genome_ID}vsREF > GENO${genome_ID}vsREF.best"
     filter_best_hits GENO"${genome_ID}"vsREF | sed 's#lcl|##' > GENO"${genome_ID}"vsREF.best
 
 
     # 3.2. Compute A vs B reciprocal best hits
     # the following hashes will hold query=>subject and subject=>query results
     #    that will be used to identify the reicprocal best hits (RBHs)
-    print_start_time && echo "# Computing REF vs GENO reciprocal best hits @ qcov=$qcov" >&2
+    print_start_time && echo "# Computing REF vs GENO reciprocal best hits @ qcov=$qcov"
     
     #REF_1	GENO1_92	100.000	234	0	0	5	238	1	234	1.18e-180	488
     #REF_2	GENO1_141	100.000	278	0	0	1	278	1	278	0.0	569
@@ -474,7 +475,7 @@ for f in "${non_ref[@]}"; do
     RBH_out="${ref%.*}"_vs_"${f%.*}"_qcov"${qcov}"_${num_RBHs}RBHs_2col.tsv
     mv "$RBH_outfile" "$RBH_out"
     RBH_outfile="$RBH_out"
-    print_start_time && echo "# Found $num_RBHs reciprocal best hits between $ref and $f at qcov=${qcov}%" >&2
+    print_start_time && echo "# Found $num_RBHs reciprocal best hits between $ref and $f at qcov=${qcov}%"
     echo '==='
 done
 
@@ -550,7 +551,7 @@ while read -r -a ids; do
 done < ORTHOLOG_IDs_SHARED_WITH_REF.tsv
 
 ((DEBUG == 0)) && [[ -s ORTHOLOG_IDs_SHARED_WITH_REF.tsv ]] && rm ./*core_IDs.list
-[[ ! -s ORTHOLOG_IDs_SHARED_WITH_REF.tsv ]] && { echo '# FATAL ERROR: could not write ORTHOLOG_IDs_SHARED_WITH_REF.tsv'; exit 1 ; }
+[[ ! -s ORTHOLOG_IDs_SHARED_WITH_REF.tsv ]] && { echo '# FATAL ERROR: could not write ORTHOLOG_IDs_SHARED_WITH_REF.tsv' >&2; exit 1 ; }
 
 # -------------------------------
 # 5.1 reconstitute cluster fastas
@@ -566,14 +567,14 @@ done
 
 clusters_dir=${ref%.*}_vs_${#non_ref_faaedtab_files[@]}genomes_qcov"${qcov}"_"${#ref_orth_IDs[@]}"_clusters
 [[ -d "$clusters_dir" ]] && rm -rf "$clusters_dir"
-[[ ! -d "$clusters_dir" ]] && mkdir "$clusters_dir" || { echo "ERROR: could not generate dir $clusters_dir" && exit 1 ; }
+[[ ! -d "$clusters_dir" ]] && mkdir "$clusters_dir" || { echo "ERROR: could not generate dir $clusters_dir" >&2 && exit 1 ; }
 
 print_start_time && echo "# moving cluster FASTA files and tables to $clusters_dir"
 mv cluster*.fas GENO*.best REF*.best ORTHOLOG_IDs_SHARED_WITH_REF.tsv "$clusters_dir"
 
-cd "$clusters_dir" || { echo "ERROR: could not cd into $clusters_dir" && exit 1 ; }
+cd "$clusters_dir" || { echo "ERROR: could not cd into $clusters_dir" >&2 && exit 1 ; }
 mkdir core || { echo "ERROR: could not mkdir core" && exit 1 ; }
-mkdir non_core || { echo "ERROR: could not mkdir non_core" && exit 1 ; }
+mkdir non_core || { echo "ERROR: could not mkdir non_core" >&2 && exit 1 ; }
 
 core_loci=0
 non_core_loci=0

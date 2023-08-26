@@ -42,7 +42,7 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers=0.4_2023-01-14 # added -seg yes -soft_masking true to blastp call, as in get_hom       
+vers=0.5_2023-08-25 # added -seg yes -soft_masking true to all blastp calls, as in get_hom       
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -418,8 +418,8 @@ for f in "${non_ref[@]}"; do
     print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${ref}ed -db ${f}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > REFvsGENO${genome_ID}"
     blastp -seg yes -soft_masking true -query "${ref}"ed -db "${f}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > REFvsGENO"${genome_ID}"
 
-    print_start_time && echo "# running: blastp -query ${f}ed -db ${REF}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > GENO${genome_ID}vsREF"
-    blastp -query "${f}"ed -db "${ref}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > GENO"${genome_ID}"vsREF
+    print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${f}ed -db ${REF}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > GENO${genome_ID}vsREF"
+    blastp -seg yes -soft_masking true -query "${f}"ed -db "${ref}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > GENO"${genome_ID}"vsREF
 
 
     # 3.1. Retrieve the highest-scoring hit out of the -num_alignments $num_aln hits

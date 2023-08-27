@@ -86,7 +86,7 @@ function check_bash_version()
        error "You need Bash version ${min_bash_vers} or higher to run this script."
    fi
    
-   echo "# running bash v.${bash_vers}"
+   echo "${bash_vers}"
 }
 #-----------------------------------------------------------------------------------------
 
@@ -355,7 +355,7 @@ echo "
 ===================================================================================================== 
 $progname vers. $vers 
 -----------------------------------------------------------------------------------------------------
- run on $hostn running $os with $nprocs processors and ${bash_vers} at ${today/ /} 
+ run on $hostn running $os with $nprocs processors and bash v.${bash_vers} at ${today/ /} 
    using the following parameters: 
  - proteome_dir=$proteome_dir | fasta_extension=$ext
  - BLASTP params: blastp v.${blast_vers} | num_aln=$num_aln | qcov=$qcov | threads=$threads 
@@ -445,7 +445,7 @@ for f in "${non_ref[@]}"; do
     print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${ref}ed -db ${f}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > REFvsGENO${genome_ID}"
     blastp -seg yes -soft_masking true -query "${ref}"ed -db "${f}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > REFvsGENO"${genome_ID}"
 
-    print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${f}ed -db ${REF}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > GENO${genome_ID}vsREF"
+    print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${f}ed -db ${ref}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > GENO${genome_ID}vsREF"
     blastp -seg yes -soft_masking true -query "${f}"ed -db "${ref}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > GENO"${genome_ID}"vsREF
 
 
@@ -560,6 +560,11 @@ done
 print_start_time && echo "# Generating a table of ortholog IDs shared with $ref" 
 paste ./*core_IDs.list > ORTHOLOG_IDs_SHARED_WITH_REF.tsv
 
+# ORTHOLOG_IDs_SHARED_WITH_REF.tsv
+#REF_1	GENO1_496	GENO2_843
+#REF_3	GENO1_498	GENO2_845
+#REF_4	GENO1_500	GENO2_847
+
 #--------------------------
 # 5. Write cluster fastas
 #--------------------------
@@ -581,7 +586,11 @@ declare -A seen3
 c=0
 while read -r -a ids; do 
     c=$((c + 1))
+    # grep out the reference sequence, stored at idx[0]
     grep -w "${ids[0]}" "${faaedtab_files[0]}" > cluster_"${c}".fastab
+    
+    # next process the non ref sequences stored at idxs >= 1
+    #  and append them to the growing cluster_"${c}".fastab file
     for (( idx=1; idx <= ((${#ids[@]} -1)); idx++)); do
 	(( seen3[${ids[$idx]}]++ ))
 	((DEBUG > 0)) && echo "DEBUG: idx:$idx; c=$c; grep -w ${ids[$idx]} ${faaedtab_files[$idx]}" >&2

@@ -42,10 +42,12 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers=1.0_2023-10-24 # - Major rewrite and simplification of the RBH filtering code, now using AWK hashes. 
-                    # - Major rewrite and simplification of the code to write out clusters
-		    # - Customized and more informative BLAST results table fields
-		    # - higher customizability of BLAST runs     
+vers=1.1_2023-10-25 # v1.1_2023-10-25 significant speedup by parallelizing cluster writing with xargs call of blastdbcmd
+    # - Major rewrite and simplification of the RBH filtering code, now using AWK hashes. 
+    # - Major rewrite and simplification of the code to write out clusters
+    # - Customized and more informative BLAST results table fields
+    # - higher customizability of BLAST runs
+		         
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -63,7 +65,7 @@ cols='6 qseqid sseqid pident gaps length qlen slen qcovs evalue score'
 DEBUG=0
 qcov=70
 num_aln=5
-threads=4
+threads=$(nproc) # all cores available
 ext=faa
 
 mat=BLOSUM62
@@ -411,7 +413,6 @@ fi
 
 echo '-----------------------------------------------------------------------------------------------------'
 
-
 # keep the ref as first element in fasta arrays
 declare -a non_ref infiles 
 non_ref=( $(ls *"${ext}" | grep -v "$ref") )
@@ -423,7 +424,7 @@ infiles=("$ref" "${non_ref[@]}")
 # The FASTA headers of all proteomes are edited using Perl to add a unique identifier.
 if ((fix_header == 1))
 then
-    print_start_time && echo "# formatting ${#infiles[@]} input FASTA files for indexing"
+    print_start_time && echo "# Formatting ${#infiles[@]} input FASTA files for indexing"
     perl -pe 'if(/^>/){$c++; s/>/>lcl\|REF_$c /}' "$ref" > "${ref}ed"
 
     genome_ID=0
@@ -440,6 +441,9 @@ else
     done
 fi
 
+declare -a faaed_files
+faaed_files=($(ls *.faaed))
+
 # -------------------------------------------------------------------
 # 2. run makeblastdb on all input proteomes with edited FASTA headers
 # -------------------------------------------------------------------
@@ -451,6 +455,11 @@ do
     #Note: -parse_seqids results in query and subject IDs with different structure => lcl|A_DB_203  B_DB_166
     makeblastdb -in "$f" -dbtype prot -parse_seqids &> /dev/null
 done
+
+
+print_start_time && echo "# Generating the aliased blastp database allDBs ..."
+blastdb_aliastool -dblist_file <(printf '%s\n' "${faaed_files[@]}") -dbtype prot -out allDBs -title allDBs
+
 echo '-----------------------------------------------------------------------------------------------------'
 
 #-----------------------------------
@@ -467,7 +476,7 @@ for f in "${non_ref[@]}"; do
     ref_vs_geno_blastout=${ref%.*}vs${f%.*}_best_hits.tmp
     geno_vs_ref_blastout=${f%.*}vs${ref%.*}_best_hits.tmp
     
-    print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${ref}ed -db ${f}ed -qcov_hsp_perc $qcov -outfmt $cols -num_alignments $num_aln -num_threads $threads -evalue $Eval -matrix $mat > $ref_vs_geno_blastout"
+    print_start_time && echo "# Running: blastp -seg yes -soft_masking true -query ${ref}ed -db ${f}ed -qcov_hsp_perc $qcov -outfmt $cols -num_alignments $num_aln -num_threads $threads -evalue $Eval -matrix $mat > $ref_vs_geno_blastout"
     
     blastp -seg yes -soft_masking true -query "${ref}"ed -db "${f}"ed -qcov_hsp_perc "$qcov" -outfmt "$cols" -num_alignments "$num_aln" \
       -num_threads "$threads" -evalue "$Eval" -matrix "$mat" > "$ref_vs_geno_blastout"
@@ -475,7 +484,7 @@ for f in "${non_ref[@]}"; do
     check_file "$ref_vs_geno_blastout"
 
    # Retrieve the best nonREF proteome database hits using blastdbcmd, onlfy if qcov > \$qcov
-   print_start_time && echo "# retrieving the best hits from $ref_vs_geno_blastout with blastdbcmd ..."
+   print_start_time && echo "# Retrieving the best hits from $ref_vs_geno_blastout with blastdbcmd ..."
    blastdbcmd -entry_batch <(awk -F"\t" -v qcov=$qcov '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "${f}"ed > "${ref%.*}vs${f%.*}"_besthits.faa
    
    check_file "${ref%.*}vs${f%.*}"_besthits.faa
@@ -489,7 +498,7 @@ for f in "${non_ref[@]}"; do
 	continue
    fi
 
-    print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${ref%.*}vs${f%.*}_besthits.faa -db ${ref}ed -qcov_hsp_perc $qcov -outfmt $cols -num_alignments $num_aln -num_threads $threads -evalue $Eval -matrix $mat > $geno_vs_ref_blastout"
+    print_start_time && echo "# Running: blastp -seg yes -soft_masking true -query ${ref%.*}vs${f%.*}_besthits.faa -db ${ref}ed -qcov_hsp_perc $qcov -outfmt $cols -num_alignments $num_aln -num_threads $threads -evalue $Eval -matrix $mat > $geno_vs_ref_blastout"
     
     blastp -seg yes -soft_masking true -query "${ref%.*}vs${f%.*}"_besthits.faa -db "${ref}"ed -qcov_hsp_perc "$qcov" -outfmt "$cols" -num_alignments "$num_aln" \
       -num_threads "$threads" -evalue "$Eval" -matrix "$mat"> "$geno_vs_ref_blastout"
@@ -498,7 +507,7 @@ for f in "${non_ref[@]}"; do
 
     # Sort the blastp output table from the preceding search by increasing E-values (in column 9) and decreasing scores (col 10)
     #    & filter out unique REF vs nonREF RBHs using AWK hashes from the sorted blast output table with qcov > $qcov
-    print_start_time && echo "# filtering out unique REF vs nonREF RBHs from the sorted blast output table with qcov > $qcov"
+    print_start_time && echo "# Filtering out unique REF vs nonREF RBHs from the sorted blast output table with qcov > $qcov"
     for GENOid in $(cut -f1 "$geno_vs_ref_blastout" | sort -u)
     do 
        grep "$GENOid" "$ref_vs_geno_blastout"
@@ -509,21 +518,22 @@ for f in "${non_ref[@]}"; do
     check_file "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv ]]
 done
 
-echo '-----------------------------------------------------------------------------------------------'
+echo '-----------------------------------------------------------------------------------------------------'
 
 
 #-----------------------------------------------------------------------
 # 4. Identify REF proteins shared by all tsv files holding pairwise RBHs
 #-----------------------------------------------------------------------
 # Find the intersections of REFs in all tsv files
-print_start_time && echo "# computing the intersections of REF proteins in all tsv files holding pairwise RBHs"
+print_start_time && echo "# Computing the intersections of REF proteins in all tsv files holding pairwise RBHs"
 awk '{r[$1]++; if(r[$1] == ARGC-1) print $1}' ./*.tsv > REF_RBH_IDs.list
 [[ ! -s REF_RBH_IDs.list ]] && error "could not write REF_RBH_IDs.list"
 
 intersection_size=$(wc -l REF_RBH_IDs.list | awk '{print $1}')
-((intersection_size > 0)) && echo "# found $intersection_size core RBHs shared by ${#non_ref[*]} nonREF proteomes with the $ref reference proteome"
+((intersection_size > 0)) && echo "# Found $intersection_size core RBHs shared by ${#non_ref[*]} nonREF proteomes with the $ref reference proteome"
 ((intersection_size == 0)) && error "# ERROR: found $intersection_size core orhtologous genes among ${#infiles[*]} input proteomes ..."
 
+echo '-----------------------------------------------------------------------------------------------------'
 
 #-------------------------------------------------------------------------------------------------------------------------
 # 5. Loop over tsv files and generate RBHs_matrix.tsv core_genome_clusters.tsv and nonCore_genome_clusters.tsv tables
@@ -542,7 +552,7 @@ declare -A pangenome_clusters
 
 # Construct the pangenome_clusters hash, indexed by reference proteome, 
 #  containing a value a string of tab-separated nonREF proteome RBH IDs.
-print_start_time && echo "# populating the pangenome_clusters hash ..."
+print_start_time && echo "# Populating the pangenome_clusters hash ..."
 for t in *RBHs_*.tsv; do
     while read -r REF QUERY rest
     do
@@ -559,7 +569,7 @@ done
 
 
 # 5.1 print the RBHs_matrix.tsv
-print_start_time && echo "# printing the pangenome_matrix, core_genome_clusters and nonCore_genome_clusters files"
+print_start_time && echo "# Printing the pangenome_matrix, core_genome_clusters and nonCore_genome_clusters files"
 for key in "${!pangenome_clusters[@]}"
 do
       echo -e "${key}\t${pangenome_clusters[$key]}"
@@ -574,63 +584,126 @@ check_file core_genome_clusters.tsv
 awk -v ninfiles="${#infiles[@]}" 'NF != ninfiles' RBHs_matrix.tsv > nonCore_genome_clusters.tsv
 check_file nonCore_genome_clusters.tsv warn
 
+echo '-----------------------------------------------------------------------------------------------------'
+
 #-----------------------------
 # 6. Write cluster FASTA files
 #-----------------------------
-# 6.1 read all source FASTA file into memory (as the hash seqs) for later filtering
-print_start_time && echo "# reading all source FASTA files into memory (as the hash seqs) ..."
+# Below is the code for three strategies, two of them commented out
+#  The final (uncommented) one is the fastest of the benchmarked strategies. 
+print_start_time && echo "# Extracting RBH cluster FASTA files ..."
 
-declare -A seqs; 
+## >>> Take 1 6.1 read all source FASTA file into memory (as the hash seqs) for later filtering
+# print_start_time && echo "# reading all source FASTA files into memory (as the hash seqs) ..."
+#
+#declare -A seqs; 
+#
+#for f in "${infiles[@]}"
+#do
+#   while read -r l
+#   do 
+#      if [[ "$l" =~ ^\> ]] # line contains the FASTA header
+#      then 
+#           key=$l
+#      else               # concatenate sequence lines
+#           seqs["$key"]="${seqs[$key]}""${l}"
+#      fi
+#   done < "$f"
+#done
 
-for f in "${infiles[@]}"
-do
-   while read -r l
-   do 
-      if [[ "$l" =~ ^\> ]] # line contains the FASTA header
-      then 
-           key=$l
-      else               # concatenate sequence lines
-           seqs["$key"]="${seqs[$key]}""${l}"
-      fi
-   done < "$f"
-done
 
-
-# 6.2 filter the hash seqs with cluster keys saved in each line of RBHs_matrix.tsv
+## 6.2 filter the hash seqs with cluster keys saved in each line of RBHs_matrix.tsv
 # for k in "${!seqs[@]}"; do if [[ $k =~ \>Q8MYF2 ]]; then echo -e "$k\n${seqs[$k]}"; fi;  done < test.faa
-print_start_time && echo "# Filtering the seqs hash and writing RBH cluster FASTA files ..."
+#print_start_time && echo "# Filtering the seqs hash and writing RBH cluster FASTA files ..."
+
+#initialize cluster counter
+#c=0
+
+## read each line of the RBHs_matrix.tsv
+##  into the ids array using the read -r -a idiom,
+##  and filter the seqs hash with the corresponding IDs as keys
+##  to write out the cluster_x.fas files
+## NOTE: the comment block below implementing
+##  a hash traversing strategy below is very slow, 
+##  even with the continue 2 statement; 
+##    should benchmark the following options: 
+##          - filtering fastab with grep
+##          - use blastdbcmd and 
+#
+#while read -r -a ids
+#do 
+#    ((c++)) 
+#    # iterate over all indexes of the idx array
+#    #  and append them to the growing cluster_"${c}".fastab file
+#    for (( idx=0; idx <= ((${#ids[@]} -1)); idx++))
+#    do
+#	# iterate of all source sequence FASTA headers (k)
+#	#  and print out only sequences matching the ids 
+#	#  in cluster c, concatenating them '>>' to cluster_"${c}".fastab
+#	for k in "${!seqs[@]}"
+#        do 
+#            if [[ "$k" =~ "${ids[$idx]}" ]]
+#	    then 
+#	         ((DEBUG > 0)) && echo "DEBUG (write clusters): k:$k; idx:$idx; ids[$idx]}:${ids[$idx]}; c=$c" >&2
+#		 echo -e "$k\n${seqs[$k]}"
+#		 continue 2
+#	    fi
+#        done >> cluster_"${c}".fas
+#    done 
+#done < RBHs_matrix.tsv
+
+
+print_start_time && echo "# Reading RBHs_matrix.tsv and extracting cluster proteins with blastdbcmd ..."
+## >>> Take 2: 6.1 This is the blastdb-based approach, which is a bit faster than the 
+##   hash traversing and filtering approach shown above, but not much more
+## read each line of the RBHs_matrix.tsv
+##  into the ids array using the read -r -a idiom,
+##  and extract the ids from the aliased allDBs blastdb
+
+#declare -a entries
+#while read -r -a ids
+#do 
+#    ((c++)) 
+#    # iterate over all indexes of the idx array
+#    #  and append them to the entries array
+#    for (( idx=0; idx <= ((${#ids[@]} -1)); idx++))
+#    do
+#        entries+=("${ids[$idx]}")
+#    done 
+#    # extract the entries from the aliased allDBs input proteomes
+#    #  note the use of stdbuf to unbuffer the blasdbcmd output, in an attempt to speed it up,
+#    #  but seems to have no effect
+#    #  https://stackoverflow.com/questions/3465619/how-to-make-output-of-any-shell-command-unbuffered
+#    stdbuf -i0 -o0 -e0 blastdbcmd -db allDBs -dbtype prot -entry_batch <(printf '%s\n' "${entries[@]}") -out cluster_"${c}".fas
+#    unset -v entries
+#done < RBHs_matrix.tsv
+
+# >>> Take 3, 6.1 uses blastdbcmd but calling it in parallel with xargs 
+# write the each line of the RBHs_matrix.tsv IDs to a tmpfile
+#  to pass the list of tmpfiles to a parallel call of blastdbcmd
+print_start_time && echo "# Writing each line of the RBHs_matrix.tsv IDs to an idstmp file por parallelization ..."
 
 #initialize cluster counter
 c=0
-
-# read each line of the RBHs_matrix.tsv
-#  into the ids array using the read -r -a idiom,
-#  and filter the seqs hash with the corresponding IDs as keys
-#  to write out the cluster_x.fas files
-# NOTE: this is very slow, even with the continue 2 statement; should benchmark filtering fastab with grep
 while read -r -a ids
 do 
     ((c++)) 
-    # iterate over all indexes of the idx array
-    #  and append them to the growing cluster_"${c}".fastab file
-    for (( idx=0; idx <= ((${#ids[@]} -1)); idx++)); do
-	# iterate of all source sequence FASTA headers (k)
-	#  and print out only sequences matching the ids 
-	#  in cluster c, concatenating them '>>' to cluster_"${c}".fastab
-	for k in "${!seqs[@]}"
-        do 
-            if [[ "$k" =~ "${ids[$idx]}" ]]
-	    then 
-	         ((DEBUG > 0)) && echo "DEBUG (write clusters): k:$k; idx:$idx; ids[$idx]}:${ids[$idx]}; c=$c" >&2
-		 echo -e "$k\n${seqs[$k]}"
-		 continue 2
-	    fi
-        done >> cluster_"${c}".fas
-    done 
+    # write each line of the RBHs_matrix.tsv to a temporal file
+    printf '%s\n' "${ids[@]}" > cluster_${c}.idstmp
 done < RBHs_matrix.tsv
 
-  
+## 6.2 pass the list of tmpfiles to a parallel call of blastdbcmd
+##  This works nicely, but must ensure that parallel is available on host
+#ls *.idstmp | parallel --gnu -j "$threads" 'blastdbcmd -db allDBs -dbtype prot -entry_batch {} -out {.}.fas'  
+
+# 6.2 use the more portable find | xargs idiom to parallelize the blastdbcmd call
+print_start_time && echo "# Running blastdbcmd in parallel with xargs using -P $threads ..."
+find . -name '*.idstmp' -print0 | xargs -0 -P "$threads" -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
+
+
 # 6.3 filter out core and nonCore clusters
+print_start_time && echo "# Moving core and nonCore clusters to their respective directories ..."
+
 mkdir core_clusters || error "could not mkdir core_clusters"
 mkdir nonCore_clusters || error "could not mkdir nonCore_clusters"
 for f in cluster_*.fas
@@ -643,21 +716,24 @@ do
     fi
 done
 
+echo '-----------------------------------------------------------------------------------------------------'
+
 
 #----------------
 # 7. final cleanup
 #----------------
 #Unnecessary files generated during the process are removed.
-print_start_time && echo "# final cleanup in $wkdir"
+print_start_time && echo "# Tidying up $wkdir ..."
 
-((DEBUG == 0)) && rm *faaed *faaed.* *best_hits.tmp REF_RBH_IDs.list *besthits.faa
+echo '-----------------------------------------------------------------------------------------------------'
+
+((DEBUG == 0)) && rm ./*faaed ./*faaed.* ./*best_hits.tmp ./REF_RBH_IDs.list ./*besthits.faa ./*.idstmp
 
 elapsed=$(( SECONDS - start_time ))
 
 eval "echo Elapsed time: $(date -ud "@$elapsed" +'$((%s/3600/24)) days, %H hr, %M min, %S sec')"
 
 print_end_message
-
 
 exit 0
 

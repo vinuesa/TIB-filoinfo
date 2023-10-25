@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#: progname: compute_blastp_RBH_orthologous_clusters.sh
+#: progname: compute_RBH_clusters.sh
 #: Author: Pablo Vinuesa, CCG-UNAM, @pvinmex, https://www.ccg.unam.mx/~vinuesa/
 #
 #: AIM: Simple script around NCBI's blastp, to compute reciprocal best hits between a
@@ -42,7 +42,10 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers=0.6_2023-08-26 # improved code modularization and comments.       
+vers=1.0_2023-10-24 # - Major rewrite and simplification of the RBH filtering code, now using AWK hashes. 
+                    # - Major rewrite and simplification of the code to write out clusters
+		    # - Customized and more informative BLAST results table fields
+		    # - higher customizability of BLAST runs     
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -52,12 +55,22 @@ min_bash_vers=4.4 # required to write modern bash idioms:
 
 set -o pipefail
 
+
+# fixed custom blastp header
+cols='6 qseqid sseqid pident gaps length qlen slen qcovs evalue score'
+
 # Initialize variables with default values
 DEBUG=0
-qcov=80
-num_aln=10
+qcov=70
+num_aln=5
 threads=4
 ext=faa
+
+mat=BLOSUM62
+Eval=0.001
+seg=yes      # yes|no
+mask=true    # true|false
+fix_header=0 # do not fix FASTA header for makeblastdb 
 
 # Color codes for output
 RED='\033[0;31m'
@@ -72,6 +85,22 @@ function error() {
     echo -e "${RED}Error: ${NC} $1" >&2
     exit 1
 }
+#-----------------------------------------------------------------------------------------
+
+# Function to check that files were generated
+function check_file() {
+    if [ -s "$1" ]
+    then
+        echo " wrote $1"
+    elif [ ! -s "$1" ] && [ -n "$2" ] # pass a second arg, like warn
+    then
+         echo -e "${RED}WARNING: could not write ${NC} $1" >&2
+    else
+        echo -e "${RED}Error: could not write ${NC} $1" >&2
+        exit 1
+    fi
+}
+#-----------------------------------------------------------------------------------------
 
 # Function to check Bash version
 function check_bash_version()
@@ -104,56 +133,9 @@ function print_start_date()
 }
 #----------------------------------------------------------------------------------------- 
 
-function filter_best_hits()
-{
-    # Processes blastp output to retain best hits for each query.
-    # sorts the hits for each query, to identify the one with the 
-    # hightest bitscore (column 12 of standard tabular blastp -m 6),
-    # which is passed to filter_best_hits as its only parameter
-    
-    local infile n s 
-    
-    # Declare arrays to store the names and best hits
-    declare -a names 
-    declare -A max best
-
-    infile=$1
-
-    # Read the input file and parse the fields
-    while read -r n f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 s; 
-    do
-        if [[ -z "${max[$n]}" ]]
-        then
-             names+=( "$n" )
-        fi
-
-        # Compare the score for the current name to the current max value
-        # float comparisons using bc
-        if [[ ! "${max[$n]}" ]] || [[ 1 -eq "$(echo "$s > ${max[$n]}" | bc)" ]]
-        then
-            max["$n"]="$s"
-            unset 'best[$n]'
-        fi
-
-        # If the current score is equal to the current max value, store the line
-        # float comparisons using bc
-        if [[ 1 -eq "$(echo "$s == ${max[$n]}" | bc)" ]]
-        then
-             best[$n]="${n}\t$f2\t$f3\t$f4\t$f5\t$f6\t$f7\t$f8\t$f9\t${f10}\t${f11}\t$s"
-        fi
-    done < "$infile"
-
-    # Print the best hits for each name
-    for n in "${names[@]}"; do
-        [[ -z "${best[$n]}" ]] && continue
-        echo -e "${best[$n]}"
-    done
-}
-#----------------------------------------------------------------------------------------- 
-
 # Function to check dependencies
 function check_dependencies() {
-    local dependencies=("fas2tab.pl" "tab2fas.pl" "blastp" "makeblastdb")
+    local dependencies=("fas2tab.pl" "tab2fas.pl" "blastp" "makeblastdb" "blastdbcmd")
     
     for dep in "${dependencies[@]}"; do
         if ! command -v "$dep" &> /dev/null; then
@@ -226,12 +208,26 @@ EOF
 }
 #----------------------------------------------------------------------------------------- 
 
+function run_blastp()
+{
+   local q db outfile
+   q=$1
+   db=$2
+   outfile=$3
+   
+   blastp -query "$q" -db "$db" -matrix "$mat" -outfmt "$cols" -num_alignments $num_aln -num_threads $threads -qcov_hsp_perc "$qcov" \
+    -seg "$seg" -soft_masking "$mask" -evalue "$Eval" > "$outfile"
+}
+#----------------------------------------------------------------------------------------- 
+
+
 function print_help()
 {
    # Prints the help message explaining how to use the script.
    cat <<EOF
    
-   Usage: $progname -d <dir> [-e <ext>] [-n <num_aln>] [-q <qcov>] [-t <threads>] [-D] [-v]
+   Usage: $progname -d <dir> [-e <ext>] [-E <Eval>] [-m <matrix>] [-n <num_aln>] [-q <qcov>] [-t <threads>] 
+                              [-S <yes|no> SEG filtering] -M [<false|true> soft_masking] [-D] [-v]
    
    REQUIRED:
     -d <string> path to directory containing the input proteomes (protein FASTA)
@@ -239,9 +235,14 @@ function print_help()
    OPTIONAL
    -D <flag> print debugging info
    -e <string> fasta file extension name [def:$ext]
+   -E <integer or float -ge 0> E-value [def:$Eval]
+   -F <0|1> fix FASTA header for makeblastdb [def:$fix_header]
    -h <flag> print this help
    -n <int> number of blast alignments [def:$num_aln]
+   -m <string> matrix name <BLOSUM45|BLOSUM62|BLOSUM80> [def:$mat]
+   -M <false|true> soft_masking [def:$mask]
    -q <int> minimum query coverage percentage cutoff [def:$qcov]
+   -S <yes|no> SEG filtering [def:$seg]
    -t <int> number of threads for blastp runs [def:$threads]
    -v <flag> print version
    
@@ -292,7 +293,7 @@ EOF
 
 args=("$@")
 
-while getopts ':d:e:n:q:r:t:hDv?:' OPTIONS
+while getopts ':d:e:E:F:m:M:n:q:r:S:t:hDv?:' OPTIONS
 do
    case $OPTIONS in
 
@@ -300,13 +301,23 @@ do
         ;;
    e)   ext=$OPTARG
         ;;
+   E)   Eval=$OPTARG
+        ;;
+   F)   fix_header=$OPTARG
+        ;;
    h)   print_help
+        ;;
+   m)   mat=$OPTARG
+        ;;
+   M)   mask=$OPTARG
         ;;
    n)   num_aln=$OPTARG
         ;;
    q)   qcov=$OPTARG
         ;;
    r)   ref=$OPTARG
+        ;;
+   S)   seg=$OPTARG
         ;;
    t)   threads=$OPTARG
         ;;
@@ -335,6 +346,13 @@ if [[ -z "$proteome_dir" ]]; then
        print_help
 fi
 
+if [[ -z "$ref" ]]
+then
+     ref_selection="auto"
+else
+     ref_selection="$ref"
+fi
+
 ###>>> Exported variables !!!
 declare -x g=$genome_ID perl # export only2perl!!!; call as $ENV{genome_ID}
 
@@ -358,8 +376,9 @@ $progname vers. $vers
  run on $hostn running $os with $nprocs processors and bash v.${bash_vers} at ${today/ /} 
    using the following parameters: 
  - proteome_dir=$proteome_dir | fasta_extension=$ext
- - BLASTP params: blastp v.${blast_vers} | num_aln=$num_aln | qcov=$qcov | threads=$threads 
- - reference=$ref | DEBUG=$DEBUG 
+ - BLASTP params: blastp v.${blast_vers} | num_aln=$num_aln | qcov=$qcov | threads=$threads |
+                      Eval=$Eval | mat=$mat | seg=$seg | mask=$mask
+ - reference=$ref_selection | fix_header=$fix_header | DEBUG=$DEBUG 
  - invocation: $progname ${args[*]}
 ===================================================================================================== 
  " >&2
@@ -369,13 +388,13 @@ $progname vers. $vers
 # -------------------
 # Main script logic starts here
 
-
 # ---------------------------------------
 # 0. Validate user input & setup pipeline
 # ---------------------------------------
 # Check dependencies and Bash version
 check_dependencies
-check_bash_version "$min_bash_vers"
+v=$(check_bash_version "$min_bash_vers")
+echo "# running under bash v.$v"
 
 # Move to proteome directory
 print_start_time && echo "# working in $proteome_dir"
@@ -392,6 +411,7 @@ fi
 
 echo '-----------------------------------------------------------------------------------------------------'
 
+
 # keep the ref as first element in fasta arrays
 declare -a non_ref infiles 
 non_ref=( $(ls *"${ext}" | grep -v "$ref") )
@@ -401,254 +421,245 @@ infiles=("$ref" "${non_ref[@]}")
 # 1. edit headers for makeblastdb (blast+): Formatting and Indexing Proteomes
 # ---------------------------------------------------------------------------
 # The FASTA headers of all proteomes are edited using Perl to add a unique identifier.
-print_start_time && echo "# formatting ${#infiles[@]} input FASTA files for indexing"
-perl -pe 'if(/^>/){$c++; s/>/>lcl\|REF_$c /}' "$ref" > "${ref}ed"
+if ((fix_header == 1))
+then
+    print_start_time && echo "# formatting ${#infiles[@]} input FASTA files for indexing"
+    perl -pe 'if(/^>/){$c++; s/>/>lcl\|REF_$c /}' "$ref" > "${ref}ed"
 
-genome_ID=0
-g=0
-for f in "${non_ref[@]}"; do
-    genome_ID=$(( genome_ID + 1 ))
-    g="$genome_ID"
-    perl -pe 'if(/^>/){$c++; s/>/>lcl\|GENO$ENV{g}\_$c /}' "$f" > "${f}ed"
-done
+    genome_ID=0
+    g=0
+    for f in "${non_ref[@]}"; do
+        genome_ID=$(( genome_ID + 1 ))
+        g="$genome_ID"
+        perl -pe 'if(/^>/){$c++; s/>/>lcl\|GENO$ENV{g}\_$c /}' "$f" > "${f}ed"
+    done
+else
+    for f in *"${ext}"
+    do
+        ln -s "$f" "${f}ed"   
+    done
+fi
 
 # -------------------------------------------------------------------
 # 2. run makeblastdb on all input proteomes with edited FASTA headers
 # -------------------------------------------------------------------
 # Each proteome is used to create a blastp database using makeblastdb.
 print_start_time && echo "# Generating indexed blastp databases"
+
 for f in *"${ext}"ed
 do 
-    #Note: -parse_seqids results in query and subject IDs with different structure => lcl|A_DB_203	B_DB_166
+    #Note: -parse_seqids results in query and subject IDs with different structure => lcl|A_DB_203  B_DB_166
     makeblastdb -in "$f" -dbtype prot -parse_seqids &> /dev/null
-    
-    # The tabular output of the fas2tab.pl script is saved for each proteome.
-    fas2tab.pl "$f" | sed '/^$/d' > "${f}"tab
 done
 echo '-----------------------------------------------------------------------------------------------------'
-
-# declar hashes holding [query]-target and [target]-query hits
-declare -A AB_hits BA_hits 
 
 #-----------------------------------
 # 3. Run and process pairwise blastp 
 #-----------------------------------
-genome_ID=0
-
-# declare hashes to  hold non-redundant query and target hits
-declare -A seen seen2
-
 # For each non-reference proteome, blastp is run against the reference proteome 
 #   (REFvsGENO) and vice versa (GENOvsREF).
+
+genome_ID=0
+
 for f in "${non_ref[@]}"; do
     genome_ID=$(( genome_ID + 1 ))
-    print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${ref}ed -db ${f}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > REFvsGENO${genome_ID}"
-    blastp -seg yes -soft_masking true -query "${ref}"ed -db "${f}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > REFvsGENO"${genome_ID}"
-
-    print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${f}ed -db ${ref}ed -qcov_hsp_perc $qcov -outfmt 6 -num_alignments $num_aln -num_threads $threads > GENO${genome_ID}vsREF"
-    blastp -seg yes -soft_masking true -query "${f}"ed -db "${ref}"ed -qcov_hsp_perc "$qcov" -outfmt 6 -num_alignments "$num_aln" -num_threads "$threads" > GENO"${genome_ID}"vsREF
-
-
-    # 3.1 The best hits are extracted using the filter_best_hits function.
-    #      Retrieve the highest-scoring hit out of the -num_alignments $num_aln hits
-    # Note: makeblastdb with -parse_seqids produces subject cols without the lcl| prfix: => lcl|A_DB_203	B_DB_166
-    #        and therefore we remove them to have subject and query IDs with the same structure,
-    #        required for hash key comparisons later in the code
-    print_start_time && echo "# filter_best_hits REFvsGENO${genome_ID} > REFvsGENO${genome_ID}.best"
-    filter_best_hits REFvsGENO"${genome_ID}" | sed 's#lcl|##' > REFvsGENO"${genome_ID}".best
-
-    print_start_time && echo "# filter_best_hits GENO${genome_ID}vsREF > GENO${genome_ID}vsREF.best"
-    filter_best_hits GENO"${genome_ID}"vsREF | sed 's#lcl|##' > GENO"${genome_ID}"vsREF.best
-
-
-    # 3.2. Reciprocal best hits (RBHs) are determined by comparing the hits between the two blastp runs.
-    #      Compute A vs B reciprocal best hits: 
-    #      the following hashes will hold query=>subject and subject=>query results
-    #      that will be used to identify the reicprocal best hits (RBHs)
-    print_start_time && echo "# Computing REF vs GENO reciprocal best hits @ qcov=$qcov"
     
-    #REF_1	GENO1_92	100.000	234	0	0	5	238	1	234	1.18e-180	488
-    #REF_2	GENO1_141	100.000	278	0	0	1	278	1	278	0.0	569
-    while read -r q subj rest
-    do
-	AB_hits["$q"]="$subj"
-    done < REFvsGENO"${genome_ID}".best
-
+    ref_vs_geno_blastout=${ref%.*}vs${f%.*}_best_hits.tmp
+    geno_vs_ref_blastout=${f%.*}vs${ref%.*}_best_hits.tmp
     
-    #GENO1_1	REF_52	99.441	179	1	0	10	188	1	179	1.65e-131	359
-    #GENO1_2	REF_53	100.000	95	0	0	1	95	1	95	6.70e-68	191
-    while read -r q subj rest
-    do
-        (( seen[$q]++ ))
-        if (( ${seen[$q]} == 1 )); then
-	    BA_hits["$subj"]="$q"
-	fi
-    done < GENO"${genome_ID}"vsREF.best
+    print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${ref}ed -db ${f}ed -qcov_hsp_perc $qcov -outfmt $cols -num_alignments $num_aln -num_threads $threads -evalue $Eval -matrix $mat > $ref_vs_geno_blastout"
     
-    # 3.3 find the RBHs by comparing the two hashes and sort output by A_DB_# key
-    RBH_outfile="${ref%.*}"_vs_"${f%.*}"_qcov"${qcov}"_RBHs_2col.tsv
-    for kA in "${!AB_hits[@]}"
-    do
-        (( seen2[${AB_hits[$kA]}]++ ))
-	if [[ "${BA_hits[$kA]}" == "${AB_hits[$kA]}" ]] && (( "${seen2[${AB_hits[$kA]}]}" == 1 ))
-        then
-             printf "%s\t%s\n" "$kA" "${AB_hits[$kA]}"
-        else
-	     continue
-	fi
-    done | sort -k1.6g > "$RBH_outfile"
+    blastp -seg yes -soft_masking true -query "${ref}"ed -db "${f}"ed -qcov_hsp_perc "$qcov" -outfmt "$cols" -num_alignments "$num_aln" \
+      -num_threads "$threads" -evalue "$Eval" -matrix "$mat" > "$ref_vs_geno_blastout"
+    
+    check_file "$ref_vs_geno_blastout"
 
+   # Retrieve the best nonREF proteome database hits using blastdbcmd, onlfy if qcov > \$qcov
+   print_start_time && echo "# retrieving the best hits from $ref_vs_geno_blastout with blastdbcmd ..."
+   blastdbcmd -entry_batch <(awk -F"\t" -v qcov=$qcov '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "${f}"ed > "${ref%.*}vs${f%.*}"_besthits.faa
+   
+   check_file "${ref%.*}vs${f%.*}"_besthits.faa
+   
+   num_hits=$(grep -c '^>' "${ref%.*}vs${f%.*}"_besthits.faa)
+   
+   if ((num_hits == 0))
+   then
+        echo "WARNING: no hits in ${ref%.*}vs${f%.*}"_besthits.faa"
+	rm ${ref%.*}vs${f%.*}"_besthits.faa
+	continue
+   fi
 
-    # 3.4 make a more informative RBH_outfile name, including number of RBHs found
-    num_RBHs=$(wc -l "$RBH_outfile" | awk '{print $1}')
-    RBH_out="${ref%.*}"_vs_"${f%.*}"_qcov"${qcov}"_${num_RBHs}RBHs_2col.tsv
-    mv "$RBH_outfile" "$RBH_out"
-    RBH_outfile="$RBH_out"
-    print_start_time && echo "# Found $num_RBHs reciprocal best hits between $ref and $f at qcov=${qcov}%"
-    echo '==='
+    print_start_time && echo "# running: blastp -seg yes -soft_masking true -query ${ref%.*}vs${f%.*}_besthits.faa -db ${ref}ed -qcov_hsp_perc $qcov -outfmt $cols -num_alignments $num_aln -num_threads $threads -evalue $Eval -matrix $mat > $geno_vs_ref_blastout"
+    
+    blastp -seg yes -soft_masking true -query "${ref%.*}vs${f%.*}"_besthits.faa -db "${ref}"ed -qcov_hsp_perc "$qcov" -outfmt "$cols" -num_alignments "$num_aln" \
+      -num_threads "$threads" -evalue "$Eval" -matrix "$mat"> "$geno_vs_ref_blastout"
+      
+    check_file "$geno_vs_ref_blastout"
+
+    # Sort the blastp output table from the preceding search by increasing E-values (in column 9) and decreasing scores (col 10)
+    #    & filter out unique REF vs nonREF RBHs using AWK hashes from the sorted blast output table with qcov > $qcov
+    print_start_time && echo "# filtering out unique REF vs nonREF RBHs from the sorted blast output table with qcov > $qcov"
+    for GENOid in $(cut -f1 "$geno_vs_ref_blastout" | sort -u)
+    do 
+       grep "$GENOid" "$ref_vs_geno_blastout"
+    done | sort -gk9,9 -gk10,10 | \
+           awk -v qcov=$qcov 'BEGIN{FS=OFS="\t"}{REFid[$1]++; GENOid[$2]++; if(REFid[$1] == 1 && GENOid[$2] == 1 && $8 > qvov) print }' > \
+             "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
+    
+    check_file "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv ]]
 done
 
 echo '-----------------------------------------------------------------------------------------------'
 
-#--------------------------------------------------------------------
-# 4. Loop over tsv files and count the number of hits for each REF_ID
-#--------------------------------------------------------------------
-# Cluster Computation and Output
 
-print_start_time "# Computing clusters of homologous sequences"
+#-----------------------------------------------------------------------
+# 4. Identify REF proteins shared by all tsv files holding pairwise RBHs
+#-----------------------------------------------------------------------
+# Find the intersections of REFs in all tsv files
+print_start_time && echo "# computing the intersections of REF proteins in all tsv files holding pairwise RBHs"
+awk '{r[$1]++; if(r[$1] == ARGC-1) print $1}' ./*.tsv > REF_RBH_IDs.list
+[[ ! -s REF_RBH_IDs.list ]] && error "could not write REF_RBH_IDs.list"
 
-# A hash (core_ref) counts the occurrences of each reference ID in the RBH tables.
-declare -A core_ref # hash counting the instances of the REFERNCE_IDs in the RBH tables
+intersection_size=$(wc -l REF_RBH_IDs.list | awk '{print $1}')
+((intersection_size > 0)) && echo "# found $intersection_size core RBHs shared by ${#non_ref[*]} nonREF proteomes with the $ref reference proteome"
+((intersection_size == 0)) && error "# ERROR: found $intersection_size core orhtologous genes among ${#infiles[*]} input proteomes ..."
 
 
-# For each RBH table, the RBH clusters are extracted and stored in cluster_X.fastab files.
-for f in *RBHs_2col.tsv; do
-    while read -r REF QUERY
+#-------------------------------------------------------------------------------------------------------------------------
+# 5. Loop over tsv files and generate RBHs_matrix.tsv core_genome_clusters.tsv and nonCore_genome_clusters.tsv tables
+#-------------------------------------------------------------------------------------------------------------------------
+# Cluster Computation
+
+print_start_time && echo "# Computing clusters of homologous sequences"
+
+# The core_ref hash counts the instances of the REFERNCE_IDs in the RBH tables
+declare -A core_ref
+
+# The pangenome_clusters hash is indexed by REFERNCE_IDs 
+#   and as its value holds the RBHs as a tab-separated
+#   string of IDs from nonREF proteomes    
+declare -A pangenome_clusters
+
+# Construct the pangenome_clusters hash, indexed by reference proteome, 
+#  containing a value a string of tab-separated nonREF proteome RBH IDs.
+print_start_time && echo "# populating the pangenome_clusters hash ..."
+for t in *RBHs_*.tsv; do
+    while read -r REF QUERY rest
     do
-        # count the instances of REFERNCE_IDs in each RBHs_2col.tsv tables
+        # count the instances of REFERNCE_IDs in each RBHs_*.tsv tables
 	(( core_ref["$REF"]++ ))
-    done < "$f"
+	if [[ ${core_ref["$REF"]} -eq 1 ]]
+	then
+	    pangenome_clusters["$REF"]="$QUERY" 
+	else
+	    pangenome_clusters["$REF"]="${pangenome_clusters[$REF]}\t$QUERY"
+	fi
+    done < "$t"
 done
 
-((DEBUG > 0 )) && echo "# DEBUG: Loop over tsv files and count the number of hits for each REF_ID; \${#non_ref[@]}: ${#non_ref[@]}" >&2 \
-               &&  for k in "${!core_ref[@]}"; do (("${core_ref[$k]}" == "${#non_ref[@]}")) && echo -e "$k\t${core_ref[$k]}"; done >&2
 
-# A list of reference IDs shared with all genomes is created (ref_orth_IDs).
-declare -a ref_orth_IDs # array holding the REFERNCE_IDs found in all RBH tables
-
-# ref_orth_IDs contains the reference_IDs of orthologous loci
-#   shared by the REFERENCE with all genomes; 
-ref_orth_IDs=( $(for k in "${!core_ref[@]}"; do (("${core_ref[$k]}" == "${#non_ref[@]}")) && printf '%s\n' "$k"; done) )
-
-# sort the ref_orth_IDs array; note sort -k1.5g for IDs like REF_58
-ref_orth_IDs=( $(printf '%s\n' "${ref_orth_IDs[@]}" | sort -k1.5g) ) 
-((DEBUG > 0 )) && echo "# DEBUG: the sorted  \${ref_orth_IDs[@]} array:" >&2 \
-               && echo "${ref_orth_IDs[@]}" >&2
-
-
-echo "# found ${#ref_orth_IDs[@]} RBH clusters for ${#non_ref[@]} genomes against $ref"
-printf '%s\n' "${ref_orth_IDs[@]}" > "${ref%.*}"_core_IDs.list
-
-for f in *RBHs_2col.tsv; do
-    base="${f%RBHs_2col.tsv}"
-    for id in "${ref_orth_IDs[@]}"
-    do
-          grep -w "$id" "$f" | cut -f2
-    done > "${base}"_core_IDs.list
-done
-
-print_start_time && echo "# Generating a table of ortholog IDs shared with $ref" 
-paste ./*core_IDs.list > ORTHOLOG_IDs_SHARED_WITH_REF.tsv
-
-# ORTHOLOG_IDs_SHARED_WITH_REF.tsv
-#REF_1	GENO1_496	GENO2_843
-#REF_3	GENO1_498	GENO2_845
-#REF_4	GENO1_500	GENO2_847
-
-#--------------------------
-# 5. Write cluster fastas
-#--------------------------
-# The clusters are split into "core" and "non-core" based on the number of genomes sharing the locus.
-print_start_time && echo '# Generating FASTA files for orthologous clusters'
-
-declare -a non_ref_faaedtab_files faaedtab_files
-ref_faaedtab=$(ls "${ref}"edtab)
-non_ref_faaedtab_files=( $(ls *."${ext}"edtab | grep -v "${ref}"edtab) )
-# put the ref_faaedtab in the first position idx[0] of the faaedtab_files array
-faaedtab_files=( "$ref_faaedtab" "${non_ref_faaedtab_files[@]}" )
-
-
-# 5.1 reconstitute cluster fastas
-# NOTE: calling blasdbcmd multiple times in a loop to retrieve 
-#       the cluster sequences is quite slow. 
-#       Therefore they're grepped out of the *edtab files
-declare -A seen3
-c=0
-while read -r -a ids; do 
-    c=$((c + 1))
-    # grep out the reference sequence, stored at idx[0]
-    grep -w "${ids[0]}" "${faaedtab_files[0]}" > cluster_"${c}".fastab
-    
-    # next process the non ref sequences stored at idxs >= 1
-    #  and append them to the growing cluster_"${c}".fastab file
-    for (( idx=1; idx <= ((${#ids[@]} -1)); idx++)); do
-	(( seen3[${ids[$idx]}]++ ))
-	((DEBUG > 0)) && echo "DEBUG: idx:$idx; c=$c; grep -w ${ids[$idx]} ${faaedtab_files[$idx]}" >&2
-        if (( ${seen3[${ids[$idx]}]} == 1 )); then
-	    grep -w "${ids[$idx]}" "${faaedtab_files[$idx]}" >> cluster_"${c}".fastab
-	fi    
-    done
-done < ORTHOLOG_IDs_SHARED_WITH_REF.tsv
-
-((DEBUG == 0)) && [[ -s ORTHOLOG_IDs_SHARED_WITH_REF.tsv ]] && rm ./*core_IDs.list
-[[ ! -s ORTHOLOG_IDs_SHARED_WITH_REF.tsv ]] && error "could not write ORTHOLOG_IDs_SHARED_WITH_REF.tsv"
-
-# Convert fastab files back to FASTA
-for f in cluster_*.fastab
+# 5.1 print the RBHs_matrix.tsv
+print_start_time && echo "# printing the pangenome_matrix, core_genome_clusters and nonCore_genome_clusters files"
+for key in "${!pangenome_clusters[@]}"
 do
-     tab2fas.pl "$f" > "${f%tab}"
+      echo -e "${key}\t${pangenome_clusters[$key]}"
+done > RBHs_matrix.tsv
+check_file RBHs_matrix.tsv
+
+# 5.2 print the core_genome_clusters.tsv
+awk -v ninfiles="${#infiles[@]}" 'NF == ninfiles' RBHs_matrix.tsv > core_genome_clusters.tsv
+check_file core_genome_clusters.tsv
+
+# 5.3 print the nonCore_genome_clusters.tsv
+awk -v ninfiles="${#infiles[@]}" 'NF != ninfiles' RBHs_matrix.tsv > nonCore_genome_clusters.tsv
+check_file nonCore_genome_clusters.tsv warn
+
+#-----------------------------
+# 6. Write cluster FASTA files
+#-----------------------------
+# 6.1 read all source FASTA file into memory (as the hash seqs) for later filtering
+print_start_time && echo "# reading all source FASTA files into memory (as the hash seqs) ..."
+
+declare -A seqs; 
+
+for f in "${infiles[@]}"
+do
+   while read -r l
+   do 
+      if [[ "$l" =~ ^\> ]] # line contains the FASTA header
+      then 
+           key=$l
+      else               # concatenate sequence lines
+           seqs["$key"]="${seqs[$key]}""${l}"
+      fi
+   done < "$f"
 done
 
 
-# Cluster (RBH) FASTA files are moved to appropriate directories (core and non_core).
-clusters_dir=${ref%.*}_vs_${#non_ref_faaedtab_files[@]}genomes_qcov"${qcov}"_"${#ref_orth_IDs[@]}"_clusters
-[[ -d "$clusters_dir" ]] && rm -rf "$clusters_dir"
-[[ ! -d "$clusters_dir" ]] && mkdir "$clusters_dir" || error "could not generate dir $clusters_dir"
+# 6.2 filter the hash seqs with cluster keys saved in each line of RBHs_matrix.tsv
+# for k in "${!seqs[@]}"; do if [[ $k =~ \>Q8MYF2 ]]; then echo -e "$k\n${seqs[$k]}"; fi;  done < test.faa
+print_start_time && echo "# Filtering the seqs hash and writing RBH cluster FASTA files ..."
 
-print_start_time && echo "# moving cluster FASTA files and tables to $clusters_dir"
-mv cluster*.fas GENO*.best REF*.best ORTHOLOG_IDs_SHARED_WITH_REF.tsv "$clusters_dir"
+#initialize cluster counter
+c=0
 
-cd "$clusters_dir" || error "could not cd into $clusters_dir"
-mkdir core || error "could not mkdir core"
-mkdir non_core || error "could not mkdir non_core"
+# read each line of the RBHs_matrix.tsv
+#  into the ids array using the read -r -a idiom,
+#  and filter the seqs hash with the corresponding IDs as keys
+#  to write out the cluster_x.fas files
+# NOTE: this is very slow, even with the continue 2 statement; should benchmark filtering fastab with grep
+while read -r -a ids
+do 
+    ((c++)) 
+    # iterate over all indexes of the idx array
+    #  and append them to the growing cluster_"${c}".fastab file
+    for (( idx=0; idx <= ((${#ids[@]} -1)); idx++)); do
+	# iterate of all source sequence FASTA headers (k)
+	#  and print out only sequences matching the ids 
+	#  in cluster c, concatenating them '>>' to cluster_"${c}".fastab
+	for k in "${!seqs[@]}"
+        do 
+            if [[ "$k" =~ "${ids[$idx]}" ]]
+	    then 
+	         ((DEBUG > 0)) && echo "DEBUG (write clusters): k:$k; idx:$idx; ids[$idx]}:${ids[$idx]}; c=$c" >&2
+		 echo -e "$k\n${seqs[$k]}"
+		 continue 2
+	    fi
+        done >> cluster_"${c}".fas
+    done 
+done < RBHs_matrix.tsv
 
-core_loci=0
-non_core_loci=0
-for f in *fas; do 
-   if grep -c '^>' "$f" | grep "${#infiles[@]}" &> /dev/null; then 
-      core_loci=$((core_loci + 1))
-      mv "$f" core
-   else
-      non_core_loci=$((non_core_loci + 1))
-      mv "$f" non_core
-   fi
+  
+# 6.3 filter out core and nonCore clusters
+mkdir core_clusters || error "could not mkdir core_clusters"
+mkdir nonCore_clusters || error "could not mkdir nonCore_clusters"
+for f in cluster_*.fas
+do 
+    if [[ $(grep -c '^>' "$f") -eq "${#infiles[@]}" ]]
+    then 
+         mv "$f" core_clusters/core_"${f}" || error "could not mv $f to core_clusters/core_${f}"
+    else
+         mv "$f" nonCore_clusters/nonCore_"${f}" || error "could mv $f to nonCore_clusters/nonCore_${f}"
+    fi
 done
-print_start_time && echo "# Moved $core_loci core FASTA files to $clusters_dir/core"
-print_start_time && echo "# Moved $non_core_loci non-core FASTA files to $clusters_dir/non_core"
 
 
-# ----------------
-# 6. final cleanup
-# ----------------
-# Unnecessary files generated during the process are removed.
-cd "$wkdir" || error "could not cd into $wkdir"
+#----------------
+# 7. final cleanup
+#----------------
+#Unnecessary files generated during the process are removed.
 print_start_time && echo "# final cleanup in $wkdir"
-((DEBUG == 0)) && rm ./*fastab GENO*vsREF REFvsGENO[[:digit:]]* ./*"${ext}"ed* ./*RBHs_2col.tsv
 
-echo
+((DEBUG == 0)) && rm *faaed *faaed.* *best_hits.tmp REF_RBH_IDs.list *besthits.faa
 
 elapsed=$(( SECONDS - start_time ))
 
 eval "echo Elapsed time: $(date -ud "@$elapsed" +'$((%s/3600/24)) days, %H hr, %M min, %S sec')"
 
 print_end_message
+
+
+exit 0
+
+
+

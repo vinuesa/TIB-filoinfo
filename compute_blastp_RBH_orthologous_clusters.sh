@@ -47,6 +47,7 @@ vers=1.1.1_2023-10-25 # compute_blastp_RBH_orthologous_clusters.sh v1.1.1_2023-1
                     #  - implements blastdb_aliastool to alias the proteome specific DBs as allDBs
 		    #  - significant speedup by parallelizing cluster writing with xargs call of blastdbcmd on aliased allDBs
 		    #  - better formatted output, including colors
+		    #  - mostly shellcheck copliant
 
     # v1.0_2023-10-24
     # - Major rewrite and simplification of the RBH filtering code, now using AWK hashes. 
@@ -495,7 +496,7 @@ for f in "${non_ref[@]}"; do
 
    # Retrieve the best nonREF proteome database hits using blastdbcmd, onlfy if qcov > \$qcov
    print_start_time && echo "# Retrieving the best hits from $ref_vs_geno_blastout with blastdbcmd ... "
-   blastdbcmd -entry_batch <(awk -F"\t" -v qcov=$qcov '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "${f}"ed > "${ref%.*}vs${f%.*}"_besthits.faa
+   blastdbcmd -entry_batch <(awk -F"\t" -v qcov="$qcov" '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "${f}"ed > "${ref%.*}vs${f%.*}"_besthits.faa
    
    check_file "${ref%.*}vs${f%.*}"_besthits.faa
    
@@ -503,10 +504,11 @@ for f in "${non_ref[@]}"; do
    
    if ((num_hits == 0))
    then
-        echo "WARNING: no hits in ${ref%.*}vs${f%.*}"_besthits.faa"
-	rm ${ref%.*}vs${f%.*}"_besthits.faa
+        echo "WARNING: no hits in ${ref%.*}vs${f%.*}_besthits.faa"
+	rm "${ref%.*}vs${f%.*}"_besthits.faa
 	continue
    fi
+   
 
     print_start_time && echo "# Running: run_blastp ${ref%.*}vs${f%.*}_besthits.faa ${ref}ed $geno_vs_ref_blastout ... "    
     run_blastp "${ref%.*}vs${f%.*}"_besthits.faa "${ref}"ed "$geno_vs_ref_blastout"
@@ -518,10 +520,10 @@ for f in "${non_ref[@]}"; do
     do 
        grep "$GENOid" "$ref_vs_geno_blastout"
     done | sort -gk9,9 -gk10,10 | \
-           awk -v qcov=$qcov 'BEGIN{FS=OFS="\t"}{REFid[$1]++; GENOid[$2]++; if(REFid[$1] == 1 && GENOid[$2] == 1 && $8 > qvov) print }' > \
+           awk -v qcov="$qcov" 'BEGIN{FS=OFS="\t"}{REFid[$1]++; GENOid[$2]++; if(REFid[$1] == 1 && GENOid[$2] == 1 && $8 > qvov) print }' > \
              "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
     
-    check_file "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv ]]
+    check_file "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
 
 done
 
@@ -696,7 +698,7 @@ while read -r -a ids
 do 
     ((c++)) 
     # write each line of the RBHs_matrix.tsv to a temporal file
-    printf '%s\n' "${ids[@]}" > cluster_${c}.idstmp
+    printf '%s\n' "${ids[@]}" > cluster_"${c}".idstmp
 done < RBHs_matrix.tsv
 
 ## 6.2 pass the list of tmpfiles to a parallel call of blastdbcmd
@@ -705,7 +707,7 @@ done < RBHs_matrix.tsv
 
 # 6.2 use the more portable find | xargs idiom to parallelize the blastdbcmd call
 print_start_time && echo "# Running blastdbcmd in parallel with xargs using all available cores \$(nproc) ..."
-find . -name '*.idstmp' -print0 | xargs -0 -P $(nproc) -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
+find . -name '*.idstmp' -print0 | xargs -0 -P "$(nproc)" -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
 
 
 # 6.3 rename *.idstmp.fas cluster files with rename, if available

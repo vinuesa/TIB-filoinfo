@@ -3,13 +3,15 @@
 #: progname: compute_RBH_clusters.sh
 #: Author: Pablo Vinuesa, CCG-UNAM, @pvinmex, https://www.ccg.unam.mx/~vinuesa/
 #
-#: AIM: Simple script around NCBI's blastp, to compute reciprocal best hits between a
+#: AIM: Wrapper script around NCBI's blastp, to compute reciprocal best hits between a
 #:      reference genome (manually or automatically selected) and a set of additional
-#:      proteomes (protein fasta files). It also computes the core set, writing
-#:      the corresponding clusters (FASTA files) to disk
+#:      proteomes (protein fasta files). It also computes the core and non_core sets, 
+#:      writing the corresponding clusters (FASTA files) to disk
 #
-#: Design: all blastp and other computations are run sequentially, 
-#:         although the user can specify a number of threads to parallelize blastp 
+#: Design: The code is partially parallelized:
+#:         - the user can specify a number of threads to parallelize blastp
+#:         - the final blastdbcmd is called from xargs to parallelize the 
+#:           retrieval and writing to disk of RBH clusters 
 #----------------------------------------------------------------------------------------
 #: LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
 #----------------------------------------------------------------------------------------
@@ -42,12 +44,13 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers=1.1.1_2023-10-25 # compute_blastp_RBH_orthologous_clusters.sh v1.1.1_2023-10-25 
-                    #  - blastp run from run_blastp function
-                    #  - implements blastdb_aliastool to alias the proteome specific DBs as allDBs
-		    #  - significant speedup by parallelizing cluster writing with xargs call of blastdbcmd on aliased allDBs
-		    #  - better formatted output, including colors
-		    #  - mostly shellcheck copliant
+vers=1.1.2_2023-10-26 # compute_blastp_RBH_orthologous_clusters.sh v1.1.2_2023-10-26 
+                     #  - blastp run from run_blastp function using -best_hit_overhang and -best_hit_score_edge for Best-Hits filtering algorithm
+		     #  - improved default params for running blastp, according to PMID: 33099302; now uses task blastp-fast by default
+                     #  - implements blastdb_aliastool to alias the proteome specific DBs as allDBs
+		     #  - significant speedup by parallelizing cluster writing with xargs call of blastdbcmd on aliased allDBs
+		     #  - better formatted output, including colors
+		     #  - complies with "Bash's unofficial strict mode" set -euo pipefail
 
     # v1.0_2023-10-24
     # - Major rewrite and simplification of the RBH filtering code, now using AWK hashes. 
@@ -62,7 +65,7 @@ min_bash_vers=4.4 # required to write modern bash idioms:
 		  #    by setting the -n attribute
 		  #    see https://stackoverflow.com/questions/16461656/how-to-pass-array-as-an-argument-to-a-function-in-bash
 
-set -o pipefail
+set -euo pipefail
 
 
 # fixed custom blastp header
@@ -70,15 +73,19 @@ cols='6 qseqid sseqid pident gaps length qlen slen qcovs evalue score'
 
 # Initialize variables with default values
 DEBUG=0
-qcov=70
-num_aln=5
+qcov=60
+num_aln=1
 threads=4  #$(nproc) # all cores available
 ext=faa
+ref=''
 
+task='blastp-fast'
 mat=BLOSUM62
-Eval=0.001
+Eval=0.00001
 seg=yes      # yes|no
 mask=true    # true|false
+best_hit_overhang=0.1    # recommended value in blastp -help
+best_hit_score_edge=0.1  # recommended value in blastp -help
 fix_header=0 # do not fix FASTA header for makeblastdb 
 
 # Color codes for output
@@ -88,7 +95,6 @@ YELLOW='\033[1;33m'
 #BLUE='\033[0;34m'
 LBLUE='\033[1;34m'
 #CYAN='\033[0;36m'
-
 NC='\033[0m' # No Color => end color
 
 #---------------------------------------------------------------------------------#
@@ -96,30 +102,29 @@ NC='\033[0m' # No Color => end color
 #---------------------------------------------------------------------------------#
 
 # Function to print error messages
-function error() {
-    echo -e "${RED}Error: ${NC} $1" >&2
+function error {
+    echo -e "${RED}Error: $1 ${NC}" 1>&2
     exit 1
 }
 #-----------------------------------------------------------------------------------------
 
 # Function to check that files were generated
-function check_file() {
+function check_file {
     if [ -s "$1" ]
     then
-        echo -e "${GREEN} wrote ${NC} $1"
+        echo -e "${GREEN} wrote $1 ${NC}"
     elif [ ! -s "$1" ] && [ -n "$2" ] # pass a second arg, like warn
     then
-         echo -e "${YELLOW}WARNING: could not write ${NC} $1" >&2
+         echo -e "${YELLOW}WARNING: could not write $1 ${NC}" 1>&2
     else
-        echo -e "${RED}Error: could not write ${NC} $1" >&2
+        echo -e "${RED}Error: could not write $1 ${NC}" 1>&2
         exit 1
     fi
 }
 #-----------------------------------------------------------------------------------------
 
 # Function to check Bash version
-function check_bash_version()
-{
+function check_bash_version {
    # Checks if the Bash version meets the minimum required version.
    # the more modern bash array syntax and functions require bash version >= 4.4
    local bash_vers min_bash_vers
@@ -134,22 +139,20 @@ function check_bash_version()
 }
 #-----------------------------------------------------------------------------------------
 
-function print_start_time()
-{
+function print_start_time {
    # Prints the current time in the format "HH:MM:SS".
    printf '%(%T)T %s' '-1'
 }
 #----------------------------------------------------------------------------------------- 
 
-function print_start_date()
-{
+function print_start_date {
    # Prints the current date in the format "YYYY-MM-DD".
    printf '%(%F)T %s' '-1'
 }
 #----------------------------------------------------------------------------------------- 
 
 # Function to check dependencies
-function check_dependencies() {
+function check_dependencies {
     local dependencies=("blastp" "makeblastdb" "blastdbcmd" "blastdb_aliastool")
     
     for dep in "${dependencies[@]}"; do
@@ -163,8 +166,7 @@ function check_dependencies() {
 
 #----------------------------------------------------------------------------------------- 
 
-function select_ref()
-{ 
+function select_ref { 
      # Automatically selects the smallest genome as the reference.
      local ext
      ext=$1
@@ -178,15 +180,14 @@ function select_ref()
 }
 #----------------------------------------------------------------------------------------- 
 
-function print_n_processors()
-{
+function print_n_processors {
     # Prints the number of processors/cores on the system.
+    # could also use nproc, which is part of GNU core utils
     awk '/processor/{p++}END{print p}' /proc/cpuinfo
 }
 #----------------------------------------------------------------------------------------- 
 
-function print_end_message()
-{
+function print_end_message {
    # Prints a message to acknowledge the use of the script.
    cat <<EOF
   
@@ -211,8 +212,7 @@ exit 0
 }
 #----------------------------------------------------------------------------------------- 
 
-function print_version()
-{
+function print_version {
    #  Prints the version information.
    cat <<EOF
 
@@ -223,28 +223,30 @@ EOF
 }
 #----------------------------------------------------------------------------------------- 
 
-function run_blastp()
-{
-   local q db outfile
-   q=$1
-   db=$2
-   outfile=$3
+function run_blastp {
+   local task q db outfile
+   task=$1 # default: blastp-fast
+   q=$2
+   db=$3
+   outfile=$4
    
-   blastp -query "$q" -db "$db" -matrix "$mat" -outfmt "$cols" -num_alignments $num_aln -num_threads $threads -qcov_hsp_perc "$qcov" \
-    -seg "$seg" -soft_masking "$mask" -evalue "$Eval" -out "$outfile"
+   # parameterizations in part following suggestions by Julie E. Hernandez-Salmeronóand Gabriel Moreno-Hagelsieb 
+   # in BMC Genomics volume 21, Article number: 741 (2020); https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07132-6
+   blastp -task "$task" -query "$q" -db "$db" -matrix "$mat" -outfmt "$cols" -num_alignments $num_aln -num_threads $threads -qcov_hsp_perc "$qcov" \
+    -seg "$seg" -soft_masking "$mask" -best_hit_overhang "$best_hit_overhang" -best_hit_score_edge "$best_hit_score_edge" -use_sw_tback \
+    -evalue "$Eval" -out "$outfile" 2> /dev/null
     
    check_file "$outfile"
 }
 #----------------------------------------------------------------------------------------- 
 
 
-function print_help()
-{
+function print_help {
    # Prints the help message explaining how to use the script.
    cat <<EOF
    
    Usage: $progname -d <dir> [-e <ext>] [-E <Eval>] [-F <0|1>] [-m <matrix>] [-n <num_aln>] [-q <qcov>] [-t <threads>] 
-                              [-S <yes|no>] -M [<false|true>] [-D] [-h] [-v]
+                              [-T <blastp|blastp-fast>] [-S <yes|no>] -M [<false|true>] [-D] [-h] [-v]
    
    REQUIRED:
     -d <string> path to directory containing the input proteomes (protein FASTA)
@@ -261,17 +263,19 @@ function print_help()
    -q <int> minimum query coverage percentage cutoff [def:$qcov]
    -S <yes|no> SEG filtering [def:$seg]
    -t <int> number of threads for blastp runs [def:$threads]
+   -T <string> blastp task <blastp|blastp-fast> [def:$task]
    -v <flag> print version
    
    EXAMPLES:
-     $progname -d .
-     $progname -d proteome_files -n 5 -q 85 -t \$(nproc)
+     $progname -d . -m BLOSUM80 -T blastp -q 85
+     $progname -d proteome_files -n 5 -t \$(nproc)
    
-   AIMS: 
-     1. Compute blastp reciprocal best hits (RBHs) between a set of proteomes (protein FASTA files) 
-	and a single reference 	proteome, which is automatically selected as the smallest one, 
-	if not defined by the user. 
-     2. RBH clusters (FASTA FILES) are computed and provided as core_clusters and nonCore_clusters
+   AIM: 
+      Wrapper script around NCBI\'s blastp, to compute reciprocal best hits between a
+      reference genome (manually or automatically selected) and a set of additional
+      proteomes (protein fasta files). It also computes the core and non_core sets, 
+      writing the corresponding clusters (FASTA files) to disk in 
+      the core_clusters and nonCore_clusters directories
    
    SOURCE: the latest version can be fetched from https://github.com/vinuesa/TIB-filoinfo
 	   
@@ -310,7 +314,7 @@ EOF
 args=("$@")
 
 
-while getopts ':d:e:E:F:m:M:n:q:r:S:t:hDv?:' OPTIONS
+while getopts ':d:e:E:F:m:M:n:q:r:S:t:T:hDv?:' OPTIONS
 do
    case $OPTIONS in
 
@@ -337,6 +341,8 @@ do
    S)   seg=$OPTARG
         ;;
    t)   threads=$OPTARG
+        ;;
+   T)   task=$OPTARG
         ;;
    v)   print_version
         ;;
@@ -371,7 +377,9 @@ else
 fi
 
 ###>>> Exported variables !!!
+genome_ID=''
 declare -x g=$genome_ID perl # export only2perl!!!; call as $ENV{genome_ID}
+
 
 today=$(print_start_date)
 hostn=$(hostname)
@@ -393,8 +401,8 @@ $progname vers. $vers
  run on $hostn using $os with $nprocs processors and bash v.${bash_vers} on ${today/ /} 
    with the following parameters: 
  - proteome_dir=$proteome_dir | fasta_extension=$ext
- - BLASTP params: blastp v.${blast_vers} | num_aln=$num_aln | qcov=$qcov | threads=$threads |
-                      Eval=$Eval | mat=$mat | seg=$seg | mask=$mask
+ - BLASTP params: blastp v.${blast_vers} | task=$task | num_aln=$num_aln | qcov=$qcov | 
+                 Eval=$Eval | mat=$mat | seg=$seg | mask=$mask | threads=$threads 
  - reference=$ref_selection | fix_header=$fix_header | DEBUG=$DEBUG 
  - invocation: $progname ${args[*]}
 ===================================================================================================== 
@@ -446,7 +454,7 @@ then
     g=0
     for f in "${non_ref[@]}"; do
         genome_ID=$(( genome_ID + 1 ))
-        g="$genome_ID"
+	g="$genome_ID"
         perl -pe 'if(/^>/){$c++; s/>/>lcl\|GENO$ENV{g}\_$c /}' "$f" > "${f}ed"
     done
 else
@@ -475,7 +483,7 @@ done
 print_start_time && echo "# Generating the aliased blastp database allDBs ..."
 blastdb_aliastool -dblist_file <(printf '%s\n' "${faaed_files[@]}") -dbtype prot -out allDBs -title allDBs
 
-echo '-----------------------------------------------------------------------------------------------------'
+printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
 #-----------------------------------
 # 3. Run and process pairwise blastp 
@@ -484,20 +492,18 @@ echo '--------------------------------------------------------------------------
 #   (REFvsGENO) and vice versa (GENOvsREF).
 
 genome_ID=0
-
 for f in "${non_ref[@]}"; do
     genome_ID=$(( genome_ID + 1 ))
     
     ref_vs_geno_blastout=${ref%.*}vs${f%.*}_best_hits.tmp
     geno_vs_ref_blastout=${f%.*}vs${ref%.*}_best_hits.tmp
     
-    print_start_time && echo "# Running: run_blastp ${ref}ed ${f}ed $ref_vs_geno_blastout"
-    run_blastp "${ref}"ed "${f}"ed "$ref_vs_geno_blastout" check_file "$ref_vs_geno_blastout"
+    print_start_time && echo "# Running: run_blastp $task ${ref}ed ${f}ed $ref_vs_geno_blastout" 
+    run_blastp "$task" "${ref}"ed "${f}"ed "$ref_vs_geno_blastout"
 
    # Retrieve the best nonREF proteome database hits using blastdbcmd, onlfy if qcov > \$qcov
    print_start_time && echo "# Retrieving the best hits from $ref_vs_geno_blastout with blastdbcmd ... "
    blastdbcmd -entry_batch <(awk -F"\t" -v qcov="$qcov" '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "${f}"ed > "${ref%.*}vs${f%.*}"_besthits.faa
-   
    check_file "${ref%.*}vs${f%.*}"_besthits.faa
    
    num_hits=$(grep -c '^>' "${ref%.*}vs${f%.*}"_besthits.faa)
@@ -510,8 +516,8 @@ for f in "${non_ref[@]}"; do
    fi
    
 
-    print_start_time && echo "# Running: run_blastp ${ref%.*}vs${f%.*}_besthits.faa ${ref}ed $geno_vs_ref_blastout ... "    
-    run_blastp "${ref%.*}vs${f%.*}"_besthits.faa "${ref}"ed "$geno_vs_ref_blastout"
+    print_start_time && printf '%s\n' "# Running: run_blastp $task ${ref%.*}vs${f%.*}_besthits.faa ${ref}ed $geno_vs_ref_blastout ..."    
+    run_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "${ref}"ed "$geno_vs_ref_blastout"
 
     # Sort the blastp output table from the preceding search by increasing E-values (in column 9) and decreasing scores (col 10)
     #    & filter out unique REF vs nonREF RBHs using AWK hashes from the sorted blast output table with qcov > $qcov
@@ -526,6 +532,7 @@ for f in "${non_ref[@]}"; do
     check_file "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
 
 done
+
 
 echo "-----------------------------------------------------------------------------------------------------"
 
@@ -553,27 +560,30 @@ print_start_time && echo "# Computing clusters of homologous sequences ..."
 
 # The core_ref hash counts the instances of the REFERNCE_IDs in the RBH tables
 declare -A core_ref
+core_ref=()
 
 # The pangenome_clusters hash is indexed by REFERNCE_IDs 
 #   and as its value holds the RBHs as a tab-separated
 #   string of IDs from nonREF proteomes    
 declare -A pangenome_clusters
+pangenome_clusters=()
 
 # Construct the pangenome_clusters hash, indexed by reference proteome, 
 #  containing a value a string of tab-separated nonREF proteome RBH IDs.
 print_start_time && echo "# Populating the pangenome_clusters hash ..."
 for t in *RBHs_*.tsv; do
+    [ ! -s "$t" ] && error "file: $t does not exist or is empty"
     while read -r REF QUERY rest
     do
         # count the instances of REFERNCE_IDs in each RBHs_*.tsv tables
 	(( core_ref["$REF"]++ ))
-	if [[ ${core_ref["$REF"]} -eq 1 ]]
+	if (( ${core_ref["$REF"]} == 1 ))
 	then
 	    pangenome_clusters["$REF"]="$QUERY" 
 	else
 	    pangenome_clusters["$REF"]="${pangenome_clusters[$REF]}\t$QUERY"
 	fi
-    done < "$t"
+    done < "$t" || { echo "Failed to process file: $t"; exit 1; } # required test for set -e compliance
 done
 
 
@@ -593,17 +603,18 @@ check_file core_genome_clusters.tsv
 awk -v ninfiles="${#infiles[@]}" 'NF != ninfiles' RBHs_matrix.tsv > nonCore_genome_clusters.tsv
 check_file nonCore_genome_clusters.tsv warn
 
-echo '-----------------------------------------------------------------------------------------------------'
+printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
 #-----------------------------
 # 6. Write cluster FASTA files
 #-----------------------------
 # Below is the code for three strategies to write RBH cluster FASTA files, two of them commented out
 #  The final (uncommented) one is the fastest of the benchmarked strategies. 
-print_start_time && echo "# Extracting RBH cluster FASTA files ..."
+
+print_start_time && printf '%s\n' '# Extracting RBH cluster FASTA files ...'
 
 ## >>> Take 1 6.1 read all source FASTA file into memory (as the hash seqs) for later filtering
-# print_start_time && echo "# reading all source FASTA files into memory (as the hash seqs) ..."
+# print_start_time && echo "# reading all source FASTA files into memory \(as the hash seqs\) ..."
 #
 #declare -A seqs; 
 #
@@ -699,7 +710,7 @@ do
     ((c++)) 
     # write each line of the RBHs_matrix.tsv to a temporal file
     printf '%s\n' "${ids[@]}" > cluster_"${c}".idstmp
-done < RBHs_matrix.tsv
+done < RBHs_matrix.tsv || { echo "Failed to process file: RBHs_matrix.tsv"; exit 1; } # required test for set -e compliance
 
 ## 6.2 pass the list of tmpfiles to a parallel call of blastdbcmd
 ##  This works nicely, but must ensure that parallel is available on host
@@ -707,7 +718,7 @@ done < RBHs_matrix.tsv
 
 # 6.2 use the more portable find | xargs idiom to parallelize the blastdbcmd call
 print_start_time && echo "# Running blastdbcmd in parallel with xargs using all available cores \$(nproc) ..."
-find . -name '*.idstmp' -print0 | xargs -0 -P "$(nproc)" -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
+find . -name '*.idstmp' -print0 | xargs -0 -P $(nproc) -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
 
 
 # 6.3 rename *.idstmp.fas cluster files with rename, if available
@@ -735,15 +746,16 @@ done
 echo '-----------------------------------------------------------------------------------------------------'
 
 
-#----------------
+#-----------------
 # 7. final cleanup
-#----------------
+#-----------------
 #Unnecessary files generated during the process are removed.
 print_start_time && echo "# Tidying up $wkdir ..."
 
 echo '-----------------------------------------------------------------------------------------------------'
 
-((DEBUG == 0)) && rm ./*faaed ./*faaed.* ./*best_hits.tmp ./REF_RBH_IDs.list ./*besthits.faa ./*.idstmp
+((DEBUG == 0)) && rm ./*faaed ./*faaed.* ./*best_hits.tmp ./REF_RBH_IDs.list ./*besthits.faa ./*.idstmp allDBs.pal
+gzip *RBHs_qcov_gt*tsv
 
 elapsed=$(( SECONDS - start_time ))
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#: progname: compute_RBH_orthologs.sh
+#: progname: compute_RBH_clusters.sh
 #: Author: Pablo Vinuesa, CCG-UNAM, @pvinmex, https://www.ccg.unam.mx/~vinuesa/
 #
 #: AIM: Wrapper script around NCBI's blastp, to compute reciprocal best hits (RBHs) between a
@@ -25,28 +25,15 @@
 #: IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
 #: ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 #----------------------------------------------------------------------------------------
-#:   NOTES: 
-#:    1. For a versatile and highly customizable pan-genome analysis 
-#:       software package, consider using GET_HOMOLOGUES
-#:         https://doi.org/10.1128%2FAEM.02411-13
-#:	 https://github.com/eead-csic-compbio/get_homologues
-#:	 https://hub.docker.com/u/eeadcsiccompbio
-#:	 
-#:    2. To perform core- and/or pan-genome phylogenomic analyses
-#:       consider using the GET_PHYLOMARKERS package
-#:       https://doi.org/10.3389/fmicb.2018.00771 
-#:       https://github.com/vinuesa/get_phylomarkers
-#:       https://hub.docker.com/r/vinuesa/get_phylomarkers          
-#----------------------------------------------------------------------------------------
 #: GitHub repo: you can fetch the latest version of the script from:
 #   https://github.com/vinuesa/TIB-filoinfo/blob/master/compute_blastp_RBH_orthologous_clusters.sh
 # wget -c https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/compute_blastp_RBH_orthologous_clusters.sh
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers='1.1.4_2023-10-28' # compute_blastp_RBH_orthologous_clusters.sh v1.1.4_2023-10-28 
-		       #  - added option -N (flag), to print additional notes
-		       #  - cleaned old code remnants processing faaed files
+vers='1.1.5_2023-10-28' # compute_RBH_clusters.sh v1.1.5_2023-10-28 
+		       #  - renamed script to compute_RBH_clusters.sh
+		       #  - additional cleanup of old snippets in the main code section; some added to notes()
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -54,13 +41,15 @@ min_bash_vers=4.4 # required to write modern bash idioms:
 		  #    by setting the -n attribute
 		  #    see https://stackoverflow.com/questions/16461656/how-to-pass-array-as-an-argument-to-a-function-in-bash
 
+# set Bash's unofficial strict mode
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
-
+IFS=$'\n\t'
 
 # fixed custom blastp header
 cols='6 qseqid sseqid pident gaps length qlen slen qcovs evalue score'
 
-# Initialize variables with default values
+# Initialize variables with default values; no undefined/unbound variables allowed in strict mode 
 DEBUG=0
 qcov=60
 num_aln=1
@@ -250,14 +239,81 @@ function print_notes {
        https://doi.org/10.3389/fmicb.2018.00771 
        https://github.com/vinuesa/get_phylomarkers
        https://hub.docker.com/r/vinuesa/get_phylomarkers  
-            
+ 
+ 
+  ====== DEV NOTES =====
+#-----------------------------
+# 6. Write cluster FASTA files
+#-----------------------------
+# Below is the code for three strategies to write RBH cluster FASTA files, two of them commented out
+#  The final (uncommented) one is the fastest of the benchmarked strategies. 
+
+## >>> Take 1 6.1 read all source FASTA file into memory (as the hash seqs) for later filtering
+# print_start_time && echo "# reading all source FASTA files into memory \(as the hash seqs\) ..."
+#
+#declare -A seqs; 
+#
+#for f in "${infiles[@]}"
+#do
+#   while read -r l
+#   do 
+#      if [[ "$l" =~ ^\> ]] # line contains the FASTA header
+#      then 
+#           key=$l
+#      else               # concatenate sequence lines
+#           seqs["$key"]="${seqs[$key]}""${l}"
+#      fi
+#   done < "$f"
+#done
+
+
+## 6.2 filter the hash seqs with cluster keys saved in each line of RBHs_matrix.tsv
+# for k in "${!seqs[@]}"; do if [[ $k =~ \>Q8MYF2 ]]; then echo -e "$k\n${seqs[$k]}"; fi;  done < test.faa
+#print_start_time && echo "# Filtering the seqs hash and writing RBH cluster FASTA files ..."
+
+#initialize cluster counter
+#c=0
+
+## read each line of the RBHs_matrix.tsv
+##  into the ids array using the read -r -a idiom,
+##  and filter the seqs hash with the corresponding IDs as keys
+##  to write out the cluster_x.fas files
+## NOTE: the comment block below implementing
+##  a hash traversing strategy below is very slow, 
+##  even with the continue 2 statement; 
+##    should benchmark the following options: 
+##          - filtering fastab with grep
+##          - use blastdbcmd and 
+#
+#while read -r -a ids
+#do 
+#    ((c++)) 
+#    # iterate over all indexes of the idx array
+#    #  and append them to the growing cluster_"${c}".fastab file
+#    for (( idx=0; idx <= ((${#ids[@]} -1)); idx++))
+#    do
+#	# iterate of all source sequence FASTA headers (k)
+#	#  and print out only sequences matching the ids 
+#	#  in cluster c, concatenating them '>>' to cluster_"${c}".fastab
+#	for k in "${!seqs[@]}"
+#        do 
+#            if [[ "$k" =~ "${ids[$idx]}" ]]
+#	    then 
+#	         ((DEBUG > 0)) && echo "DEBUG (write clusters): k:$k; idx:$idx; ids[$idx]}:${ids[$idx]}; c=$c" >&2
+#		 echo -e "$k\n${seqs[$k]}"
+#		 continue 2
+#	    fi
+#        done >> cluster_"${c}".fas
+#    done 
+#done < RBHs_matrix.tsv
+
+           
 _NOTES_
 
    exit 1  
 
 }
 #----------------------------------------------------------------------------------------- 
-
 
 function print_help {
    # Prints the help message explaining how to use the script.
@@ -545,8 +601,8 @@ core_ref=()
 declare -A all_clusters
 all_clusters=()
 
-# Construct the all_clusters hash, indexed by reference proteome, 
-#  containing a value a string of tab-separated nonREF proteome RBH IDs.
+# 5.1 Construct the all_clusters hash, indexed by reference proteome, 
+#  containing as value a string of tab-separated nonREF proteome RBH IDs.
 print_start_time && echo "# Populating the all_clusters hash ..."
 for t in *RBHs_*.tsv; do
     [ ! -s "$t" ] && error "file: $t does not exist or is empty"
@@ -564,7 +620,7 @@ for t in *RBHs_*.tsv; do
 done
 
 
-# 5.1 print the RBHs_matrix.tsv
+# 5.2 print the RBHs_matrix.tsv
 print_start_time && echo "# Printing the RBHs_matrix, core_genome_clusters, and nonCore_genome_clusters files ..."
 for key in "${!all_clusters[@]}"
 do
@@ -572,11 +628,11 @@ do
 done > RBHs_matrix.tsv
 check_file RBHs_matrix.tsv
 
-# 5.2 print the core_genome_clusters.tsv
+# 5.3 print the core_genome_clusters.tsv
 awk -v ninfiles="${#infiles[@]}" 'NF == ninfiles' RBHs_matrix.tsv > core_genome_clusters.tsv
 check_file core_genome_clusters.tsv
 
-# 5.3 print the nonCore_genome_clusters.tsv
+# 5.4 print the nonCore_genome_clusters.tsv
 awk -v ninfiles="${#infiles[@]}" 'NF != ninfiles' RBHs_matrix.tsv > nonCore_genome_clusters.tsv
 check_file nonCore_genome_clusters.tsv warn
 
@@ -586,100 +642,12 @@ printf '%s\n' '-----------------------------------------------------------------
 #-----------------------------
 # 6. Write cluster FASTA files
 #-----------------------------
-# Below is the code for three strategies to write RBH cluster FASTA files, two of them commented out
-#  The final (uncommented) one is the fastest of the benchmarked strategies. 
 
 print_start_time && printf '%s\n' '# Extracting RBH cluster FASTA files ...'
 
-## >>> Take 1 6.1 read all source FASTA file into memory (as the hash seqs) for later filtering
-# print_start_time && echo "# reading all source FASTA files into memory \(as the hash seqs\) ..."
-#
-#declare -A seqs; 
-#
-#for f in "${infiles[@]}"
-#do
-#   while read -r l
-#   do 
-#      if [[ "$l" =~ ^\> ]] # line contains the FASTA header
-#      then 
-#           key=$l
-#      else               # concatenate sequence lines
-#           seqs["$key"]="${seqs[$key]}""${l}"
-#      fi
-#   done < "$f"
-#done
-
-
-## 6.2 filter the hash seqs with cluster keys saved in each line of RBHs_matrix.tsv
-# for k in "${!seqs[@]}"; do if [[ $k =~ \>Q8MYF2 ]]; then echo -e "$k\n${seqs[$k]}"; fi;  done < test.faa
-#print_start_time && echo "# Filtering the seqs hash and writing RBH cluster FASTA files ..."
-
-#initialize cluster counter
-#c=0
-
-## read each line of the RBHs_matrix.tsv
-##  into the ids array using the read -r -a idiom,
-##  and filter the seqs hash with the corresponding IDs as keys
-##  to write out the cluster_x.fas files
-## NOTE: the comment block below implementing
-##  a hash traversing strategy below is very slow, 
-##  even with the continue 2 statement; 
-##    should benchmark the following options: 
-##          - filtering fastab with grep
-##          - use blastdbcmd and 
-#
-#while read -r -a ids
-#do 
-#    ((c++)) 
-#    # iterate over all indexes of the idx array
-#    #  and append them to the growing cluster_"${c}".fastab file
-#    for (( idx=0; idx <= ((${#ids[@]} -1)); idx++))
-#    do
-#	# iterate of all source sequence FASTA headers (k)
-#	#  and print out only sequences matching the ids 
-#	#  in cluster c, concatenating them '>>' to cluster_"${c}".fastab
-#	for k in "${!seqs[@]}"
-#        do 
-#            if [[ "$k" =~ "${ids[$idx]}" ]]
-#	    then 
-#	         ((DEBUG > 0)) && echo "DEBUG (write clusters): k:$k; idx:$idx; ids[$idx]}:${ids[$idx]}; c=$c" >&2
-#		 echo -e "$k\n${seqs[$k]}"
-#		 continue 2
-#	    fi
-#        done >> cluster_"${c}".fas
-#    done 
-#done < RBHs_matrix.tsv
-
-
-##print_start_time && echo "# Reading RBHs_matrix.tsv and extracting cluster proteins with blastdbcmd ..."
-## >>> Take 2: 6.1 This is the blastdb-based approach, which is a bit faster than the 
-##   hash traversing and filtering approach shown above, but not much more
-## read each line of the RBHs_matrix.tsv
-##  into the ids array using the read -r -a idiom,
-##  and extract the ids from the aliased allDBs blastdb
-
-#declare -a entries
-#while read -r -a ids
-#do 
-#    ((c++)) 
-#    # iterate over all indexes of the idx array
-#    #  and append them to the entries array
-#    for (( idx=0; idx <= ((${#ids[@]} -1)); idx++))
-#    do
-#        entries+=("${ids[$idx]}")
-#    done 
-#    # extract the entries from the aliased allDBs input proteomes
-#    #  note the use of stdbuf to unbuffer the blasdbcmd output, in an attempt to speed it up,
-#    #  but seems to have no effect
-#    #  https://stackoverflow.com/questions/3465619/how-to-make-output-of-any-shell-command-unbuffered
-#    stdbuf -i0 -o0 -e0 blastdbcmd -db allDBs -dbtype prot -entry_batch <(printf '%s\n' "${entries[@]}") -out cluster_"${c}".fas
-#    unset -v entries
-#done < RBHs_matrix.tsv
-
-# >>> Take 3, 6.1 uses blastdbcmd but calling it in parallel with xargs 
-# write the each line of the RBHs_matrix.tsv IDs to a tmpfile
-#  to pass the list of tmpfiles to a parallel call of blastdbcmd
-# print_start_time && echo "# Reading RBHs_matrix.tsv and extracting cluster proteins with blastdbcmd ..."
+# 6.1 (take 3; see notes) blastdbcmd is called from parallel or xargs 
+#  - write the each line of the RBHs_matrix.tsv IDs to a tmpfile
+#    to pass the list of tmpfiles to a parallel call of blastdbcmd
 print_start_time && echo "  - Writing each line of the RBHs_matrix.tsv IDs to an idstmp file por parallelization ..."
 
 #initialize cluster counter

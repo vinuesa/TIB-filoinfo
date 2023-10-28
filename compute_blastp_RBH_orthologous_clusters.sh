@@ -44,11 +44,12 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers=1.1.2_2023-10-26 # compute_blastp_RBH_orthologous_clusters.sh v1.1.2_2023-10-26 
+vers=1.1.3_2023-10-27 # compute_blastp_RBH_orthologous_clusters.sh v1.1.3_2023-10-27 
                      #  - blastp run from run_blastp function using -best_hit_overhang and -best_hit_score_edge for Best-Hits filtering algorithm
 		     #  - improved default params for running blastp, according to PMID: 33099302; now uses task blastp-fast by default
                      #  - implements blastdb_aliastool to alias the proteome specific DBs as allDBs
-		     #  - significant speedup by parallelizing cluster writing with xargs call of blastdbcmd on aliased allDBs
+		     #  - significant speedup by parallelizing cluster writing with parallel (if available) or xargs call of blastdbcmd on aliased allDBs
+		     #  - removed option -F <0|1> [fix FASTA headers]; A Note was added to print_help on FASTA formatting
 		     #  - better formatted output, including colors
 		     #  - complies with "Bash's unofficial strict mode" set -euo pipefail
 
@@ -86,7 +87,7 @@ seg=yes      # yes|no
 mask=true    # true|false
 best_hit_overhang=0.1    # recommended value in blastp -help
 best_hit_score_edge=0.1  # recommended value in blastp -help
-fix_header=0 # do not fix FASTA header for makeblastdb 
+#fix_header=0 # do not fix FASTA header for makeblastdb; disabled in vers. 1.1.3_2023-10-26
 
 # Color codes for output
 RED='\033[0;31m'
@@ -245,8 +246,8 @@ function print_help {
    # Prints the help message explaining how to use the script.
    cat <<EOF
    
-   Usage: $progname -d <dir> [-e <ext>] [-E <Eval>] [-F <0|1>] [-m <matrix>] [-n <num_aln>] [-q <qcov>] [-t <threads>] 
-                              [-T <blastp|blastp-fast>] [-S <yes|no>] -M [<false|true>] [-D] [-h] [-v]
+   Usage: $progname -d <dir> [-e <ext>] [-E <Eval>] [-m <matrix>] [-n <num_aln>] [-q <qcov>]  
+                     [-t <threads>] [-T <blastp|blastp-fast>] [-S <yes|no>] -M [<false|true>] [-D] [-h] [-v]
    
    REQUIRED:
     -d <string> path to directory containing the input proteomes (protein FASTA)
@@ -255,7 +256,6 @@ function print_help {
    -D <flag> print debugging info
    -e <string> fasta file extension name [def:$ext]
    -E <integer or float -ge 0> E-value [def:$Eval]
-   -F <0|1> fix FASTA header for makeblastdb [def:$fix_header]
    -h <flag> print this help
    -n <int> number of blast alignments [def:$num_aln]
    -m <string> matrix name <BLOSUM45|BLOSUM62|BLOSUM80> [def:$mat]
@@ -283,17 +283,24 @@ function print_help {
       See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
       
    NOTES: 
-    1. For a versatile and highly customizable pan-genome analysis 
-       software package, consider using GET_HOMOLOGUES
+    1. Assumes that the input FASTA sequences haver properly-formatted headers 
+         for indexing with makeblastdb
+	 
+    2. A detailed tutorial on using blast efficiently on the Linux command line can found here:
+         https://vinuesa.github.io/TIB-filoinfo/sesion3_BLAST/
+    
+    3. For a versatile and highly customizable pan-genome analysis software package, 
+         consider using GET_HOMOLOGUES
          https://doi.org/10.1128%2FAEM.02411-13
 	 https://github.com/eead-csic-compbio/get_homologues
 	 https://hub.docker.com/u/eeadcsiccompbio
 	 
-    2. To perform core- and/or pan-genome phylogenomic analyses
+    4. To perform core- and/or pan-genome phylogenomic analyses,
        consider using the GET_PHYLOMARKERS package
        https://doi.org/10.3389/fmicb.2018.00771 
        https://github.com/vinuesa/get_phylomarkers
-       https://hub.docker.com/r/vinuesa/get_phylomarkers          
+       https://hub.docker.com/r/vinuesa/get_phylomarkers  
+            
 EOF
 
    check_dependencies
@@ -314,7 +321,7 @@ EOF
 args=("$@")
 
 
-while getopts ':d:e:E:F:m:M:n:q:r:S:t:T:hDv?:' OPTIONS
+while getopts ':d:e:E:m:M:n:q:r:S:t:T:hDv?:' OPTIONS
 do
    case $OPTIONS in
 
@@ -323,8 +330,6 @@ do
    e)   ext=$OPTARG
         ;;
    E)   Eval=$OPTARG
-        ;;
-   F)   fix_header=$OPTARG
         ;;
    h)   print_help
         ;;
@@ -403,7 +408,7 @@ $progname vers. $vers
  - proteome_dir=$proteome_dir | fasta_extension=$ext
  - BLASTP params: blastp v.${blast_vers} | task=$task | num_aln=$num_aln | qcov=$qcov | 
                  Eval=$Eval | mat=$mat | seg=$seg | mask=$mask | threads=$threads 
- - reference=$ref_selection | fix_header=$fix_header | DEBUG=$DEBUG 
+ - reference=$ref_selection | DEBUG=$DEBUG 
  - invocation: $progname ${args[*]}
 ===================================================================================================== 
  " >&2
@@ -416,10 +421,6 @@ $progname vers. $vers
 # ---------------------------------------
 # 0. setup pipeline and select reference
 # ---------------------------------------
-# Check dependencies and Bash version
-#check_dependencies
-#v=$(check_bash_version "$min_bash_vers")
-#echo "# running under bash v.$v"
 
 # Move to proteome directory
 print_start_time && echo "# working in $proteome_dir"
@@ -441,28 +442,33 @@ declare -a non_ref infiles
 non_ref=( $(ls *"${ext}" | grep -v "$ref") )
 infiles=("$ref" "${non_ref[@]}")
 
-# ---------------------------------------------------------------------------
-# 1. edit headers for makeblastdb (blast+): Formatting and Indexing Proteomes
-# ---------------------------------------------------------------------------
-# The FASTA headers of all proteomes are edited using Perl to add a unique identifier.
-if ((fix_header == 1))
-then
-    print_start_time && echo "# Formatting ${#infiles[@]} input FASTA files for indexing"
-    perl -pe 'if(/^>/){$c++; s/>/>lcl\|REF_$c /}' "$ref" > "${ref}ed"
+## ---------------------------------------------------------------------------
+## 1. edit headers for makeblastdb (blast+): Formatting and Indexing Proteomes
+## ---------------------------------------------------------------------------
+## The FASTA headers of all proteomes are edited using Perl to add a unique identifier.
+#if ((fix_header == 1))
+#then
+#    print_start_time && echo "# Formatting ${#infiles[@]} input FASTA files for indexing"
+#    perl -pe 'if(/^>/){$c++; s/>/>lcl\|REF_$c /}' "$ref" > "${ref}ed"
+#
+#    genome_ID=0
+#    g=0
+#    for f in "${non_ref[@]}"; do
+#        genome_ID=$(( genome_ID + 1 ))
+#	g="$genome_ID"
+#        perl -pe 'if(/^>/){$c++; s/>/>lcl\|GENO$ENV{g}\_$c /}' "$f" > "${f}ed"
+#    done
+#else
+#    for f in *"${ext}"
+#    do
+#        ln -s "$f" "${f}ed"   
+#    done
+#fi
 
-    genome_ID=0
-    g=0
-    for f in "${non_ref[@]}"; do
-        genome_ID=$(( genome_ID + 1 ))
-	g="$genome_ID"
-        perl -pe 'if(/^>/){$c++; s/>/>lcl\|GENO$ENV{g}\_$c /}' "$f" > "${f}ed"
-    done
-else
-    for f in *"${ext}"
-    do
-        ln -s "$f" "${f}ed"   
-    done
-fi
+for f in *"${ext}"
+do
+    ln -s "$f" "${f}ed" 
+done
 
 declare -a faaed_files
 faaed_files=($(ls *.faaed))
@@ -515,7 +521,6 @@ for f in "${non_ref[@]}"; do
 	continue
    fi
    
-
     print_start_time && printf '%s\n' "# Running: run_blastp $task ${ref%.*}vs${f%.*}_besthits.faa ${ref}ed $geno_vs_ref_blastout ..."    
     run_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "${ref}"ed "$geno_vs_ref_blastout"
 
@@ -533,8 +538,7 @@ for f in "${non_ref[@]}"; do
 
 done
 
-
-echo "-----------------------------------------------------------------------------------------------------"
+printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
 
 #-----------------------------------------------------------------------
@@ -549,7 +553,7 @@ intersection_size=$(wc -l REF_RBH_IDs.list | awk '{print $1}')
 ((intersection_size > 0)) && echo -e "${LBLUE}  Found $intersection_size core RBHs shared by ${#non_ref[*]} nonREF proteomes with the $ref reference proteome${NC}"
 ((intersection_size == 0)) && error "# ERROR: found $intersection_size core orhtologous genes among ${#infiles[*]} input proteomes ..."
 
-echo '-----------------------------------------------------------------------------------------------------'
+printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
 #-------------------------------------------------------------------------------------------------------------------------
 # 5. Loop over tsv files and generate RBHs_matrix.tsv core_genome_clusters.tsv and nonCore_genome_clusters.tsv tables
@@ -562,15 +566,15 @@ print_start_time && echo "# Computing clusters of homologous sequences ..."
 declare -A core_ref
 core_ref=()
 
-# The pangenome_clusters hash is indexed by REFERNCE_IDs 
+# The all_clusters hash is indexed by REFERNCE_IDs 
 #   and as its value holds the RBHs as a tab-separated
 #   string of IDs from nonREF proteomes    
-declare -A pangenome_clusters
-pangenome_clusters=()
+declare -A all_clusters
+all_clusters=()
 
-# Construct the pangenome_clusters hash, indexed by reference proteome, 
+# Construct the all_clusters hash, indexed by reference proteome, 
 #  containing a value a string of tab-separated nonREF proteome RBH IDs.
-print_start_time && echo "# Populating the pangenome_clusters hash ..."
+print_start_time && echo "# Populating the all_clusters hash ..."
 for t in *RBHs_*.tsv; do
     [ ! -s "$t" ] && error "file: $t does not exist or is empty"
     while read -r REF QUERY rest
@@ -579,19 +583,19 @@ for t in *RBHs_*.tsv; do
 	(( core_ref["$REF"]++ ))
 	if (( ${core_ref["$REF"]} == 1 ))
 	then
-	    pangenome_clusters["$REF"]="$QUERY" 
+	    all_clusters["$REF"]="$QUERY" 
 	else
-	    pangenome_clusters["$REF"]="${pangenome_clusters[$REF]}\t$QUERY"
+	    all_clusters["$REF"]="${all_clusters[$REF]}\t$QUERY"
 	fi
     done < "$t" || { echo "Failed to process file: $t"; exit 1; } # required test for set -e compliance
 done
 
 
 # 5.1 print the RBHs_matrix.tsv
-print_start_time && echo "# Printing the pangenome_matrix, core_genome_clusters, and nonCore_genome_clusters files ..."
-for key in "${!pangenome_clusters[@]}"
+print_start_time && echo "# Printing the RBHs_matrix, core_genome_clusters, and nonCore_genome_clusters files ..."
+for key in "${!all_clusters[@]}"
 do
-      echo -e "${key}\t${pangenome_clusters[$key]}"
+      echo -e "${key}\t${all_clusters[$key]}"
 done > RBHs_matrix.tsv
 check_file RBHs_matrix.tsv
 
@@ -673,7 +677,7 @@ print_start_time && printf '%s\n' '# Extracting RBH cluster FASTA files ...'
 #done < RBHs_matrix.tsv
 
 
-print_start_time && echo "# Reading RBHs_matrix.tsv and extracting cluster proteins with blastdbcmd ..."
+##print_start_time && echo "# Reading RBHs_matrix.tsv and extracting cluster proteins with blastdbcmd ..."
 ## >>> Take 2: 6.1 This is the blastdb-based approach, which is a bit faster than the 
 ##   hash traversing and filtering approach shown above, but not much more
 ## read each line of the RBHs_matrix.tsv
@@ -701,7 +705,8 @@ print_start_time && echo "# Reading RBHs_matrix.tsv and extracting cluster prote
 # >>> Take 3, 6.1 uses blastdbcmd but calling it in parallel with xargs 
 # write the each line of the RBHs_matrix.tsv IDs to a tmpfile
 #  to pass the list of tmpfiles to a parallel call of blastdbcmd
-print_start_time && echo "# Writing each line of the RBHs_matrix.tsv IDs to an idstmp file por parallelization ..."
+# print_start_time && echo "# Reading RBHs_matrix.tsv and extracting cluster proteins with blastdbcmd ..."
+print_start_time && echo "  - Writing each line of the RBHs_matrix.tsv IDs to an idstmp file por parallelization ..."
 
 #initialize cluster counter
 c=0
@@ -712,23 +717,24 @@ do
     printf '%s\n' "${ids[@]}" > cluster_"${c}".idstmp
 done < RBHs_matrix.tsv || { echo "Failed to process file: RBHs_matrix.tsv"; exit 1; } # required test for set -e compliance
 
-## 6.2 pass the list of tmpfiles to a parallel call of blastdbcmd
-##  This works nicely, but must ensure that parallel is available on host
-#ls *.idstmp | parallel --gnu -j "$threads" 'blastdbcmd -db allDBs -dbtype prot -entry_batch {} -out {.}.fas'  
-
-# 6.2 use the more portable find | xargs idiom to parallelize the blastdbcmd call
-print_start_time && echo "# Running blastdbcmd in parallel with xargs using all available cores \$(nproc) ..."
-find . -name '*.idstmp' -print0 | xargs -0 -P $(nproc) -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
-
-
-# 6.3 rename *.idstmp.fas cluster files with rename, if available
-if command -v rename &> /dev/null; 
+# 6.2 Pass the list of tmpfiles to a parallel call of blastdbcmd, or, if not available, call it from xargs
+if command -v parallel &> /dev/null 
 then 
-    rename 's/\.idstmp//' *.fas
+    print_start_time && echo "  - Running blastdbcmd through parallel with -j \$(nproc) ..."
+    find . -name '*.idstmp' | parallel --gnu -j $(nproc) 'blastdbcmd -db allDBs -dbtype prot -entry_batch {} -out {.}.fas'  
+else
+    # use the more portable find | xargs idiom to parallelize the blastdbcmd call of parallel is not found on host
+    print_start_time && echo "  - Running blastdbcmd in parallel with xargs using all available cores \$(nproc) ..."
+    find . -name '*.idstmp' -print0 | xargs -0 -P $(nproc) -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
+
+    # rename *.idstmp.fas cluster files with rename, if available
+    if command -v rename &> /dev/null; 
+    then 
+        rename 's/\.idstmp//' *.fas
+    fi
 fi
 
-
-# 6.4 filter out core and nonCore clusters
+# 6.3 filter out core and nonCore clusters
 print_start_time && echo "# Moving core and nonCore clusters to their respective directories ..."
 
 mkdir core_clusters || error "could not mkdir core_clusters"
@@ -739,11 +745,11 @@ do
     then 
          mv "$f" core_clusters/core_"${f}" || error "could not mv $f to core_clusters/core_${f}"
     else
-         mv "$f" nonCore_clusters/nonCore_"${f}" || error "could mv $f to nonCore_clusters/nonCore_${f}"
+         mv "$f" nonCore_clusters/nonCore_"${f}" || error "could not mv $f to nonCore_clusters/nonCore_${f}"
     fi
 done
 
-echo '-----------------------------------------------------------------------------------------------------'
+printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
 
 #-----------------
@@ -752,7 +758,7 @@ echo '--------------------------------------------------------------------------
 #Unnecessary files generated during the process are removed.
 print_start_time && echo "# Tidying up $wkdir ..."
 
-echo '-----------------------------------------------------------------------------------------------------'
+printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
 ((DEBUG == 0)) && rm ./*faaed ./*faaed.* ./*best_hits.tmp ./REF_RBH_IDs.list ./*besthits.faa ./*.idstmp allDBs.pal
 gzip *RBHs_qcov_gt*tsv

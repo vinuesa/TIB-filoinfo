@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-#: progname: compute_RBH_clusters.sh
+#: progname: compute_RBH_orthologs.sh
 #: Author: Pablo Vinuesa, CCG-UNAM, @pvinmex, https://www.ccg.unam.mx/~vinuesa/
 #
-#: AIM: Wrapper script around NCBI's blastp, to compute reciprocal best hits between a
+#: AIM: Wrapper script around NCBI's blastp, to compute reciprocal best hits (RBHs) between a
 #:      reference genome (manually or automatically selected) and a set of additional
-#:      proteomes (protein fasta files). It also computes the core and non_core sets, 
+#:      proteomes (protein fasta files). It also computes the core and non_core RBH sets, 
 #:      writing the corresponding clusters (FASTA files) to disk
 #
 #: Design: The code is partially parallelized:
@@ -44,21 +44,9 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers=1.1.3_2023-10-27 # compute_blastp_RBH_orthologous_clusters.sh v1.1.3_2023-10-27 
-                     #  - blastp run from run_blastp function using -best_hit_overhang and -best_hit_score_edge for Best-Hits filtering algorithm
-		     #  - improved default params for running blastp, according to PMID: 33099302; now uses task blastp-fast by default
-                     #  - implements blastdb_aliastool to alias the proteome specific DBs as allDBs
-		     #  - significant speedup by parallelizing cluster writing with parallel (if available) or xargs call of blastdbcmd on aliased allDBs
-		     #  - removed option -F <0|1> [fix FASTA headers]; A Note was added to print_help on FASTA formatting
-		     #  - better formatted output, including colors
-		     #  - complies with "Bash's unofficial strict mode" set -euo pipefail
-
-    # v1.0_2023-10-24
-    # - Major rewrite and simplification of the RBH filtering code, now using AWK hashes. 
-    # - Major rewrite and simplification of the code to write out clusters
-    # - Customized and more informative BLAST results table fields
-    # - higher customizability of BLAST runs
-		         
+vers=1.1.3_2023-10-28 # compute_blastp_RBH_orthologous_clusters.sh v1.1.3_2023-10-28 
+		     #  - activated missing option -r <ref>
+		     #  - A Note was added to print_help on FASTA header format requirement for local/user proteomes
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -246,8 +234,8 @@ function print_help {
    # Prints the help message explaining how to use the script.
    cat <<EOF
    
-   Usage: $progname -d <dir> [-e <ext>] [-E <Eval>] [-m <matrix>] [-n <num_aln>] [-q <qcov>]  
-                     [-t <threads>] [-T <blastp|blastp-fast>] [-S <yes|no>] -M [<false|true>] [-D] [-h] [-v]
+   Usage: $progname -d <dir> [-e <ext>] [-r <reference proteome>] [-E <Eval>] [-m <matrix>] [-n <num_aln>] [-q <qcov>]  
+             [-t <threads>] [-T <blastp|blastp-fast>] [-S <yes|no>] -M [<false|true>] [-D] [-h] [-v]
    
    REQUIRED:
     -d <string> path to directory containing the input proteomes (protein FASTA)
@@ -261,6 +249,7 @@ function print_help {
    -m <string> matrix name <BLOSUM45|BLOSUM62|BLOSUM80> [def:$mat]
    -M <false|true> soft_masking [def:$mask]
    -q <int> minimum query coverage percentage cutoff [def:$qcov]
+   -r <string> name of user-selected reference proteome
    -S <yes|no> SEG filtering [def:$seg]
    -t <int> number of threads for blastp runs [def:$threads]
    -T <string> blastp task <blastp|blastp-fast> [def:$task]
@@ -284,7 +273,8 @@ function print_help {
       
    NOTES: 
     1. Assumes that the input FASTA sequences haver properly-formatted headers 
-         for indexing with makeblastdb
+         for indexing with makeblastdb; locally/user generated proteomes should have
+	 the following FASTA header structure >lcl|numericID_ORGNemonic
 	 
     2. A detailed tutorial on using blast efficiently on the Linux command line can found here:
          https://vinuesa.github.io/TIB-filoinfo/sesion3_BLAST/
@@ -430,7 +420,7 @@ wkdir=$(pwd)
 
 print_start_time && echo '# Selecting the smallest genome as the reference'
 # automatically select the smallest reference, if not provided as ARG
-if [[ -z "$ref" ]]; then
+if [[ "$ref_selection" == "auto" ]]; then
     ref=$(select_ref "$ext")
     echo "  - Selected $ref as the reference genome"
 fi

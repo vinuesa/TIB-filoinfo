@@ -44,9 +44,9 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers=1.1.3_2023-10-28 # compute_blastp_RBH_orthologous_clusters.sh v1.1.3_2023-10-28 
-		     #  - activated missing option -r <ref>
-		     #  - A Note was added to print_help on FASTA header format requirement for local/user proteomes
+vers='1.1.4_2023-10-28' # compute_blastp_RBH_orthologous_clusters.sh v1.1.4_2023-10-28 
+		       #  - added option -N (flag), to print additional notes
+		       #  - cleaned old code remnants processing faaed files
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -229,6 +229,35 @@ function run_blastp {
 }
 #----------------------------------------------------------------------------------------- 
 
+function print_notes {
+   cat <<_NOTES_
+   
+    1. The auxiliary scritp fix_FASTA_headers4blastdb.sh might be helpful
+        to generate properly-formatted FASTA headers of local/user proteomes.
+	It is available from https://github.com/vinuesa/TIB-filoinfo
+
+    2. A detailed tutorial on using blast efficiently on the Linux command line can found here:
+         https://vinuesa.github.io/TIB-filoinfo/sesion3_BLAST/
+    
+    3. For a versatile and highly customizable pan-genome analysis software package, 
+         consider using GET_HOMOLOGUES
+         https://doi.org/10.1128%2FAEM.02411-13
+	 https://github.com/eead-csic-compbio/get_homologues
+	 https://hub.docker.com/u/eeadcsiccompbio
+	 
+    4. To perform core- and/or pan-genome phylogenomic analyses,
+       consider using the GET_PHYLOMARKERS package
+       https://doi.org/10.3389/fmicb.2018.00771 
+       https://github.com/vinuesa/get_phylomarkers
+       https://hub.docker.com/r/vinuesa/get_phylomarkers  
+            
+_NOTES_
+
+   exit 1  
+
+}
+#----------------------------------------------------------------------------------------- 
+
 
 function print_help {
    # Prints the help message explaining how to use the script.
@@ -260,11 +289,10 @@ function print_help {
      $progname -d proteome_files -n 5 -t \$(nproc)
    
    AIM: 
-      Wrapper script around NCBI\'s blastp, to compute reciprocal best hits between a
-      reference genome (manually or automatically selected) and a set of additional
-      proteomes (protein fasta files). It also computes the core and non_core sets, 
-      writing the corresponding clusters (FASTA files) to disk in 
-      the core_clusters and nonCore_clusters directories
+      Wrapper script around NCBI\'s blastp, to compute reciprocal best hits (RBHs) between a
+      reference genome (manually or automatically selected) and a set of additional proteomes
+      (protein fasta files). It also computes the core and non_core RBH sets, writing the 
+      corresponding clusters (FASTA files) to disk in the core_clusters and nonCore_clusters dirs.
    
    SOURCE: the latest version can be fetched from https://github.com/vinuesa/TIB-filoinfo
 	   
@@ -274,23 +302,10 @@ function print_help {
    NOTES: 
     1. Assumes that the input FASTA sequences haver properly-formatted headers 
          for indexing with makeblastdb; locally/user generated proteomes should have
-	 the following FASTA header structure >lcl|numericID_ORGNemonic
+	 the following FASTA header structure: '>lcl|uniqueID_ORGNemonic'
+	 like in '>lcl|FUN_005793_ACAC3' or '>lcl|000762_Sm18'. 
+    2. run $progname -N for additional notes	 
 	 
-    2. A detailed tutorial on using blast efficiently on the Linux command line can found here:
-         https://vinuesa.github.io/TIB-filoinfo/sesion3_BLAST/
-    
-    3. For a versatile and highly customizable pan-genome analysis software package, 
-         consider using GET_HOMOLOGUES
-         https://doi.org/10.1128%2FAEM.02411-13
-	 https://github.com/eead-csic-compbio/get_homologues
-	 https://hub.docker.com/u/eeadcsiccompbio
-	 
-    4. To perform core- and/or pan-genome phylogenomic analyses,
-       consider using the GET_PHYLOMARKERS package
-       https://doi.org/10.3389/fmicb.2018.00771 
-       https://github.com/vinuesa/get_phylomarkers
-       https://hub.docker.com/r/vinuesa/get_phylomarkers  
-            
 EOF
 
    check_dependencies
@@ -311,7 +326,7 @@ EOF
 args=("$@")
 
 
-while getopts ':d:e:E:m:M:n:q:r:S:t:T:hDv?:' OPTIONS
+while getopts ':d:e:E:m:M:n:q:r:S:t:T:hDvN?:' OPTIONS
 do
    case $OPTIONS in
 
@@ -328,6 +343,8 @@ do
    M)   mask=$OPTARG
         ;;
    n)   num_aln=$OPTARG
+        ;;
+   N)   print_notes
         ;;
    q)   qcov=$OPTARG
         ;;
@@ -371,11 +388,6 @@ else
      ref_selection="$ref"
 fi
 
-###>>> Exported variables !!!
-genome_ID=''
-declare -x g=$genome_ID perl # export only2perl!!!; call as $ENV{genome_ID}
-
-
 today=$(print_start_date)
 hostn=$(hostname)
 
@@ -383,7 +395,6 @@ bash_vers=$(check_bash_version "$min_bash_vers")
 nprocs=$(print_n_processors)
 os=$(uname -o)
 blast_vers=$(blastp -version | awk 'NR == 1{print $2}')
-
 
 # OK, ready to start the analysis ...
 start_time=$SECONDS
@@ -425,43 +436,17 @@ if [[ "$ref_selection" == "auto" ]]; then
     echo "  - Selected $ref as the reference genome"
 fi
 
-echo '-----------------------------------------------------------------------------------------------------'
+printf '%s\n' '-----------------------------------------------------------------------------------------------------'
+
+# ----------------------------------------------------------
+# 1. Read proteome files into the non_ref and infiles arrays
+# ----------------------------------------------------------
 
 # keep the ref as first element in fasta arrays
 declare -a non_ref infiles 
 non_ref=( $(ls *"${ext}" | grep -v "$ref") )
 infiles=("$ref" "${non_ref[@]}")
 
-## ---------------------------------------------------------------------------
-## 1. edit headers for makeblastdb (blast+): Formatting and Indexing Proteomes
-## ---------------------------------------------------------------------------
-## The FASTA headers of all proteomes are edited using Perl to add a unique identifier.
-#if ((fix_header == 1))
-#then
-#    print_start_time && echo "# Formatting ${#infiles[@]} input FASTA files for indexing"
-#    perl -pe 'if(/^>/){$c++; s/>/>lcl\|REF_$c /}' "$ref" > "${ref}ed"
-#
-#    genome_ID=0
-#    g=0
-#    for f in "${non_ref[@]}"; do
-#        genome_ID=$(( genome_ID + 1 ))
-#	g="$genome_ID"
-#        perl -pe 'if(/^>/){$c++; s/>/>lcl\|GENO$ENV{g}\_$c /}' "$f" > "${f}ed"
-#    done
-#else
-#    for f in *"${ext}"
-#    do
-#        ln -s "$f" "${f}ed"   
-#    done
-#fi
-
-for f in *"${ext}"
-do
-    ln -s "$f" "${f}ed" 
-done
-
-declare -a faaed_files
-faaed_files=($(ls *.faaed))
 
 # -------------------------------------------------------------------
 # 2. run makeblastdb on all input proteomes with edited FASTA headers
@@ -469,17 +454,17 @@ faaed_files=($(ls *.faaed))
 # Each proteome is used to create a blastp database using makeblastdb.
 print_start_time && echo "# Generating indexed blastp databases"
 
-for f in *"${ext}"ed
+for f in "${infiles[@]}"
 do 
-    #Note: -parse_seqids results in query and subject IDs with different structure => lcl|A_DB_203  B_DB_166
     makeblastdb -in "$f" -dbtype prot -parse_seqids &> /dev/null
 done
 
 
 print_start_time && echo "# Generating the aliased blastp database allDBs ..."
-blastdb_aliastool -dblist_file <(printf '%s\n' "${faaed_files[@]}") -dbtype prot -out allDBs -title allDBs
+blastdb_aliastool -dblist_file <(printf '%s\n' "${infiles[@]}") -dbtype prot -out allDBs -title allDBs
 
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
+
 
 #-----------------------------------
 # 3. Run and process pairwise blastp 
@@ -487,19 +472,17 @@ printf '%s\n' '-----------------------------------------------------------------
 # For each non-reference proteome, blastp is run against the reference proteome 
 #   (REFvsGENO) and vice versa (GENOvsREF).
 
-genome_ID=0
-for f in "${non_ref[@]}"; do
-    genome_ID=$(( genome_ID + 1 ))
-    
+for f in "${non_ref[@]}"
+do
     ref_vs_geno_blastout=${ref%.*}vs${f%.*}_best_hits.tmp
     geno_vs_ref_blastout=${f%.*}vs${ref%.*}_best_hits.tmp
     
     print_start_time && echo "# Running: run_blastp $task ${ref}ed ${f}ed $ref_vs_geno_blastout" 
-    run_blastp "$task" "${ref}"ed "${f}"ed "$ref_vs_geno_blastout"
+    run_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
 
    # Retrieve the best nonREF proteome database hits using blastdbcmd, onlfy if qcov > \$qcov
    print_start_time && echo "# Retrieving the best hits from $ref_vs_geno_blastout with blastdbcmd ... "
-   blastdbcmd -entry_batch <(awk -F"\t" -v qcov="$qcov" '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "${f}"ed > "${ref%.*}vs${f%.*}"_besthits.faa
+   blastdbcmd -entry_batch <(awk -F"\t" -v qcov="$qcov" '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "$f" > "${ref%.*}vs${f%.*}"_besthits.faa
    check_file "${ref%.*}vs${f%.*}"_besthits.faa
    
    num_hits=$(grep -c '^>' "${ref%.*}vs${f%.*}"_besthits.faa)
@@ -512,7 +495,7 @@ for f in "${non_ref[@]}"; do
    fi
    
     print_start_time && printf '%s\n' "# Running: run_blastp $task ${ref%.*}vs${f%.*}_besthits.faa ${ref}ed $geno_vs_ref_blastout ..."    
-    run_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "${ref}"ed "$geno_vs_ref_blastout"
+    run_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
 
     # Sort the blastp output table from the preceding search by increasing E-values (in column 9) and decreasing scores (col 10)
     #    & filter out unique REF vs nonREF RBHs using AWK hashes from the sorted blast output table with qcov > $qcov
@@ -525,7 +508,6 @@ for f in "${non_ref[@]}"; do
              "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
     
     check_file "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
-
 done
 
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
@@ -544,6 +526,7 @@ intersection_size=$(wc -l REF_RBH_IDs.list | awk '{print $1}')
 ((intersection_size == 0)) && error "# ERROR: found $intersection_size core orhtologous genes among ${#infiles[*]} input proteomes ..."
 
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
+
 
 #-------------------------------------------------------------------------------------------------------------------------
 # 5. Loop over tsv files and generate RBHs_matrix.tsv core_genome_clusters.tsv and nonCore_genome_clusters.tsv tables
@@ -598,6 +581,7 @@ awk -v ninfiles="${#infiles[@]}" 'NF != ninfiles' RBHs_matrix.tsv > nonCore_geno
 check_file nonCore_genome_clusters.tsv warn
 
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
+
 
 #-----------------------------
 # 6. Write cluster FASTA files
@@ -750,7 +734,7 @@ print_start_time && echo "# Tidying up $wkdir ..."
 
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
-((DEBUG == 0)) && rm ./*faaed ./*faaed.* ./*best_hits.tmp ./REF_RBH_IDs.list ./*besthits.faa ./*.idstmp allDBs.pal
+((DEBUG == 0)) && rm *."${ext}".* ./*best_hits.tmp ./REF_RBH_IDs.list ./*besthits.faa ./*.idstmp allDBs.pal
 gzip *RBHs_qcov_gt*tsv
 
 elapsed=$(( SECONDS - start_time ))

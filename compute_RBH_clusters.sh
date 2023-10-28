@@ -31,8 +31,8 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers='1.1.5_2023-10-28' # compute_RBH_clusters.sh v1.1.5_2023-10-28 
-		       #  - renamed script to compute_RBH_clusters.sh
+vers='1.1.6_2023-10-28' # compute_RBH_clusters.sh v1.1.6_2023-10-28 
+		       #  - minor fixes: quoted 'EOF' in print_notes; changed invocation: $progname ${args[*]} to ${args[@]}
 		       #  - additional cleanup of old snippets in the main code section; some added to notes()
 
 min_bash_vers=4.4 # required to write modern bash idioms:
@@ -160,7 +160,7 @@ function select_ref {
 
 function print_n_processors {
     # Prints the number of processors/cores on the system.
-    # could also use nproc, which is part of GNU core utils
+    # could also use nproc, which is part of GNU core utils ;)
     awk '/processor/{p++}END{print p}' /proc/cpuinfo
 }
 #----------------------------------------------------------------------------------------- 
@@ -172,8 +172,8 @@ function print_end_message {
   Done!
   
   ========================================================================================
-  If you use $progname v.$vers for your research,
-  I would appreciate that you:
+  If you use $progname v.$vers for your research, then please:
+  
   
   1. Cite the code in your work as:   
   Pablo Vinuesa. $progname v.$vers 
@@ -219,7 +219,8 @@ function run_blastp {
 #----------------------------------------------------------------------------------------- 
 
 function print_notes {
-   cat <<_NOTES_
+
+   cat << 'EOF'
    
     1. The auxiliary scritp fix_FASTA_headers4blastdb.sh might be helpful
         to generate properly-formatted FASTA headers of local/user proteomes.
@@ -308,7 +309,7 @@ function print_notes {
 #done < RBHs_matrix.tsv
 
            
-_NOTES_
+EOF
 
    exit 1  
 
@@ -341,7 +342,7 @@ function print_help {
    -v <flag> print version
    
    EXAMPLES:
-     $progname -d . -m BLOSUM80 -T blastp -q 85
+     $progname -d . -m BLOSUM80 -T blastp -q 85 -r my_ref.fa -e fa
      $progname -d proteome_files -n 5 -t \$(nproc)
    
    AIM: 
@@ -466,7 +467,7 @@ $progname vers. $vers
  - BLASTP params: blastp v.${blast_vers} | task=$task | num_aln=$num_aln | qcov=$qcov | 
                  Eval=$Eval | mat=$mat | seg=$seg | mask=$mask | threads=$threads 
  - reference=$ref_selection | DEBUG=$DEBUG 
- - invocation: $progname ${args[*]}
+ - invocation: $progname ${args[@]}
 ===================================================================================================== 
  " >&2
 

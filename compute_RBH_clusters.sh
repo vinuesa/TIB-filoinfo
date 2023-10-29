@@ -27,13 +27,13 @@
 #----------------------------------------------------------------------------------------
 #: GitHub repo: you can fetch the latest version of the script from:
 #   https://github.com/vinuesa/TIB-filoinfo/blob/master/compute_blastp_RBH_orthologous_clusters.sh
-# wget -c https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/compute_blastp_RBH_orthologous_clusters.sh
+# wget -c https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/compute_RBH_clusters.sh
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers='1.1.6_2023-10-28' # compute_RBH_clusters.sh v1.1.6_2023-10-28 
-		       #  - minor fixes: quoted 'EOF' in print_notes; changed invocation: $progname ${args[*]} to ${args[@]}
-		       #  - additional cleanup of old snippets in the main code section; some added to notes()
+vers='1.1.7_2023-10-29' # compute_RBH_clusters.sh v1.1.7_2023-10-29 
+		       #  - added function check_dir_is_clean
+		       #  - a few minor fixes and code tidying
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -64,7 +64,6 @@ seg=yes      # yes|no
 mask=true    # true|false
 best_hit_overhang=0.1    # recommended value in blastp -help
 best_hit_score_edge=0.1  # recommended value in blastp -help
-#fix_header=0 # do not fix FASTA header for makeblastdb; disabled in vers. 1.1.3_2023-10-26
 
 # Color codes for output
 RED='\033[0;31m'
@@ -198,6 +197,21 @@ $progname v.$vers
 
 EOF
   exit 1
+}
+#----------------------------------------------------------------------------------------- 
+
+function check_dir_is_clean {
+  
+  # make sure that the working directory does not contain *tsv or *tmp files
+  if ls *.tsv &> /dev/null 
+  then 
+      error "Found *tsv files in $wkdir; $progname requires a clean directory, containing only the source proteome FASTA files"
+  fi
+
+  if ls *.tmp &> /dev/null 
+  then 
+      error "Found *tmp files in $wkdir; $progname requires a clean directory, containing only the source proteome FASTA files"
+  fi
 }
 #----------------------------------------------------------------------------------------- 
 
@@ -360,8 +374,9 @@ function print_help {
     1. Assumes that the input FASTA sequences haver properly-formatted headers 
          for indexing with makeblastdb; locally/user generated proteomes should have
 	 the following FASTA header structure: '>lcl|uniqueID_ORGNemonic'
-	 like in '>lcl|FUN_005793_ACAC3' or '>lcl|000762_Sm18'. 
-    2. run $progname -N for additional notes	 
+	 like in '>lcl|FUN_005793_ACAC3' or '>lcl|000762_Sm18'.
+    2. Make sure that the working directory contains only the uncompressed proteome FASTA files (faa) 
+    3. run $progname -N for additional notes	 
 	 
 EOF
 
@@ -493,6 +508,8 @@ if [[ "$ref_selection" == "auto" ]]; then
     echo "  - Selected $ref as the reference genome"
 fi
 
+check_dir_is_clean
+
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
 # ----------------------------------------------------------
@@ -534,7 +551,7 @@ do
     ref_vs_geno_blastout=${ref%.*}vs${f%.*}_best_hits.tmp
     geno_vs_ref_blastout=${f%.*}vs${ref%.*}_best_hits.tmp
     
-    print_start_time && echo "# Running: run_blastp $task ${ref}ed ${f}ed $ref_vs_geno_blastout" 
+    print_start_time && echo "# Running: run_blastp $task ${ref} ${f} $ref_vs_geno_blastout" 
     run_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
 
    # Retrieve the best nonREF proteome database hits using blastdbcmd, onlfy if qcov > \$qcov
@@ -551,7 +568,7 @@ do
 	continue
    fi
    
-    print_start_time && printf '%s\n' "# Running: run_blastp $task ${ref%.*}vs${f%.*}_besthits.faa ${ref}ed $geno_vs_ref_blastout ..."    
+    print_start_time && printf '%s\n' "# Running: run_blastp $task ${ref%.*}vs${f%.*}_besthits.faa ${ref} $geno_vs_ref_blastout ..."    
     run_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
 
     # Sort the blastp output table from the preceding search by increasing E-values (in column 9) and decreasing scores (col 10)
@@ -574,7 +591,8 @@ printf '%s\n' '-----------------------------------------------------------------
 # 4. Identify REF proteins shared by all tsv files holding pairwise RBHs
 #-----------------------------------------------------------------------
 # Find the intersections of REFs in all tsv files
-print_start_time && echo "# Computing the intersections of REF proteins in all tsv files holding pairwise RBHs ... "
+
+print_start_time && printf '%s\n' '# Computing the intersections of REF proteins in all tsv files holding pairwise RBHs ... '
 awk '{r[$1]++; if(r[$1] == ARGC-1) print $1}' ./*.tsv > REF_RBH_IDs.list
 [[ ! -s REF_RBH_IDs.list ]] && error "could not write REF_RBH_IDs.list"
 
@@ -649,7 +667,7 @@ print_start_time && printf '%s\n' '# Extracting RBH cluster FASTA files ...'
 # 6.1 (take 3; see notes) blastdbcmd is called from parallel or xargs 
 #  - write the each line of the RBHs_matrix.tsv IDs to a tmpfile
 #    to pass the list of tmpfiles to a parallel call of blastdbcmd
-print_start_time && echo "  - Writing each line of the RBHs_matrix.tsv IDs to an idstmp file por parallelization ..."
+print_start_time && printf '%s\n' '  - Writing each line of the RBHs_matrix.tsv IDs to an idstmp file por parallelization ...'
 
 #initialize cluster counter
 c=0
@@ -663,11 +681,11 @@ done < RBHs_matrix.tsv || { echo "Failed to process file: RBHs_matrix.tsv"; exit
 # 6.2 Pass the list of tmpfiles to a parallel call of blastdbcmd, or, if not available, call it from xargs
 if command -v parallel &> /dev/null 
 then 
-    print_start_time && echo "  - Running blastdbcmd through parallel with -j \$(nproc) ..."
+    print_start_time && printf '%s\n'  '  - Running blastdbcmd through parallel with -j \$(nproc) ...'
     find . -name '*.idstmp' | parallel --gnu -j $(nproc) 'blastdbcmd -db allDBs -dbtype prot -entry_batch {} -out {.}.fas'  
 else
     # use the more portable find | xargs idiom to parallelize the blastdbcmd call of parallel is not found on host
-    print_start_time && echo "  - Running blastdbcmd in parallel with xargs using all available cores \$(nproc) ..."
+    print_start_time && '%s\n' '  - Running blastdbcmd in parallel with xargs using all available cores \$(nproc) ...'
     find . -name '*.idstmp' -print0 | xargs -0 -P $(nproc) -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
 
     # rename *.idstmp.fas cluster files with rename, if available
@@ -678,7 +696,7 @@ else
 fi
 
 # 6.3 filter out core and nonCore clusters
-print_start_time && echo "# Moving core and nonCore clusters to their respective directories ..."
+print_start_time && printf '%s\n' '# Moving core and nonCore clusters to their respective directories ...'
 
 mkdir core_clusters || error "could not mkdir core_clusters"
 mkdir nonCore_clusters || error "could not mkdir nonCore_clusters"
@@ -699,7 +717,7 @@ printf '%s\n' '-----------------------------------------------------------------
 # 7. final cleanup
 #-----------------
 #Unnecessary files generated during the process are removed.
-print_start_time && echo "# Tidying up $wkdir ..."
+print_start_time && printf '%s\n' "# Tidying up $wkdir ..."
 
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 

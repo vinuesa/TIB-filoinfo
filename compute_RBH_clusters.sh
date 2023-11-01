@@ -6,9 +6,9 @@
 #: AIM: Wrapper script around NCBI's blastp, to compute reciprocal best hits (RBHs) between a
 #:      reference genome (manually or automatically selected) and a set of additional
 #:      proteomes (protein fasta files). It also computes the core and non_core RBH sets, 
-#:      writing the corresponding clusters (FASTA files) to disk
+#:      writing the corresponding clusters (FASTA files) to disk.
 #
-#: Design: The code is partially parallelized:
+#: Design: The blastp and final cluster writing using blastdbcmd are parallelized:
 #:         - the user can specify a number of threads to parallelize blastp
 #:         - the final blastdbcmd is called from xargs to parallelize the 
 #:           retrieval and writing to disk of RBH clusters 
@@ -31,9 +31,8 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers='1.1.7_2023-10-29' # compute_RBH_clusters.sh v1.1.7_2023-10-29 
-		       #  - added function check_dir_is_clean
-		       #  - a few minor fixes and code tidying
+vers='1.2.0_2023-10-31' # compute_RBH_clusters.sh v1.2.0_2023-10-31 
+		       #  - added function parallel_blastp
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -87,14 +86,22 @@ function error {
 
 # Function to check that files were generated
 function check_file {
+    local msg flag
+    
+    msg=''
+    flag=''
+    
+    msg=$1
+    flag=${2:-}
+    
     if [ -s "$1" ]
     then
-        echo -e "${GREEN} wrote $1 ${NC}"
-    elif [ ! -s "$1" ] && [ -n "$2" ] # pass a second arg, like warn
+        echo -e "${GREEN} wrote $msg ${NC}"
+    elif [ ! -s "$msg" ] && [ -n "$flag" ] # pass a second arg, like warn
     then
-         echo -e "${YELLOW}WARNING: could not write $1 ${NC}" 1>&2
+         echo -e "${YELLOW}WARNING: could not write $msg ${NC}" 1>&2
     else
-        echo -e "${RED}Error: could not write $1 ${NC}" 1>&2
+        echo -e "${RED}Error: could not write $msg ${NC}" 1>&2
         exit 1
     fi
 }
@@ -212,6 +219,50 @@ function check_dir_is_clean {
   then 
       error "Found *tmp files in $wkdir; $progname requires a clean directory, containing only the source proteome FASTA files"
   fi
+}
+#----------------------------------------------------------------------------------------- 
+
+function parallel_blastp {
+   # https://bioinformaticsworkbook.org/dataAnalysis/blast/running-blast-jobs-in-parallel.html#gsc.tab=0
+   local task q db outfile qbytes procs ftype block_size blastp_cmd
+   task=$1 # default: blastp-fast
+   q=$2
+   db=$3
+   outfile=$4
+   
+   procs="$threads" # for the parallel version we use a single thread on each compute core
+   
+   # check if query is a symlink to compute the file size 
+   #  for the block size calculation "a la prokka"
+   
+   ftype=$(ls -l "$q")
+   ftype="${ftype:0:1}"
+   
+   if [[ "$ftype" == "l" ]]
+   then
+       qbytes=$(stat --printf="%s" $(readlink -f "$q"))
+   else
+       qbytes=$(stat --printf="%s" "$q")
+   fi
+   
+   block_size=$(awk -v qb="$qbytes" -v p="$procs" 'BEGIN{print int( qb / p / 1000)}')
+   block_size="${block_size}"k
+   
+   # parameterizations in part following suggestions by Julie E. Hernandez-Salmeronóand Gabriel Moreno-Hagelsieb 
+   # in BMC Genomics volume 21, Article number: 741 (2020); https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07132-6
+   # Mote that here we use '-query -' to read from STDIN, not from file
+  
+   blastp_cmd=" blastp -task $task -query - -db $db -matrix $mat -outfmt '$cols' \
+   -num_threads 1 -num_descriptions 1 -num_alignments 1 -qcov_hsp_perc $qcov -seg no -soft_masking $mask \
+   -best_hit_overhang $best_hit_overhang -best_hit_score_edge $best_hit_score_edge -use_sw_tback \
+   -evalue $Eval >> $outfile 2> /dev/null"
+   
+   PARALLELCMD="parallel --gnu -j $procs --block $block_size --recstart '>' --pipe"
+   
+  ((DEBUG)) && echo "# parallel_blast cmd: cat $q | ${PARALLELCMD}${blastp_params}" 
+   
+   cat "$q" | parallel --gnu -j "$procs" --block "$block_size" --recstart '>' --pipe "$blastp_cmd"
+   
 }
 #----------------------------------------------------------------------------------------- 
 
@@ -334,8 +385,8 @@ function print_help {
    # Prints the help message explaining how to use the script.
    cat <<EOF
    
-   Usage: $progname -d <dir> [-e <ext>] [-r <reference proteome>] [-E <Eval>] [-m <matrix>] [-n <num_aln>] [-q <qcov>]  
-             [-t <threads>] [-T <blastp|blastp-fast>] [-S <yes|no>] -M [<false|true>] [-D] [-h] [-v]
+   Usage: $progname -d <dir> [-e <ext>] [-r <reference proteome>] [-E <Eval>] [-m <matrix>] [-n <num_aln>] 
+          [-q <qcov>] [-t <threads>] [-T <blastp|blastp-fast>] [-S <yes|no>] [-M  <false|true>] [-D] [-h] [-v]
    
    REQUIRED:
     -d <string> path to directory containing the input proteomes (protein FASTA)
@@ -359,11 +410,15 @@ function print_help {
      $progname -d . -m BLOSUM80 -T blastp -q 85 -r my_ref.fa -e fa
      $progname -d proteome_files -n 5 -t \$(nproc)
    
-   AIM: 
+   AIM & DESIGN 
       Wrapper script around NCBI\'s blastp, to compute reciprocal best hits (RBHs) between a
       reference genome (manually or automatically selected) and a set of additional proteomes
       (protein fasta files). It also computes the core and non_core RBH sets, writing the 
       corresponding clusters (FASTA files) to disk in the core_clusters and nonCore_clusters dirs.
+      
+      If installed, blastp calls and cluster writing are parallelized with parallel. 
+      Otherwise, blastp is called with -t threads, and the blastdbcmd call for 
+       cluster writing is parallelized through xargs.
    
    SOURCE: the latest version can be fetched from https://github.com/vinuesa/TIB-filoinfo
 	   
@@ -375,7 +430,7 @@ function print_help {
          for indexing with makeblastdb; locally/user generated proteomes should have
 	 the following FASTA header structure: '>lcl|uniqueID_ORGNemonic'
 	 like in '>lcl|FUN_005793_ACAC3' or '>lcl|000762_Sm18'.
-    2. Make sure that the working directory contains only the uncompressed proteome FASTA files (faa) 
+    2. Make sure that the working directory contains only the uncompressed proteome FASTA files (faa)
     3. run $progname -N for additional notes	 
 	 
 EOF
@@ -552,8 +607,13 @@ do
     geno_vs_ref_blastout=${f%.*}vs${ref%.*}_best_hits.tmp
     
     print_start_time && echo "# Running: run_blastp $task ${ref} ${f} $ref_vs_geno_blastout" 
-    run_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
-
+    
+   if command -v parallel &> /dev/null
+   then
+       parallel_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
+   else
+       run_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
+   fi
    # Retrieve the best nonREF proteome database hits using blastdbcmd, onlfy if qcov > \$qcov
    print_start_time && echo "# Retrieving the best hits from $ref_vs_geno_blastout with blastdbcmd ... "
    blastdbcmd -entry_batch <(awk -F"\t" -v qcov="$qcov" '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "$f" > "${ref%.*}vs${f%.*}"_besthits.faa
@@ -569,8 +629,15 @@ do
    fi
    
     print_start_time && printf '%s\n' "# Running: run_blastp $task ${ref%.*}vs${f%.*}_besthits.faa ${ref} $geno_vs_ref_blastout ..."    
-    run_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
 
+   if command -v parallel &> /dev/null
+   then
+       parallel_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
+   else
+       run_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
+   fi
+   
+   
     # Sort the blastp output table from the preceding search by increasing E-values (in column 9) and decreasing scores (col 10)
     #    & filter out unique REF vs nonREF RBHs using AWK hashes from the sorted blast output table with qcov > $qcov
     print_start_time && echo "# Filtering out unique REF vs nonREF RBHs from the sorted blast output table with qcov > $qcov"

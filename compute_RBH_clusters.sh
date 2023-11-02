@@ -5,7 +5,8 @@
 #
 #: AIM: Wrapper script around NCBI's blastp, to compute reciprocal best hits (RBHs) between a
 #:      reference genome (manually or automatically selected) and a set of additional
-#:      proteomes (protein fasta files). It also computes the core and non_core RBH sets, 
+#:      proteomes (protein fasta files) (runmode == 1), or all vs. all RBHs (runmode == 2) 
+#:        It also computes the core and non_core RBH sets, 
 #:      writing the corresponding clusters (FASTA files) to disk.
 #
 #: Design: The blastp and final cluster writing using blastdbcmd are parallelized:
@@ -31,8 +32,10 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers='1.2.0_2023-10-31' # compute_RBH_clusters.sh v1.2.0_2023-10-31 
-		       #  - added function parallel_blastp
+vers='1.3.0_2023-11-02' # compute_RBH_clusters.sh v1.3.0_2023-11-02 
+		       #  - added runmodes <1|2> to compute RBHs between nonREF vs. REF, or all vs. all, respectively
+		       #  - added compute_combinations_without_reps_by2 to inform about the number of all vs. all blastp runs to execute
+		       #  - faster code to write and move core and nonCore cluster files to their respective directories
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -49,6 +52,7 @@ IFS=$'\n\t'
 cols='6 qseqid sseqid pident gaps length qlen slen qcovs evalue score'
 
 # Initialize variables with default values; no undefined/unbound variables allowed in strict mode 
+runmode=''
 DEBUG=0
 qcov=60
 num_aln=1
@@ -259,10 +263,44 @@ function parallel_blastp {
    
    PARALLELCMD="parallel --gnu -j $procs --block $block_size --recstart '>' --pipe"
    
-  ((DEBUG)) && echo "# parallel_blast cmd: cat $q | ${PARALLELCMD}${blastp_params}" 
+  ((DEBUG)) && echo "# parallel_blast cmd: cat $q | ${PARALLELCMD}${blastp_cmd}" 
    
    cat "$q" | parallel --gnu -j "$procs" --block "$block_size" --recstart '>' --pipe "$blastp_cmd"
    
+}
+#----------------------------------------------------------------------------------------- 
+
+function compute_combinations_without_reps_by2 {
+    local max_idx num_proteomes c tot
+    
+    num_proteomes=$1
+    max_idx=$((num_proteomes - 1))    
+    c=0
+        
+    ((DEBUG)) && echo "num_prot=$num_proteomes; max_idx=$max_idx ..."
+    
+    # This loop takes the combinations without repetition of n elements taken 2 in 2 
+    #   These are the different groups of elements that can be formed by these elements, 
+    #   so that two groups differ only if they have different elements (that is to say, the order does not matter). 
+    #   They are represented as C(n,k). Such combinations without repetitions can be easily computed with an R function
+    #    like: comb_without_rep <- function(n, k){ factorial(n)/(factorial(k)*factorial(n-k)) }
+
+    # NOTE: this is exactly the structure of the nested for loop used to compute all vs. all RBHs in runmode 2
+    for ((i=0; i<=max_idx; i++))
+    do
+       ((DEBUG == 1)) && echo "outer i:$i, max_idx:$max_idx"
+       
+       for ((j=$((i+1)); j<=max_idx; j++))
+       do
+           c=$((c+1))
+	   
+           ((DEBUG == 1)) && echo "indexes $i:$j"
+       done
+    done
+    
+    tot=$((c * 2))
+    echo "# There are $c combinations without repetitions for $num_proteomes proteomes, taken 2 by 2 ..."
+    echo "# This sums to a total of $tot reciprocal blastp runs between the $c non-rendundant pairwise combinations of $num_proteomes proteomes ..."
 }
 #----------------------------------------------------------------------------------------- 
 
@@ -389,6 +427,7 @@ function print_help {
           [-q <qcov>] [-t <threads>] [-T <blastp|blastp-fast>] [-S <yes|no>] [-M  <false|true>] [-D] [-h] [-v]
    
    REQUIRED:
+    -R <integer [1|2]> blastp runmodes - 1: nonREF vs. REF; 2: all vs. all
     -d <string> path to directory containing the input proteomes (protein FASTA)
     
    OPTIONAL
@@ -453,7 +492,7 @@ EOF
 args=("$@")
 
 
-while getopts ':d:e:E:m:M:n:q:r:S:t:T:hDvN?:' OPTIONS
+while getopts ':d:e:E:m:M:n:q:r:R:S:t:T:hDvN?:' OPTIONS
 do
    case $OPTIONS in
 
@@ -476,6 +515,8 @@ do
    q)   qcov=$OPTARG
         ;;
    r)   ref=$OPTARG
+        ;;
+   R)   runmode=$OPTARG
         ;;
    S)   seg=$OPTARG
         ;;
@@ -508,6 +549,12 @@ if [[ -z "$proteome_dir" ]]; then
        print_help
 fi
 
+if [[ -z "$runmode" ]]; then
+       error "Missing required RUNMODE option: -R <1|2>"
+       print_help
+fi
+
+
 if [[ -z "$ref" ]]
 then
      ref_selection="auto"
@@ -533,7 +580,7 @@ $progname vers. $vers
 -----------------------------------------------------------------------------------------------------
  run on $hostn using $os with $nprocs processors and bash v.${bash_vers} on ${today/ /} 
    with the following parameters: 
- - proteome_dir=$proteome_dir | fasta_extension=$ext
+ - proteome_dir=$proteome_dir | fasta_extension=$ext | runmode=$runmode
  - BLASTP params: blastp v.${blast_vers} | task=$task | num_aln=$num_aln | qcov=$qcov | 
                  Eval=$Eval | mat=$mat | seg=$seg | mask=$mask | threads=$threads 
  - reference=$ref_selection | DEBUG=$DEBUG 
@@ -565,6 +612,16 @@ fi
 
 check_dir_is_clean
 
+
+# check if the system has parallel installed
+FOUND_PARALLEL=0
+
+if command -v parallel &> /dev/null
+then
+    FOUND_PARALLEL=1
+fi
+
+
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
 # ----------------------------------------------------------
@@ -575,7 +632,6 @@ printf '%s\n' '-----------------------------------------------------------------
 declare -a non_ref infiles 
 non_ref=( $(ls *"${ext}" | grep -v "$ref") )
 infiles=("$ref" "${non_ref[@]}")
-
 
 # -------------------------------------------------------------------
 # 2. run makeblastdb on all input proteomes with edited FASTA headers
@@ -601,55 +657,128 @@ printf '%s\n' '-----------------------------------------------------------------
 # For each non-reference proteome, blastp is run against the reference proteome 
 #   (REFvsGENO) and vice versa (GENOvsREF).
 
-for f in "${non_ref[@]}"
-do
-    ref_vs_geno_blastout=${ref%.*}vs${f%.*}_best_hits.tmp
-    geno_vs_ref_blastout=${f%.*}vs${ref%.*}_best_hits.tmp
-    
-    print_start_time && echo "# Running: run_blastp $task ${ref} ${f} $ref_vs_geno_blastout" 
-    
-   if command -v parallel &> /dev/null
-   then
-       parallel_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
-   else
-       run_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
-   fi
-   # Retrieve the best nonREF proteome database hits using blastdbcmd, onlfy if qcov > \$qcov
-   print_start_time && echo "# Retrieving the best hits from $ref_vs_geno_blastout with blastdbcmd ... "
-   blastdbcmd -entry_batch <(awk -F"\t" -v qcov="$qcov" '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "$f" > "${ref%.*}vs${f%.*}"_besthits.faa
-   check_file "${ref%.*}vs${f%.*}"_besthits.faa
-   
-   num_hits=$(grep -c '^>' "${ref%.*}vs${f%.*}"_besthits.faa)
-   
-   if ((num_hits == 0))
-   then
-        echo "WARNING: no hits in ${ref%.*}vs${f%.*}_besthits.faa"
-	rm "${ref%.*}vs${f%.*}"_besthits.faa
-	continue
-   fi
-   
-    print_start_time && printf '%s\n' "# Running: run_blastp $task ${ref%.*}vs${f%.*}_besthits.faa ${ref} $geno_vs_ref_blastout ..."    
 
-   if command -v parallel &> /dev/null
-   then
-       parallel_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
-   else
-       run_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
-   fi
+if ((runmode == 1)) # all_vs_REF blastp
+then
+    for f in "${non_ref[@]}"
+    do
+        ref_vs_geno_blastout=${ref%.*}vs${f%.*}_best_hits.tmp
+        geno_vs_ref_blastout=${f%.*}vs${ref%.*}_best_hits.tmp
+    
+        print_start_time && echo "# Running: run_blastp $task ${ref} ${f} $ref_vs_geno_blastout" 
+    
+       if ((FOUND_PARALLEL))
+       then
+           parallel_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
+       else
+           run_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
+       fi
+       # Retrieve the best nonREF proteome database hits using blastdbcmd, onlfy if qcov > \$qcov
+       print_start_time && echo "# Retrieving the best hits from $ref_vs_geno_blastout with blastdbcmd ... "
+       blastdbcmd -entry_batch <(awk -F"\t" -v qcov="$qcov" '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "$f" > "${ref%.*}vs${f%.*}"_besthits.faa
+       check_file "${ref%.*}vs${f%.*}"_besthits.faa
+   
+       num_hits=$(grep -c '^>' "${ref%.*}vs${f%.*}"_besthits.faa)
+   
+       if ((num_hits == 0))
+       then
+            echo "WARNING: no hits in ${ref%.*}vs${f%.*}_besthits.faa"
+	    rm "${ref%.*}vs${f%.*}"_besthits.faa
+	    continue
+       fi
+   
+        print_start_time && printf '%s\n' "# Running: run_blastp $task ${ref%.*}vs${f%.*}_besthits.faa ${ref} $geno_vs_ref_blastout ..."    
+
+       if ((FOUND_PARALLEL))
+       then
+           parallel_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
+       else
+          run_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
+       fi
    
    
-    # Sort the blastp output table from the preceding search by increasing E-values (in column 9) and decreasing scores (col 10)
-    #    & filter out unique REF vs nonREF RBHs using AWK hashes from the sorted blast output table with qcov > $qcov
-    print_start_time && echo "# Filtering out unique REF vs nonREF RBHs from the sorted blast output table with qcov > $qcov"
-    for GENOid in $(cut -f1 "$geno_vs_ref_blastout" | sort -u)
-    do 
-       grep "$GENOid" "$ref_vs_geno_blastout"
-    done | sort -gk9,9 -gk10,10 | \
+        # Sort the blastp output table from the preceding search by increasing E-values (in column 9) and decreasing scores (col 10)
+        #    & filter out unique REF vs nonREF RBHs using AWK hashes from the sorted blast output table with qcov > $qcov
+        print_start_time && echo "# Filtering out unique REF vs nonREF RBHs from the sorted blast output table with qcov > $qcov"
+        for GENOid in $(cut -f1 "$geno_vs_ref_blastout" | sort -u)
+        do 
+           grep "$GENOid" "$ref_vs_geno_blastout"
+        done | sort -gk9,9 -gk10,10 | \
            awk -v qcov="$qcov" 'BEGIN{FS=OFS="\t"}{REFid[$1]++; GENOid[$2]++; if(REFid[$1] == 1 && GENOid[$2] == 1 && $8 > qvov) print }' > \
              "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
     
-    check_file "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
-done
+        check_file "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
+    done
+fi
+
+# run all vs. all 
+if ((runmode == 2)) # all_vs_all blastp
+then
+    # print to STDOUT the number of blastp runs to execute
+    compute_combinations_without_reps_by2 "${#infiles[@]}"
+    
+    max_idx=$(("${#infiles[@]}" - 1))
+    # This loop takes the combinations without repetition of n proteomes taken 2 in 2 
+    #   These are the different groups of elements that can be formed by these elements, 
+    #   so that two groups differ only if they have different elements (that is to say, the order does not matter). 
+    #   They are represented as C(n,k). Such combinations without repetitions can be easily computed with an R function
+    #    like: comb_without_rep <- function(n, k){ factorial(n)/(factorial(k)*factorial(n-k)) }
+    for ((i=0; i<=max_idx; i++))
+    do
+       for ((j=((i+1)); j<=((max_idx)); j++))
+       do
+           f="${infiles[$i]}"
+	   ref="${infiles[$j]}"
+
+           ref_vs_geno_blastout=${ref%.*}vs${f%.*}_best_hits.tmp
+           geno_vs_ref_blastout=${f%.*}vs${ref%.*}_best_hits.tmp
+    
+           print_start_time && echo "# Running: run_blastp $task ${ref} ${f} $ref_vs_geno_blastout" 
+    
+          if ((FOUND_PARALLEL))
+          then
+              parallel_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
+          else
+              run_blastp "$task" "$ref" "$f" "$ref_vs_geno_blastout"
+          fi
+          # Retrieve the best nonREF proteome database hits using blastdbcmd, onlfy if qcov > \$qcov
+          print_start_time && echo "# Retrieving the best hits from $ref_vs_geno_blastout with blastdbcmd ... "
+          blastdbcmd -entry_batch <(awk -F"\t" -v qcov="$qcov" '$8 > qcov{print $2}' "$ref_vs_geno_blastout" | sort -u) -db "$f" > "${ref%.*}vs${f%.*}"_besthits.faa
+          check_file "${ref%.*}vs${f%.*}"_besthits.faa
+   
+          num_hits=$(grep -c '^>' "${ref%.*}vs${f%.*}"_besthits.faa)
+   
+          if ((num_hits == 0))
+          then
+               echo "WARNING: no hits in ${ref%.*}vs${f%.*}_besthits.faa"
+	       rm "${ref%.*}vs${f%.*}"_besthits.faa
+	       continue
+          fi
+   
+          print_start_time && printf '%s\n' "# Running: run_blastp $task ${ref%.*}vs${f%.*}_besthits.faa ${ref} $geno_vs_ref_blastout ..."    
+
+          if ((FOUND_PARALLEL))
+          then
+              parallel_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
+          else
+             run_blastp "$task" "${ref%.*}vs${f%.*}"_besthits.faa "$ref" "$geno_vs_ref_blastout"
+          fi
+   
+   
+           # Sort the blastp output table from the preceding search by increasing E-values (in column 9) and decreasing scores (col 10)
+           #    & filter out unique REF vs nonREF RBHs using AWK hashes from the sorted blast output table with qcov > $qcov
+           print_start_time && echo "# Filtering out unique REF vs nonREF RBHs from the sorted blast output table with qcov > $qcov"
+           for GENOid in $(cut -f1 "$geno_vs_ref_blastout" | sort -u)
+           do 
+              grep "$GENOid" "$ref_vs_geno_blastout"
+           done | sort -gk9,9 -gk10,10 | \
+              awk -v qcov="$qcov" 'BEGIN{FS=OFS="\t"}{REFid[$1]++; GENOid[$2]++; if(REFid[$1] == 1 && GENOid[$2] == 1 && $8 > qvov) print }' > \
+                "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
+    
+              check_file "${ref_vs_geno_blastout%.*}"_RBHs_qcov_gt"${qcov}".tsv
+       done
+    done
+fi
 
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
@@ -659,13 +788,21 @@ printf '%s\n' '-----------------------------------------------------------------
 #-----------------------------------------------------------------------
 # Find the intersections of REFs in all tsv files
 
-print_start_time && printf '%s\n' '# Computing the intersections of REF proteins in all tsv files holding pairwise RBHs ... '
-awk '{r[$1]++; if(r[$1] == ARGC-1) print $1}' ./*.tsv > REF_RBH_IDs.list
-[[ ! -s REF_RBH_IDs.list ]] && error "could not write REF_RBH_IDs.list"
 
-intersection_size=$(wc -l REF_RBH_IDs.list | awk '{print $1}')
-((intersection_size > 0)) && echo -e "${LBLUE}  Found $intersection_size core RBHs shared by ${#non_ref[*]} nonREF proteomes with the $ref reference proteome${NC}"
-((intersection_size == 0)) && error "# ERROR: found $intersection_size core orhtologous genes among ${#infiles[*]} input proteomes ..."
+if ((runmode == 1)) # all_vs_REF blastp
+then
+    print_start_time && printf '%s\n' '# Computing the intersections of REF proteins in all tsv files holding pairwise RBHs ... '
+    awk '{r[$1]++; if(r[$1] == ARGC-1) print $1}' ./*.tsv > REF_RBH_IDs.list
+    [[ ! -s REF_RBH_IDs.list ]] && error "could not write REF_RBH_IDs.list"
+
+    intersection_size=$(wc -l REF_RBH_IDs.list | awk '{print $1}')
+    ((intersection_size > 0)) && echo -e "${LBLUE}  Found $intersection_size core RBHs shared by ${#non_ref[*]} nonREF proteomes with the $ref reference proteome${NC}"
+    ((intersection_size == 0)) && error "# ERROR: found $intersection_size core orhtologous genes among ${#infiles[*]} input proteomes ..."
+elif ((runmode == 2)) # all_vs_all blastp
+then
+    intersection_size="${#infiles[@]}"
+    print_start_time && printf '%s\n' "# Computing the core proteins among $intersection_size proteomes from pairwise RBH tsv files ... "
+fi
 
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
@@ -694,17 +831,77 @@ for t in *RBHs_*.tsv; do
     [ ! -s "$t" ] && error "file: $t does not exist or is empty"
     while read -r REF QUERY rest
     do
-        # count the instances of REFERNCE_IDs in each RBHs_*.tsv tables
-	(( core_ref["$REF"]++ ))
-	if (( ${core_ref["$REF"]} == 1 ))
-	then
-	    all_clusters["$REF"]="$QUERY" 
-	else
-	    all_clusters["$REF"]="${all_clusters[$REF]}\t$QUERY"
-	fi
+	# count the instances of REFERNCE_IDs in each RBHs_*.tsv tables
+    	(( core_ref["$REF"]++ ))
+    	if (( ${core_ref["$REF"]} == 1 ))
+    	then
+    	    all_clusters["$REF"]="$QUERY" 
+    	else
+    	    all_clusters["$REF"]="${all_clusters[$REF]}\t$QUERY"
+    	fi
     done < "$t" || { echo "Failed to process file: $t"; exit 1; } # required test for set -e compliance
 done
 
+
+#if ((runmode == 1)) # all_vs_REF blastp
+#then
+#    # The core_ref hash counts the instances of the REFERNCE_IDs in the RBH tables
+#    declare -A core_ref
+#    core_ref=()
+#
+#    # The all_clusters hash is indexed by REFERNCE_IDs 
+#    #   and as its value holds the RBHs as a tab-separated
+#    #   string of IDs from nonREF proteomes    
+#    declare -A all_clusters
+#    all_clusters=()
+#
+#    # 5.1 Construct the all_clusters hash, indexed by reference proteome, 
+#    #  containing as value a string of tab-separated nonREF proteome RBH IDs.
+#    print_start_time && echo "# Populating the all_clusters hash ..."
+#    for t in *RBHs_*.tsv; do
+#        [ ! -s "$t" ] && error "file: $t does not exist or is empty"
+#        while read -r REF QUERY rest
+#        do
+#            # count the instances of REFERNCE_IDs in each RBHs_*.tsv tables
+#	    (( core_ref["$REF"]++ ))
+#	    if (( ${core_ref["$REF"]} == 1 ))
+#	    then
+#	        all_clusters["$REF"]="$QUERY" 
+#	    else
+#	        all_clusters["$REF"]="${all_clusters[$REF]}\t$QUERY"
+#	    fi
+#        done < "$t" || { echo "Failed to process file: $t"; exit 1; } # required test for set -e compliance
+#    done
+#elif  ((runmode == 2)) all_vs_all blastp
+#    # The core_genome hash counts the instances of the REFERNCE_IDs in the RBH tables
+#    declare -A core_genome
+#    core_genome=()
+#
+#    # The all_clusters hash is indexed by REFERNCE_IDs 
+#    #   and as its value holds the RBHs as a tab-separated
+#    #   string of IDs from nonREF proteomes    
+#    declare -A all_clusters
+#    all_clusters=()
+#
+#    # 5.1 Construct the all_clusters hash, indexed by reference proteome, 
+#    #  containing as value a string of tab-separated nonREF proteome RBH IDs.
+#    print_start_time && echo "# Populating the all_clusters hash ..."
+#    for t in *RBHs_*.tsv; do
+#        [ ! -s "$t" ] && error "file: $t does not exist or is empty"
+#        while read -r SUB QUERY rest
+#        do
+#            # count the instances of REFERNCE_IDs in each RBHs_*.tsv tables
+#	    (( core_genome["$SUB"]++ ))
+#	    (( core_genome["$QUERY"]++ ))
+#	    if (( ${core_genome["$SUB"]} == 1 )) &&  ${core_genome["$QUERY"]} == 1 ))
+#	    then
+#	        all_clusters["$SUB"]="$QUERY" 
+#	    else
+#	        all_clusters["$SUB"]="${all_clusters[$SUB]}\t$QUERY"
+#	    fi
+#        done < "$t" || { echo "Failed to process file: $t"; exit 1; } # required test for set -e compliance
+#    done
+#fi
 
 # 5.2 print the RBHs_matrix.tsv
 print_start_time && echo "# Printing the RBHs_matrix, core_genome_clusters, and nonCore_genome_clusters files ..."
@@ -742,18 +939,35 @@ while read -r -a ids
 do 
     ((c++)) 
     # write each line of the RBHs_matrix.tsv to a temporal file
-    printf '%s\n' "${ids[@]}" > cluster_"${c}".idstmp
-done < RBHs_matrix.tsv || { echo "Failed to process file: RBHs_matrix.tsv"; exit 1; } # required test for set -e compliance
+    printf '%s\n' "${ids[@]}" > core_cluster_"${c}".idstmp    
+done < core_genome_clusters.tsv || { echo "Failed to process file: core_genome_clusters.tsv"; exit 1; } # required test for set -e compliance
+
+c=0
+while read -r -a ids
+do 
+    ((c++)) 
+    # write each line of the RBHs_matrix.tsv to a temporal file
+    printf '%s\n' "${ids[@]}" > nonCore_cluster_"${c}".idstmp
+done < nonCore_genome_clusters.tsv || { echo "Failed to process file: nonCore_genome_clusters.tsv"; exit 1; } # required test for set -e compliance
+
 
 # 6.2 Pass the list of tmpfiles to a parallel call of blastdbcmd, or, if not available, call it from xargs
-if command -v parallel &> /dev/null 
-then 
-    print_start_time && printf '%s\n'  '  - Running blastdbcmd through parallel with -j \$(nproc) ...'
-    find . -name '*.idstmp' | parallel --gnu -j $(nproc) 'blastdbcmd -db allDBs -dbtype prot -entry_batch {} -out {.}.fas'  
+mkdir core_clusters || error "could not mkdir core_clusters"
+mkdir nonCore_clusters || error "could not mkdir nonCore_clusters"
+
+if ((FOUND_PARALLEL))
+then     
+    print_start_time && printf '%s\n'  '  - Running blastdbcmd through parallel  ...'
+    
+    find . -maxdepth 1 -name 'core_cluster_*.idstmp' | parallel --gnu blastdbcmd -db allDBs -dbtype prot -entry_batch {} -out {.}.fas 
+
+    find . -maxdepth 1 -name 'nonCore_cluster_*.idstmp' | parallel --gnu blastdbcmd -db allDBs -dbtype prot -entry_batch {} -out {.}.fas 
 else
     # use the more portable find | xargs idiom to parallelize the blastdbcmd call of parallel is not found on host
     print_start_time && '%s\n' '  - Running blastdbcmd in parallel with xargs using all available cores \$(nproc) ...'
-    find . -name '*.idstmp' -print0 | xargs -0 -P $(nproc) -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
+    find . -maxdepth 1 -name 'core_cluster_*.idstmp' -print0 | xargs -0 -P $(nproc) -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
+
+    find . -maxdepth 1 -name 'nonCore_cluster_*.idstmp' -print0 | xargs -0 -P $(nproc) -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
 
     # rename *.idstmp.fas cluster files with rename, if available
     if command -v rename &> /dev/null; 
@@ -762,20 +976,15 @@ else
     fi
 fi
 
+
 # 6.3 filter out core and nonCore clusters
 print_start_time && printf '%s\n' '# Moving core and nonCore clusters to their respective directories ...'
 
-mkdir core_clusters || error "could not mkdir core_clusters"
-mkdir nonCore_clusters || error "could not mkdir nonCore_clusters"
-for f in cluster_*.fas
-do 
-    if [[ $(grep -c '^>' "$f") -eq "${#infiles[@]}" ]]
-    then 
-         mv "$f" core_clusters/core_"${f}" || error "could not mv $f to core_clusters/core_${f}"
-    else
-         mv "$f" nonCore_clusters/nonCore_"${f}" || error "could not mv $f to nonCore_clusters/nonCore_${f}"
-    fi
-done
+find . -maxdepth 1 -name 'core_cluster_*.fas' -print0 | xargs -0 -P $(nproc) -I % mv % core_clusters
+find . -maxdepth 1 -name 'core_cluster_*.idstmp' -print0 | xargs -0 -P $(nproc) -I % rm %
+
+find . -maxdepth 1 -name 'nonCore_cluster_*.fas' -print0 | xargs -0 -P $(nproc) -I % mv % nonCore_clusters
+find . -maxdepth 1 -name 'nonCore_cluster_*.idstmp' -print0 | xargs -0 -P $(nproc) -I % rm %
 
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
@@ -788,7 +997,8 @@ print_start_time && printf '%s\n' "# Tidying up $wkdir ..."
 
 printf '%s\n' '-----------------------------------------------------------------------------------------------------'
 
-((DEBUG == 0)) && rm *."${ext}".* ./*best_hits.tmp ./REF_RBH_IDs.list ./*besthits.faa ./*.idstmp allDBs.pal
+((DEBUG == 0)) && ((runmode == 1)) && rm *."${ext}".* ./*best_hits.tmp ./REF_RBH_IDs.list ./*besthits.faa allDBs.pal
+((DEBUG == 0)) && ((runmode == 2)) && rm *."${ext}".* ./*best_hits.tmp ./*besthits.faa allDBs.pal
 gzip *RBHs_qcov_gt*tsv
 
 elapsed=$(( SECONDS - start_time ))

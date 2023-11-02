@@ -32,10 +32,9 @@
 #----------------------------------------------------------------------------------------
 
 progname=${0##*/}
-vers='1.3.0_2023-11-02' # compute_RBH_clusters.sh v1.3.0_2023-11-02 
-		       #  - added runmodes <1|2> to compute RBHs between nonREF vs. REF, or all vs. all, respectively
-		       #  - added compute_combinations_without_reps_by2 to inform about the number of all vs. all blastp runs to execute
-		       #  - faster code to write and move core and nonCore cluster files to their respective directories
+vers='1.3.1_2023-11-02' # compute_RBH_clusters.sh v1.3.1_2023-11-02 
+		       #  - reportes numbers of core and nonCore clusters written to disk
+		       #  - minor code cleanup
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -237,7 +236,7 @@ function parallel_blastp {
    procs="$threads" # for the parallel version we use a single thread on each compute core
    
    # check if query is a symlink to compute the file size 
-   #  for the block size calculation "a la prokka"
+   #  for the block size calculation
    
    ftype=$(ls -l "$q")
    ftype="${ftype:0:1}"
@@ -257,7 +256,7 @@ function parallel_blastp {
    # Mote that here we use '-query -' to read from STDIN, not from file
   
    blastp_cmd=" blastp -task $task -query - -db $db -matrix $mat -outfmt '$cols' \
-   -num_threads 1 -num_descriptions 1 -num_alignments 1 -qcov_hsp_perc $qcov -seg no -soft_masking $mask \
+   -num_threads 1 -num_descriptions 1 -num_alignments 1 -qcov_hsp_perc $qcov -seg $seg -soft_masking $mask \
    -best_hit_overhang $best_hit_overhang -best_hit_score_edge $best_hit_score_edge -use_sw_tback \
    -evalue $Eval >> $outfile 2> /dev/null"
    
@@ -931,13 +930,17 @@ print_start_time && printf '%s\n' '# Extracting RBH cluster FASTA files ...'
 # 6.1 (take 3; see notes) blastdbcmd is called from parallel or xargs 
 #  - write the each line of the RBHs_matrix.tsv IDs to a tmpfile
 #    to pass the list of tmpfiles to a parallel call of blastdbcmd
-print_start_time && printf '%s\n' '  - Writing each line of the RBHs_matrix.tsv IDs to an idstmp file por parallelization ...'
+print_start_time && printf '%s\n' '  - Writing cluster idstmp files for parallelization ...'
 
 #initialize cluster counter
+declare -A cluster_sizes
+cluster_sizes=()
 c=0
 while read -r -a ids
 do 
     ((c++)) 
+    (( cluster_sizes[core]++ ))
+
     # write each line of the RBHs_matrix.tsv to a temporal file
     printf '%s\n' "${ids[@]}" > core_cluster_"${c}".idstmp    
 done < core_genome_clusters.tsv || { echo "Failed to process file: core_genome_clusters.tsv"; exit 1; } # required test for set -e compliance
@@ -946,28 +949,33 @@ c=0
 while read -r -a ids
 do 
     ((c++)) 
+    (( cluster_sizes[nonCore]++ ))
+
     # write each line of the RBHs_matrix.tsv to a temporal file
     printf '%s\n' "${ids[@]}" > nonCore_cluster_"${c}".idstmp
 done < nonCore_genome_clusters.tsv || { echo "Failed to process file: nonCore_genome_clusters.tsv"; exit 1; } # required test for set -e compliance
-
 
 # 6.2 Pass the list of tmpfiles to a parallel call of blastdbcmd, or, if not available, call it from xargs
 mkdir core_clusters || error "could not mkdir core_clusters"
 mkdir nonCore_clusters || error "could not mkdir nonCore_clusters"
 
+
 if ((FOUND_PARALLEL))
 then     
     print_start_time && printf '%s\n'  '  - Running blastdbcmd through parallel  ...'
-    
     find . -maxdepth 1 -name 'core_cluster_*.idstmp' | parallel --gnu blastdbcmd -db allDBs -dbtype prot -entry_batch {} -out {.}.fas 
-
+    print_start_time && printf '%s\n' "  - Finished writing ${cluster_sizes[core]} core cluster FASTA files"    
+    
     find . -maxdepth 1 -name 'nonCore_cluster_*.idstmp' | parallel --gnu blastdbcmd -db allDBs -dbtype prot -entry_batch {} -out {.}.fas 
+    print_start_time && printf '%s\n' "  - Finished writing ${cluster_sizes[nonCore]} nonCore cluster FASTA files"    
 else
     # use the more portable find | xargs idiom to parallelize the blastdbcmd call of parallel is not found on host
     print_start_time && '%s\n' '  - Running blastdbcmd in parallel with xargs using all available cores \$(nproc) ...'
     find . -maxdepth 1 -name 'core_cluster_*.idstmp' -print0 | xargs -0 -P $(nproc) -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
+    print_start_time && printf '%s\n' "  - Finished writing ${cluster_sizes[core]} core cluster FASTA files"    
 
     find . -maxdepth 1 -name 'nonCore_cluster_*.idstmp' -print0 | xargs -0 -P $(nproc) -I % blastdbcmd -db allDBs -dbtype prot -entry_batch % -out %.fas
+    print_start_time && printf '%s\n' "  - Finished writing ${cluster_sizes[nonCore]} nonCore cluster FASTA files"    
 
     # rename *.idstmp.fas cluster files with rename, if available
     if command -v rename &> /dev/null; 

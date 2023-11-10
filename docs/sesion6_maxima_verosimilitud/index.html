@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México. GitHub repos; @pvinmex" />
 
-<meta name="date" content="2022-12-04" />
+<meta name="date" content="2023-11-09" />
 
 <title>Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</title>
 
@@ -282,23 +282,17 @@ overflow-y: auto;
 border: 1px solid #ddd;
 border-radius: 4px;
 }
-.tabset-dropdown > .nav-tabs > li.active:before {
-content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+content: "\e259";
 font-family: 'Glyphicons Halflings';
 display: inline-block;
 padding: 10px;
 border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-content: "";
-border: none;
-}
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-content: "";
+content: "\e258";
 font-family: 'Glyphicons Halflings';
-display: inline-block;
-padding: 10px;
-border-right: 1px solid #ddd;
+border: none;
 }
 .tabset-dropdown > .nav-tabs > li.active {
 display: block;
@@ -343,7 +337,7 @@ display: none;
 de modelos y búsquedas intensivas de árboles</h1>
 <h4 class="author"><a href="https://www.ccg.unam.mx/~vinuesa/">Pablo
 Vinuesa, CCG-UNAM, Cuernavaca, México</a>. <a href="https://github.com/vinuesa">GitHub repos</a>; <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a></h4>
-<h4 class="date">2022-12-04</h4>
+<h4 class="date">2023-11-09</h4>
 
 </div>
 
@@ -376,9 +370,9 @@ práctica</a></li>
 verosimilitud (<span class="math inline">\(LRTs\)</span>) entre pares de
 modelos anidados</a>
 <ul>
-<li><a href="#estima-del-árbol-nj-de-referencia-sobre-el-que-estimaremos-parámetros-de-los-modelos-en-competición" id="toc-estima-del-árbol-nj-de-referencia-sobre-el-que-estimaremos-parámetros-de-los-modelos-en-competición"><span class="toc-section-number">3.2.1</span> Estima del árbol NJ de
-referencia, sobre el que estimaremos parámetros de los modelos en
-competición</a></li>
+<li><a href="#estima-del-árbol-nj-de-referencia-sobre-el-que-estimaremos-los-parámetros-de-todos-los-modelos-en-competición" id="toc-estima-del-árbol-nj-de-referencia-sobre-el-que-estimaremos-los-parámetros-de-todos-los-modelos-en-competición"><span class="toc-section-number">3.2.1</span> Estima del árbol NJ de
+referencia, sobre el que estimaremos los parámetros de todos los modelos
+en competición</a></li>
 <li><a href="#optimización-de-parámetros-y-estimas-de-lnl-para-una-gama-de-modelos-a-evaluar" id="toc-optimización-de-parámetros-y-estimas-de-lnl-para-una-gama-de-modelos-a-evaluar"><span class="toc-section-number">3.2.2</span> Optimización de parámetros y
 estimas de <span class="math inline">\(lnL\)</span> para una gama de
 modelos a evaluar</a>
@@ -413,7 +407,7 @@ mejor modelo encontrado: HKY85+G</a></li>
 con figtree</a></li>
 </ul></li>
 <li><a href="#estrategia-alternativa-de-selección-de-modelos-de-dna-reducción-de-parámetros-del-modelo-gtrgi-y-evaluación-de-los-modelos-resultantes-mediante-aic" id="toc-estrategia-alternativa-de-selección-de-modelos-de-dna-reducción-de-parámetros-del-modelo-gtrgi-y-evaluación-de-los-modelos-resultantes-mediante-aic"><span class="toc-section-number">3.3</span> Estrategia alternativa de
-selección de modelos de DNA: reducción de parámetros del modelo GTR+G+I
+selección de modelos de DNA: reducción de parámetros del modelo GTR+G+I,
 y evaluación de los modelos resultantes mediante <span class="math inline">\(AIC\)</span></a>
 <ul>
 <li><a href="#ajuste-de-modelo-gtrgi-a-primates.phy" id="toc-ajuste-de-modelo-gtrgi-a-primates.phy"><span class="toc-section-number">3.3.1</span> Ajuste de modelo <span class="math inline">\(GTR+G+I\)</span> a primates.phy</a></li>
@@ -523,16 +517,17 @@ análisis numérico de valores de <span class="math inline">\(lnL\)</span>
 para los modelos en competición.</p>
 <p>A lo largo de las prácticas iremos optimizando los comandos usados,
 agregando <span class="math inline">\(blucles\)</span>, <span class="math inline">\(arreglos\)</span>, <span class="math inline">\(hashes\)</span> entre otros, para hacer más
-eficiente el análisis, culminando con el la presentación de los <span class="math inline">\(scripts\)</span> <em>phyml_DNAmodelFinder</em> y
-<em>phyml_protModelFinder</em>, con los que automatizamos el proceso.
-Ambos programas son de utilidad para la investigación en
-filogenética.</p>
-<p>Además, aprenderemos a hacer búsquedas intensivas bajor el mejor
-modelo seleccionado, usando múltiples árboles de semilla, así como el
-despliegue y edición de los mejores árboles encontrados con <span class="math inline">\(FigTree\)</span>.</p>
-<p>Al final concluir el tutorial habrán adquirido una sólida formación
-en selección de modelos evolutivos para filogenética y aprendido
-aspectos fundamentales de biocómputo en sistemas tipo <span class="math inline">\(Unix\)</span>, como <span class="math inline">\(Linux\)</span>.</p>
+eficiente el análisis, culminando con la presentación de los <span class="math inline">\(scripts\)</span> <em>phyml_DNAmodelFinder</em> y
+<em>phyml_protModelFinder</em>, con los que automatizaremos el proceso.
+Ambos programas útiles para la investigación en filogenética.</p>
+<p>Además, aprenderemos a hacer <strong>búsquedas intensivas</strong>
+bajo el mejor modelo seleccionado, <strong>usando múltiples árboles de
+semilla</strong>, así como el despliegue y edición de los mejores
+árboles encontrados con <span class="math inline">\(FigTree\)</span>.</p>
+<p>Al concluir el tutorial habrán adquirido una sólida formación en
+selección de modelos evolutivos para filogenética, y aprendido o
+reforzado aspectos fundamentales de biocómputo desde la línea de
+comandos en un entorno de <span class="math inline">\(Linux\)</span>.</p>
 </div>
 <div id="licencia" class="section level2" number="1.3">
 <h2><span class="header-section-number">1.3</span> Licencia</h2>
@@ -550,11 +545,11 @@ Commons Attribution-NonCommercial 4.0</a></p>
 <h1><span class="header-section-number">2</span> NOTAS DE INSTALACION DE
 PHYML DESDE EL REPOSITORIO GitHub</h1>
 <pre style="background: Cornsilk;"><code>1. Descarga la ultima version estable desde el [repositorio GitHub de phyml](https://github.com/stephaneguindon/phyml/releases)
-wget -c https://github.com/stephaneguindon/phyml/archive/v3.3.20190321.tar.gz
+wget -c  https://github.com/stephaneguindon/phyml/archive/refs/tags/v3.3.20220408.tar.gz
 
 2. desempaqueta y ve al direcotorio
-tar -xvzf v3.3.20190321.tar.gz
-cd phyml-v3.3.20190321
+tar -xvzf v3.3.20220408.tar.gz
+cd phyml-v3.3.20220408.tar.gz
 
 3. Para compilarlo, ejecuta:
 
@@ -570,6 +565,9 @@ cd src
 ./phyml --help
 
 5. Sugiero copiar phyml a un directorio en el $PATH
+cp $HOME/bin
+
+# o para instalarlo a nivel del sistema, con poderes de administrador
 sudo cp phyml /usr/local/bin</code></pre>
 <div id="publicaciones-clave-sobre-phyml" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Publicaciones clave
@@ -599,7 +597,7 @@ de PhyML v3</h2>
 <li>Phyml requiere alineamientos múltiples de DNA o proteína en formato
 phylip.</li>
 <li>Puedes usar el <span class="math inline">\(script\)</span> <a href="https://github.com/vinuesa/TIB-filoinfo/blob/master/convert_aln_format_batch_bp.pl">convert_aln_format_batch_bp.pl</a>
-para interconvertir alinemientos múltiples entre diferentes formatos,
+para interconvertir alineamientos múltiples entre diferentes formatos,
 incluyendo FASTA, PHYLIP, NEXUS, entre muchos otros.</li>
 </ul>
 <pre style="background: Cornsilk;"><code># para ver la ayuda
@@ -637,17 +635,17 @@ phyml -i 10_GDP_eucar_prokar_cluO_prof2prof.faa  -d aa -m WAG -c 4 -a e -v e -s 
 <h1><span class="header-section-number">3</span> SELECCION DE MODELOS
 PARAMÉTRICOS DE DNA USANDO PHYML - Prácticas</h1>
 <p>Iniciaremos estas prácticas enfocándonos primeramente en el uso de
-<span class="math inline">\(phyml\)</span> y en conceptos básicos de la
-selección de modelos paramétricos, empezando por las <strong>pruebas de
-cocientes de verosimilitudes (<span class="math inline">\(LRTs\)</span>)</strong>.</p>
+<span class="math inline">\(phyml\)</span>, y en conceptos básicos de la
+selección de modelos paramétricos. Empezaremos por las <strong>pruebas
+de cocientes o razones de verosimilitudes (<span class="math inline">\(LRTs\)</span>)</strong>.</p>
 <p>Una vez familiarizados con el uso de <span class="math inline">\(phyml\)</span> y los conceptos básicos de
 contraste de hipótesis anidadas mediante <span class="math inline">\(LRTs\)</span>, nos enfocaremos a eficientizar el
 análisis computacional, introduciendo estructuras de programación
-básicas como <em>bucles</em> y <em>estructuras de datos</em>. Esta
-progresión culmina con la presentación de los <span class="math inline">\(scripts\)</span> <em>phyml_DNAmodelFinder</em> y
+básicas como <em>bucles</em> y <em>estructuras de datos</em>.</p>
+<p>Esta progresión culmina con la presentación de los <span class="math inline">\(scripts\)</span> <em>phyml_DNAmodelFinder</em> y
 <em>phyml_protModelFinder</em>, que automatizan el proceso de selección
 de modelos de manera eficiente, haciendo un riguroso y exhaustivo
-análisis de los modelos en competición, basado en el <strong>criterio de
+análisis de los modelos en competición basado en el <strong>criterio de
 información bayesiano <span class="math inline">\(BIC\)</span></strong>.</p>
 <div id="descarga-de-secuencias-para-la-práctica" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Descarga de
@@ -659,7 +657,7 @@ la línea de comandos.</p>
 <p>Haz un <span class="math inline">\(cd\)</span> al directorio de
 trabajo, y desde éste ejecuta el siguiente comando:</p>
 <pre style="background: Cornsilk;"><code>wget -c https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/docs/sesion6_maxima_verosimilitud/phyml_tutorial_data.tgz</code></pre>
-<p>y confirma que tienes el tarro comprimido:</p>
+<p>y confirma que tienes el <em>tarro comprimido (tgz)</em>:</p>
 <pre style="background: Cornsilk;"><code>ls -ltr</code></pre>
 <pre>
 -rw-rw-r-- 1 vinuesa vinuesa 145254 nov 21 19:36 phyml_tutorial_data.tgz
@@ -699,8 +697,9 @@ de los diferentes modelos a ajustar, y determinar la puntuación de
 verosimilitud de los modelos evaluados</li>
 </ol>
 <p>Es decir, recordando la definición de la función de máxima
-verosimilitud, <code>ln<em>L</em> = Pr(D|H)</code>, que para modelos
-filogenéticos podemos reescribir como:</p>
+verosimilitud:</p>
+<p><code>ln<em>L</em> = Pr(D|H)</code>, que para modelos filogenéticos
+podemos reescribir como:</p>
 <p><b>ln<em>L</em> = Pr(D|<span class="math inline">\(\tau\nu\rho\)</span>)</b>, donde:</p>
 <ul>
 <li>D=Datos (alineamiento)</li>
@@ -710,27 +709,31 @@ rama</li>
 <li><span class="math inline">\(\rho\)</span>= parámetros del modelo de
 sustitución</li>
 </ul>
-<p>Calculamos inicialmente un un árbol NJ (método algorítmico de
-agrupación muy rápido) para <strong>fijar la topología (<span class="math inline">\(\tau\)</span>)</strong>, que es lo más costoso en
-filogenética, pidiendo a <span class="math inline">\(phyml\)</span>
-optimice sólo los parámetros de longitud de rama (<span class="math inline">\(\nu\)</span>) y del modelo de sustitución (<span class="math inline">\(\rho\)</span>) a evaluar (opción
-<code>-o lr</code>), calculando el puntaje (<span class="math inline">\(score\)</span>) de verosimilitud
+<p>El objetivo de calcular inicialmente un un árbol NJ (método
+algorítmico de agrupación muy rápido) es <strong>fijar la topología
+(<span class="math inline">\(\tau\)</span>)</strong>, que es el
+parámetro más costoso computacionalmente de calcular, pidiendo a <span class="math inline">\(phyml\)</span> que optimice sólo los parámetros de
+longitud de rama (<span class="math inline">\(\nu\)</span>) y del modelo
+de sustitución (<span class="math inline">\(\rho\)</span>) a evaluar
+(opción <code>-o lr</code>), calculando el puntaje (<span class="math inline">\(score\)</span>) de verosimilitud
 correspondiente.</p>
 <p>Veamos cómo hacerlo en el siguiente ejemplo.</p>
-<div id="estima-del-árbol-nj-de-referencia-sobre-el-que-estimaremos-parámetros-de-los-modelos-en-competición" class="section level3" number="3.2.1">
+<div id="estima-del-árbol-nj-de-referencia-sobre-el-que-estimaremos-los-parámetros-de-todos-los-modelos-en-competición" class="section level3" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> Estima del árbol NJ
-de referencia, sobre el que estimaremos parámetros de los modelos en
-competición</h3>
-<pre style="background: Cornsilk;"><code># visualizemos el alineamiento para confirmar que es tal, y que está en formato phylip (requerido por phyml)
+de referencia, sobre el que estimaremos los parámetros de todos los
+modelos en competición</h3>
+<pre style="background: Cornsilk;"><code># Visualizemos el alineamiento para confirmar que es tal, y que está en formato phylip (requerido por phyml)
 head primates.phy &amp;&amp; tail primates.phy
 
-# estima de árbol BioNJ con distancias JC69 (una sola tasa de sustitución e igual frecuencia de bases)
-phyml -i primates.phy -d nt -m 000000 -f 0.25,0.25,0.25,0.25 -b 0 -c 1 -o n &amp;&gt; /dev/null
+# Estima de árbol BioNJ con distancias JC69 (una sola tasa de sustitución e igual frecuencia de bases)
+#  phyml -i primates.phy -d nt -m 000000 -f 0.25,0.25,0.25,0.25 -b 0 -c 1 -o n &amp;&gt; /dev/null
+phyml -i primates.phy -d nt -m JC69 -b 0 -c 1 -o n &amp;&gt; /dev/null
 
-# renombremos el archivo
+# Renombremos el archivo
 mv primates.phy_phyml_tree.txt primates_JC.ph
 
-# podemos visualizar el arbol con: figtree primates_JC.ph &amp;</code></pre>
+# Podemos visualizar el arbol con: 
+figtree primates_JC.ph &amp;</code></pre>
 </div>
 <div id="optimización-de-parámetros-y-estimas-de-lnl-para-una-gama-de-modelos-a-evaluar" class="section level3" number="3.2.2">
 <h3><span class="header-section-number">3.2.2</span> Optimización de
@@ -739,21 +742,24 @@ una gama de modelos a evaluar</h3>
 <p>Después de calcular el árbol <em>NJ-JC</em>, iniciamos el proceso de
 seleccion de modelos.</p>
 <p>Existen 203 modelos en la familia <span class="math inline">\(GTR+I+G\)</span>, los cuales se distinguen por su
-grado de parametrización. El objetivo de la selección de modelos es
-encontrar uno con un nivel óptimo de parámetros para nuestros datos. Es
-decir, un modelo con suficientes parámetros para modelar con realismo
-las características más salientes de nuestros datos (alineamiento),
-haciendo uso de <strong>tres clases de parámetros</strong>:</p>
+grado de parametrización con respecto a:</p>
 <ol style="list-style-type: decimal">
 <li>frecuencia de bases</li>
 <li>número de clases de tasas de sustitución</li>
 <li>modelado de la heterogeneidad de tasas de sustutución entre
 sitios</li>
 </ol>
+<p><strong>El objetivo de la selección de modelos</strong> es encontrar
+uno con un <strong>nivel óptimo de parámetros para nuestros
+datos</strong>. Es decir, un modelo con suficientes parámetros para
+modelar con realismo las características más salientes de nuestros datos
+(alineamiento), haciendo uso de <strong>tres clases de
+parámetros</strong> listados en el párrafo entarior.</p>
 <p>La idea es agregar los parámetros necesarios para que el modelo
-presente un ajuste óptimo, sin incurrir en sobreparametrización.</p>
+presente un ajuste óptimo, pero sin incurrir en
+sobreparametrización.</p>
 <p>Para entender el proceso, vamos a evaluar una serie de pares de
-modelos anidados de parametrización creciente:</p>
+modelos anidados de parametrización creciente, concretamente:</p>
 <ul>
 <li>JC vs K2P</li>
 <li>JC vs F81</li>
@@ -774,9 +780,9 @@ sustituciones:  ac ag at cg ct gt
   C  == T    Ti (pirimidinas)
   
 donde:
-- 000000 ó 111111 representa una sóla tasa de sustitución, igual para cada tipo o clase de sustitución, como $JC69$ o $F81$
+- 000000 ó 111111 representa una sola tasa de sustitución, igual para cada tipo o clase de sustitución, como en los modelos $JC69$ o $F81$
 - 121121 ó 010010 representa una clase de tasas para las transiciones (Ti)
-                  y otra clase de tasas para las transversiones (Tv), como el $K2P$ o $HKY85$
+                  y otra clase de tasas para las transversiones (Tv), como en $K2P$ o $HKY85$
 - 012345 representa un modelo de 6 tasas, es decir, el GTR.
 </pre>
 <div id="jukes-y-cantor-de-1969-jc-o-jc69" class="section level4" number="3.2.2.1">
@@ -827,9 +833,9 @@ grep Log-like primates.phy_phyml_stats.txt </code></pre>
 <pre style="background: AliceBlue;">
 . Log-likelihood:           -6424.20245
 </pre>
-<p>Guardaremos el valor de <span class="math inline">\(-lnL\)</span>
-para cada uno de los modelos a evaluar en un archivo adecuadamente
-nombrado para posterior referencia.</p>
+<p>Guardaremos el valor de <span class="math inline">\(lnL\)</span> para
+cada uno de los modelos a evaluar en un archivo adecuadamente nombrado
+para posterior referencia.</p>
 <pre style="background: Cornsilk;"><code>grep Log-like primates.phy_phyml_stats.txt &gt; JC.fit</code></pre>
 <p>También podríamos haber usado <span class="math inline">\(awk\)</span>, que nos permite encontrar la línea
 que contiene ‘Log-like’ y además imprimir el último campo de la misma,
@@ -845,10 +851,10 @@ Kimura de 1980 (<span class="math inline">\(K80\)</span>) o Kimura de 2
 parámetros (<span class="math inline">\(K2P\)</span>)</h4>
 <ul>
 <li>Parametrizacaión de K80: asume igual frecuencia de bases (<span class="math inline">\(\pi_a = \pi_c = \pi_g = \pi_c = 0.25\)</span> ),
-pero permite comodar Ti <span class="math inline">\(\ne\)</span> Tv
+pero permite acomodar Ti <span class="math inline">\(\ne\)</span> Tv
 (<span class="math inline">\(\alpha \ne \beta\)</span>).</li>
-<li>Con este modelo evaluamos si existe un sesgo transicional en los
-datos</li>
+<li>Con este modelo evaluamos si existe un <em>sesgo transicional</em>
+en los datos</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 2. Modelo K80; veamos lo que tarda al usar el &quot;user-tree&quot; vs. tener que estimarlo 
 phyml -i primates.phy -d nt -m K80 -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
@@ -862,7 +868,8 @@ Felsenstein de 1981 (<span class="math inline">\(F81\)</span>)</h4>
 <li>Parametrización: acomoda diferentes frecuencias de bases (<span class="math inline">\(\pi_a \ne \pi_c \ne \pi_g \ne \pi_c\)</span>) pero
 asume que la tasa de Ti = Tv (<span class="math inline">\(\alpha =
 \beta\)</span>).</li>
-<li>Con este modelo evaluamos si existe sesgo composicional.</li>
+<li>Con este modelo evaluamos si existe <em>sesgo
+composicional</em>.</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 3. Modelo F81
 #  phyml -i primates.phy -d nt -m F81 -c 1
@@ -876,8 +883,8 @@ Hasegawa, Kishino y Yano de 1985 (<span class="math inline">\(HKY85\)</span>)</h
 <ul>
 <li>Parametrización: acomoda diferentes frecuencias de bases (<span class="math inline">\(\pi_a \ne \pi_c \ne \pi_g \ne \pi_c\)</span>) y
 tasa de Ti <span class="math inline">\(\ne\)</span> Tv (<span class="math inline">\(\alpha \ne \beta\)</span>).</li>
-<li>Con este modelo evaluamos si existe sesgo composicional de bases y
-sesgo transicional en tasas de sustitución.</li>
+<li>Con este modelo evaluamos si existe <em>sesgo composicional</em> de
+bases y <em>sesgo transicional</em> en tasas de sustitución.</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 4. Modelo HKY85
 #  phyml -i primates.phy -d nt -m HKY85 -c 1 
@@ -885,8 +892,8 @@ phyml -i primates.phy -d nt -m 121121 -f e -c 1 -u primates_JC.ph -o lr -b 0 &am
 
 grep Log-like primates.phy_phyml_stats.txt &gt; HKY85.fit</code></pre>
 <p>NOTA: Como veremos en ejemplos posteriores, podíamos haber optimizado
-el proceso corriendo un bucle for como la siguiente. Por ahora nos
-concetramos en entender cómo llamar a <span class="math inline">\(phyml\)</span> con modelos de parametrización cada
+el proceso corriendo un <code>bucle for</code> como el mostrado abajo.
+Por ahora nos concetramos en entender cómo llamar a <span class="math inline">\(phyml\)</span> con modelos de parametrización cada
 vez más compleja.</p>
 <pre style="background: Cornsilk;"><code>
 for mat in JC69 K80 F81 HKY85; do 
@@ -905,9 +912,9 @@ Tv (<span class="math inline">\(\alpha \ne \beta\)</span>) y
 distribución Gamma (<span class="math inline">\(+\Gamma\)</span>) para
 acomodar heterogeneidad de tasas entre sitios o columnas del
 alineamiento</li>
-<li>Con este modelo podemos evaluar si existe sesgo composicional de
-bases, sesgo transicional en tasas de sustitución y heterogeneidad de
-tasas entre sitios</li>
+<li>Con este modelo podemos evaluar si existe <em>sesgo
+composicional</em> de bases, <em>sesgo transicional</em> en tasas de
+sustitución y <em>heterogeneidad de tasas entre sitios</em>.</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 5. Modelo HKY85+G
 #  phyml -i primates.phy -d nt -m HKY85 -c 4 -a e
@@ -926,9 +933,10 @@ Tv (<span class="math inline">\(\alpha \ne \beta\)</span>), distribución
 Gamma (<span class="math inline">\(+\Gamma\)</span>) y proporción de
 sitios invariantes (<span class="math inline">\(pInv\)</span>) para
 modelar heterogeneidad de tasas entre sitios</li>
-<li>Con este modelo podemos evaluar si existe sesgo composicional de
-bases, sesgo transicional en tasas de sustitución, heterogeneidad de
-tasas entre sitios, asumiendo una proporción de sitios invariantes.</li>
+<li>Con este modelo podemos evaluar si existe <em>sesgo
+composicional</em> de bases, <em>sesgo transicional</em> en tasas de
+sustitución, <em>heterogeneidad de tasas entre sitios</em>, asumiendo
+una <em>proporción de sitios invariantes</em>.</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 6. Modelo HKY85+G+I
 #  phyml -i primates.phy -d nt -m HKY85 -c 4 -a e -v e
@@ -948,7 +956,7 @@ anteriores.</p>
 <h3><span class="header-section-number">3.2.3</span> Análisis gráfico y
 estadístico de resultdos usando herramientas de <span class="math inline">\(Linux\)</span> y <span class="math inline">\(R\)</span></h3>
 <p>Una vez evaluados los diferentes modelos en competición, haremos un
-análisis gráfico y estadístico de los resultados.</p>
+simple análisis gráfico y estadístico de los resultados.</p>
 <ul>
 <li>Parseo de valores <span class="math inline">\(lnL\)</span> de los
 archivos *.fit y generación de archivos tsv y csv</li>
@@ -956,15 +964,12 @@ archivos *.fit y generación de archivos tsv y csv</li>
 <pre style="background: Cornsilk;"><code># generemos un archivo separado por tabuladores con su cabecera
 awk &#39;BEGIN{OFS=&quot;\t&quot;; print &quot;model\tlnL&quot;}{print FILENAME , $NF}&#39; *.fit | sed &#39;s/\.fit//&#39; &gt; model_fits.tsv
 
-# convertimos el tsv a un archivo con campos delimitados por comas (csv)
-sed &#39;s/\t/,/&#39; model_fits.tsv &gt; model_fits.csv
 
 # limpiemos un poco el directorio de trabajo
-*fit </code></pre>
+rm *fit </code></pre>
 <p>Visualizemos los resultados obtenidos:</p>
-<pre style="background: Cornsilk;"><code>sort -gk2 model_fits.tsv | column -t model_fits.tsv</code></pre>
+<pre style="background: Cornsilk;"><code>sed &#39;1d&#39; model_fits.tsv | sort -drk2 | column -t</code></pre>
 <pre>
-model    lnL
 JC       -6424.20245
 F81      -6303.66088
 K80      -6142.42909
@@ -985,8 +990,8 @@ R
 
 # leamos los datos en una estructura tipo dataframe
 # system(&quot;ls&quot;)
-list.files(pattern=&quot;\\.csv$&quot;)
-dfr &lt;- read.csv(file=&quot;model_fits.csv&quot;, header = FALSE, sep=&quot;,&quot;)
+list.files(pattern=&quot;\\.tsv$&quot;)
+dfr &lt;- read.csv(file=&quot;model_fits.tsv&quot;, header = TRUE, sep=&quot;\t&quot;)
 
 # ver la estructura del data frame
 str(dfr)
@@ -1011,7 +1016,7 @@ dev.off()</code></pre>
 <p><strong>Figura 1.</strong> <em>Dotchart</em> mostrando resultados
 ordenados de puntuación de <span class="math inline">\(lnL\)</span> para
 los modelos indicados, estimados sobre una filogenia <span class="math inline">\(NJ-JC\)</span>, y el alineamiento
-primates.phy.</p>
+<em>primates.phy</em>.</p>
 <p>La gráfica revela claramente la importancia los parámetros de
 frecuencia de bases, ti/tv y heterogeneidad de tasas entre sitios,
 reflejados en los incrementos altamente significativos de <span class="math inline">\(lnL\)</span> de los modelos de complejidad
@@ -1039,8 +1044,10 @@ decir, <span class="math inline">\(L_0\)</span> es un caso particular de
 <span class="math inline">\(L_1\)</span>.<br />
 </li>
 <li>El estadístico <span class="math inline">\(LRT=2*(lnL_1 -
-lnL_0)\)</span></li>
+lnL_0)\)</span> sigue una distribución de chi-cuadrada:</li>
 </ol>
+<p><span class="math display">\[\chi^2 = \sum \frac {(O -
+E)^2}{E}\]</span></p>
 <pre style="background: Cornsilk;"><code># 6.3 Entre los dos modelos que parecen empatados, veamos si existen o no diferencias significativas, 
 #     corriendo una prueba estadistica formal: dado que los modelos HKY+G u HKY+G+I estan anidados,
 #     podemos correr un simple LRT (prueba de razones de verosimilitudes): LRT = 2(lnL1 - lnL 0)
@@ -1061,7 +1068,8 @@ q()         # para salir de R
 <li><strong>Tarea</strong>: repite el ejercicio de evaluación de
 cocientes de similitud para las siguientes parejas de modelos anidados:
 <ul>
-<li>F81-HKY85 (¿qué evaluamos con este contraste de hipótesis?)</li>
+<li>F81-HKY85 (¿qué evaluamos con este contraste de hipótesis, y los dos
+que siguen?)</li>
 <li>HKY85-HKY85+G</li>
 <li>HKY85+G-HKY85+I+G</li>
 </ul></li>
@@ -1077,9 +1085,10 @@ uso una aproximación conservadora, favoreciendo por ejemplo el modelo
 filogenia bajo el mejor modelo encontrado: HKY85+G</h3>
 <p>Estimemos la filogenia de máxima verosimilitud bajo el modelo
 seleccionado: <span class="math inline">\(HKY+G\)</span></p>
-<p>Nótese que usamos sólo la parameterización del modelo (-m HKY85 -c 4
--a e), dejando que phyml optimice todos los parámetros, incluyendo ahora
-la topología, longitudes de ramas y tasas <code>-o tlr</code>.</p>
+<p>Nótese que usamos sólo la parameterización del modelo (<code>-m HKY85
+-c 4 -a e</code>), dejando que <em>phyml</em> optimice todos los
+parámetros, incluyendo ahora la topología, longitudes de ramas y tasas
+<code>-o tlr</code>.</p>
 <ul>
 <li><strong>Pregunta</strong>: ¿qué tipo de rearreglos de rama usa <span class="math inline">\(phyml\)</span> en la llamada mostrada
 seguidamente?</li>
@@ -1141,7 +1150,7 @@ encontrado para primates.phy bajo el modelo <span class="math inline">\(HKY+G\)<
 <div id="estrategia-alternativa-de-selección-de-modelos-de-dna-reducción-de-parámetros-del-modelo-gtrgi-y-evaluación-de-los-modelos-resultantes-mediante-aic" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Estrategia
 alternativa de selección de modelos de DNA: reducción de parámetros del
-modelo GTR+G+I y evaluación de los modelos resultantes mediante <span class="math inline">\(AIC\)</span></h2>
+modelo GTR+G+I, y evaluación de los modelos resultantes mediante <span class="math inline">\(AIC\)</span></h2>
 <p>En el ejercicio anterior evaluamos una serie de modelos anidados,
 iniciando arbitrariamente por el más sencillo (JC69), progresando hasta
 el modelo <span class="math inline">\(HKY85+I+G\)</span>.</p>
@@ -1161,7 +1170,8 @@ usando <strong>criterios de información</strong>.</p>
 <p>Igual que en ejemplos anteriores, usamos el árbol NJ-JC para estimar
 sobre éste los parámetros del modelo de sustitución y evaluar el ajuste
 (<span class="math inline">\(lnL\)</span>) resultante, sin necesidad de
-invertir tiempo de cómputo en reestimar la topología.</p>
+invertir tiempo de cómputo en reestimar la topología y longitudes de
+rama.</p>
 <p>Con <span class="math inline">\(grep\)</span> filtramos la línea con
 el ‘Log-likelihood’ y la guardamos en un archivo adecuadamente
 nombrado.</p>
@@ -1290,7 +1300,7 @@ crecientes de <span class="math inline">\(AICi\)</span>, vemos que el
 3 AIC_4ratesGI 11493.81
 1    AIC_GTRGI 11494.78
 </pre>
-<p>Construyamos un nuevo <span class="math inline">\(datafame\)</span>
+<p>Construyamos un nuevo <span class="math inline">\(data\ fame\)</span>
 <span class="math inline">\(model\_deltas\)</span> con los vectores
 <span class="math inline">\(models\)</span> y <span class="math inline">\(deltas\)</span>, con los valores de <span class="math inline">\(\Delta_i\)</span> para cada modelo, con respecto
 al <span class="math inline">\(AIC\_min\)</span></p>
@@ -1305,7 +1315,7 @@ delta_4ratesG &lt;- AIC_4ratesG - AICmin
 deltas &lt;- c(delta_5ratesGI, delta_GTRGI, delta_4ratesGI, delta_5ratesG, delta_4ratesG)
 models &lt;- c(&quot;5ratesGI&quot;, &quot;GTRGI&quot;,&quot;4ratesGI&quot;, &quot;5ratesG&quot;, &quot;4ratesG&quot;)
 
-# build and print model_deltas dataframe
+# build and print model_deltas data frame
 model_deltas &lt;- data.frame(models, deltas)
 model_deltas[order(model_deltas$deltas),]</code></pre>
 <pre style="background: AliceBlue;">
@@ -1355,11 +1365,13 @@ modelos mediante <span class="math inline">\(AIC\)</span>.</p>
 <ol style="list-style-type: decimal">
 <li>es muy rápida (posiblemente la más rápida)</li>
 <li>encuentra muy buenos modelos, ya que los métodos tradicionales,
-incluyendo estrategias automáticas como las implementadas en <span class="math inline">\(jModelTest2\)</span>, no evalúan por defecto a los
+incluyendo estrategias automáticas, como las implementadas en <span class="math inline">\(jModelTest2\)</span>, no evalúan por defecto a los
 203 modelos posibles de la familia <span class="math inline">\(GTR+G+I\)</span> (aunque es posible con la opción
 <code>-s 203</code>).</li>
 </ol>
-<p>Para su implementación eficiente, habría que escribir un <span class="math inline">\(script\)</span> para automatizarla.</p>
+<p>Para una implementación eficiente de la estrategia arriba descrita,
+habría que escribir un <span class="math inline">\(script\)</span> para
+automatizarla.</p>
 <ul>
 <li>Veamos los parámetros relevantes</li>
 </ul>
@@ -1412,9 +1424,9 @@ simplificaciones adicionales. ¿Cuáles sugieres? Evalúalas.</p>
 <div id="cálculo-de-aics-y-bics-para-selección-modelos-de-aminoácidos" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Cálculo de AICs y BICs
 para selección modelos de aminoácidos</h1>
-<p>Recuerden que para la inferencia de filogenias de proteínas bajo
-máxima verosimilitud se usan matrices empíricas de sustitución, como la
-<span class="math inline">\(BLOSUM62\)</span> o <span class="math inline">\(JTT\)</span> … Dado que estas matrices no están
+<p>Recuerden que para la inferencia de <strong>filogenias de
+proteínas</strong> bajo <em>máxima verosimilitud</em> se usan
+<strong>matrices empíricas de sustitución</strong>, como la <span class="math inline">\(BLOSUM62\)</span> o <span class="math inline">\(JTT\)</span> … Dado que estas matrices NO están
 anidadas entre sí, necesitamos usar <b>criterios de información</b> como
 el <span class="math inline">\(AIC\)</span> o <span class="math inline">\(BIC\)</span> para evaluar su mérito o ajuste
 relativo.</p>
@@ -1719,13 +1731,20 @@ poderlos mantener y desarrollar con facilidad.</p>
 <code>phyml_protModelFinder.sh</code> y
 <code>phyml_DNAmodelFinder.sh</code>, que pueden copiar a su directorio
 ~/bin en <em>tepeu</em> con los siguientes comandos:</p>
-<pre><code>cp /home/vinuesa/cursos/LCG-ENS/scripts/phyml_protModelFinder.sh ~/bin
+<pre style="background: Cornsilk;"><code>
+[ ! -d $HOME/bin ] &amp;&amp; mkdir $HOME/bin
+
+cp /home/vinuesa/cursos/LCG-ENS/scripts/phyml_protModelFinder.sh ~/bin
 cp /home/vinuesa/cursos/LCG-ENS/scripts/phyml_DNAmodelFinder.sh ~/bin</code></pre>
 <p>o descargar directamente desde el <a href="https://github.com/vinuesa/TIB-filoinfo">repositorio GitHub de los
 TIB</a>, usando <span class="math inline">\(wget\)</span> desde la línea
 de comandos:</p>
-<pre><code>wget https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_protModelFinder.sh
-wget https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_DNAmodelFinder.sh</code></pre>
+<pre style="background: Cornsilk;"><code>[ ! -d $HOME/bin ] &amp;&amp; mkdir $HOME/bin 
+cd $HOME/bin
+wget https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_protModelFinder.sh
+wget https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_DNAmodelFinder.sh
+
+cd -</code></pre>
 <p>Estos <span class="math inline">\(scripts\)</span>, además de hacer
 las llamadas a <span class="math inline">\(phyml\)</span>, evalúa los
 resultados haciendo uso de los criterios de información de Akaike (AIC)

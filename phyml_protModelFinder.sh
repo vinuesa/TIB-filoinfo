@@ -18,7 +18,7 @@ set -uo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version=0.6 # 2022-12-01;
+version=0.7_2023-11-12 # v0.7_2023-11-12; added computation of elapsed time and print_end_message
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
@@ -213,6 +213,25 @@ function compute_BIC()
    awk -v lnL="$score" -v k="$total_params" -v n="$n_sites" 'BEGIN{ BIC= (-2 * lnL) + (k * log(n)); printf "%0.5f", BIC }'
 }
 #-----------------------------------------------------------------------------------------
+
+function print_end_message()
+{
+   cat <<EOF
+  ========================================================================================
+  If you use $progname v.$version for your research,
+  I would appreciate that you:
+  
+  1. Cite the code in your work as:   
+  Pablo Vinuesa. $progname v.$version 
+       https://github.com/vinuesa/TIB-filoinfo/blob/master/$progname
+  
+  2. Give it a like on the https://github.com/vinuesa/TIB-filoinfo/ repo
+  
+  Thanks!
+
+EOF
+}
+#----------------------------------------------------------------------------------------- 
 
 function print_help(){
 
@@ -526,5 +545,13 @@ fi
 echo '--------------------------------------------------------------------------------------------------'
 
 echo ''
+
+elapsed=$(( SECONDS - start_time ))
+
+eval "echo Elapsed time: $(date -ud "@$elapsed" +'$((%s/3600/24)) days, %H hr, %M min, %S sec')"
+
+echo 'Done!'
+
+print_end_message
 
 exit 0

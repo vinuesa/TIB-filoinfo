@@ -50,7 +50,7 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='0.9_2022-12-12' # code nickname: Lupita
+version='0.9.1_2023-11-12' # v0.9.1_2023-11-12; fixed unbound variable vers (should be version) in print_end_message
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
@@ -544,7 +544,7 @@ function print_end_message()
   I would appreciate that you:
   
   1. Cite the code in your work as:   
-  Pablo Vinuesa. $progname v.$vers 
+  Pablo Vinuesa. $progname v.$version 
        https://github.com/vinuesa/TIB-filoinfo/blob/master/$progname
   
   2. Give it a like on the https://github.com/vinuesa/TIB-filoinfo/ repo

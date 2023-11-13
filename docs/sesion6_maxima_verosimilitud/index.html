@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México. GitHub repos; @pvinmex" />
 
-<meta name="date" content="2023-11-09" />
+<meta name="date" content="2023-11-12" />
 
 <title>Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</title>
 
@@ -337,7 +337,7 @@ display: none;
 de modelos y búsquedas intensivas de árboles</h1>
 <h4 class="author"><a href="https://www.ccg.unam.mx/~vinuesa/">Pablo
 Vinuesa, CCG-UNAM, Cuernavaca, México</a>. <a href="https://github.com/vinuesa">GitHub repos</a>; <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a></h4>
-<h4 class="date">2023-11-09</h4>
+<h4 class="date">2023-11-12</h4>
 
 </div>
 
@@ -420,20 +420,20 @@ verosimilitud con el mejor modelo de 5 tasas+G con parametrización
 <li><a href="#conclusión" id="toc-conclusión"><span class="toc-section-number">3.3.5</span> CONCLUSIÓN</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#cálculo-de-aics-y-bics-para-selección-modelos-de-aminoácidos" id="toc-cálculo-de-aics-y-bics-para-selección-modelos-de-aminoácidos"><span class="toc-section-number">4</span> Cálculo de AICs y BICs para
-selección modelos de aminoácidos</a>
+<li><a href="#cálculo-de-aics-y-bics-para-selección-modelos-de-aminoácidos" id="toc-cálculo-de-aics-y-bics-para-selección-modelos-de-aminoácidos"><span class="toc-section-number">4</span> Cálculo de <span class="math inline">\(AICs\)</span> y <span class="math inline">\(BICs\)</span> para selección modelos de
+aminoácidos</a>
 <ul>
 <li><a href="#evaluación-rápida-de-un-subconjunto-de-matrices-con-un-bucle-for" id="toc-evaluación-rápida-de-un-subconjunto-de-matrices-con-un-bucle-for"><span class="toc-section-number">4.1</span> Evaluación rápida de un
 subconjunto de matrices con un <span class="math inline">\(bucle\
 for\)</span></a></li>
-<li><a href="#análisis-gráfico-y-numérico-de-resultados-de-aic-usando-herramientas-de-filtrado-del-linux-y-r" id="toc-análisis-gráfico-y-numérico-de-resultados-de-aic-usando-herramientas-de-filtrado-del-linux-y-r"><span class="toc-section-number">4.2</span> Análisis gráfico y numérico de
+<li><a href="#análisis-gráfico-y-numérico-de-resultados-de-aic-usando-herramientas-de-filtrado-de-linux-y-r" id="toc-análisis-gráfico-y-numérico-de-resultados-de-aic-usando-herramientas-de-filtrado-de-linux-y-r"><span class="toc-section-number">4.2</span> Análisis gráfico y numérico de
 resultados de <span class="math inline">\(AIC\)</span> usando
-herramientas de filtrado del <span class="math inline">\(Linux\)</span>
-y <span class="math inline">\(R\)</span></a>
+herramientas de filtrado de <span class="math inline">\(Linux\)</span> y
+<span class="math inline">\(R\)</span></a>
 <ul>
 <li><a href="#análisis-gráfico-con-r-de-modelos-ordenados-por-valor-de-lnl" id="toc-análisis-gráfico-con-r-de-modelos-ordenados-por-valor-de-lnl"><span class="toc-section-number">4.2.1</span> Análisis gráfico con R de
 modelos ordenados por valor de <span class="math inline">\(lnL\)</span></a></li>
-<li><a href="#cálculo-formal-de-aicmin-y-deltaaic-para-los-modelos-en-competición" id="toc-cálculo-formal-de-aicmin-y-deltaaic-para-los-modelos-en-competición"><span class="toc-section-number">4.2.2</span> Cálculo formal de <span class="math inline">\(AICmin\)</span> y <span class="math inline">\(deltaAIC\)</span> para los modelos en
+<li><a href="#cálculo-formal-de-aic_min-y-delta_aic_i-para-los-modelos-en-competición" id="toc-cálculo-formal-de-aic_min-y-delta_aic_i-para-los-modelos-en-competición"><span class="toc-section-number">4.2.2</span> Cálculo formal de <span class="math inline">\(AIC_{min}\)</span> y <span class="math inline">\(\Delta_{AIC_{i}}\)</span> para los modelos en
 competición</a></li>
 <li><a href="#conclusión-1" id="toc-conclusión-1"><span class="toc-section-number">4.2.3</span> CONCLUSIÓN</a></li>
 </ul></li>
@@ -1342,7 +1342,8 @@ modelos significativamente peores.</p></li>
 libres a estimar, resulta ser el peor de los modelos evaluados por AIC,
 indicando que está claramente sobre-parametrizado.</p></li>
 <li><p><strong>Tarea</strong>: Evalúa mediante AICs otras
-simplificaciones en las clases de transversiones.</p></li>
+simplificaciones en las clases de transversiones. Debes de evaluar al
+menos un modelo adicional de 4 tasas y otro de tres.</p></li>
 </ul>
 </div>
 <div id="estima-de-la-filogenia-de-máxima-verosimilitud-con-el-mejor-modelo-de-5-tasasg-con-parametrización-123425" class="section level3" number="3.3.4">
@@ -1422,15 +1423,15 @@ simplificaciones adicionales. ¿Cuáles sugieres? Evalúalas.</p>
 </div>
 </div>
 <div id="cálculo-de-aics-y-bics-para-selección-modelos-de-aminoácidos" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> Cálculo de AICs y BICs
-para selección modelos de aminoácidos</h1>
+<h1><span class="header-section-number">4</span> Cálculo de <span class="math inline">\(AICs\)</span> y <span class="math inline">\(BICs\)</span> para selección modelos de
+aminoácidos</h1>
 <p>Recuerden que para la inferencia de <strong>filogenias de
 proteínas</strong> bajo <em>máxima verosimilitud</em> se usan
 <strong>matrices empíricas de sustitución</strong>, como la <span class="math inline">\(BLOSUM62\)</span> o <span class="math inline">\(JTT\)</span> … Dado que estas matrices NO están
 anidadas entre sí, necesitamos usar <b>criterios de información</b> como
 el <span class="math inline">\(AIC\)</span> o <span class="math inline">\(BIC\)</span> para evaluar su mérito o ajuste
 relativo.</p>
-<p>En el siguiente ejercicio, evaluaremos primeramente una gama de
+<p>En el siguiente ejercicio evaluaremos primeramente una gama de
 matrices empíricas, ajustando o no frecuencia de los residuos (<span class="math inline">\(-f\ e\)</span>) y/o distribución gamma (<span class="math inline">\(+G\)</span>) para modelado de la heterogeneidad de
 tasas entre los sitios o columnas del alineamiento.</p>
 <p>Como hicimos en ejemplos anteriores, para minimizar el tiempo de
@@ -1463,8 +1464,9 @@ phyml -i &quot;$infile&quot; -d aa -m LG -c 1 -b 0 -o n &amp;&gt; /dev/null
 # y renombrémoslo, para su uso como ´usertree&#39;
 mv &quot;${infile}&quot;_phyml_tree.txt primates_LG.ph
 
-# verifica que se generó el archivo
-[[ ! -s primates_LG.ph ]] &amp;&amp; echo &quot;ERROR: primates_LG.ph not found&quot;
+# verifica que se generó el archivo; 
+# si no fuera el caso, termina el proceso con mensaje explícito de error
+[[ ! -s primates_LG.ph ]] &amp;&amp; { echo &quot;ERROR: primates_LG.ph not found&quot;; exit 1 ; }
 
 # declaramos el hash model_fits para guardar los valores de lnL asociados a cada modelo
 declare -A model_scores
@@ -1491,15 +1493,14 @@ for mat in AB BLOSUM62 DAYHOFF JTT LG VT WAG; do
      model_scores[&quot;${mat}+f+G&quot;]=$(awk &#39;/Log-like/{print $NF}&#39; ${infile}_phyml_stats.txt)
 done</code></pre>
 </div>
-<div id="análisis-gráfico-y-numérico-de-resultados-de-aic-usando-herramientas-de-filtrado-del-linux-y-r" class="section level2" number="4.2">
+<div id="análisis-gráfico-y-numérico-de-resultados-de-aic-usando-herramientas-de-filtrado-de-linux-y-r" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Análisis gráfico y
 numérico de resultados de <span class="math inline">\(AIC\)</span>
-usando herramientas de filtrado del <span class="math inline">\(Linux\)</span> y <span class="math inline">\(R\)</span></h2>
-<p>Primero escribiremos en un archivo los valores de <span class="math inline">\(lnL\)</span> para cada modelo evaluado, el cual
-leeremos en <span class="math inline">\(R\)</span> para generar las
-gráficas de puntuaciones de <span class="math inline">\(lnL\)</span> y
-calcular los <span class="math inline">\(AIC_i\)</span> de cada
-modelo</p>
+usando herramientas de filtrado de <span class="math inline">\(Linux\)</span> y <span class="math inline">\(R\)</span></h2>
+<p>Primero escribiremos en un archivo los valores de <span class="math inline">\(lnL\)</span> para cada modelo evaluado guardados
+en nuestro <code> hash model_scores</code>, el cual leeremos en <span class="math inline">\(R\)</span> para generar las gráficas de
+puntuaciones de <span class="math inline">\(lnL\)</span> y calcular los
+<span class="math inline">\(AIC_i\)</span> de cada modelo.</p>
 <pre style="background: Cornsilk;"><code># vamos a recorrer el hash model_scores para imprimir los resultados en forma tabular 
 #   y ordenada por valores decrecientes de lnL
 echo &quot;# writing ${infile}_sorted_model_fits.tsv, sorted by lnL&quot;
@@ -1616,9 +1617,9 @@ modelo?</li>
 </ul></li>
 </ul>
 </div>
-<div id="cálculo-formal-de-aicmin-y-deltaaic-para-los-modelos-en-competición" class="section level3" number="4.2.2">
+<div id="cálculo-formal-de-aic_min-y-delta_aic_i-para-los-modelos-en-competición" class="section level3" number="4.2.2">
 <h3><span class="header-section-number">4.2.2</span> Cálculo formal de
-<span class="math inline">\(AICmin\)</span> y <span class="math inline">\(deltaAIC\)</span> para los modelos en
+<span class="math inline">\(AIC_{min}\)</span> y <span class="math inline">\(\Delta_{AIC_{i}}\)</span> para los modelos en
 competición</h3>
 <pre style="background: Cornsilk;"><code># Computo de AICmin y deltaAICi         
 # recuerda: AICi = 2Ki - 2(lnLi); donde Ki = numero parametros libres del modelo i; lnLi = lnL del modelo i
@@ -1747,8 +1748,7 @@ wget https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_DNAmode
 cd -</code></pre>
 <p>Estos <span class="math inline">\(scripts\)</span>, además de hacer
 las llamadas a <span class="math inline">\(phyml\)</span>, evalúa los
-resultados haciendo uso de los criterios de información de Akaike (AIC)
-y bayesiano (BIC). Veremos que el <span class="math inline">\(AIC\)</span> usa un criterio más laxo que el <span class="math inline">\(BIC\)</span>, tendiendo a seleccionar modelos más
+resultados haciendo uso de los criterios de información de Akaike (<span class="math inline">\(AIC\)</span>) y bayesiano (<span class="math inline">\(BIC\)</span>). Veremos que el <span class="math inline">\(AIC\)</span> usa un criterio más laxo que el <span class="math inline">\(BIC\)</span>, tendiendo a seleccionar modelos más
 complejos que el segundo.</p>
 <p>Te invito a que explores en detalle el código de ambos.</p>
 <div id="ejemplo-de-invocación-del-script-phyml_protmodelfinder.sh" class="section level2" number="5.1">
@@ -1810,7 +1810,7 @@ algunas funcionalidades requieren <span class="math inline">\(bash &gt;=
 disponible vía <span class="math inline">\(MacPorts\)</span>, <span class="math inline">\(Homebrew\)</span> o <span class="math inline">\(Fink\)</span>.</p></li>
 <li><p>Seguidamente comprueba los argumentos pasados al <span class="math inline">\(script\)</span>, determinado si existe el archivo
 de entrada y si está en formato phylip. Esto lo hace llamando a la
-función <span class="math inline">\(check_is_phylip\)</span></p></li>
+función <span class="math inline">\(check\_is\_phylip\)</span></p></li>
 <li><p>El primer cálculo consiste en evaluar las frecuencias empríricas
 de los aminoácidos con la función <span class="math inline">\(compute\_AA\_freq\_in\_phylip()\)</span>, que se
 muestra seguidamente</p></li>
@@ -1863,8 +1863,8 @@ parámetros del modelo y calcular el ajuste de <span class="math inline">\(lnL\)
 evaluar, llenando diversos hashes con los resultados para su despliegue
 y posterior análisis estadístico.</p></li>
 <li><p>Una vez estimados los parámetros y calculados los puntajes de
-verosimilitud correspondientes, se calculan los <span class="math inline">\(AICi\)</span>, <span class="math inline">\(AICc\)</span>, <span class="math inline">\(BICi\)</span>, <span class="math inline">\(\Delta_{BIC}\)</span>, <span class="math inline">\(BICw\)</span> y <span class="math inline">\(BICcumW\)</span> asociados a cada modelo, haciendo
-llamadas a funciones, se guardan los resultados en un <span class="math inline">\(hash\)</span> y se imprime finalmente la tabla de
+verosimilitud correspondientes, se calculan los <span class="math inline">\(AIC_i\)</span>, <span class="math inline">\(AIC_c\)</span>, <span class="math inline">\(BIC_i\)</span>, <span class="math inline">\(\Delta_{BIC}\)</span>, <span class="math inline">\(BIC_w\)</span> y <span class="math inline">\(BIC_{cumW}\)</span> asociados a cada modelo,
+haciendo llamadas a funciones, se guardan los resultados en un <span class="math inline">\(hash\)</span> y se imprime finalmente la tabla de
 resultados, ordenada por valores crecientes de BIC.</p></li>
 <li><p>Por último se usa el mejor modelo (seleccionado por <span class="math inline">\(BIC\)</span>), para estimar la filogenia, bien sea
 a partir de un árbol semilla <span class="math inline">\(BioNJ\)</span>
@@ -2095,13 +2095,13 @@ paste &quot;${infile}&quot;_sorted_model_set_&quot;${model_set}&quot;_fits.tsv \
 <h3><span class="header-section-number">5.1.1</span> El criterio
 bayesiano de información (<span class="math inline">\(BIC\)</span>)</h3>
 <p>Noten que el mejor modelo seleccionado por <span class="math inline">\(BIC\)</span> caso es <span class="math inline">\(JTT+G\)</span>, mientras que <span class="math inline">\(AIC\)</span> selecciona <span class="math inline">\(JTT+f+G\)</span>. Es más, vemos que <span class="math inline">\(JTT+f+G\)</span> tiene un <span class="math inline">\(\Delta_{BIC}\)</span> &gt; 43, por lo que es un
-modelo muchísimo peor que el <span class="math inline">\(JTT+f+G\)</span> Es tan grande la distancia <span class="math inline">\(BIC\)</span> entre ambos modelos, que el intervalo
-de credibilidad del 100% incluye sólo al modelo <span class="math inline">\(JTT+f+G\)</span>, como indican las columnas de
-<span class="math inline">\(BIC_w\)</span> y <span class="math inline">\(BIC_{cumW}\)</span>.</p>
+modelo muchísimo peor que el <span class="math inline">\(JTT+G\)</span>.
+Es tan grande la distancia <span class="math inline">\(\Delta_{BIC}\)</span> entre ambos modelos, que el
+intervalo de credibilidad del 100% incluye sólo al modelo <span class="math inline">\(JTT+G\)</span>, como indican las columnas de <span class="math inline">\(BIC_w\)</span> y <span class="math inline">\(BIC_{cumW}\)</span>.</p>
 <p>¿A qué se debe esta disparidad entre <span class="math inline">\(AIC\)</span> y <span class="math inline">\(BIC\)</span>? El criterio de información de Akaike
 (<span class="math inline">\(AIC\)</span>) es sabido que tiende a
-favorecer modelos con más parámetros y con frecuencia selecciona modelos
-sobreparametrizados.</p>
+favorecer modelos con más parámetros, y con frecuencia selecciona
+modelos sobreparametrizados.</p>
 <p>En cambio, el <span class="math inline">\(BIC\)</span> es más
 conservador y no adolece del problema de sobreparametrización.</p>
 <p>Por ello los <span class="math inline">\(scripts\)</span> <span class="math inline">\(phyml\_protModelFinder.sh\)</span> y <span class="math inline">\(phyml\_DNAmodelFinder.sh\)</span> usan el <span class="math inline">\(BIC\)</span> para la selección de modelos.</p>
@@ -2131,7 +2131,7 @@ preferido, el cual equivale al modelo de máxima probabilidad
 posterior.</p>
 <p>Dado que para muchos alineamientos <span class="math inline">\(log(n)
 &gt; 2\)</span>, el <span class="math inline">\(BIC\)</span> suele
-seleccionar modelos con menos parámetros que <span class="math inline">\(BIC\)</span>.</p>
+seleccionar modelos con menos parámetros que <span class="math inline">\(AIC\)</span>.</p>
 <p>Con <span class="math inline">\(BIC\)</span> podemos comparar todos
 los modelos en competición, independientemente de si están o no
 anidados.</p>
@@ -2207,9 +2207,9 @@ estándar+TIM+TVM, <em>phyml_DNAmodelFinder.sh</em> hace unas
 evaluaciones de valores de <span class="math inline">\(\Delta_{BIC}\)</span> entre los siguientes pares
 de modelos:</p>
 <pre>
-- JC69 vs. F81 para evaluar si existe sesgo composicional significativo
+- JC69 vs. F81 para determinar si existe sesgo composicional significativo
 - F81 vs. HKY85 para evaluar si existe sesgo transicional significativo
-- HKY85+G vs. HKY85+I+G para evaluar si amerita o no incluir pInv
+- HKY85+G vs. HKY85+I+G para calcular si amerita o no incluir pInv
 </pre>
 <p>En función de estos análisis efectuados sobre los modelos del
 conjunto estándar, el <span class="math inline">\(script\)</span> decide
@@ -2228,7 +2228,7 @@ de modelos</h3>
 <ul>
 <li>el ambiente en el que corre (verión de <span class="math inline">\(Bash\)</span> y dependencias)</li>
 <li>que las secuencias están en formato <span class="math inline">\(phylip\)</span></li>
-<li>hace unas estadísticas de las secuencias</li>
+<li>calcula unas estadísticas descriptivas de las secuencias</li>
 </ul>
 <pre style="background: Cornsilk;"><code>phyml_DNAmodelFinder.sh primates.phy 2</code></pre>
 <pre>

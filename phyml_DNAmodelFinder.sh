@@ -540,7 +540,7 @@ function print_end_message()
 {
    cat <<EOF
   ========================================================================================
-  If you use $progname v.$vers for your research,
+  If you use $progname v.$version for your research,
   I would appreciate that you:
   
   1. Cite the code in your work as:   

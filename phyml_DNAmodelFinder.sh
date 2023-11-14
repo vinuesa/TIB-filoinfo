@@ -50,14 +50,14 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='0.9.2_2023-11-13' # v0.9.2_2023-11-13; added check_phym_version, requiring version >= 3.3
+version='0.9.3_2023-11-13' # v0.9.2_2023-11-13; improved version checking in check_phyml_version, requiring version >= 2022
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
 		  #    by setting the -n attribute
 		  #    see https://stackoverflow.com/questions/16461656/how-to-pass-array-as-an-argument-to-a-function-in-bash
 
-min_phyml_version=3.3 # 
+min_phyml_version=2022 # this corresponds to 3.3.2022*; check_phyml_version extracts the year
 
 n_starts=1         # seed trees
 delta_BIC_cutoff=2 # to set compositional_heterogeneity, transitional_heterogeneity and pInv flags 
@@ -360,16 +360,17 @@ function check_phyml_version {
    min_phyml_version=$1
    phyml_OK=''
    
-   phyml_version=$(phyml --version | awk 'NF > 0{print substr($NF, 0, 4)}' | sed 's/\.$//')
-   phyml_OK=$(awk -v v=$phyml_version -v m="$min_phyml_version" 'BEGIN{if(v < m || v > 1000){ print 0}else{print 1}  }')
+   #phyml_version=$(phyml --version | awk '/This is PhyML version/{print substr($NF, 0, 4)}' | sed 's/\.$//') # extracts 3.3; but the series goes back to 2017
+   phyml_version=$(phyml --version | awk '/This is PhyML version/{print substr($NF, 0, 8)}' | sed 's/.*\.//g') # extracts the year
+   phyml_OK=$(awk -v v=$phyml_version -v m="$min_phyml_version" 'BEGIN{if(v < m){ print 0}else{print 1}  }')
    
    if ((phyml_OK != 1)) 
    then
       echo "# FATAL: you are using the old phyml v.${phyml_version}
                but $progname requires phyml >= v${min_phyml_version}"
       
-      echo " - Please install a newer version from https://github.com/stephaneguindon/phyml
-                DO NOT INSTALL THE OLD 2021 BINARIES FROM  http://www.atgc-montpellier.fr/phyml/download.php"
+      echo " - Please install the latest version from https://github.com/stephaneguindon/phyml
+                DO NOT INSTALL THE OLD 2012 BINARIES FROM  http://www.atgc-montpellier.fr/phyml/download.php"
       exit 1
    fi
    

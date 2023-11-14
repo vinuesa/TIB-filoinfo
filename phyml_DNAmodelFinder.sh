@@ -50,12 +50,14 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='0.9.1_2023-11-12' # v0.9.1_2023-11-12; fixed unbound variable vers (should be version) in print_end_message
+version='0.9.2_2023-11-13' # v0.9.2_2023-11-13; added check_phym_version, requiring version >= 3.3
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
 		  #    by setting the -n attribute
 		  #    see https://stackoverflow.com/questions/16461656/how-to-pass-array-as-an-argument-to-a-function-in-bash
+
+min_phyml_version=3.3 # 
 
 n_starts=1         # seed trees
 delta_BIC_cutoff=2 # to set compositional_heterogeneity, transitional_heterogeneity and pInv flags 
@@ -352,6 +354,29 @@ function check_bash_version()
 }
 #-----------------------------------------------------------------------------------------
 
+function check_phyml_version {
+   local phyml_version min_phyml_version phyml_OK
+   
+   min_phyml_version=$1
+   phyml_OK=''
+   
+   phyml_version=$(phyml --version | awk 'NF > 0{print substr($NF, 0, 4)}' | sed 's/\.$//')
+   phyml_OK=$(awk -v v=$phyml_version -v m="$min_phyml_version" 'BEGIN{if(v < m || v > 1000){ print 0}else{print 1}  }')
+   
+   if ((phyml_OK != 1)) 
+   then
+      echo "# FATAL: you are using the old phyml v.${phyml_version}
+               but $progname requires phyml >= v${min_phyml_version}"
+      
+      echo " - Please install a newer version from https://github.com/stephaneguindon/phyml
+                DO NOT INSTALL THE OLD 2021 BINARIES FROM  http://www.atgc-montpellier.fr/phyml/download.php"
+      exit 1
+   fi
+   
+   echo "$phyml_version"
+}
+#-----------------------------------------------------------------------------------------
+
 function check_is_phylip()
 {
    local phylip
@@ -560,12 +585,13 @@ function print_help(){
    bash_vers=$(check_bash_version "$min_bash_vers")
    bash_ge_5=$(awk -v bv="$bash_vers" 'BEGIN { if (bv >= 5.0){print 1}else{print 0} }')
    
+   
 if ((bash_ge_5 > 0)); then 
    cat <<EoH
 
 $progname v${version} requires two arguments provided on the command line, the third one being optional:
 
-$progname <string [input phylip of aligned DNA sequences)> <int [model sets:1-3]> <int [no_rdm_starts; default:$n_starts]>
+$progname <string [aligned DNA sequences in PHYLIP format)> <int [model sets:1-3]> <int [no_rdm_starts; default:$n_starts]>
  
 # model sets to choose from: 
 1 -> standard models (JC69 K80 F81 HKY85 TN93 GTR)
@@ -574,28 +600,28 @@ $progname <string [input phylip of aligned DNA sequences)> <int [model sets:1-3]
      standard + ${#extended_models_uf[@]} extended_uf_models 
      			     
 NOTE: $progname automatically chooses the proper extended set (ef|uf) to evaluate, 
-        based on delta_BIC evaluation of compositional bias (JC69 vs F81)
+        based on delta_BIC evaluation of compositional bias (JC69 vs. F81)
  
 3 -> minimal test set (JC69 F81 HKY85 TN93)
 
 EXAMPLE: $progname primates.phy 2
  
-AIM:  $progname v${version} will evaluate the fit of the the seleced model set,
-	combined or not with +G and/or +f, computing AICi, BICi, deltaBIC, BICw 
-     	  and inferring the ML tree under the BIC-selected model  
+AIM:  $progname v${version} will evaluate the fit of the selected model set,
+	combined or not with +G and/or +f, computing AICi, BICi, deltaBIC and BICw, 
+     	  inferring the ML tree under the BIC-selected model.  
 
 PROCEDURE:
  - Models are fitted using a fixed NJ-JC tree, optimizing branch lenghts and rates 
       to calculate their AICi, BICi, delta_BIC and BICw
- - Only relevant matrices among the extended set are evaluated, based on delta_BIC
-      comparisons between JC69-F81, to decide if ef|uf models should be evaluated
-      and comparisons between KHY85-TN93, to determine if models with two Ti rates should 
+ - Only relevant models among the extended set are evaluated, based on delta_BIC
+      comparisons between JC69-F81, to decide if ef|uf models should be evaluated,
+      and comparisons between KHY85-TN93 to determine if models with two Ti rates should 
       be evaluated
  - pInv is automatically excluded in the extended model set, 
 	if the delta_BICi_HKY+G is =< $delta_BIC_cutoff when compared with the BIC_HKY+G+I
  - The best model is selected by BIC
  - SPR searches can be launched starting from multiple random trees
- - Default single seed tree searches use a BioNJ with BEST moves
+ - Default single seed tree searches use a BioNJ tree with BEST moves
      
 SOURCE: the latest version of the program is available on GitHub:
 	 https://github.com/vinuesa/TIB-filoinfo
@@ -616,9 +642,9 @@ $progname <string [input phylip file (aligned DNA sequences)> <int [model sets:1
    2 -> WILL NOT RUN properly on Bash < v5.0, sorry (see NOTE below) 
    3 -> minimal test set (JC K80 F81 HKY85 TN93)
 
-AIM:  $progname v${version} will evaluate the fit of the the seleced model set,
-	combined or not with +G and/or +f, computing AICi, BICi, deltaBIC, BICw 
-     	  and inferring the ML tree under the BIC-selected model  
+AIM:  $progname v${version} will evaluate the fit of the selected model set,
+	combined or not with +G and/or +f, computing AICi, BICi, deltaBIC and BICw, 
+     	  inferring the ML tree under the BIC-selected model  
 
 PROCEDURE
   - Models are fitted using a fixed NJ-JC tree, optimizing branch lenghts and rates 
@@ -661,6 +687,9 @@ n_starts="${3:-1}"
 
 wkd=$(pwd)
 
+#phymlv=''
+#check_phyml_version "$min_phyml_version"
+phymlv=$(check_phyml_version "$min_phyml_version")
 check_is_phylip "$infile"
 
 # OK, ready to start the analysis ...
@@ -669,6 +698,8 @@ echo "==========================================================================
 bash_vers=$(check_bash_version "$min_bash_vers")
 awk -v bv="$bash_vers" -v mb="$min_bash_vers" \
   'BEGIN { if (bv < mb){print "FATAL: you are running acient bash v"bv, "and version >=", mb, "is required"; exit 1}else{print "# Bash version", bv, "OK"} }'
+
+echo "# running with phyml v.${phymlv}"
 
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
 echo "# workding directory: $wkd"
@@ -721,7 +752,7 @@ fi
 # 5.1 run a for loop to combine all base models with (or not) +G and or +I
 #     and fill the model_scores and model_cmds hashes
 echo "2.1. running in a for loop to combine all base models in model_set ${model_set}=>${model_options[$model_set]},
-      with (or not) +G and or +I, and compute the model lnL, after optimizing branch lengths and rates"
+     with (or without) +G and or +I, and compute the model lnL, after optimizing branch lengths and rates"
 
 # globals for compositional_heterogeneity check
 declare -A seen

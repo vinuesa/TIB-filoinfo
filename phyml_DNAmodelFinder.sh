@@ -50,14 +50,22 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='0.9.3_2023-11-13' # v0.9.2_2023-11-13; improved version checking in check_phyml_version, requiring version >= 2022
+version='1.0.0_2023-11-14' # v1.0.0_2023-11-14; 
+                         # - robust version checking and reporting in check_phyml_version
+			 # - check_phyml_version also checks the year, using or not --leave_duplicates in the phyml call if yr >= 2022 or not
+			 # - extensively tested on phyml versions 20120412, 3.3.20170530, 3.3.20220408
+			 # - minor code cleanup, removing a few unused variables
+			 # - corrected typos in the help menu
+			  
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
 		  #    by setting the -n attribute
 		  #    see https://stackoverflow.com/questions/16461656/how-to-pass-array-as-an-argument-to-a-function-in-bash
 
-min_phyml_version=2022 # this corresponds to 3.3.2022*; check_phyml_version extracts the year
+min_phyml_version=3.3 # this corresponds to 3.3.year; check_phyml_version also extracts the year, suggesting to update to v2022
+phymlv=''
+phymlyr=''
 
 n_starts=1         # seed trees
 delta_BIC_cutoff=2 # to set compositional_heterogeneity, transitional_heterogeneity and pInv flags 
@@ -355,26 +363,25 @@ function check_bash_version()
 #-----------------------------------------------------------------------------------------
 
 function check_phyml_version {
-   local phyml_version min_phyml_version phyml_OK
+   local phyml_version min_phyml_version phyml_version_year
    
    min_phyml_version=$1
-   phyml_OK=''
+   phyml_version_year=''
+   phyml_version=''
    
-   #phyml_version=$(phyml --version | awk '/This is PhyML version/{print substr($NF, 0, 4)}' | sed 's/\.$//') # extracts 3.3; but the series goes back to 2017
-   phyml_version=$(phyml --version | awk '/This is PhyML version/{print substr($NF, 0, 8)}' | sed 's/.*\.//g') # extracts the year
-   phyml_OK=$(awk -v v=$phyml_version -v m="$min_phyml_version" 'BEGIN{if(v < m){ print 0}else{print 1}  }')
+   # This version extracts 3.3 from '3.3.20220408.'; but the series goes back to 2017 ...
+   #   v3.3.20220408 is required to have the --leave_duplicates option
+   phyml_version=$(phyml --version | awk '/This is PhyML version/{print substr($NF, 0, 4)}' | sed 's/\.$//') 
+   #phyml_OK=$(awk -v v="$phyml_version" -v m="$min_phyml_version" 'BEGIN{if(v < m || v > 2000) { print 0}else{print 1}  }')
    
-   if ((phyml_OK != 1)) 
+   if [[ 1 -eq "$(echo "$phyml_version == $min_phyml_version" | bc)" ]]
    then
-      echo "# FATAL: you are using the old phyml v.${phyml_version}
-               but $progname requires phyml >= v${min_phyml_version}"
-      
-      echo " - Please install the latest version from https://github.com/stephaneguindon/phyml
-                DO NOT INSTALL THE OLD 2012 BINARIES FROM  http://www.atgc-montpellier.fr/phyml/download.php"
-      exit 1
+        phyml_version_year=$(phyml --version | awk '/This is PhyML version/{print substr($NF, 0, 8)}' | sed 's/.*\.//g')
+   else
+        phyml_version_year="$phyml_version"
    fi
-   
-   echo "$phyml_version"
+      
+   printf '%s\n' "${phyml_version}_${phyml_version_year}"
 }
 #-----------------------------------------------------------------------------------------
 
@@ -434,12 +441,11 @@ function print_start_time()
 
 function compute_AICi()
 {
-   # AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
+   # AICi=$(compute_AICi "$score" "$total_params")
    local score n_branches total_params
    
    score=$1
-   n_branches=$2
-   total_params=$3
+   total_params=$2
     
    # AICi=-2*lnLi + 2*Ni
    echo "(-2 * $score) + (2 * $total_params)" | bc -l
@@ -584,8 +590,7 @@ EOF
 function print_help(){
 
    bash_vers=$(check_bash_version "$min_bash_vers")
-   bash_ge_5=$(awk -v bv="$bash_vers" 'BEGIN { if (bv >= 5.0){print 1}else{print 0} }')
-   
+   bash_ge_5=$(awk -v bv="$bash_vers" 'BEGIN { if (bv >= 5.0){print 1}else{print 0} }')   
    
 if ((bash_ge_5 > 0)); then 
    cat <<EoH
@@ -612,7 +617,7 @@ AIM:  $progname v${version} will evaluate the fit of the selected model set,
      	  inferring the ML tree under the BIC-selected model.  
 
 PROCEDURE:
- - Models are fitted using a fixed NJ-JC tree, optimizing branch lenghts and rates 
+ - Models are fitted using a fixed BioNJ-JC tree, optimizing branch lengths and rates 
       to calculate their AICi, BICi, delta_BIC and BICw
  - Only relevant models among the extended set are evaluated, based on delta_BIC
       comparisons between JC69-F81, to decide if ef|uf models should be evaluated,
@@ -688,9 +693,9 @@ n_starts="${3:-1}"
 
 wkd=$(pwd)
 
-#phymlv=''
-#check_phyml_version "$min_phyml_version"
 phymlv=$(check_phyml_version "$min_phyml_version")
+phymlyr=$(echo "$phymlv" | cut -d_ -f2)
+   
 check_is_phylip "$infile"
 
 # OK, ready to start the analysis ...
@@ -701,6 +706,7 @@ awk -v bv="$bash_vers" -v mb="$min_bash_vers" \
   'BEGIN { if (bv < mb){print "FATAL: you are running acient bash v"bv, "and version >=", mb, "is required"; exit 1}else{print "# Bash version", bv, "OK"} }'
 
 echo "# running with phyml v.${phymlv}"
+((phymlyr < 2022)) && printf '%s\n%s\n' "# Warning: running old PhyML version from $phymlyr!" "   Update to the latest one, using the phyml's GitHub repo: https://github.com/stephaneguindon/phyml/releases" 
 
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
 echo "# workding directory: $wkd"
@@ -770,12 +776,13 @@ freq_cmd=''
     
 for mat in "${models[@]}"; do
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -u ${infile}_JC-NJ.nwk -c 1 -v 0 -o lr"
-     phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -c 1 -o lr --leave_duplicates --no_memory_check &> /dev/null 
+     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -c 1 -o lr --leave_duplicates --no_memory_check &> /dev/null 
+     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -c 1 -o lr --no_memory_check &> /dev/null 
      extra_params=0 
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
-     AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
+     AICi=$(compute_AICi "$score" "$total_params")
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
      printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
@@ -801,12 +808,13 @@ for mat in "${models[@]}"; do
      fi
      
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -c 4 -a e -u ${infile}_JC-NJ.nwk -o lr"
-     phyml -i "$infile" -d nt -m "${mat}" -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "${mat}" -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "${mat}" -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --no_memory_check &> /dev/null
      extra_params=1 
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
-     AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
+     AICi=$(compute_AICi "$score" "$total_params")
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
      printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
@@ -822,12 +830,13 @@ for mat in "${models[@]}"; do
      fi
      
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -v e -c 1 -u ${infile}_JC-NJ.nwk -o lr"
-     phyml -i "$infile" -d nt -m "$mat" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --no_memory_check &> /dev/null
      extra_params=1 # 1 pInv
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
-     AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
+     AICi=$(compute_AICi "$score" "$total_params")
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
      printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
@@ -835,12 +844,13 @@ for mat in "${models[@]}"; do
      model_cmds["${mat}+I"]="$mat -v e"
           
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -u ${infile}_JC-NJ.nwk -v e -a e -o lr"
-     phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --no_memory_check &> /dev/null
      extra_params=2 #19 from AA frequencies + 1 gamma 
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
-     AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
+     AICi=$(compute_AICi "$score" "$total_params")
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
      printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
@@ -919,13 +929,14 @@ if ((model_set == 2)); then
        && [[ "$mat" =~ (01[0-6][0-6]1[0-6]|00[0-6][0-6]0[0-6] ) ]] && echo "skipping TVM matrix $mat" && continue
      ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -u ${infile}_JC-NJ.nwk -c 1 -v 0 -o lr"
-     phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -c 1 -v 0 -o lr --leave_duplicates --no_memory_check &> /dev/null 
+     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -c 1 -v 0 -o lr --leave_duplicates --no_memory_check &> /dev/null 
+     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -c 1 -v 0 -o lr --no_memory_check &> /dev/null 
      extra_params=0 
      ((compositional_heterogeneity == 0)) && mat="${mat}ef"
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
-     AICi=$(compute_AICi "$score" "$no_branches" "$total_params")     
+     AICi=$(compute_AICi "$score" "$total_params")     
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
      printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
@@ -935,13 +946,14 @@ if ((model_set == 2)); then
 
      ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -c 4 -a e -u ${infile}_JC-NJ.nwk -o lr"
-     phyml -i "$infile" -d nt -m "${mat}" "$freq_cmd" -v 0 -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "${mat}" "$freq_cmd" -v 0 -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "${mat}" "$freq_cmd" -v 0 -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --no_memory_check &> /dev/null
      extra_params=1 # 1 gamma 
      ((compositional_heterogeneity == 0)) && mat="${mat}ef"
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
-     AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
+     AICi=$(compute_AICi "$score" "$total_params")
      AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
      BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
      printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
@@ -952,13 +964,14 @@ if ((model_set == 2)); then
      if ((use_pInv > 0)); then
          ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
          print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -v e -c 1 -u ${infile}_JC-NJ.nwk -o lr"
-         phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
+         ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
+         ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --no_memory_check &> /dev/null
          extra_params=1 # 1 pInv
          ((compositional_heterogeneity == 0)) && mat="${mat}ef"
          total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
          sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
          score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
-         AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
+         AICi=$(compute_AICi "$score" "$total_params")
          AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
          BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
          printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
@@ -968,13 +981,14 @@ if ((model_set == 2)); then
 
          ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
          print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -u ${infile}_JC-NJ.nwk -v e -a e -o lr"
-         phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --leave_duplicates --no_memory_check &> /dev/null
+         ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --leave_duplicates --no_memory_check &> /dev/null
+	 ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --no_memory_check &> /dev/null
          extra_params=2 # 1 pInv + 1 gamma 
          ((compositional_heterogeneity == 0)) && mat="${mat}ef"
          total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
          sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
          score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)
-         AICi=$(compute_AICi "$score" "$no_branches" "$total_params")
+         AICi=$(compute_AICi "$score" "$total_params")
          AICc=$(compute_AICc "$score" "$total_params" "$no_sites" "$AICi")
          BICi=$(compute_BIC "$score" "$total_params" "$no_sites")
          printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
@@ -1091,7 +1105,7 @@ echo "* NOTE 1: when sites/K < 40, the AICc is recommended over AIC"
 echo "* NOTE 2: The best model is selected by BIC, because AIC is biased, favoring parameter-rich models"
 echo ''
 echo '=================================================================================================='
-echo '#  Will estimate the ML tree under best-fitting model $best_model selected by BIC'
+echo "#  Will estimate the ML tree under best-fitting model $best_model selected by BIC"
 echo '--------------------------------------------------------------------------------------------------'
 
 print_start_time

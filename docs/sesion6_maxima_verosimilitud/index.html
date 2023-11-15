@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México. GitHub repos; @pvinmex" />
 
-<meta name="date" content="2023-11-12" />
+<meta name="date" content="2023-11-14" />
 
 <title>Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</title>
 
@@ -337,7 +337,7 @@ display: none;
 de modelos y búsquedas intensivas de árboles</h1>
 <h4 class="author"><a href="https://www.ccg.unam.mx/~vinuesa/">Pablo
 Vinuesa, CCG-UNAM, Cuernavaca, México</a>. <a href="https://github.com/vinuesa">GitHub repos</a>; <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a></h4>
-<h4 class="date">2023-11-12</h4>
+<h4 class="date">2023-11-14</h4>
 
 </div>
 
@@ -544,6 +544,8 @@ Commons Attribution-NonCommercial 4.0</a></p>
 <div id="notas-de-instalacion-de-phyml-desde-el-repositorio-github" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> NOTAS DE INSTALACION DE
 PHYML DESDE EL REPOSITORIO GitHub</h1>
+<p>Para correr las prácticas que siguen a continuación es necesario que
+tengas instalada una versión reciente de <span class="math inline">\(phyml\)</span>, idealmente v3.3.20220408.</p>
 <pre style="background: Cornsilk;"><code>1. Descarga la ultima version estable desde el [repositorio GitHub de phyml](https://github.com/stephaneguindon/phyml/releases)
 wget -c  https://github.com/stephaneguindon/phyml/archive/refs/tags/v3.3.20220408.tar.gz
 
@@ -1145,6 +1147,7 @@ figtree primates.phy_phyml_tree.txt &amp;</code></pre>
 <p><strong>Figura 2.</strong> Mejor árbol de máxima verosimilitud
 encontrado para primates.phy bajo el modelo <span class="math inline">\(HKY+G\)</span>, seleccionado mediante
 <b>LRTs</b></p>
+<hr />
 </div>
 </div>
 <div id="estrategia-alternativa-de-selección-de-modelos-de-dna-reducción-de-parámetros-del-modelo-gtrgi-y-evaluación-de-los-modelos-resultantes-mediante-aic" class="section level2" number="3.3">
@@ -1416,8 +1419,8 @@ automatizarla.</p>
    0.11407   1.08105   0.00375  -1.19887
 ... truncado
 </pre>
-<p>El examen de la matriz de tasas relativas GTR sugiere
-simplificaciones adicionales. ¿Cuáles sugieres? Evalúalas.</p>
+<p>El examen de la matriz de tasas relativas GTR sugiere que existen
+simplificaciones adicionales. ¿Cuáles consideras? Evalúalas.</p>
 <hr />
 </div>
 </div>
@@ -1556,8 +1559,8 @@ con R de modelos ordenados por valor de <span class="math inline">\(lnL\)</span>
 R
 
 # 6.1 leamos los datos en una estructura tipo dataframe
-system(&quot;ls&quot;)
-dfr &lt;- read.csv(file=&quot;primates_21_AA_sorted_model_fits.csv&quot;, header = FALSE)
+list.files(pattern=&#39;\\.csv&#39;)
+dfr &lt;- read.csv(file=&quot;primates_21_AA.phy_sorted_model_fits.csv&quot;, header = FALSE)
 
 # ver la estructura del data frame
 str(dfr)
@@ -1731,17 +1734,17 @@ poderlos mantener y desarrollar con facilidad.</p>
 <p>Vamos a cerrar este tutorial corriendo los scripts
 <code>phyml_protModelFinder.sh</code> y
 <code>phyml_DNAmodelFinder.sh</code>, que pueden copiar a su directorio
-~/bin en <em>tepeu</em> con los siguientes comandos:</p>
+<code>~/bin</code> con los siguientes comandos:</p>
 <pre style="background: Cornsilk;"><code>
-[ ! -d $HOME/bin ] &amp;&amp; mkdir $HOME/bin
+[ ! -d ~/bin ] &amp;&amp; mkdir ~/bin
 
 cp /home/vinuesa/cursos/LCG-ENS/scripts/phyml_protModelFinder.sh ~/bin
 cp /home/vinuesa/cursos/LCG-ENS/scripts/phyml_DNAmodelFinder.sh ~/bin</code></pre>
 <p>o descargar directamente desde el <a href="https://github.com/vinuesa/TIB-filoinfo">repositorio GitHub de los
 TIB</a>, usando <span class="math inline">\(wget\)</span> desde la línea
 de comandos:</p>
-<pre style="background: Cornsilk;"><code>[ ! -d $HOME/bin ] &amp;&amp; mkdir $HOME/bin 
-cd $HOME/bin
+<pre style="background: Cornsilk;"><code>[ ! -d ~/bin ] &amp;&amp; mkdir ~/bin 
+cd ~/bin
 wget https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_protModelFinder.sh
 wget https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_DNAmodelFinder.sh
 
@@ -1751,6 +1754,13 @@ las llamadas a <span class="math inline">\(phyml\)</span>, evalúa los
 resultados haciendo uso de los criterios de información de Akaike (<span class="math inline">\(AIC\)</span>) y bayesiano (<span class="math inline">\(BIC\)</span>). Veremos que el <span class="math inline">\(AIC\)</span> usa un criterio más laxo que el <span class="math inline">\(BIC\)</span>, tendiendo a seleccionar modelos más
 complejos que el segundo.</p>
 <p>Te invito a que explores en detalle el código de ambos.</p>
+<p><b>NOTA</b>: Los scripts <em>phyml_protModelFinder.sh</em> y en
+particular <em>phyml_DNAmodelFinder.sh</em> hacen uso de sintaxis
+moderna de <em>Bash</em>, por lo que requiren una versión reciente
+(&gt;= 5.1.0) del intérprete de comandos <span class="math inline">\(bash\)</span> para poder hacer uso de toda la
+funcionalidad que ofrecen.</p>
+<p>Puedes ver la versión de <span class="math inline">\(bash\)</span> de
+tu sistema con el siguiente comando <code>bash –version</code>.</p>
 <div id="ejemplo-de-invocación-del-script-phyml_protmodelfinder.sh" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Ejemplo de invocación
 del script <em>phyml_protModelFinder.sh</em></h2>
@@ -1760,9 +1770,9 @@ filogenia correspondiente.</p>
 <pre style="background: Cornsilk;"><code># despliegue de la ayuda
 phyml_protModelFinder.sh</code></pre>
 <pre>
-phyml_protModelFinder.sh v0.6 requires two arguments provided on the command line:
+phyml_protModelFinder.sh v0.6 requires two arguments provided on the command line; the third one is optional
 
-phyml_protModelFinder.sh <string [input phylip file (aligned PROTEIN sequences)> <int [model sets:1-7]> <int [num random seed trees; default:1]>
+phyml_protModelFinder.sh [input phylip file of aligned PROTEIN sequences] [model sets:1-7] [num random seed trees; default:1]
  
    # model sets to choose from: 
    1 -&gt; nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
@@ -1805,15 +1815,16 @@ adición secuencial aleatorizada, bajo el mejor modelo seleccionado.</p>
 <li><p>Antes de inciar, comprueba que estamos corriendo una versión de
 <span class="math inline">\(bash &gt;= 4.4\)</span>, ya que el <span class="math inline">\(script\)</span> hace uso de idiomas modernos de
 <span class="math inline">\(bash\)</span>, incluyendo hashes. De hecho
-algunas funcionalidades requieren <span class="math inline">\(bash &gt;=
-4.8\)</span>. Si usas MacOS, probablemente debas hacer un upgrade,
-disponible vía <span class="math inline">\(MacPorts\)</span>, <span class="math inline">\(Homebrew\)</span> o <span class="math inline">\(Fink\)</span>.</p></li>
+algunas funcionalidades requieren <span class="math inline">\(bash\
+&gt;=\ 4.8\)</span>. Si usas MacOS, probablemente debas hacer un
+upgrade, disponible vía <span class="math inline">\(MacPorts\)</span>,
+<span class="math inline">\(Homebrew\)</span> o <span class="math inline">\(Fink\)</span>.</p></li>
 <li><p>Seguidamente comprueba los argumentos pasados al <span class="math inline">\(script\)</span>, determinado si existe el archivo
 de entrada y si está en formato phylip. Esto lo hace llamando a la
-función <span class="math inline">\(check\_is\_phylip\)</span></p></li>
+función <span class="math inline">\(check\_is\_phylip\)</span>.</p></li>
 <li><p>El primer cálculo consiste en evaluar las frecuencias empríricas
 de los aminoácidos con la función <span class="math inline">\(compute\_AA\_freq\_in\_phylip()\)</span>, que se
-muestra seguidamente</p></li>
+muestra seguidamente:</p></li>
 </ul>
 <pre>
 function compute_AA_freq_in_phylip()
@@ -2145,6 +2156,7 @@ salida.</li>
 diferencia? Comenta el resultado.</li>
 </ol></li>
 </ul>
+<hr />
 </div>
 </div>
 <div id="selección-inteligente-de-subconjuntos-de-modelos-de-sustitución-para-dna-con-phyml_dnamodelfinder.sh" class="section level2" number="5.2">
@@ -2157,8 +2169,15 @@ diferencia? Comenta el resultado.</li>
 usuario puede pedirle que evalúe el <strong>conjunto de modelos estándar
 (JC69, K80, F81, HKY85, TN93 y GTR)</strong> más un conjunto amplio de
 modelos transicionales (TIM<em>) y transversionales (TVM</em>), con 3, 4
-y 5 clases de tasas.</p>
-<p>Veamos la ayuda de <em>phyml_DNAmodelFinder.sh</em></p>
+y 5 clases de tasas, los cuales son elegidos después de comprobar si
+existe o no un sesgo transicional importante.</p>
+<p><b>NOTA: </b> <span class="math inline">\(phyml\_DNAmodelFinder.sh\)</span> hace uso de
+idiomas más avanzados y recientes del lenguaje <em>Bash</em> que <span class="math inline">\(phyml\_protModelFinder.sh\)</span>, ya que además
+de <code>arreglos</code> y <code>hashes</code> usa
+<code>referencias</code> a los mismos para pasarlos a funciones. Por
+tanto la funcionalidad completa del script sólo está disponible si usas
+una versión de <span class="math inline">\(bash &gt;= 5.1\)</span>.</p>
+<p>Veamos la ayuda de <span class="math inline">\(phyml\_DNAmodelFinder.sh\)</span>:</p>
 <pre>
 phyml_DNAmodelFinder.sh v0.7_2022-12-01 requires two arguments provided on the command line, the third one being optional:
 
@@ -2202,16 +2221,16 @@ CITATION: Vinuesa P. (2022). Efficient two-step selection of DNA models with phy
            https://github.com/vinuesa/TIB-filoinfo
 
 </pre>
-<p>Al elegir el set 2 de modelos, en vez de evaluar a todos los modelos
-estándar+TIM+TVM, <em>phyml_DNAmodelFinder.sh</em> hace unas
+<p>Al elegir el <em>set 2</em> de modelos, en vez de evaluar a todos los
+modelos estándar+TIM+TVM, <em>phyml_DNAmodelFinder.sh</em> hace unas
 evaluaciones de valores de <span class="math inline">\(\Delta_{BIC}\)</span> entre los siguientes pares
 de modelos:</p>
 <pre>
-- JC69 vs. F81 para determinar si existe sesgo composicional significativo
-- F81 vs. HKY85 para evaluar si existe sesgo transicional significativo
-- HKY85+G vs. HKY85+I+G para calcular si amerita o no incluir pInv
+- *JC69 vs. F81* para determinar si existe un **sesgo composicional** significativo
+- *HKY85 vs. TN93* para evaluar si existe un **sesgo transicional entre purinas y pirimidinas** significativo
+- *HKY85+G vs. HKY85+I+G* para calcular si amerita o no incluir una **proporción de sitios invariantes**
 </pre>
-<p>En función de estos análisis efectuados sobre los modelos del
+<p>En función de estos análisis, efectuados sobre los modelos del
 conjunto estándar, el <span class="math inline">\(script\)</span> decide
 qué conjuntos de modelos adicionales evaluar:</p>
 <ul>
@@ -2263,9 +2282,10 @@ idx NT  obs_freq
 --------------------------------------------------------------------------------
 
 </pre>
-<p>Queda claro del análisis de frecuencias empríricas, que hay un sesgo
-composicional importante, por lo que <em>phyml_DNAmodelFinder.sh</em>
-debería favorecer modelos que lo consideren.</p>
+<p>Queda claro del análisis de frecuencias empríricas que existe un
+sesgo composicional importante en los datos, por lo que
+<em>phyml_DNAmodelFinder.sh</em> debería favorecer modelos que lo
+consideren.</p>
 <p>En los siguientes pasos:</p>
 <ol style="list-style-type: decimal">
 <li>Calcula un árbol NJ-JC que servirá de topología de referencia</li>

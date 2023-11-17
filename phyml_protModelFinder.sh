@@ -18,12 +18,19 @@ set -uo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version=0.7_2023-11-12 # v0.7_2023-11-12; added computation of elapsed time and print_end_message
+version=0.8_2023-11-16 # phyml_protModelFinder.sh v0.8_2023-11-16; added check_phyml_version
+                       # - minor code cleanup, removing a few unused variables
+		       # - extensively tested on phyml versions 20120412, 3.3.20170530, and 3.3.20220408
+
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
 		  #    by setting the -n attribute
 		  #    see https://stackoverflow.com/questions/16461656/how-to-pass-array-as-an-argument-to-a-function-in-bash
+
+min_phyml_version=3.3 # this corresponds to 3.3.year; check_phyml_version also extracts the year, suggesting to update to v2022
+phymlv=''
+phymlyr=''
 
 # by default, use a single seed tree (BioNJ)
 n_starts=1
@@ -61,7 +68,7 @@ mpi_OK=0 # flag set in check_dependencies, if mpirun and phyml-mpi are available
 function check_dependencies()
 {
     declare -a progs required_binaries optional_binaries
-    local p programname bin
+    local p programname
     
     required_binaries=(awk bc sed perl phyml)
     optional_binaries=(mpirun phyml-mpi)
@@ -106,6 +113,29 @@ function check_bash_version()
    bash_vers=$(bash --version | head -1 | awk '{print $4}' | sed 's/(.*//' | cut -d. -f1,2)
    awk -v bv="$bash_vers" -v mb="$min_bash_vers" \
      'BEGIN { if (bv < mb){print "FATAL: you are running acient bash v"bv, "and version >=", mb, "is required"; exit 1}else{print "# Bash version", bv, "OK"} }'
+}
+#-----------------------------------------------------------------------------------------
+
+function check_phyml_version {
+   local phyml_version min_phyml_version phyml_version_year
+   
+   min_phyml_version=$1
+   phyml_version_year=''
+   phyml_version=''
+   
+   # This version extracts 3.3 from '3.3.20220408.'; but the series goes back to 2017 ...
+   #   v3.3.20220408 is required to have the --leave_duplicates option
+   phyml_version=$(phyml --version | awk '/This is PhyML version/{print substr($NF, 0, 4)}' | sed 's/\.$//') 
+   #phyml_OK=$(awk -v v="$phyml_version" -v m="$min_phyml_version" 'BEGIN{if(v < m || v > 2000) { print 0}else{print 1}  }')
+   
+   if [[ 1 -eq "$(echo "$phyml_version == $min_phyml_version" | bc)" ]]
+   then
+        phyml_version_year=$(phyml --version | awk '/This is PhyML version/{print substr($NF, 0, 8)}' | sed 's/.*\.//g')
+   else
+        phyml_version_year="$phyml_version"
+   fi
+      
+   printf '%s\n' "${phyml_version}_${phyml_version_year}"
 }
 #-----------------------------------------------------------------------------------------
 
@@ -295,6 +325,11 @@ wkd=$(pwd)
 # verify input & bash vesion
 [[ ! -s "$infile" ]] && echo "FATAL ERROR: could not find $infile in $wkd" && exit 1
 (( model_set < 1 )) || ((model_set > 7 )) && print_help
+
+# check PhyML version
+phymlv=$(check_phyml_version "$min_phyml_version")
+phymlyr=$(echo "$phymlv" | cut -d_ -f2)
+
 check_is_phylip "$infile"
 
 # OK, ready to start the analysis ...
@@ -302,6 +337,10 @@ start_time=$SECONDS
 echo "========================================================================================="
 check_bash_version "$min_bash_vers"
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
+
+echo "# running with phyml v.${phymlv}"
+((phymlyr < 2022)) && printf '%s\n%s\n' "# Warning: running old PhyML version from $phymlyr!" "   Update to the latest one, using the phyml's GitHub repo: https://github.com/stephaneguindon/phyml/releases" 
+
 check_dependencies
 echo "# infile:$infile; model_set:$model_set; mpi_OK:$mpi_OK; seed trees: $n_starts"
 echo "========================================================================================="

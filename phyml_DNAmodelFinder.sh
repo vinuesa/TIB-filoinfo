@@ -50,13 +50,10 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='1.0.0_2023-11-14' # v1.0.0_2023-11-14; 
-                         # - robust version checking and reporting in check_phyml_version
-			 # - check_phyml_version also checks the year, using or not --leave_duplicates in the phyml call if yr >= 2022 or not
-			 # - extensively tested on phyml versions 20120412, 3.3.20170530, 3.3.20220408
-			 # - minor code cleanup, removing a few unused variables
-			 # - corrected typos in the help menu
-			  
+version='1.1.0_2023-11-17' # phyml_DNAmodelFinder.sh v1.1.0_2023-11-17; 
+                           # - uses '-f m' instead of '-f e', i.e. the equilibrium base frequencies are optimized using maximum likelihood
+			   # - the change above makes phyml_DNAmodelFinder.sh primates.phy 2 select HKY85+G under BIC, exactly as
+			   #    jmodeltest -d primates.phy -i -f -g 4 -BIC -AIC -AICc -v -a -w -t fixed -s 11|203
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
@@ -776,8 +773,8 @@ freq_cmd=''
     
 for mat in "${models[@]}"; do
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -u ${infile}_JC-NJ.nwk -c 1 -v 0 -o lr"
-     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -c 1 -o lr --leave_duplicates --no_memory_check &> /dev/null 
-     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -c 1 -o lr --no_memory_check &> /dev/null 
+     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" -f m -u "${infile}"_JC-NJ.nwk -c 1 -o lr --leave_duplicates --no_memory_check &> /dev/null 
+     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" -f m -u "${infile}"_JC-NJ.nwk -c 1 -o lr --no_memory_check &> /dev/null 
      extra_params=0 
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
@@ -808,8 +805,8 @@ for mat in "${models[@]}"; do
      fi
      
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -c 4 -a e -u ${infile}_JC-NJ.nwk -o lr"
-     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "${mat}" -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
-     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "${mat}" -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --no_memory_check &> /dev/null
+     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "${mat}" -f m -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "${mat}" -f m -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --no_memory_check &> /dev/null
      extra_params=1 
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
@@ -829,9 +826,9 @@ for mat in "${models[@]}"; do
 	 fi
      fi
      
-     print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -v e -c 1 -u ${infile}_JC-NJ.nwk -o lr"
-     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
-     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --no_memory_check &> /dev/null
+     print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -f m -v e -c 1 -u ${infile}_JC-NJ.nwk -o lr"
+     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" -f m -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" -f m -v e -c 1 -u "${infile}"_JC-NJ.nwk -o lr --no_memory_check &> /dev/null
      extra_params=1 # 1 pInv
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
@@ -843,9 +840,9 @@ for mat in "${models[@]}"; do
      model_scores["${mat}+I"]="$model_string"
      model_cmds["${mat}+I"]="$mat -v e"
           
-     print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -u ${infile}_JC-NJ.nwk -v e -a e -o lr"
-     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --leave_duplicates --no_memory_check &> /dev/null
-     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --no_memory_check &> /dev/null
+     print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -f m -u ${infile}_JC-NJ.nwk -v e -a e -o lr"
+     ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" -f m -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --leave_duplicates --no_memory_check &> /dev/null
+     ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" -f m -u "${infile}"_JC-NJ.nwk -v e -a e -c 4 -o lr --no_memory_check &> /dev/null
      extra_params=2 #19 from AA frequencies + 1 gamma 
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)

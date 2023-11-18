@@ -18,10 +18,12 @@ set -uo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version=0.8_2023-11-16 # phyml_protModelFinder.sh v0.8_2023-11-16; added check_phyml_version
-                       # - minor code cleanup, removing a few unused variables
-		       # - extensively tested on phyml versions 20120412, 3.3.20170530, and 3.3.20220408
-
+version=0.9_2023-11-17 # phyml_protModelFinder.sh v0.8_2023-11-17; 
+                       # - fixed phyml call using original matrix aa frequencies with -f m
+		       # - the change above makes phyml_protModelFinder.sh primates_21_AA.phy 5 select the same HIVb+G model, with same BIC & BICw as
+		       #   prottest3 -i primates_21_AA.phy -BIC -G -F -S 0 -threads 20
+		       
+		       
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
@@ -339,7 +341,7 @@ check_bash_version "$min_bash_vers"
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
 
 echo "# running with phyml v.${phymlv}"
-((phymlyr < 2022)) && printf '%s\n%s\n' "# Warning: running old PhyML version from $phymlyr!" "   Update to the latest one, using the phyml's GitHub repo: https://github.com/stephaneguindon/phyml/releases" 
+((phymlyr < 2022)) && printf '%s\n%s\n' "# WARNING: THE SCRIPT MAY NOT WORK AS EXPECTED. You are running old PhyML version from $phymlyr!" "   Update to the latest one, using the phyml's GitHub repo: https://github.com/stephaneguindon/phyml/releases;" 
 
 check_dependencies
 echo "# infile:$infile; model_set:$model_set; mpi_OK:$mpi_OK; seed trees: $n_starts"
@@ -409,8 +411,8 @@ for mat in "${models[@]}"; do
      model_scores["${mat}"]="$model_string"
      model_cmds["${mat}"]="$mat"
 
-     print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -c 4 -a e -u ${infile}_LG-NJ.nwk -o lr"
-     phyml -i "$infile" -d aa -m "${mat}" -c 4 -a e -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null
+     print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -f m -c 4 -a e -u ${infile}_LG-NJ.nwk -o lr"
+     phyml -i "$infile" -d aa -m "${mat}" -f m -c 4 -a e -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null
      extra_params=1 
      total_params=$((no_branches + extra_params))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
@@ -420,7 +422,7 @@ for mat in "${models[@]}"; do
      BICi=$(compute_BIC "$score" "$no_branches" "$extra_params" "$no_sites")
      printf -v model_string "%d\t%.5f\t%.5f\t%.5f\t%.5f\t%.5f" "$total_params" "$sites_by_K" "$score" "$AICi" "$AICc" "$BICi"
      model_scores["${mat}+G"]="$model_string"
-     model_cmds["${mat}+G"]="$mat -c 4 -a e"
+     model_cmds["${mat}+G"]="$mat -f m -c 4 -a e"
 
      print_start_time && echo "# running: phyml -i $infile -d aa -m $mat -f e -c 1 -u ${infile}_LG-NJ.nwk -o lr"
      phyml -i "$infile" -d aa -m "$mat" -f e -c 1 -u "${infile}"_LG-NJ.nwk -o lr &> /dev/null

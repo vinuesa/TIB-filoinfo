@@ -2,8 +2,9 @@
 
 #: phyml_DNAmodelFinder.sh
 #: Author: Pablo Vinuesa, CCG-UNAM, @pvinmex, https://www.ccg.unam.mx/~vinuesa/
-#: AIM: simple wraper script around phyml, to select a reasonable substitution model for DNA alignments
-#:      compute AIC, BIC, delta_BIC and BICw, and estimate a ML phylogeny using the best-fitting model
+#: AIM: wraper script around phyml, to select a reasonable substitution model for DNA alignments.
+#:      Computes AIC, BIC, delta_BIC and BICw, and estimate a ML phylogeny using the best-fitting model
+#:         selected under the BIC.
 #: LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
  
 #: Design: phyml_DNAmodelFinder.sh evaluates the named parametric substitution models
@@ -50,10 +51,13 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='1.1.0_2023-11-17' # phyml_DNAmodelFinder.sh v1.1.0_2023-11-17; 
-                           # - uses '-f m' instead of '-f e', i.e. the equilibrium base frequencies are optimized using maximum likelihood
-			   # - the change above makes phyml_DNAmodelFinder.sh primates.phy 2 select HKY85+G under BIC, exactly as
-			   #    jmodeltest -d primates.phy -i -f -g 4 -BIC -AIC -AICc -v -a -w -t fixed -s 11|203
+version='1.2.0_2023-11-18' # phyml_DNAmodelFinder.sh v1.2.0_2023-11-18; 
+                           # - implements extended (base) model set: 
+			   #    * 6 standard named models
+			   #    * 64 extended equal-frequency (ef) models (TIM and TVM sets)
+			   #    * 62 extended unequal-frequency (uf) models (TIM and TVM sets)
+			   # - minor code cleanup (removed unused variable)
+
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
                   # 2. passing an array or hash by name reference to a bash function (since version 4.3+), 
@@ -63,6 +67,8 @@ min_bash_vers=4.4 # required to write modern bash idioms:
 min_phyml_version=3.3 # this corresponds to 3.3.year; check_phyml_version also extracts the year, suggesting to update to v2022
 phymlv=''
 phymlyr=''
+
+DEBUG=0
 
 n_starts=1         # seed trees
 delta_BIC_cutoff=2 # to set compositional_heterogeneity, transitional_heterogeneity and pInv flags 
@@ -109,6 +115,7 @@ model_free_params['TN93']=5
 model_free_params['GTR']=8
 
 ### extended_models_ef - TVM* # 15
+
 model_free_params['012210ef']=2  # K81
 model_free_params['012314ef']=4  # TVMef
 model_free_params['012310ef']=3  # TVM1ef 
@@ -124,6 +131,13 @@ model_free_params['010011ef']=1  # TVM10ef
 model_free_params['012212ef']=2  # TVM11ef
 model_free_params['011010ef']=1  # TVM12ef
 model_free_params['001101ef']=1  # TVM13ef
+#==
+model_free_params['000100ef']=1  # TVM14ef
+model_free_params['000101ef']=1  # TVM15ef
+model_free_params['010110ef']=1  # TVM16ef
+model_free_params['000102ef']=2  # TVM17ef
+model_free_params['010112ef']=2  # TVM18ef
+model_free_params['010211ef']=2  # TVM19ef
 
 TVMef[0]=012210
 TVMef[1]=012314
@@ -140,6 +154,14 @@ TVMef[11]=010011
 TVMef[12]=012212
 TVMef[13]=011010
 TVMef[14]=001101
+#== 
+TVMef[15]=000100
+TVMef[16]=000101
+TVMef[17]=010110
+TVMef[18]=000102
+TVMef[19]=010112
+TVMef[20]=010211
+
 
 ### extended_models_ef - TNef|TIM*|SYM # 26
 model_free_params['010020ef']=2  # TNef
@@ -155,21 +177,40 @@ model_free_params['012340ef']=4  # TIM7ef
 model_free_params['010021ef']=2  # TIM8ef
 model_free_params['010022ef']=2  # TIM9ef
 model_free_params['011123ef']=3  # TIM10ef
-model_free_params['012223ef']=3  # TIM11ef
-model_free_params['010120ef']=2  # TIM12ef
-model_free_params['000120ef']=2  # TIM13ef
-model_free_params['000121ef']=2  # TIM14ef
-model_free_params['001021ef']=2  # TIM15ef
-model_free_params['012234ef']=4  # TIM16ef
-model_free_params['010231ef']=3  # TIM17ef
-model_free_params['011230ef']=3  # TIM18ef
-model_free_params['011020ef']=2  # TIM19ef
-model_free_params['012130ef']=3  # TIM20ef
-model_free_params['010121ef']=2  # TIM21ef
-model_free_params['010122ef']=2  # TIM22ef
-model_free_params['010123ef']=3  # TIM23ef
+model_free_params['012222ef']=2  # TIM11ef
+model_free_params['012223ef']=3  # TIM12ef
+model_free_params['010120ef']=2  # TIM13ef
+model_free_params['000120ef']=2  # TIM14ef
+model_free_params['000121ef']=2  # TIM15ef
+model_free_params['001021ef']=2  # TIM16ef
+model_free_params['012234ef']=4  # TIM17ef
+model_free_params['010231ef']=3  # TIM18ef
+model_free_params['011230ef']=3  # TIM19ef
+model_free_params['011020ef']=2  # TIM20ef
+model_free_params['012130ef']=3  # TIM21ef
+model_free_params['010121ef']=2  # TIM22ef
+model_free_params['010122ef']=2  # TIM23ef
+model_free_params['010123ef']=3  # TIM24ef
+#==
+model_free_params['001020ef']=2  # TIM25ef
+model_free_params['000123ef']=3  # TIM26ef
+model_free_params['010203ef']=3  # TIM27ef
+model_free_params['010223ef']=3  # TIM28ef
+model_free_params['010230ef']=3  # TIM29ef
+model_free_params['012032ef']=3  # TIM30ef # < TIM3
+model_free_params['010233ef']=3  # TIM31ef
+model_free_params['001234ef']=4  # TIM32ef
+model_free_params['010234ef']=4  # TIM33ef
+model_free_params['011234ef']=4  # TIM34ef
+model_free_params['012234ef']=4  # TIM35ef
+model_free_params['012134ef']=4  # TIM36ef
+model_free_params['012304ef']=4  # TIM37ef
+model_free_params['012324ef']=4  # TIM38ef
+model_free_params['012334ef']=4  # TIM39ef
+model_free_params['012341ef']=4  # TIM40ef
+model_free_params['012344ef']=4  # TIM41ef
 
-TIMef[0]=010020
+TIMef[0]=010020   #TNef
 TIMef[1]=012230
 TIMef[2]=012345
 TIMef[3]=010023
@@ -195,23 +236,49 @@ TIMef[22]=012130
 TIMef[23]=010121
 TIMef[24]=010122
 TIMef[25]=010123
+#==
+TIMef[26]=001020
+TIMef[27]=000123
+TIMef[28]=010203
+TIMef[29]=010223
+TIMef[30]=010230
+TIMef[31]=012032
+TIMef[32]=010233
+TIMef[33]=001234
+TIMef[34]=010234
+TIMef[35]=011234
+TIMef[36]=012134
+TIMef[37]=012222
+TIMef[38]=012304
+TIMef[39]=012324
+TIMef[40]=012334
+TIMef[41]=012341
+TIMef[42]=012344
+
 
 ## extended_models_uf TVM* # 16
-model_free_params['012210']=5  # K81uf 
+model_free_params['012210']=5  # K81uf # K81=TPM1
 model_free_params['012314']=7  # TVM
 model_free_params['012310']=6  # TVM1
 model_free_params['010213']=6  # TVM2
 model_free_params['012213']=6  # TVM3
 model_free_params['012013']=6  # TVM4
 model_free_params['010012']=5  # TVM5 
-model_free_params['012012']=5  # TVM6 
-model_free_params['010212']=5  # TVM7 
+model_free_params['012012']=5  # TVM6   # TPM3
+model_free_params['010212']=5  # TVM7   # TPM2
 model_free_params['012313']=6  # TVM8 
 model_free_params['010011']=4  # TVM9
 model_free_params['012212']=5  # TVM10 
 model_free_params['010210']=5  # TVM11 
 model_free_params['011010']=4  # TVM12
 model_free_params['001101']=4  # TVM13 
+#==
+model_free_params['000100']=4  # TVM14
+model_free_params['000101']=4  # TVM15
+model_free_params['010110']=4  # TVM16
+model_free_params['000102']=5  # TVM17
+model_free_params['010112']=5  # TVM18
+model_free_params['010211']=5  # TVM19
 
 TVMuf[0]=012210
 TVMuf[1]=012314
@@ -220,7 +287,7 @@ TVMuf[3]=010213
 TVMuf[4]=012213
 TVMuf[5]=012013
 TVMuf[6]=010012
-TVMuf[7]=012012
+TVMuf[7]=012012   # TPM3
 TVMuf[8]=010212
 TVMuf[9]=012313
 TVMuf[10]=010011
@@ -228,11 +295,19 @@ TVMuf[11]=012212
 TVMuf[12]=010210
 TVMuf[13]=011010
 TVMuf[14]=001101
+#== 
+TVMuf[15]=000100
+TVMuf[16]=000101
+TVMuf[17]=010110
+TVMuf[18]=000102
+TVMuf[19]=010112
+TVMuf[20]=010211
+
 
 ## extended_models_uf TIM* # 25
-model_free_params['012230']=6  # TIM
+model_free_params['012230']=6  # TIM   # < TIM1
 model_free_params['010023']=6  # TIM1
-model_free_params['010232']=7  # TIM2
+model_free_params['010232']=7  # TIM2  # < TIM2
 model_free_params['012232']=6  # TIM3
 model_free_params['012332']=6  # TIM4
 model_free_params['012342']=7  # TIM5
@@ -250,45 +325,79 @@ model_free_params['001021']=5  # TIM16
 model_free_params['012234']=7  # TIM17
 model_free_params['010231']=6  # TIM18 
 model_free_params['011020']=5  # TIM19
+model_free_params['011230']=6  #
 model_free_params['012130']=6  # TIM20
 model_free_params['010121']=5  # TIM21
 model_free_params['010122']=5  # TIM22
 model_free_params['010123']=6  # TIM23
-model_free_params['012345']=8  # GTR
+#==
+model_free_params['001020']=5  # TIM24
+model_free_params['000123']=6  # TIM25
+model_free_params['010203']=6  # TIM26
+model_free_params['010223']=6  # TIM27
+model_free_params['010230']=6  # TIM28
+model_free_params['012032']=6  # TIM29 # < TIM3
+model_free_params['010233']=6  # TIM30
+model_free_params['001234']=7  # TIM31
+model_free_params['010234']=7  # TIM32
+model_free_params['011234']=7  # TIM33
+model_free_params['012234']=7  # TIM34
+model_free_params['012134']=7  # TIM35
+model_free_params['012304']=7  # TIM36
+model_free_params['012324']=7  # TIM37
+model_free_params['012334']=7  # TIM38
+model_free_params['012341']=7  # TIM39
+model_free_params['012344']=7  # TIM40
 
-TIMuf[0]=012230
-TIMuf[1]=010023
-TIMuf[2]=010232
-TIMuf[3]=012232
-TIMuf[4]=012332
-TIMuf[5]=012342
-TIMuf[6]=012343
-TIMuf[7]=012340
-TIMuf[8]=010021
-TIMuf[9]=010022
-TIMuf[10]=010120
-TIMuf[11]=011123
-TIMuf[12]=012223
-TIMuf[13]=012222
-TIMuf[14]=000120
-TIMuf[15]=000121
-TIMuf[16]=001021
-TIMuf[17]=012234
-TIMuf[18]=010231
-TIMuf[19]=011020
-TIMuf[20]=012130
-TIMuf[21]=010121
-TIMuf[22]=010122
-TIMuf[23]=010123
-TIMuf[24]=012345
-
+TIMuf[0]=012230        
+TIMuf[1]=010023        
+TIMuf[2]=010232        
+TIMuf[3]=012232        
+TIMuf[4]=012332        
+TIMuf[5]=012342        
+TIMuf[6]=012343        
+TIMuf[7]=012340        
+TIMuf[8]=010021        
+TIMuf[9]=010022        
+TIMuf[10]=010120       
+TIMuf[11]=011123       
+TIMuf[12]=012223       
+TIMuf[13]=012222       
+TIMuf[14]=000120       
+TIMuf[15]=000121       
+TIMuf[16]=001021       
+TIMuf[17]=012234       
+TIMuf[18]=010231       
+TIMuf[19]=011020       
+TIMuf[20]=011230
+TIMuf[21]=012130       
+TIMuf[22]=010121       
+TIMuf[23]=010122       
+TIMuf[24]=010123       
+#==		      
+TIMuf[25]=001020
+TIMuf[26]=000123
+TIMuf[27]=010203
+TIMuf[28]=010223
+TIMuf[29]=010230
+TIMuf[30]=012032
+TIMuf[31]=010233
+TIMuf[32]=001234
+TIMuf[33]=010234
+TIMuf[34]=011234
+TIMuf[35]=012134
+TIMuf[36]=012304
+TIMuf[37]=012324
+TIMuf[38]=012334
+TIMuf[39]=012341
+TIMuf[40]=012344
 
 # array of models to evaluate
 standard_models=(JC69 K80 F81 HKY85 TN93 GTR)
 
-extended_models_ef=( "${TIMef[@]}" "${TVMef[@]}" ) # 26
+extended_models_ef=( "${TIMef[@]}" "${TVMef[@]}" ) # 64
 
-extended_models_uf=( "${TIMuf[@]}" "${TVMuf[@]}" ) # 26
+extended_models_uf=( "${TIMuf[@]}" "${TVMuf[@]}" ) # 62
                                                        
 test_models=(JC69 K80 F81 HKY85 TN93)
 
@@ -439,7 +548,7 @@ function print_start_time()
 function compute_AICi()
 {
    # AICi=$(compute_AICi "$score" "$total_params")
-   local score n_branches total_params
+   local score total_params
    
    score=$1
    total_params=$2
@@ -750,10 +859,10 @@ phyml -i "$infile" -d nt -m JC69 -c 1 -b 0 -o n &> /dev/null
 if [[ -s "${infile}"_phyml_tree.txt ]]; then
    mv "${infile}"_phyml_tree.txt "${infile}"_JC-NJ.nwk
 else
-    echo "FATAL ERROR: could not compute ${infile}_phyml_tree.txt" && exit 1
+    echo "FATAL ERROR: could not compute ${infile}_phyml_tree.txt (${infile}_JC-NJ.nw)" && exit 1
 fi
 
-# 5.1 run a for loop to combine all base models with (or not) +G and or +I
+# 5.1 run a for loop to combine all base models with (or not) +G, +I +G+I
 #     and fill the model_scores and model_cmds hashes
 echo "2.1. running in a for loop to combine all base models in model_set ${model_set}=>${model_options[$model_set]},
      with (or without) +G and or +I, and compute the model lnL, after optimizing branch lengths and rates"
@@ -771,8 +880,10 @@ transitional_heterogeneity=''
 use_pInv=''
 freq_cmd=''
     
+# loop to test standard models, with or without +G, +I, +G+I; 
+# Note the use of -f m to estimate base frequencies under ML. PhyML takes care of using or not -f m, given the standard model name
 for mat in "${models[@]}"; do
-     print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -u ${infile}_JC-NJ.nwk -c 1 -v 0 -o lr"
+     print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -f m -u ${infile}_JC-NJ.nwk -c 1 -v 0 -o lr"
      ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" -f m -u "${infile}"_JC-NJ.nwk -c 1 -o lr --leave_duplicates --no_memory_check &> /dev/null 
      ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" -f m -u "${infile}"_JC-NJ.nwk -c 1 -o lr --no_memory_check &> /dev/null 
      extra_params=0 
@@ -787,7 +898,7 @@ for mat in "${models[@]}"; do
      model_cmds["${mat}"]="$mat"
 
      # save the JC_BICi to test for significant compositional heterogeneity (JC vs F81)
-     #  and transitional bias (HKY vs TN93
+     #  and transitional bias between purines and pyrimidines (HKY vs TN93)
      if ((model_set == 2)); then
          if [[ "$mat" == 'JC69' ]]; then
 	     JC_BICi="$BICi"
@@ -804,7 +915,7 @@ for mat in "${models[@]}"; do
 	 fi
      fi
      
-     print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -c 4 -a e -u ${infile}_JC-NJ.nwk -o lr"
+     print_start_time && echo "# running: phyml -i $infile -d nt -m $mat -f m -c 4 -a e -u ${infile}_JC-NJ.nwk -o lr"
      ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "${mat}" -f m -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --leave_duplicates --no_memory_check &> /dev/null
      ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "${mat}" -f m -c 4 -a e -u "${infile}"_JC-NJ.nwk -o lr --no_memory_check &> /dev/null
      extra_params=1 
@@ -920,16 +1031,17 @@ if ((model_set == 2)); then
    for mat in "${models[@]}"; do
      # skip models with two transition rates if transitional_heterogeneity == 0
      ((transitional_heterogeneity == 0)) \
-       && [[ "$mat" =~ (01[0-6][0-6]2[0-6]|01[0-6][0-6]3[0-6]|01[0-6][0-6]4[0-6]|00[0-1][0-6][1-6][1-6]|000[0-6][1-6][0-6]) ]] \
+       && [[ "$mat" =~ (00[0-5][0-5]2[0-5]|01[0-5][0-5]2[0-6]|01[0-5][0-5]0[0-6]|01[0-5][0-5]3[0-5]|01[0-5][0-5]4[0-5]|01[0-5][0-5]5[0-5]|00[0-1][0-5][1-5][1-5]|000[0-5][1-5][0-5]) ]] \
        && echo "skipping TN|TIM|SYM matrix $mat" && continue
      ((transitional_heterogeneity == 1)) \
-       && [[ "$mat" =~ (01[0-6][0-6]1[0-6]|00[0-6][0-6]0[0-6] ) ]] && echo "skipping TVM matrix $mat" && continue
+       && [[ "$mat" =~ (01[0-5][0-5]1[0-5]|00[0-5][0-5]0[0-5]|000[0-5]0[0-5] ) ]] && echo "skipping TVM matrix $mat" && continue
      ((compositional_heterogeneity == 0)) && mat="${mat%ef}"
      print_start_time && echo "# running: phyml -i $infile -d nt -m $mat $freq_cmd -u ${infile}_JC-NJ.nwk -c 1 -v 0 -o lr"
      ((phymlyr >= 2022)) && phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -c 1 -v 0 -o lr --leave_duplicates --no_memory_check &> /dev/null 
      ((phymlyr < 2022)) && phyml -i "$infile" -d nt -m "$mat" "$freq_cmd" -u "${infile}"_JC-NJ.nwk -c 1 -v 0 -o lr --no_memory_check &> /dev/null 
      extra_params=0 
      ((compositional_heterogeneity == 0)) && mat="${mat}ef"
+     ((DEBUG)) && echo "### DEBUG:  mat=$mat"
      total_params=$((no_branches + extra_params + ${model_free_params[$mat]}))
      sites_by_K=$(echo 'scale=2;'"$no_sites/$total_params" | bc -l)
      score=$(awk '/Log-l/{print $NF}' "${infile}"_phyml_stats.txt)

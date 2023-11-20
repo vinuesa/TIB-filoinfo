@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México. GitHub repos; @pvinmex" />
 
-<meta name="date" content="2023-11-14" />
+<meta name="date" content="2023-11-19" />
 
 <title>Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</title>
 
@@ -337,7 +337,7 @@ display: none;
 de modelos y búsquedas intensivas de árboles</h1>
 <h4 class="author"><a href="https://www.ccg.unam.mx/~vinuesa/">Pablo
 Vinuesa, CCG-UNAM, Cuernavaca, México</a>. <a href="https://github.com/vinuesa">GitHub repos</a>; <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a></h4>
-<h4 class="date">2023-11-14</h4>
+<h4 class="date">2023-11-19</h4>
 
 </div>
 
@@ -387,7 +387,9 @@ modelos a evaluar</a>
 Yano de 1985 (<span class="math inline">\(HKY85\)</span>)</a></li>
 <li><a href="#modelo-de-hasegawa-kishino-y-yano-de-1985-distribución-gamma-hky85g" id="toc-modelo-de-hasegawa-kishino-y-yano-de-1985-distribución-gamma-hky85g"><span class="toc-section-number">3.2.2.5</span> Modelo de Hasegawa, Kishino y
 Yano de 1985 + distribución Gamma (<span class="math inline">\(HKY85+G\)</span>)</a></li>
-<li><a href="#modelo-de-hasegawa-kishino-y-yano-de-1985-distribución-gamma-proporción-de-sitios-invariantes-hky85gi" id="toc-modelo-de-hasegawa-kishino-y-yano-de-1985-distribución-gamma-proporción-de-sitios-invariantes-hky85gi"><span class="toc-section-number">3.2.2.6</span> Modelo de Hasegawa, Kishino y
+<li><a href="#modelo-de-hasegawa-kishino-y-yano-de-1985-proporción-de-sitios-invariantes-hky85i" id="toc-modelo-de-hasegawa-kishino-y-yano-de-1985-proporción-de-sitios-invariantes-hky85i"><span class="toc-section-number">3.2.2.6</span> Modelo de Hasegawa, Kishino y
+Yano de 1985 + proporción de sitios invariantes (<span class="math inline">\(HKY85+I\)</span>)</a></li>
+<li><a href="#modelo-de-hasegawa-kishino-y-yano-de-1985-distribución-gamma-proporción-de-sitios-invariantes-hky85gi" id="toc-modelo-de-hasegawa-kishino-y-yano-de-1985-distribución-gamma-proporción-de-sitios-invariantes-hky85gi"><span class="toc-section-number">3.2.2.7</span> Modelo de Hasegawa, Kishino y
 Yano de 1985 + distribución Gamma + proporción de sitios invariantes
 (<span class="math inline">\(HKY85+G+I\)</span>)</a></li>
 </ul></li>
@@ -411,13 +413,12 @@ selección de modelos de DNA: reducción de parámetros del modelo GTR+G+I,
 y evaluación de los modelos resultantes mediante <span class="math inline">\(AIC\)</span></a>
 <ul>
 <li><a href="#ajuste-de-modelo-gtrgi-a-primates.phy" id="toc-ajuste-de-modelo-gtrgi-a-primates.phy"><span class="toc-section-number">3.3.1</span> Ajuste de modelo <span class="math inline">\(GTR+G+I\)</span> a primates.phy</a></li>
-<li><a href="#evaluación-de-modelos-simplificados-de-5-y-4-tasas" id="toc-evaluación-de-modelos-simplificados-de-5-y-4-tasas"><span class="toc-section-number">3.3.2</span> Evaluación de modelos
-simplificados de 5 y 4 tasas</a></li>
+<li><a href="#evaluación-de-modelos-simplificados-de-2-3-y-4-tasas" id="toc-evaluación-de-modelos-simplificados-de-2-3-y-4-tasas"><span class="toc-section-number">3.3.2</span> Evaluación de modelos
+simplificados de 2, 3 y 4 tasas</a></li>
 <li><a href="#cálculo-de-los-aici-de-cada-modelo-y-delta_i-con-respecto-al-aicmin-en-r" id="toc-cálculo-de-los-aici-de-cada-modelo-y-delta_i-con-respecto-al-aicmin-en-r"><span class="toc-section-number">3.3.3</span> Cálculo de los <span class="math inline">\(AICi\)</span> (de cada modelo) y <span class="math inline">\(\Delta_i\)</span> con respecto al <span class="math inline">\(AICmin\)</span> en <code>R</code></a></li>
-<li><a href="#estima-de-la-filogenia-de-máxima-verosimilitud-con-el-mejor-modelo-de-5-tasasg-con-parametrización-123425" id="toc-estima-de-la-filogenia-de-máxima-verosimilitud-con-el-mejor-modelo-de-5-tasasg-con-parametrización-123425"><span class="toc-section-number">3.3.4</span> Estima de la filogenia de máxima
-verosimilitud con el mejor modelo de 5 tasas+G con parametrización
-123425</a></li>
-<li><a href="#conclusión" id="toc-conclusión"><span class="toc-section-number">3.3.5</span> CONCLUSIÓN</a></li>
+<li><a href="#conclusiones" id="toc-conclusiones"><span class="toc-section-number">3.3.4</span> Conclusiones</a></li>
+<li><a href="#tarea-de-ajuste-de-modelos-paramétricos-mediante-criterios-de-información-aic-y-bic" id="toc-tarea-de-ajuste-de-modelos-paramétricos-mediante-criterios-de-información-aic-y-bic"><span class="toc-section-number">3.3.5</span> Tarea de ajuste de modelos
+paramétricos mediante criterios de información AIC y BIC</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#cálculo-de-aics-y-bics-para-selección-modelos-de-aminoácidos" id="toc-cálculo-de-aics-y-bics-para-selección-modelos-de-aminoácidos"><span class="toc-section-number">4</span> Cálculo de <span class="math inline">\(AICs\)</span> y <span class="math inline">\(BICs\)</span> para selección modelos de
@@ -435,10 +436,10 @@ herramientas de filtrado de <span class="math inline">\(Linux\)</span> y
 modelos ordenados por valor de <span class="math inline">\(lnL\)</span></a></li>
 <li><a href="#cálculo-formal-de-aic_min-y-delta_aic_i-para-los-modelos-en-competición" id="toc-cálculo-formal-de-aic_min-y-delta_aic_i-para-los-modelos-en-competición"><span class="toc-section-number">4.2.2</span> Cálculo formal de <span class="math inline">\(AIC_{min}\)</span> y <span class="math inline">\(\Delta_{AIC_{i}}\)</span> para los modelos en
 competición</a></li>
-<li><a href="#conclusión-1" id="toc-conclusión-1"><span class="toc-section-number">4.2.3</span> CONCLUSIÓN</a></li>
+<li><a href="#conclusión" id="toc-conclusión"><span class="toc-section-number">4.2.3</span> CONCLUSIÓN</a></li>
 </ul></li>
-<li><a href="#búsqueda-intensiva-bajo-el-mejor-modelo-usando-rearreglos-tipo-best-y-10-árboles-de-semilla" id="toc-búsqueda-intensiva-bajo-el-mejor-modelo-usando-rearreglos-tipo-best-y-10-árboles-de-semilla"><span class="toc-section-number">4.3</span> Búsqueda intensiva bajo el mejor
-modelo, usando rearreglos tipo BEST y 10 árboles de semilla</a>
+<li><a href="#búsqueda-intensiva-bajo-el-mejor-modelo-usando-rearreglos-tipo-best-y-5-árboles-de-semilla" id="toc-búsqueda-intensiva-bajo-el-mejor-modelo-usando-rearreglos-tipo-best-y-5-árboles-de-semilla"><span class="toc-section-number">4.3</span> Búsqueda intensiva bajo el mejor
+modelo, usando rearreglos tipo BEST y 5 árboles de semilla</a>
 <ul>
 <li><a href="#despliegue-y-edición-del-árbol-con-figtree-1" id="toc-despliegue-y-edición-del-árbol-con-figtree-1"><span class="toc-section-number">4.3.1</span> Despliegue y edición del árbol
 con figtree</a></li>
@@ -453,6 +454,8 @@ DNA y proteína por <span class="math inline">\(BIC\)</span> con
 <ul>
 <li><a href="#el-criterio-bayesiano-de-información-bic" id="toc-el-criterio-bayesiano-de-información-bic"><span class="toc-section-number">5.1.1</span> El criterio bayesiano de
 información (<span class="math inline">\(BIC\)</span>)</a></li>
+<li><a href="#tarea-selección-de-modelos-con-bic" id="toc-tarea-selección-de-modelos-con-bic"><span class="toc-section-number">5.1.2</span> Tarea: selección de modelos con
+BIC</a></li>
 </ul></li>
 <li><a href="#selección-inteligente-de-subconjuntos-de-modelos-de-sustitución-para-dna-con-phyml_dnamodelfinder.sh" id="toc-selección-inteligente-de-subconjuntos-de-modelos-de-sustitución-para-dna-con-phyml_dnamodelfinder.sh"><span class="toc-section-number">5.2</span> Selección “inteligente” de
 subconjuntos de modelos de sustitución para DNA con
@@ -461,21 +464,7 @@ subconjuntos de modelos de sustitución para DNA con
 <li><a href="#ejemplo-de-corrida-phyml_dnamodelfinder.sh-en-modo-de-selección-de-set-extendido-de-modelos" id="toc-ejemplo-de-corrida-phyml_dnamodelfinder.sh-en-modo-de-selección-de-set-extendido-de-modelos"><span class="toc-section-number">5.2.1</span> Ejemplo de corrida
 <em>phyml_DNAmodelFinder.sh</em> en modo de selección de set extendido
 de modelos</a></li>
-</ul></li>
-<li><a href="#comparación-del-rendimiento-benchmarking-de-phyml_dnamodelfinder-con-jmodeltesst2" id="toc-comparación-del-rendimiento-benchmarking-de-phyml_dnamodelfinder-con-jmodeltesst2"><span class="toc-section-number">5.3</span> Comparación del rendimiento
-(<em>benchmarking</em>) de <em>phyml_DNAmodelFinder</em> con
-<em>jModelTesst2</em></a>
-<ul>
-<li><a href="#rendimiento-de-phyml_dnamodelfinder" id="toc-rendimiento-de-phyml_dnamodelfinder"><span class="toc-section-number">5.3.1</span> Rendimiento de
-<em>phyml_DNAmodelFinder</em></a></li>
-<li><a href="#rendimiento-de-jmodeltest2" id="toc-rendimiento-de-jmodeltest2"><span class="toc-section-number">5.3.2</span> Rendimiento de
-<em>jModelTest2</em></a></li>
-<li><a href="#benchmark-entre-phyml_dnamodelfinder.sh-y-jmodeltest2" id="toc-benchmark-entre-phyml_dnamodelfinder.sh-y-jmodeltest2"><span class="toc-section-number">5.3.3</span> Benchmark entre <span class="math inline">\(phyml\_DNAmodelFinder.sh\)</span> y <span class="math inline">\(jModelTest2\)</span></a>
-<ul>
-<li><a href="#conclusión-2" id="toc-conclusión-2"><span class="toc-section-number">5.3.3.1</span> Conclusión</a></li>
-</ul></li>
-<li><a href="#impacto-de-modeltest-y-su-sucesor-jmodeltest2-en-el-campo-de-la-filogenética" id="toc-impacto-de-modeltest-y-su-sucesor-jmodeltest2-en-el-campo-de-la-filogenética"><span class="toc-section-number">5.3.4</span> Impacto de <span class="math inline">\(modelTest\)</span> y su sucesor <span class="math inline">\(jModelTest2\)</span> en el campo de la
-filogenética</a></li>
+<li><a href="#conclusión-1" id="toc-conclusión-1"><span class="toc-section-number">5.2.2</span> Conclusión</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#cita-para-este-tutorial-y-los-scripts-phyml_dnamodelfinder-y-phyml_protmodelfinder" id="toc-cita-para-este-tutorial-y-los-scripts-phyml_dnamodelfinder-y-phyml_protmodelfinder"><span class="toc-section-number">6</span> Cita para este tutorial y los
@@ -859,7 +848,8 @@ pero permite acomodar Ti <span class="math inline">\(\ne\)</span> Tv
 en los datos</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 2. Modelo K80; veamos lo que tarda al usar el &quot;user-tree&quot; vs. tener que estimarlo 
-phyml -i primates.phy -d nt -m K80 -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
+#phyml -i primates.phy -d nt -m 010010 -f 0.25,0.25,0.25,0.25 -t e -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
+phyml -i primates.phy -d nt -m K80 -t e -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
 
 grep Log- primates.phy_phyml_stats.txt &gt; K80.fit</code></pre>
 </div>
@@ -870,12 +860,12 @@ Felsenstein de 1981 (<span class="math inline">\(F81\)</span>)</h4>
 <li>Parametrización: acomoda diferentes frecuencias de bases (<span class="math inline">\(\pi_a \ne \pi_c \ne \pi_g \ne \pi_c\)</span>) pero
 asume que la tasa de Ti = Tv (<span class="math inline">\(\alpha =
 \beta\)</span>).</li>
-<li>Con este modelo evaluamos si existe <em>sesgo
-composicional</em>.</li>
+<li>Con este modelo evaluamos si existe <em>sesgo composicional</em>,
+evaluando frecuencias bajo máxima verosimilitud <code>-f m</code>.</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 3. Modelo F81
-#  phyml -i primates.phy -d nt -m F81 -c 1
-phyml -i primates.phy -d nt -m 111111 -f e -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
+# phyml -i primates.phy -d nt -m 000000 -f m -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
+phyml -i primates.phy -d nt -m F81 -f m -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
 
 grep Log- primates.phy_phyml_stats.txt &gt; F81.fit</code></pre>
 </div>
@@ -889,20 +879,18 @@ tasa de Ti <span class="math inline">\(\ne\)</span> Tv (<span class="math inline
 bases y <em>sesgo transicional</em> en tasas de sustitución.</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 4. Modelo HKY85
-#  phyml -i primates.phy -d nt -m HKY85 -c 1 
-phyml -i primates.phy -d nt -m 121121 -f e -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
+# phyml -i primates.phy -d nt -m 010010 -f m -t e -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
+phyml -i primates.phy -d nt -m HKY85 -f m -t e -c 1 -o lr -b 0 &amp;&gt; /dev/null
 
 grep Log-like primates.phy_phyml_stats.txt &gt; HKY85.fit</code></pre>
 <p>NOTA: Como veremos en ejemplos posteriores, podíamos haber optimizado
 el proceso corriendo un <code>bucle for</code> como el mostrado abajo.
 Por ahora nos concetramos en entender cómo llamar a <span class="math inline">\(phyml\)</span> con modelos de parametrización cada
 vez más compleja.</p>
-<pre style="background: Cornsilk;"><code>
-for mat in JC69 K80 F81 HKY85; do 
-  phyml -i primates.phy -d nt -m $mat -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
-  awk &#39;/Log-like/{print $NF}&#39; primates.phy_phyml_stats.txt &gt; ${mat}.fit
-done
-</code></pre>
+<pre style="background: Cornsilk;"><code>for m in JC69 K80 F81 HKY85; do 
+  phyml -i primates.phy -d nt -m $m -f m -u primates_JC.ph -c 1 -o lr -b 0 &amp;&gt; /dev/null
+  awk &#39;/Log-like/{print $NF}&#39; primates.phy_phyml_stats.txt &gt; ${m}.fit
+done</code></pre>
 </div>
 <div id="modelo-de-hasegawa-kishino-y-yano-de-1985-distribución-gamma-hky85g" class="section level4" number="3.2.2.5">
 <h4><span class="header-section-number">3.2.2.5</span> Modelo de
@@ -919,13 +907,33 @@ composicional</em> de bases, <em>sesgo transicional</em> en tasas de
 sustitución y <em>heterogeneidad de tasas entre sitios</em>.</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 5. Modelo HKY85+G
-#  phyml -i primates.phy -d nt -m HKY85 -c 4 -a e
-phyml -i primates.phy -d nt -m 121121 -f e -c 4 -a e -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
-
+# phyml -i primates.phy -d nt -m 121121 -f m -t e -c 4 -a e -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
+phyml -i primates.phy -d nt -m HKY85 -f m -t e -c 4 -a e -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
 grep Log-like primates.phy_phyml_stats.txt &gt; HKY85G.fit</code></pre>
 </div>
-<div id="modelo-de-hasegawa-kishino-y-yano-de-1985-distribución-gamma-proporción-de-sitios-invariantes-hky85gi" class="section level4" number="3.2.2.6">
+<div id="modelo-de-hasegawa-kishino-y-yano-de-1985-proporción-de-sitios-invariantes-hky85i" class="section level4" number="3.2.2.6">
 <h4><span class="header-section-number">3.2.2.6</span> Modelo de
+Hasegawa, Kishino y Yano de 1985 + proporción de sitios invariantes
+(<span class="math inline">\(HKY85+I\)</span>)</h4>
+<ul>
+<li>Parametrización: (<span class="math inline">\(\pi_a \ne \pi_c \ne
+\pi_g \ne \pi_c\)</span>), Ti <span class="math inline">\(\ne\)</span>
+Tv (<span class="math inline">\(\alpha \ne \beta\)</span>) y proporción
+de sitios invariantes (<span class="math inline">\(+I\)</span>) para
+acomodar heterogeneidad de tasas entre sitios o columnas del
+alineamiento</li>
+<li>Con este modelo podemos evaluar si existe <em>sesgo
+composicional</em> de bases, <em>sesgo transicional</em> en tasas de
+sustitución y <em>heterogeneidad de tasas entre sitios</em>,
+considerando sólo una proporción de sitios invariantes.</li>
+</ul>
+<pre style="background: Cornsilk;"><code># 5. Modelo HKY85+G
+# phyml -i primates.phy -d nt -m 121121 -f m -t e -c 1 -v e -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
+phyml -i primates.phy -d nt -m HKY85 -f m -t e -c 1 -v e -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
+grep Log-like primates.phy_phyml_stats.txt &gt; HKY85I.fit</code></pre>
+</div>
+<div id="modelo-de-hasegawa-kishino-y-yano-de-1985-distribución-gamma-proporción-de-sitios-invariantes-hky85gi" class="section level4" number="3.2.2.7">
+<h4><span class="header-section-number">3.2.2.7</span> Modelo de
 Hasegawa, Kishino y Yano de 1985 + distribución Gamma + proporción de
 sitios invariantes (<span class="math inline">\(HKY85+G+I\)</span>)</h4>
 <ul>
@@ -941,9 +949,8 @@ sustitución, <em>heterogeneidad de tasas entre sitios</em>, asumiendo
 una <em>proporción de sitios invariantes</em>.</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 6. Modelo HKY85+G+I
-#  phyml -i primates.phy -d nt -m HKY85 -c 4 -a e -v e
-phyml -i primates.phy -d nt -m 121121 -f e -c 4 -a e -v e -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
-
+#  phyml -i primates.phy -d nt -m 121121 -f m -t e -c 4 -a e -v e -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
+phyml -i primates.phy -d nt -m HKY85 -f m -t e -c 4 -a e -v e -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
 grep Log-like primates.phy_phyml_stats.txt &gt; HKY85GI.fit</code></pre>
 <p><strong>Nota:</strong> en el ejercicio de selección de matrices de
 sustitución para proteínas veremos cómo optimizar este tedioso proceso,
@@ -969,17 +976,29 @@ awk &#39;BEGIN{OFS=&quot;\t&quot;; print &quot;model\tlnL&quot;}{print FILENAME 
 
 # limpiemos un poco el directorio de trabajo
 rm *fit </code></pre>
-<p>Visualizemos los resultados obtenidos:</p>
-<pre style="background: Cornsilk;"><code>sed &#39;1d&#39; model_fits.tsv | sort -drk2 | column -t</code></pre>
-<pre>
-JC       -6424.20245
-F81      -6303.66088
+<p>Visualizemos los resultados obtenidos, ordenados de mayor a menor
+<span class="math inline">\(lnL\)</span> con <code>sort -grk2</code></p>
+<pre style="background: Cornsilk;"><code>sed &#39;1d&#39; model_fits.tsv | sort -grk2 | column -t</code></pre>
+<pre style="background: AliceBlue;">
+HKY85G   -5711.93899   &lt;== mejor (mayor) lnL
+HKY85GI  -5711.94038
+HKY85I   -5768.00412
+HKY85    -5981.72029
 K80      -6142.42909
-HKY85    -5984.54284
-HKY85GI  -5728.06284
-HKY85G   -5728.06261
+F81      -6284.99565
+JC69     -6424.20245
 </pre>
 <!-- {r chunk1, out.width = '800px', fig.retina = NULL, fig.align='center', echo=TRUE} -->
+<p>Los resultados arriba mostrados indican que el mejor modelo es <span class="math inline">\(HKY+G\)</span>. Noten que en este caso existe una
+<strong>interacción negativa</strong> entre los parámetros <span class="math inline">\(\Gamma\)</span> e <span class="math inline">\(I\)</span> en el modelo <span class="math inline">\(HKY+G+I\)</span>, ya que tiene este último tiene
+un puntaje de <span class="math inline">\(lnL\)</span> ligeramente más
+bajo que el del modelo <span class="math inline">\(HKY+G\)</span>, a
+pesar de contar con un parámetro más.</p>
+<p>Esta interacción negativa entre <span class="math inline">\(\Gamma\)</span> y <span class="math inline">\(I\)</span> la he observado con cierta frecuencia,
+por lo que suelo ignorar <span class="math inline">\(I\)</span> para
+modelar la heterogeneidad de tasas entre sitios, a no ser que la
+evidencia en favor de usar <span class="math inline">\(I\)</span> sea
+abrumadora.</p>
 <div id="graficado-con-r-de-valores-de-verosimilitud-de-los-modelos-en-competición-ordenados-de-lnl" class="section level4" number="3.2.3.1">
 <h4><span class="header-section-number">3.2.3.1</span> Graficado con R
 de valores de verosimilitud de los modelos en competición, ordenados de
@@ -1014,14 +1033,16 @@ dev.off()</code></pre>
 <li>visualizemos la gráfica</li>
 </ul>
 <pre style="background: Cornsilk;"><code>eog LRTs_primates_dotchart.png &amp;</code></pre>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgCAMAAABKCk6nAAAC7lBMVEUAAAABAQECAgIDAwMEBAQFBQUGBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMUFBQVFRUWFhYXFxcYGBgZGRkaGhobGxscHBwdHR0eHh4fHx8gICAhISEiIiIjIyMkJCQlJSUmJiYnJycoKCgpKSkqKiorKyssLCwtLS0uLi4vLy8wMDAxMTEyMjIzMzM0NDQ1NTU2NjY3Nzc4ODg5OTk6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dISEhJSUlKSkpLS0tMTExNTU1OTk5PT09QUFBRUVFSUlJTU1NUVFRVVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2ttbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2fn5+goKChoaGioqKjo6OkpKSlpaWnp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7///8W82waAAAQ7klEQVR4nO3de3hT9R3H8R+lkwqBFmxLhwIDoaBWKVY2tV0HAxSxgCgD5Ta5DOa8TEVwY07mFWUioiKCCqIDnKBTmagoFymT0Ym0wLgplIv0Am3a0jbp97+d0+aENmUhvyU96T75vJ/zNM15zjfnkBdJL4/8VMKgU+G+ANa0ERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweNDAxQXVDXd8o3qfb6b+IU4VE/Jrsjto4FT1VcMdBMaKwCjAmzPbJgz/RqT8oWTHNStEjqv4LWmrU5VSq+XgiPjEX54SKRzdIfVVj94+9aP7Yrsu2HK1Y8Chs1NnD/HMeIGtxy+e2jV20D99z+M9hXVYcwoC+GS7qJEDVKcKGaI639xavWw88Y7OavW6ruqJwyVJPxiZoW5y11yjuqVFeYFV6yuUuqBXWzVavFPeQ6wZC9h6/Jpr1VUZLeJP+JzHOtx7Gc0pCOAN6tKD8tivv9uoOp+WtSrBeOLVw8eqa9+in1P3iFyv3v9Ada+QiV7gFgckQ42Xj40d3invIdaMBWw9/nrV0yVjo5f6nMc63DosnE9FoyCAyxOUuuy3+2Sh+o1IZRt19Lhq5ZS6r8F3qtqenqPuE/nEC9xF5Ha1VHarHmenvIdYMxaw9fjPq0m1933OYx1uHdasggCWwkVDY1SrnS+ou407ndR3xtdGc7cJPFXd/bbRjhnqfpG/n/0abAK/XgvsnfIeYs14vwZ7Hn+eerD2rs95rMOtw+z/8/sJAvijhz8S52D14heqS6l8pi4SL/BWma9mirwyI+dV1eOMTD4XsHfKe4g1YwFbj/+h6lMtEx3Lfc5jHW4dFrbn4VxBAH+oHCN/ceEPdspg1e2WNsYz7AEeoYZ+fTohatxwdamzqI3qeV2LcwF7p7yHWDMWsPX47lTVp3+LHxb4nMc63HsZzSkIYFl+Tazjxx+IlD3Q05G2XCzgDWmOj2TvTe07TswX2TgwNuWlcwJbU2cP8cx436Ktx/9+4sWxN+1qdB7rFNZhzSkMYPZfIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8JoG+OuVzK5WV4UBeMLTrzCbSvf/r92aCLh5/RNK6KYQGDsCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8IIBdqkjxsdFQ+SUOiWyO2nZA6luY8fwSbImOXb4CZFMpVSWsWdZ3zYXTzkmkrqmbpDA9hUy4AOdX5XSSxaJfBJ3ouDC94pHTRK5ZL/TWSHycq/1zu3TUqoJbEeuT94+WO9uqICPdF9ofP5OfJH7qhdka5LI6n5S4ag97FjbvebN9FwC29Dpn89+adjCs/dDBLy396zaXTff80ofl5R2fPPwsFmSF5cWN2i/rEm3Bgjc9M38QKTmxnzv/eCAW0ZHR0eZwL2z+lSauw60vWiTcfOiikkokOyh+6ru7SfzbxHZExMT87gX+I5Ncmw/tybZfmau8P7scu+eMaF5BS90p8+u3Xf/UOPDxk65lU/1rb3/rSpcm1L72cxHz76CD4rbxa1JtnEHjCf47u3ePZND9U3W3rbZ5r7Hxxsf/ninSElUwZcbRY62dH7v2Gzsc1/9KN+ibWjbwNyy5Vlu7/3Q/Zg0v7fxDXMd8LqEHWVzkuXdxDz3zCHGG0aXj8oPT+pMYFv656Sbny4/ezd0wO6MB8UDLAu7xw3ME1nQI/G248bd5f3apS39YgmBwxB/kwUegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAyerSu+WxHYvmxd8d2KwE2W87Gs6bn1d9i64rsVgZuq6htWlub8dFe9Pbau+G414ZDUuLk1wbbBZMi5q96e4NaL1lzx3eqOLyT/39yaYJtvfI2U0wPr7Rlt54rvVnyLbqr23GZ8ePuxentC9k1WICu+WxG4yXpy1OJZN5bV22Hriu9WBG669q7YUFP/vq0rvlsR2L74myzwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDZ8uC4L4R2L7sWBC8UZEE7C4N7/ltWBC8cREEPOe64ZlfhvMCbFgQvHGRA/za70UKM4rDeAXBAQe0IHjjxubI6ZMRsQ0rNP64c98J4zWMb/oFwRsPjtsppUURsY08afxxn1wTxmuY0PQLgjcejJy36LfudcvRjJIwXoEdC4I3KnKA5bnrB96wI5wXYMuC4L5FELDxLIX39PxNFngEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHgEBo/A4BEYPAKDR2DwCAwegcEjMHjBAFsLvVsLvGdfHT+5PJCTEti+ggU2F3r3LPDu6vzX8hFPBHLS5gx8ZOmbBeG+hlAWJHDtQu+eBd4/vlJkU3IgJ23GwH/7+euLM/4R7qsIYcEB1y307lngfckYkaJWgZy0GQNfVyZyYnC4ryKEBQfsWei9boH3uVNFqlUgayPf8bnk722WW/Yo8/oG1IT/SkK1/SIo4LqF3j0LvC++3XgFR9cEANx8X8HudOP6KzPDfRkhLNhvssyF3j0LvK/vK7KlZyAnbb7A8vTd+/PGrAj3VYSwoH9Mmt+7wrPAu+viT11j5gRy0mYMLGunTNsQ7msIZUEDmwu9exZ4/6pvl8mVgZy0OQOjxd9kgUdg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCgxcUcHzL6Ojoi6wF30UW5Ad2UgLbV3DAOeZHz4LvUr3esTuwk4YKuPqFG4cuC2R52wguBMCeBd9lQkq0zcAPPlVRev+fQ/NYqIUA2LPgu1FSgMDjD4irKvjN1d94LHdmKB4Kd5sU9NfgFZ4F3zWA79gkx/YHvxXfYj7YgKMheCjcbUzwr2DPgu8awKF6i848KbI/KzSPhVoI3qI9C76L/cBb0x97JH1PaB4LtRAAexZ8F/uBxbn+8zMheijUQgBsLfgeBmB23vibLPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoMXJLBLHRdZktqm+1ydkxLYvkIA/NwV2We2XfaixkkbAJcc0ZhkugUPXBhrLmO4brTGSesBV02+YXz6Vo1ZplfwwB9fpX3SesB/WipScH2F9kOwAAseePGN2icdu12KjtVtg1zG/ZnZ1l1uod7GBgFcWmUCr6t9BTsXVQUOPC5XykvqtiHmi/fef1l3uYV6mxgEcL9l4lQF3ztyjc/f7RK4b/236FdnuORf/as1hplWwbxFTxxR9sYlIk9enl25tes8jZPW/y56fubPxnyrMcv0Cgb48MDYKz4XqVlwWeuez7g1Tsqfg+2Lv8kCj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPDCAvzbzEH+696ug25t22qPtHNoj8S20R5p31p/5ELtkQ5x/+Wp7JUfBuDzNu897ZHXXtMeef9Z7ZEtv9Me2TNNe6TwVu0R6a8/YkbghhE4NBFYOwI3jsAE9o3AoYnA2v1/Ac//QHtk2TLtkQ+f0x7ZOlt75N+/1h4pHqU9IoP0R8zCBFyu/z9SqqzUHqku1x6pcWqPSElzHTELEzCzKwKDR2DwCAwegcEjMHgEBo/A4NkKnH9T++sPmZ+U3Wd8yL46fnK598b/yEtd4rKO64182Kdd+k69EZEF+ZoX1vBY/yOZSqkskVXJiXdW6I2sSY4dfiLAEZ/sBK65ckXlI+PMz6bFiLg6/7V8xBPWjf+RbzrmFt86RWvkcJu/lz50udaIVK937Na7sIbH+h+RS/Y7nRWyq21OxW2/0xopuPC94lGTAhzxyU7gz9KM59D8r7XWphvAH18psinZuvE/svZBkZX9tUbeukHkVItinRGZkBK9W+/CGh7rf6TCUXvz7EiRzV21RrYmiazuF9iIb3YCL84a223EtyLHUr42gJeMESlqZd2cZ0SKPhuwSGvEWWgodNc8iyTt1ruwhsf6H8mLS4sbtF+euEVkW5RLZ6S045uHh80K7Cy+2Qk8V60qeeg6qRnyt+MG8NypxmtAlXhu/I+IfJLaabvmiKxNWqM7YgLrjDQ81v9I9tB9Vff2k+2ObYW3qiKdEXlRxSQUBHZhvtkFvKRHj5WL+oocbVG0cLqYwItvN/4iRtd4bvyPmHff7qk3cur23pu0z2IC64w0PNb/iHn7rSqUN67o9UyUS2dkY6fcyqf6nv/CzpWdr+B1qcaTElUy3uForRxb1htP0Zae4rnxPzLvFeMP2rJaZ6TqJ7+pMu7pjEgdsM5Iw2P9j3y50Rhp6aww/iL941KtkT/eKVISVRDQiG92Ald1XOeeNcD8zHwFuy7+1DVmjnXjf+Sdy3eevuenWiOr0s4YaY1IHbDOSMNj/Y+8m5jnnjlE8pP2lmXN0xpZl7CjbE5yYCO+2fpz8NbU+KGHzU9MYPmqb5fJld4b/yNzL+0w9JDWyMPK7JTWWeqAtUYaHut/ZEGPxNuMH+YXJ3V7pEZvZGH3uIF5AY74xN9kgUdg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBIzB4BAaPwOARGDwCg0dg8AgMHoHBi0TgnFTrM6c6Fc4LsSMC++tMk19LkxehwN+kj0289tN6wK7p8fGPiLzVo+P0ClmVHH/rScnpPztNNvRJGl0Y1qsNskgFVs/X/CmjHvCqvkUH2+3J7Zh34tp5+9pvq5w2VnLaPFNVELfRNWNYWK82yCIV+IJS2ZVSD/izH33hFnn0AZFdm+dNETnRqianvVuWDhY5EvU/LjLXLIpU4F4iu+sD1zzevf09lVMXmJ/PMP9dSExBzuWGeHyK0dHwXWvQRSpwbx/g745JXurK2bNEvlo1b6pIwQXunBSRl38lUr05rFcbZASu69nB+UXXvL69076CjD/v7bCj+q7RYgJ/l/hl5R8GhPVqgyzSgVvFxMSYC1GXDG+XeFe1LO0WP6lS/pKcMPL7WmB5/7K4QYfCfcHBFInAERWBwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweAQGj8DgERg8AoNHYPAIDB6BwSMweP8BfgY9HnpDVOcAAAAASUVORK5CYII="></p>
+<p><img src="data:image/png;base64,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"></p>
 <p><strong>Figura 1.</strong> <em>Dotchart</em> mostrando resultados
 ordenados de puntuación de <span class="math inline">\(lnL\)</span> para
 los modelos indicados, estimados sobre una filogenia <span class="math inline">\(NJ-JC\)</span>, y el alineamiento
 <em>primates.phy</em>.</p>
 <p>La gráfica revela claramente la importancia los parámetros de
-frecuencia de bases, ti/tv y heterogeneidad de tasas entre sitios,
-reflejados en los incrementos altamente significativos de <span class="math inline">\(lnL\)</span> de los modelos de complejidad
+<strong>frecuencia de bases</strong>, <strong>ti/tv</strong> y
+<strong>heterogeneidad de tasas entre sitios modelada con una
+distribución gamma (<span class="math inline">\(\Gamma\)</span>)</strong>, reflejados en los
+incrementos altamente significativos de <span class="math inline">\(lnL\)</span> de los modelos de complejidad
 creciente analizados.</p>
 </div>
 <div id="evaluación-formal-de-ajuste-relativo-entre-pares-de-modelos-anidados-con-grado-creciente-de-parametrización-mediante-pruebas-de-razones-de-verosimilitud-lrts" class="section level4" number="3.2.3.2">
@@ -1029,13 +1050,14 @@ creciente analizados.</p>
 de ajuste relativo entre pares de modelos anidados con grado creciente
 de parametrización, mediante <b>pruebas de razones de verosimilitud</b>
 (<span class="math inline">\(LRTs\)</span>)</h4>
-<p>Examinando la <b>figura 1</b>, vemos que los modelos <span class="math inline">\(JC69\)</span> y <span class="math inline">\(F81\)</span> tienen puntajes de verosimilitud muy
-distintos. La pregunta es: ¿Son significativamente distintos?. Vamos a
-hacer una <strong>prueba de cocientes de verosimilitudes</strong> o
-<span class="math inline">\(LRT\)</span> para evaluar estadísticamente
-si existe un sesgo significativo en <strong>frecuencia de baes</strong>
-(<span class="math inline">\(-f\ e\)</span>), que justifique estimar
-tres parámetros libres adicionales (por <span class="math inline">\(F81\)</span>).</p>
+<p>Examinando la <b>figura 1</b>, vemos que los modelos <strong><span class="math inline">\(JC69\)</span></strong> y <strong><span class="math inline">\(F81\)</span></strong> tienen puntajes de
+verosimilitud muy distintos. La pregunta es: ¿Son significativamente
+distintos?. Vamos a hacer una <strong>prueba de cocientes de
+verosimilitudes</strong> o <span class="math inline">\(LRT\)</span> para
+evaluar estadísticamente si existe un sesgo significativo en
+<strong>frecuencia de baes</strong> (<span class="math inline">\(-f\
+e\)</span>), que justifique estimar tres parámetros libres adicionales
+(por <span class="math inline">\(F81\)</span>).</p>
 <p>Recordemos que:</p>
 <ol style="list-style-type: decimal">
 <li>Las pruebas de razones de verosimilitud (<span class="math inline">\(LRTs\)</span>) sólo permiten <strong>comparar
@@ -1051,13 +1073,14 @@ lnL_0)\)</span> sigue una distribución de chi-cuadrada:</li>
 <p><span class="math display">\[\chi^2 = \sum \frac {(O -
 E)^2}{E}\]</span></p>
 <pre style="background: Cornsilk;"><code># 6.3 Entre los dos modelos que parecen empatados, veamos si existen o no diferencias significativas, 
-#     corriendo una prueba estadistica formal: dado que los modelos HKY+G u HKY+G+I estan anidados,
+#     corriendo una prueba estadistica formal: dado que los modelos JC69 y F81 estan anidados,
 #     podemos correr un simple LRT (prueba de razones de verosimilitudes): LRT = 2(lnL1 - lnL 0)
 dfr
 
 # LRT = 2(   lnL1    -    lnL0  )
-xsq &lt;- 2*(-6303.66088 - -6424.20245) # 2 veces la diferencia de lnL entre el alternativo - modelo nulo
-xsq # [1] 241.0831 # Este es un valor gigantesco de la ji-cuadrada.
+# 2 veces la diferencia de lnL entre el alternativo (F81) - modelo nulo (JC69)
+xsq &lt;- 2*(-6284.99565 - -6424.20245) 
+xsq # [1] 278.4136 # Este es un valor gigantesco de la ji-cuadrada, y por tanto ALTAMENTE SIGNIFICATIVO.
 
 # cómputo de estadísticas
 pchisq(xsq,1)      # 1;  este es el valor critico de la X2 para el estadistico LRT con 1 grado de libertad; [1] 1
@@ -1066,20 +1089,18 @@ pchisq(xsq,1)      # 1;  este es el valor critico de la X2 para el estadistico L
 
 q()         # para salir de R
             # decimos que NO quieren salvar sesion</code></pre>
+<p>En general, cuando observamos una diferencia de <span class="math inline">\(lnL\)</span> de decenas de unidades entre modelos
+anidados, la diferencia será significativa, como podrás comprobar en el
+siguiente ejercicio:</p>
 <ul>
 <li><strong>Tarea</strong>: repite el ejercicio de evaluación de
 cocientes de similitud para las siguientes parejas de modelos anidados:
 <ul>
-<li>F81-HKY85 (¿qué evaluamos con este contraste de hipótesis, y los dos
-que siguen?)</li>
-<li>HKY85-HKY85+G</li>
-<li>HKY85+G-HKY85+I+G</li>
+<li>K80 vs. HKY85 (¿qué evaluamos con este contraste de hipótesis, y los
+dos que siguen?)</li>
+<li>HKY85+I vs. KY85+I+G</li>
 </ul></li>
 </ul>
-<p>En cuanto a la parametrización adecuada de un modelo, en lo personal
-uso una aproximación conservadora, favoreciendo por ejemplo el modelo
-<span class="math inline">\(HKY85+G\)</span> sobre el <span class="math inline">\(HKY85+G+I\)</span>, ya que el <span class="math inline">\(LRT\)</span> tiene una <i>p </i> &gt; 0.01 (aunque
-&lt; 0.05) (¡haz el ejercicio propuesto!)</p>
 </div>
 </div>
 <div id="estima-de-la-filogenia-bajo-el-mejor-modelo-encontrado-hky85g" class="section level3" number="3.2.4">
@@ -1087,19 +1108,22 @@ uso una aproximación conservadora, favoreciendo por ejemplo el modelo
 filogenia bajo el mejor modelo encontrado: HKY85+G</h3>
 <p>Estimemos la filogenia de máxima verosimilitud bajo el modelo
 seleccionado: <span class="math inline">\(HKY+G\)</span></p>
-<p>Nótese que usamos sólo la parameterización del modelo (<code>-m HKY85
--c 4 -a e</code>), dejando que <em>phyml</em> optimice todos los
-parámetros, incluyendo ahora la topología, longitudes de ramas y tasas
-<code>-o tlr</code>.</p>
+<p>Nótese que usamos sólo la parameterización del modelo seleccionado
+(<code>-m HKY85 -c 4 -a e</code>), pero no los varlores de los
+parámetros, ya que fueron optimizados sobre el árbol <span class="math inline">\(NJ-JC\)</span>.</p>
+<p>Pediremos a <em>phyml</em> que optimice todos los parámetros,
+incluyendo ahora la <em>topología</em>, <em>longitudes de ramas</em> y
+<em>parámetros del modelo de sustitución</em> con la opción <code>-o
+tlr</code>.</p>
 <ul>
 <li><strong>Pregunta</strong>: ¿qué tipo de rearreglos de rama usa <span class="math inline">\(phyml\)</span> en la llamada mostrada
 seguidamente?</li>
 </ul>
 <pre style="background: Cornsilk;"><code>
-phyml -i primates.phy -d nt -m HKY85 -c 4 -a e -o tlr</code></pre>
+phyml -i primates.phy -d nt -m HKY85 -f m -t e -c 4 -a e -o tlr</code></pre>
 <p>Una vez terminada la búsqueda, veamos las estimas de máxima
-verosimilitud de los parámetros</p>
-<pre style="background: Cornsilk;"><code># veamos las estimas de máxima verosimilitud de los parámetros
+verosimilitud de los parámetros del modelo de sustitución HKG+G.</p>
+<pre style="background: Cornsilk;"><code># veamos las estimas de máxima verosimilitud de los parámetros del modelo de sustitución HKG+G
 cat primates.phy_phyml_stats.txt</code></pre>
 <pre style="background: AliceBlue;">
 ...truncado
@@ -1108,26 +1132,28 @@ cat primates.phy_phyml_stats.txt</code></pre>
 . Initial tree:             BioNJ
 . Model of nucleotides substitution:    HKY85
 . Number of taxa:           12
-. Log-likelihood:           -5728.06250
+. Log-likelihood:           -5711.93881
 . Unconstrained log-likelihood:     -4184.81795
-. Composite log-likelihood:         -14190.06353
+. Composite log-likelihood:         -14275.02293
 . Parsimony:                1153
-. Tree size:                3.02303
+. Tree size:                3.38341
 . Discrete gamma model:         Yes
   - Number of classes:          4
-  - Gamma shape parameter:      0.404
-  - Relative rate in class 1:       0.01730 [freq=0.250000]         
-  - Relative rate in class 2:       0.18474 [freq=0.250000]         
-  - Relative rate in class 3:       0.73557 [freq=0.250000]         
-  - Relative rate in class 4:       3.06239 [freq=0.250000]         
-. Transition/transversion ratio:    10.004945
+  - Gamma shape parameter:      0.363
+  - Relative rate in class 1:       0.01179 [freq=0.250000]         
+  - Relative rate in class 2:       0.15381 [freq=0.250000]         
+  - Relative rate in class 3:       0.68822 [freq=0.250000]         
+  - Relative rate in class 4:       3.14618 [freq=0.250000]         
+. Transition/transversion ratio:    12.726587
 . Nucleotides frequencies:
-  - f(A)=  0.32412
-  - f(C)=  0.30402
-  - f(G)=  0.10553
-  - f(T)=  0.26633
+  - f(A)=  0.36372
+  - f(C)=  0.31987
+  - f(G)=  0.08153
+  - f(T)=  0.23488
 ...truncado
 </pre>
+<p>Compara estos parámetros con los obtenidos al durante el proceso de
+selección de modelos usando el árbol <span class="math inline">\(NJ-JC\)</span>. ¿Notan diferencias?</p>
 <p>Los resultados de estimas de máxima verosimilitud de los parámetros
 del modelo <span class="math inline">\(HKY+G\)</span> arriba mostrados
 (del archivo primates.phy_phyml_stats.txt) son fáciles de entender,
@@ -1179,65 +1205,53 @@ rama.</p>
 el ‘Log-likelihood’ y la guardamos en un archivo adecuadamente
 nombrado.</p>
 <pre style="background: Cornsilk;"><code># GTR+G+I
-phyml -i primates.phy -m GTR -a e -v e -u primates_JC.ph -o lr 
+phyml -i primates.phy -m GTR -a e -f m -v e -u primates_JC.ph -b 0 -o lr 
 grep Log-like primates.phy_phyml_stats.txt &gt; GTRGI.fit  
 
 # visualizamos las tasas del modelo GTR+G+I
 grep &#39;&lt;-&gt;&#39; primates.phy_phyml_stats.txt</code></pre>
 <pre style="background: AliceBlue;">
-# GTRIG                # 5rates 4rates &lt;&lt; clases de tasas para modelos simplificados de 5 y 4 tasas
-#  A &lt;-&gt; C    9.10202  #    1     1
-#  A &lt;-&gt; G   57.09192  #    2     2
-#  A &lt;-&gt; T    5.90739  #    3     1 
-#  C &lt;-&gt; G    3.29994  #    4     3
-#  C &lt;-&gt; T   61.03170  #    2     2
-#  G &lt;-&gt; T    1.00000  #    5     4
+# GTRIG                 2   3    3   4 rates &lt;&lt; clases de tasas para modelos simplificados de 5 y 4 tasas
+  A &lt;-&gt; C    3.60550    0   0    0   0
+  A &lt;-&gt; G   43.95008    1   1    1   1
+  A &lt;-&gt; T    3.05954    0   0    0   0
+  C &lt;-&gt; G    2.37102    0   0    0   2
+  C &lt;-&gt; T   34.89961    1   2    1   1
+  G &lt;-&gt; T    1.00000    0   0    2   3
 </pre>
 </div>
-<div id="evaluación-de-modelos-simplificados-de-5-y-4-tasas" class="section level3" number="3.3.2">
+<div id="evaluación-de-modelos-simplificados-de-2-3-y-4-tasas" class="section level3" number="3.3.2">
 <h3><span class="header-section-number">3.3.2</span> Evaluación de
-modelos simplificados de 5 y 4 tasas</h3>
+modelos simplificados de 2, 3 y 4 tasas</h3>
 <p>En base a los resultados arriba mostrados, vamos a evaluar modelos
 alternativos simplificados.</p>
 <p>La simplificación más obvia es igualar ambas tasas de transiciones,
-ya que son muy parecidas entre sí (diferencia de ~6.4%).</p>
+ya que son muy parecidas entre sí y alrededor de un órden de magnitud
+más altas que las transversiones.</p>
 <p>Evaluaremos otras opciones de simplificación o reducción de número de
 tasas, como se indica en las columnas numéricas mostradas arriba, junto
 a las tasas del <span class="math inline">\(GTR+I+G\)</span></p>
 <p>Copia el siguiente bloque completo en la terminal para ejecutar todos
 los comandos secuencialmente.</p>
-<pre style="background: Cornsilk;"><code># Evaluación del modelo alternativo (simplificado) de 5 tasas (123425)  + G + I
-phyml -i primates.phy -m 123425 -f e -a e -v e -u primates_JC.ph -o lr &amp;&gt; /dev/null
-grep Log- primates.phy_phyml_stats.txt &gt; model_123425GI.fit
+<pre style="background: Cornsilk;"><code># Evaluación del modelo alternativo (simplificado) de 2 tasas (010010) + G # NOTA: es el HKY85+G
+phyml -i primates.phy -m HKY85 -f m -a e -u primates_JC.ph -b 0 -o lr &amp;&gt; /dev/null
+grep Log- primates.phy_phyml_stats.txt &gt; model_HKY85G.fit
 
-# Evaluación del modelo alternativo (simplificado) de 5 tasas (123425)  + G
-phyml -i primates.phy -m 123425 -f e -a e -u primates_JC.ph -o lr &amp;&gt; /dev/null
-grep Log- primates.phy_phyml_stats.txt &gt; model_123425G.fit
-
-# Evaluación del modelo alternativo (simplificado) de 4 tasas: (121324) + G + I
-phyml -i primates.phy -m 121324 -f e -a e -v e -u primates_JC.ph -o lr &amp;&gt; /dev/null
-grep Log- primates.phy_phyml_stats.txt &gt; model_121324GI.fit
-
-# Evaluación del modelo alternativo (simplificado) de 4 tasas: (121324) + G
-phyml -i primates.phy -m 121324 -f e -a e -u primates_JC.ph -o lr &amp;&gt; /dev/null
-grep Log- primates.phy_phyml_stats.txt &gt; model_121324G.fit
+phyml -i primates.phy -m TN93 -f m -a e -u primates_JC.ph -b 0 -o lr &amp;&gt; /dev/null
+grep Log- primates.phy_phyml_stats.txt &gt; model_TN93G.fit
 
 # Visualicemos los ajustes, ordenados por valores decrecientes de lnL:
 for f in *fit; do echo -ne &quot;$f\t&quot;; cat $f; done | awk &#39;{print $1,$4}&#39; \
  | sed &#39;s/\.fit//&#39; | sort -k2 | column -t</code></pre>
 <pre style="background: AliceBlue;">
-GTRGI           -5719.39190
-model_123425G   -5719.45691
-model_123425GI  -5719.49337
-model_121324G   -5720.87757
-model_121324GI  -5720.90443
-===============================
-HKY85G          -5728.06239
-HKY85GI         -5728.06290
+GTRGI          -5708.92372
+TN93G          -5710.55182
+HKYG           -5711.93899
 </pre>
 <p>Noten que si bien el modelo de más alta parametrización (<span class="math inline">\(GTR+G+I\)</span>) tiene el puntaje más alto de
-<span class="math inline">\(lnL\)</span>, la diferencia contra los
-competidores es muy pequeña, &lt; 1-2 unidades de <span class="math inline">\(lnL\)</span>.</p>
+<span class="math inline">\(lnL\)</span>, la diferencia contra el
+competidor <span class="math inline">\(HKY+G\)</span> es pequeña, &lt;
+1-2 unidades de <span class="math inline">\(lnL\)</span>.</p>
 <p>Usemos el <strong>criterio de información de Akaike (AIC)</strong>
 para evaluar estos resultados formalmente.</p>
 </div>
@@ -1268,16 +1282,15 @@ nbranches &lt;- 2*(n-3) # número de ramas libres a estimar para n secuencias
 
 # construyamos el dataframe model_AICs, con los vectores &quot;model&quot; y &quot;AIC&quot;
 # vector model con los nombres de los modelos
-model &lt;- c(&quot;AIC_GTRGI&quot;, &quot;AIC_5ratesGI&quot;, &quot;AIC_4ratesGI&quot;, &quot;AIC_5ratesG&quot;, &quot;AIC_4ratesG&quot;)
+model &lt;- c(&quot;AIC_GTRGI&quot;, &quot;AIC_TN93T&quot;, &quot;AIC_HKYG&quot;)
 
-AIC_GTRGI &lt;- -2*(-5719.39194) + (2*(10+nbranches))
-AIC_5ratesGI &lt;- -2*(-5719.49325) + (2*(9+nbranches))
-AIC_4ratesGI &lt;- -2*(-5720.90447) + (2*(8+nbranches))
-AIC_5ratesG &lt;- -2*(-5719.45719) + (2*(8+nbranches))
-AIC_4ratesG &lt;- -2*(-5720.87725) + (2*(8+nbranches))
+AIC_GTRGI &lt;- -2*(-5708.92372) + 2*(10+nbranches)
+AIC_TN93G &lt;- -2*(-5710.55182) + 2*(7+nbranches)
+AIC_HKYG &lt;- -2*(-5711.93898) + 2*(6+nbranches)
+
 
 # vector AIC, con los AICi de cada modelo, en el mismo orden.
-AIC &lt;- c(AIC_GTRGI, AIC_5ratesGI, AIC_4ratesGI, AIC_5ratesG, AIC_4ratesG)
+AIC &lt;- c(AIC_GTRGI, AIC_TN93G, AIC_HKYG)
 
 # el dataframe
 model_AICs &lt;- data.frame(model, AIC)
@@ -1295,76 +1308,50 @@ crecientes de <span class="math inline">\(AICi\)</span>, vemos que el
 <span class="math inline">\(AICmin\)</span> corresponde al modelo
 <em>AIC_5ratesG</em></p>
 <pre style="background: AliceBlue;">
-&gt; model_AICs[order(model_AICs$AIC),]
-         model      AIC
-4  AIC_5ratesG 11490.91  &lt;&lt;&lt; AIC_min
-2 AIC_5ratesGI 11492.99
-5  AIC_4ratesG 11493.75
-3 AIC_4ratesGI 11493.81
-1    AIC_GTRGI 11494.78
+model_AICs[order(model_AICs$AIC),]
+      model      AIC
+2 AIC_TN93G 11471.10
+3  AIC_HKYG 11471.88
+1 AIC_GTRGI 11473.85
 </pre>
 <p>Construyamos un nuevo <span class="math inline">\(data\ fame\)</span>
 <span class="math inline">\(model\_deltas\)</span> con los vectores
 <span class="math inline">\(models\)</span> y <span class="math inline">\(deltas\)</span>, con los valores de <span class="math inline">\(\Delta_i\)</span> para cada modelo, con respecto
 al <span class="math inline">\(AIC\_min\)</span></p>
 <pre style="background: Cornsilk;"><code># compute deltas
-delta_5ratesGI &lt;- AIC_5ratesGI - AICmin
 delta_GTRGI &lt;- AIC_GTRGI - AICmin
-delta_4ratesGI &lt;- AIC_4ratesGI - AICmin
-delta_5ratesG &lt;- AIC_5ratesG - AICmin
-delta_4ratesG &lt;- AIC_4ratesG - AICmin
+delta_HKYG &lt;- AIC_HKYG - AICmin
+delta_TN93G &lt;- AIC_TN93G - AICmin
 
 # build vectors
-deltas &lt;- c(delta_5ratesGI, delta_GTRGI, delta_4ratesGI, delta_5ratesG, delta_4ratesG)
-models &lt;- c(&quot;5ratesGI&quot;, &quot;GTRGI&quot;,&quot;4ratesGI&quot;, &quot;5ratesG&quot;, &quot;4ratesG&quot;)
+deltas &lt;- c(delta_GTRGI, delta_HKYG, delta_TN93G)
+models &lt;- c(&quot;GTRGI&quot;,&quot;HKYG&quot;, &quot;TN93G&quot;)
 
 # build and print model_deltas data frame
 model_deltas &lt;- data.frame(models, deltas)
 model_deltas[order(model_deltas$deltas),]</code></pre>
 <pre style="background: AliceBlue;">
-    models  deltas
-4  5ratesG 0.00000
-1 5ratesGI 2.07212
-5  4ratesG 2.84012
-3 4ratesGI 2.89456
-2    GTRGI 3.86950
+  models  deltas
+3  TN93G 0.00000
+2   HKYG 0.77432
+1  GTRGI 2.74380
 </pre>
-<p><strong>Conclusión:</strong></p>
+</div>
+<div id="conclusiones" class="section level3" number="3.3.4">
+<h3><span class="header-section-number">3.3.4</span> Conclusiones</h3>
 <ul>
-<li><p>el mejor modelo (AICmin) es <b>5ratesG (123425)</b>. Es decir el
-parámetro de <span class="math inline">\(pInv\)</span> es perfectamente
-prescindible, y un modelo de 5 tasas es suficiente.</p></li>
-<li><p>le sigue el modelo 5ratesG, a una distancia <span class="math inline">\(\Delta_{5ratesGI} = 2.07212\)</span>. Como este
-valor es <span class="math inline">\(&gt;2\)</span>, puede considerarse
-un pobre competidor, indicando nuevamente que el parámetro <span class="math inline">\(pInv\)</span> no contribuye significativamente al
-ajuste.</p></li>
-<li><p>el tercer, cuarto y quinto modelo en el ranking son <span class="math inline">\(4ratesGI\)</span>, <span class="math inline">\(5ratesG\)</span> y <span class="math inline">\(4ratesG\)</span>, todos con <span class="math inline">\(\Delta_i &gt; 2.8\)</span>, y por tanto son
-modelos significativamente peores.</p></li>
-<li><p>queda claro que, si bien el modelo <span class="math inline">\(GTR+G+I\)</span> presenta el valor más alto de
+<li>El mejor modelo (AICmin) evaluado es <b>TN93G (0100020)</b>, pero el
+modelo <b>HKYG (0100010)</b> es un serio competidor, ya que está a una
+distancia <span class="math inline">\(\Delta_i\ =\ 0.77\)</span>.</li>
+<li>El parámetro de <span class="math inline">\(pInv\)</span> es
+perfectamente prescindible, y un modelo de 2 o tres tasas parece
+suficiente para obtener un buen ajuste.</li>
+<li>Queda claro que, si bien el modelo <span class="math inline">\(GTR+G+I\)</span> presenta el valor más alto de
 <span class="math inline">\(lnL\)</span>, al ponderar los parámetros
-libres a estimar, resulta ser el peor de los modelos evaluados por AIC,
-indicando que está claramente sobre-parametrizado.</p></li>
-<li><p><strong>Tarea</strong>: Evalúa mediante AICs otras
-simplificaciones en las clases de transversiones. Debes de evaluar al
-menos un modelo adicional de 4 tasas y otro de tres.</p></li>
+libres a estimar, resulta ser el peor modelo de los evaluados por AIC
+(<span class="math inline">\(\Delta_i\ =\ 2.74\)</span>), indicando que
+está claramente sobre-parametrizado.</li>
 </ul>
-</div>
-<div id="estima-de-la-filogenia-de-máxima-verosimilitud-con-el-mejor-modelo-de-5-tasasg-con-parametrización-123425" class="section level3" number="3.3.4">
-<h3><span class="header-section-number">3.3.4</span> Estima de la
-filogenia de máxima verosimilitud con el mejor modelo de 5 tasas+G con
-parametrización 123425</h3>
-<p>Una vez encontrado el modelo simplificado, podemos proceder a estimar
-la filogenia bajo dicho modelo</p>
-<pre style="background: Cornsilk;"><code>phyml -i primates.phy -m 123425 -f e -a e -c 4 -o tlr &amp;&gt; /dev/null</code></pre>
-<p><img src="data:image/png;base64,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"></p>
-<p><strong>Figura 3.</strong> Mejor árbol de máxima verosimilitud
-encontrado para primates.phy bajo el <b>modelo de 5 tasas+G</b>
-encontrado mediante la estrategia de reducción de parámetros del modelo
-<span class="math inline">\(GTR+G+I\)</span> y evaluación de mejores
-modelos mediante <span class="math inline">\(AIC\)</span>.</p>
-</div>
-<div id="conclusión" class="section level3" number="3.3.5">
-<h3><span class="header-section-number">3.3.5</span> CONCLUSIÓN</h3>
 <p>En mi experiencia, esta estrategia es buena por dos motivos:</p>
 <ol style="list-style-type: decimal">
 <li>es muy rápida (posiblemente la más rápida)</li>
@@ -1376,51 +1363,20 @@ incluyendo estrategias automáticas, como las implementadas en <span class="math
 <p>Para una implementación eficiente de la estrategia arriba descrita,
 habría que escribir un <span class="math inline">\(script\)</span> para
 automatizarla.</p>
-<ul>
-<li>Veamos los parámetros relevantes</li>
-</ul>
-<pre style="background: Cornsilk;"><code>cat primates.phy_phyml_stats.txt</code></pre>
-<pre style="background: AliceBlue;">
-... truncado
-. Sequence filename:            primates.phy
-. Data set:                 #1
-. Initial tree:             BioNJ
-. Model of nucleotides substitution:    Custom (0\u040f\ufffdU)
-. Number of taxa:           12
-. Log-likelihood:           -5719.51316
-. Unconstrained log-likelihood:     -4184.81795
-. Composite log-likelihood:         -14190.06353
-. Parsimony:                1153
-. Tree size:                2.82389
-. Discrete gamma model:         Yes
-  - Number of classes:          4
-  - Gamma shape parameter:      0.427
-  - Relative rate in class 1:       0.02083 [freq=0.250000]         
-  - Relative rate in class 2:       0.20180 [freq=0.250000]         
-  - Relative rate in class 3:       0.75916 [freq=0.250000]         
-  - Relative rate in class 4:       3.01820 [freq=0.250000]         
-. Nucleotides frequencies:
-  - f(A)=  0.32412
-  - f(C)=  0.30402
-  - f(G)=  0.10553
-  - f(T)=  0.26633
-. GTR relative rate parameters :
-  A &lt;-&gt; C   14.97113
-  A &lt;-&gt; G   100.00000
-  A &lt;-&gt; T    9.89700
-  C &lt;-&gt; G    5.80625
-  C &lt;-&gt; T   100.00000
-  G &lt;-&gt; T    1.00000
-. Instantaneous rate matrix : 
-  [A---------C---------G---------T------]
-  -0.63081   0.16185   0.37524   0.09373  
-   0.17255  -1.14137   0.02179   0.94703  
-   1.15252   0.06277  -1.22476   0.00947  
-   0.11407   1.08105   0.00375  -1.19887
-... truncado
-</pre>
-<p>El examen de la matriz de tasas relativas GTR sugiere que existen
-simplificaciones adicionales. ¿Cuáles consideras? Evalúalas.</p>
+</div>
+<div id="tarea-de-ajuste-de-modelos-paramétricos-mediante-criterios-de-información-aic-y-bic" class="section level3" number="3.3.5">
+<h3><span class="header-section-number">3.3.5</span> Tarea de ajuste de
+modelos paramétricos mediante criterios de información AIC y BIC</h3>
+<ol style="list-style-type: decimal">
+<li>Evalúa mediante AICs las otras simplificaciones en las clases de
+transversiones propuestas en el esquema de tasas del modelo <span class="math inline">\(GTR+I+G\)</span>.</li>
+<li>Compara los puntajes de <span class="math inline">\(lnL\)</span> de
+todos estos modelos entre sí mediante análisis de <span class="math inline">\(\Delta_i\)</span>, incluyendo los modelos <span class="math inline">\(HKY+G\)</span> y <span class="math inline">\(TN93G\)</span> evaluados previamente.</li>
+<li>Como veremos en la siguiente sección, el criterio de información de
+Akaike <span class="math inline">\(AIC\)</span> tiende a seleccionar
+modelos más parametrizados que el citerio de información bayesiano <span class="math inline">\(BIC\)</span> que presentaremos en la siguiente
+sección. Repite el análisis usando <span class="math inline">\(BIC\)</span>.</li>
+</ol>
 <hr />
 </div>
 </div>
@@ -1475,24 +1431,24 @@ mv &quot;${infile}&quot;_phyml_tree.txt primates_LG.ph
 declare -A model_scores
 
 # Corramos las matrices derivadas de genes nucleares en un bucle for para un procesado más eficiente 
-# A las matrices de base le agregamos sucesivamente parámetros adicionales: -a e; -f e; -f e -a e
+# A las matrices de base le agregamos sucesivamente parámetros adicionales: -a e; -f e; -f m -a e
 # Noten el uso de awk para procesar directamente los valores de lnL de los archivos *_phyml_stats.txt,
 #   los cuales se guardan en el hash model_scores, usando como llave el nombre del modelo :)
 for mat in AB BLOSUM62 DAYHOFF JTT LG VT WAG; do
      echo &quot; &gt;&gt;&gt; running: phyml -i ${infile} -d aa -m $mat -u primates_LG.ph -c 1 -v 0 -o lr &amp;&gt; /dev/null&quot;
-     phyml -i ${infile} -d aa -m $mat -u primates_LG.ph -c 1 -o lr &amp;&gt; /dev/null     
+     phyml -i ${infile} -d aa -m $mat -f m -u primates_LG.ph -c 1 -o lr &amp;&gt; /dev/null     
      model_scores[&quot;$mat&quot;]=$(awk &#39;/Log-like/{print $NF}&#39; ${infile}_phyml_stats.txt)
 
      echo &quot; &gt;&gt;&gt; running: phyml -i ${infile} -d aa -m $mat -c 4 -a e -u primates_LG.ph -o lr &amp;&gt; /dev/null&quot;
-     phyml -i ${infile} -d aa -m ${mat} -c 4 -a e -u primates_LG.ph -o lr &amp;&gt; /dev/null     
+     phyml -i ${infile} -d aa -m $mat -f m -c 4 -a e -u primates_LG.ph -o lr &amp;&gt; /dev/null     
      model_scores[&quot;${mat}+G&quot;]=$(awk &#39;/Log-like/{print $NF}&#39; ${infile}_phyml_stats.txt)
 
-     echo &quot; &gt;&gt;&gt; running: phyml -i ${infile} -d aa -m $mat -f e -c 1 -u primates_LG.ph -o lr &amp;&gt; /dev/null&quot;
-     phyml -i ${infile} -d aa -m $mat -f e -c 1 -u primates_LG.ph -o lr &amp;&gt; /dev/null     
+     echo &quot; &gt;&gt;&gt; running: phyml -i ${infile} -d aa -m $mat -f m -c 1 -u primates_LG.ph -o lr &amp;&gt; /dev/null&quot;
+     phyml -i ${infile} -d aa -m $mat -f m -c 1 -u primates_LG.ph -o lr &amp;&gt; /dev/null     
      model_scores[&quot;${mat}+f&quot;]=$(awk &#39;/Log-like/{print $NF}&#39; ${infile}_phyml_stats.txt)
 
-     echo &quot; &gt;&gt;&gt; running: phyml -i ${infile} -d aa -m $mat -u primates_LG.ph -f e -a e -o lr &amp;&gt; /dev/null&quot;
-     phyml -i ${infile} -d aa -m $mat -u primates_LG.ph -f e -a e -c 4 -o lr &amp;&gt; /dev/null     
+     echo &quot; &gt;&gt;&gt; running: phyml -i ${infile} -d aa -m $mat -f m -a e -u primates_LG.ph -o lr &amp;&gt; /dev/null&quot;
+     phyml -i ${infile} -d aa -m $mat -f m -c 4 -a e -u primates_LG.ph -o lr &amp;&gt; /dev/null     
      model_scores[&quot;${mat}+f+G&quot;]=$(awk &#39;/Log-like/{print $NF}&#39; ${infile}_phyml_stats.txt)
 done</code></pre>
 </div>
@@ -1590,7 +1546,7 @@ dev.off()</code></pre>
 <span class="math inline">\(lnL\)</span></li>
 </ul>
 <pre style="background: Cornsilk;"><code>eog dotchart_sorted_model_scores_for_primates_21_AA.png &amp;</code></pre>
-<p><img src="data:image/png;base64,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"></p>
+<p><img src="data:image/png;base64,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"></p>
 <p><strong>Figura 4. </strong> Puntaciones de máxima verosimilitud para
 los modelos evualuados usando un árbol <span class="math inline">\(NJ-LG\)</span> con el alineamiento <span class="math inline">\(primates\_21\_AA.phy\)</span></p>
 <pre style="background: Cornsilk;"><code># veamos los resultados ordenados por valor decreciente de lnL
@@ -1655,7 +1611,7 @@ cat (&quot;deltaAIC&quot;, &quot;\t&quot;, &quot;value&quot;, &quot;\n&quot;, &q
 # deltaJTTf      172.26 
 </pre>
 </div>
-<div id="conclusión-1" class="section level3" number="4.2.3">
+<div id="conclusión" class="section level3" number="4.2.3">
 <h3><span class="header-section-number">4.2.3</span> CONCLUSIÓN</h3>
 <p>El análisis de <span class="math inline">\(AIC\)</span> claramente
 muestra que por mucho <strong>el mejor modelo de los evaluados es
@@ -1665,12 +1621,12 @@ tuvieron que estimar 19 parámetros libres, el incremento del ajuste fue
 mayor que la penalización consiguiente <span class="math inline">\(2Ni=38+39\)</span>.</p>
 </div>
 </div>
-<div id="búsqueda-intensiva-bajo-el-mejor-modelo-usando-rearreglos-tipo-best-y-10-árboles-de-semilla" class="section level2" number="4.3">
+<div id="búsqueda-intensiva-bajo-el-mejor-modelo-usando-rearreglos-tipo-best-y-5-árboles-de-semilla" class="section level2" number="4.3">
 <h2><span class="header-section-number">4.3</span> Búsqueda intensiva
-bajo el mejor modelo, usando rearreglos tipo BEST y 10 árboles de
+bajo el mejor modelo, usando rearreglos tipo BEST y 5 árboles de
 semilla</h2>
 <pre style="background: Cornsilk;"><code># finalmente, hagamos una busqueda intensiva bajo este modelo, usando el algoritmo BEST the rearreglo de ramas, con 5 arboles de semilla y -o tlr
-phyml -i primates_21_AA.phy -d aa -m JTT -c 4 -a e -f e -s BEST --rand_start --n_rand_starts 5</code></pre>
+phyml -i primates_21_AA.phy -d aa -m JTT -c 4 -a e -f m -s BEST --rand_start --n_rand_starts 5</code></pre>
 <div id="despliegue-y-edición-del-árbol-con-figtree-1" class="section level3" number="4.3.1">
 <h3><span class="header-section-number">4.3.1</span> Despliegue y
 edición del árbol con figtree</h3>
@@ -1722,9 +1678,7 @@ y <em>phyml_protModelFinder.sh</em></h1>
 análisis corriendo un bucle for y guardando los valores de <span class="math inline">\(lnL\)</span> para cada modelo en el hash <span class="math inline">\(model\_scores\)</span>, este trabajo sigue siendo
 tedioso, con mucha intervención manual, lo cual, además de lento, nos
 expone a cometer errores.</p>
-<p>Los pasos seguidos son fácilmente automatizables y optimizables,
-escribiendo un <span class="math inline">\(script\)</span> en <span class="math inline">\(Bash\)</span> u otro lenguaje de scripting. Además
-del <span class="math inline">\(bucle\ for\)</span> y el <span class="math inline">\(hash\)</span>, vamos a poder optimizar el proceso
+<p>Los pasos seguidos son fácilmente automatizables mediante un <span class="math inline">\(script\)</span> en <span class="math inline">\(Bash\)</span> u otro lenguaje. Además del <span class="math inline">\(bucle\ for\)</span> y el <span class="math inline">\(hash\)</span>, vamos a poder optimizar el proceso
 si escribimos <span class="math inline">\(funciones\)</span> que
 encapsulen el trabajo de las diferentes operaciones que tenemos que
 hacer de manera repetida. Como discutimos en el tema de funciones, éstas
@@ -1809,7 +1763,7 @@ indicarle al programa que queremos hacer la búsqueda final de árboles a
 partir de <span class="math inline">\(n\)</span> árboles de semilla de
 adición secuencial aleatorizada, bajo el mejor modelo seleccionado.</p>
 <p>Probemos con el set de modelos para genes nucleares</p>
-<pre style="background: Cornsilk;"><code>phyml_protModelFinder.sh primates_21_AA.phy 1</code></pre>
+<pre style="background: Cornsilk;"><code>phyml_protModelFinder.sh primates_21_AA.phy 5</code></pre>
 <p>Abajo vemos el STDOUT del <span class="math inline">\(script\)</span>.</p>
 <ul>
 <li><p>Antes de inciar, comprueba que estamos corriendo una versión de
@@ -1892,24 +1846,25 @@ sobreparametrizados. Como ejemplo de ésto, vean en la tabla que se
 muestra abajo que BIC selecciona a JTT+G, mientras que AIC selecciona
 JTT+f+G.</p>
 <pre>
-$ ./phyml_protModelFinder.sh primates_21_AA.phy 1
+$ phyml_protModelFinder.sh primates_21_AA.phy 5
 =========================================================================================
 # Bash version 5.1 OK
-# phyml_protModelFinder.sh v0.5 running on puma. Run started on: 2022-11-29 at 13:29:01
-/usr/bin/mpirun
+# phyml_protModelFinder.sh v0.9_2023-11-17 running on alisio. Run started on: 2023-11-19 at 18:35:44
+# running with phyml v.3.3_2023
+/home/vinuesa/anaconda3/bin/mpirun
 /usr/bin/phyml-mpi
 /usr/bin/awk
-/usr/bin/bc
+/home/vinuesa/anaconda3/bin/bc
 /usr/bin/sed
-/usr/bin/perl
-/usr/bin/phyml
+/home/vinuesa/anaconda3/bin/perl
+/usr/local/bin/phyml
 
 # Run check_dependencies() ... looks good: all required binaries are in place.
 
-# infile:primates_21_AA.phy model_set:1 mpi_OK:1
+# infile:primates_21_AA.phy; model_set:5; mpi_OK:1; seed trees: 1
 =========================================================================================
 
-13:29:01  # 1. Computing sequence stats for primates_21_AA.phy:
+18:35:44  # 1. Computing sequence stats for primates_21_AA.phy:
 - number of sequences: 21
 - number of sites: 500
 - number of branches: 39
@@ -1937,145 +1892,181 @@ idx AA  obs_freq
 20  M   0.0243
 --------------------------------------------------------------------------------
 
-13:29:01 1. Computing NJ-LG tree for input file primates_21_AA.phy with 21 sequences
+18:35:44 1. Computing NJ-LG tree for input file primates_21_AA.phy with 21 sequences
 --------------------------------------------------------------------------------
-2. running in a for loop to combine all base models in model_set 1=&gt;nuclear_genome_models, 
+2. running in a for loop to combine all base models in model_set 5=&gt;nuclear_and_viral, 
      with (or not) +G and or +f, and compute the model lnL, after optimizing branch lengths and rates
-13:29:02 # running: phyml -i primates_21_AA.phy -d aa -m AB -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
-13:29:03 # running: phyml -i primates_21_AA.phy -d aa -m AB -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:06 # running: phyml -i primates_21_AA.phy -d aa -m AB -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:07 # running: phyml -i primates_21_AA.phy -d aa -m AB -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
-13:29:10 # running: phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
-13:29:11 # running: phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:14 # running: phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:14 # running: phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
-13:29:17 # running: phyml -i primates_21_AA.phy -d aa -m DAYHOFF -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
-13:29:18 # running: phyml -i primates_21_AA.phy -d aa -m DAYHOFF -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:21 # running: phyml -i primates_21_AA.phy -d aa -m DAYHOFF -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:22 # running: phyml -i primates_21_AA.phy -d aa -m DAYHOFF -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
-13:29:25 # running: phyml -i primates_21_AA.phy -d aa -m DCMut -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
-13:29:26 # running: phyml -i primates_21_AA.phy -d aa -m DCMut -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:29 # running: phyml -i primates_21_AA.phy -d aa -m DCMut -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:30 # running: phyml -i primates_21_AA.phy -d aa -m DCMut -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
-13:29:33 # running: phyml -i primates_21_AA.phy -d aa -m JTT -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
-13:29:34 # running: phyml -i primates_21_AA.phy -d aa -m JTT -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:37 # running: phyml -i primates_21_AA.phy -d aa -m JTT -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:38 # running: phyml -i primates_21_AA.phy -d aa -m JTT -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
-13:29:41 # running: phyml -i primates_21_AA.phy -d aa -m LG -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
-13:29:42 # running: phyml -i primates_21_AA.phy -d aa -m LG -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:44 # running: phyml -i primates_21_AA.phy -d aa -m LG -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:45 # running: phyml -i primates_21_AA.phy -d aa -m LG -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
-13:29:48 # running: phyml -i primates_21_AA.phy -d aa -m VT -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
-13:29:49 # running: phyml -i primates_21_AA.phy -d aa -m VT -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:52 # running: phyml -i primates_21_AA.phy -d aa -m VT -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:53 # running: phyml -i primates_21_AA.phy -d aa -m VT -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
-13:29:56 # running: phyml -i primates_21_AA.phy -d aa -m WAG -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
-13:29:57 # running: phyml -i primates_21_AA.phy -d aa -m WAG -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:29:59 # running: phyml -i primates_21_AA.phy -d aa -m WAG -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
-13:30:00 # running: phyml -i primates_21_AA.phy -d aa -m WAG -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+--------------------------------------------------------------------------------
+18:35:44 # running: phyml -i primates_21_AA.phy -d aa -m AB -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:35:44 # running: phyml -i primates_21_AA.phy -d aa -m AB -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:45 # running: phyml -i primates_21_AA.phy -d aa -m AB -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:45 # running: phyml -i primates_21_AA.phy -d aa -m AB -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+18:35:46 # running: phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:35:46 # running: phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:47 # running: phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:47 # running: phyml -i primates_21_AA.phy -d aa -m BLOSUM62 -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+18:35:48 # running: phyml -i primates_21_AA.phy -d aa -m DAYHOFF -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:35:48 # running: phyml -i primates_21_AA.phy -d aa -m DAYHOFF -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:49 # running: phyml -i primates_21_AA.phy -d aa -m DAYHOFF -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:49 # running: phyml -i primates_21_AA.phy -d aa -m DAYHOFF -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+18:35:50 # running: phyml -i primates_21_AA.phy -d aa -m DCMut -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:35:50 # running: phyml -i primates_21_AA.phy -d aa -m DCMut -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:51 # running: phyml -i primates_21_AA.phy -d aa -m DCMut -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:51 # running: phyml -i primates_21_AA.phy -d aa -m DCMut -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+18:35:52 # running: phyml -i primates_21_AA.phy -d aa -m JTT -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:35:53 # running: phyml -i primates_21_AA.phy -d aa -m JTT -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:53 # running: phyml -i primates_21_AA.phy -d aa -m JTT -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:54 # running: phyml -i primates_21_AA.phy -d aa -m JTT -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+18:35:54 # running: phyml -i primates_21_AA.phy -d aa -m LG -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:35:55 # running: phyml -i primates_21_AA.phy -d aa -m LG -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:56 # running: phyml -i primates_21_AA.phy -d aa -m LG -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:56 # running: phyml -i primates_21_AA.phy -d aa -m LG -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+18:35:57 # running: phyml -i primates_21_AA.phy -d aa -m VT -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:35:57 # running: phyml -i primates_21_AA.phy -d aa -m VT -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:58 # running: phyml -i primates_21_AA.phy -d aa -m VT -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:35:58 # running: phyml -i primates_21_AA.phy -d aa -m VT -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+18:35:59 # running: phyml -i primates_21_AA.phy -d aa -m WAG -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:35:59 # running: phyml -i primates_21_AA.phy -d aa -m WAG -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:36:00 # running: phyml -i primates_21_AA.phy -d aa -m WAG -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:36:00 # running: phyml -i primates_21_AA.phy -d aa -m WAG -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+18:36:01 # running: phyml -i primates_21_AA.phy -d aa -m HIVw -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:36:01 # running: phyml -i primates_21_AA.phy -d aa -m HIVw -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:36:02 # running: phyml -i primates_21_AA.phy -d aa -m HIVw -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:36:02 # running: phyml -i primates_21_AA.phy -d aa -m HIVw -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+18:36:03 # running: phyml -i primates_21_AA.phy -d aa -m HIVb -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:36:03 # running: phyml -i primates_21_AA.phy -d aa -m HIVb -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:36:04 # running: phyml -i primates_21_AA.phy -d aa -m HIVb -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:36:04 # running: phyml -i primates_21_AA.phy -d aa -m HIVb -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+18:36:05 # running: phyml -i primates_21_AA.phy -d aa -m RtREV -u primates_21_AA.phy_LG-NJ.nwk -c 1 -v 0 -o lr
+18:36:05 # running: phyml -i primates_21_AA.phy -d aa -m RtREV -f m -c 4 -a e -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:36:06 # running: phyml -i primates_21_AA.phy -d aa -m RtREV -f e -c 1 -u primates_21_AA.phy_LG-NJ.nwk -o lr
+18:36:06 # running: phyml -i primates_21_AA.phy -d aa -m RtREV -u primates_21_AA.phy_LG-NJ.nwk -f e -a e -o lr
+
+18:36:07 # writing primates_21_AA.phy_sorted_model_set_5_fits.tsv, sorted by BIC
 --------------------------------------------------------------------------------------------------
-13:30:03 # writing primates_21_AA.phy_sorted_model_set_1_fits.tsv, sorted by BIC
 model         K   sites/K   lnL          AIC          AICc         BIC          deltaBIC   BICw  BICcumW
-JTT+G         40  12.50000  -4815.80148  9711.60296   9718.74893   9880.18728   0          1.00  1.00
-JTT+f+G       59  8.47000   -4778.48904  9674.97808   9691.06899   9923.63996   43.45268   0.00  1.00
-AB+f+G        59  8.47000   -4814.44420  9746.88840   9762.97931   9995.55028   115.36300  0.00  1.00
-JTT           39  12.82000  -4904.05775  9886.11550   9892.89811   10050.48522  170.29794  0.00  1.00
-AB+G          40  12.50000  -4910.17657  9900.35314   9907.49911   10068.93746  188.75018  0.00  1.00
-WAG+G         40  12.50000  -4910.24192  9900.48384   9907.62981   10069.06816  188.88088  0.00  1.00
-VT+G          40  12.50000  -4916.81421  9913.62842   9920.77439   10082.21274  202.02546  0.00  1.00
-JTT+f         58  8.62000   -4865.61699  9847.23398   9862.75325   10091.68125  211.49397  0.00  1.00
-WAG+f+G       59  8.47000   -4870.83180  9859.66360   9875.75451   10108.32548  228.13820  0.00  1.00
-VT+f+G        59  8.47000   -4880.25893  9878.51786   9894.60877   10127.17974  246.99246  0.00  1.00
-LG+G          40  12.50000  -4946.47152  9972.94304   9980.08901   10141.52736  261.34008  0.00  1.00
-DAYHOFF+G     40  12.50000  -4969.87622  10019.75244  10026.89841  10188.33676  308.14948  0.00  1.00
-DCMut+G       40  12.50000  -4970.16584  10020.33168  10027.47765  10188.91600  308.72872  0.00  1.00
-LG+f+G        59  8.47000   -4913.60180  9945.20360   9961.29451   10193.86548  313.67820  0.00  1.00
-DAYHOFF+f+G   59  8.47000   -4920.31326  9958.62652   9974.71743   10207.28840  327.10112  0.00  1.00
-DCMut+f+G     59  8.47000   -4920.53388  9959.06776   9975.15867   10207.72964  327.54236  0.00  1.00
-AB+f          58  8.62000   -4933.84484  9983.68968   9999.20895   10228.13695  347.94967  0.00  1.00
-WAG           39  12.82000  -4998.94774  10075.89548  10082.67809  10240.26520  360.07792  0.00  1.00
-VT            39  12.82000  -5004.20867  10086.41734  10093.19995  10250.78706  370.59978  0.00  1.00
-BLOSUM62+G    40  12.50000  -5002.18584  10084.37168  10091.51765  10252.95600  372.76872  0.00  1.00
-WAG+f         58  8.62000   -4961.23284  10038.46568  10053.98495  10282.91295  402.72567  0.00  1.00
-VT+f          58  8.62000   -4968.11339  10052.22678  10067.74605  10296.67405  416.48677  0.00  1.00
-BLOSUM62+f+G  59  8.47000   -4976.30876  10070.61752  10086.70843  10319.27940  439.09212  0.00  1.00
-AB            39  12.82000  -5040.59363  10159.18726  10165.96987  10323.55698  443.36970  0.00  1.00
-LG            39  12.82000  -5042.35342  10162.70684  10169.48945  10327.07656  446.88928  0.00  1.00
-LG+f          58  8.62000   -5008.95318  10133.90636  10149.42563  10378.35363  498.16635  0.00  1.00
-DAYHOFF       39  12.82000  -5069.90036  10217.80072  10224.58333  10382.17044  501.98316  0.00  1.00
-DCMut         39  12.82000  -5070.07864  10218.15728  10224.93989  10382.52700  502.33972  0.00  1.00
-DAYHOFF+f     58  8.62000   -5021.06263  10158.12526  10173.64453  10402.57253  522.38525  0.00  1.00
-DCMut+f       58  8.62000   -5021.17208  10158.34416  10173.86343  10402.79143  522.60415  0.00  1.00
-BLOSUM62      39  12.82000  -5097.14921  10272.29842  10279.08103  10436.66814  556.48086  0.00  1.00
-BLOSUM62+f    58  8.62000   -5071.35214  10258.70428  10274.22355  10503.15155  622.96427  0.00  1.00
+HIVb+G        40  12.50000  -4785.64708  9651.29416   9658.44013   9819.87848   0          0.97  0.97
+HIVw+f+G      59  8.47000   -4729.97721  9577.95442   9594.04533   9826.61630   6.73782    0.03  1.00
+HIVb+f+G      59  8.47000   -4745.24175  9608.48350   9624.57441   9857.14538   37.26690   0.00  1.00
+HIVw+G        40  12.50000  -4811.89672  9703.79344   9710.93941   9872.37776   52.49928   0.00  1.00
+JTT+G         40  12.50000  -4815.80148  9711.60296   9718.74893   9880.18728   60.30880   0.00  1.00
+HIVw          39  12.82000  -4839.90549  9757.81098   9764.59359   9922.18070   102.30222  0.00  1.00
+JTT+f+G       59  8.47000   -4778.48904  9674.97808   9691.06899   9923.63996   103.76148  0.00  1.00
+HIVb          39  12.82000  -4845.99268  9769.98536   9776.76797   9934.35508   114.47660  0.00  1.00
+JTT           39  12.82000  -4865.61699  9809.23398   9816.01659   9973.60370   153.72522  0.00  1.00
+AB+f+G        59  8.47000   -4814.44420  9746.88840   9762.97931   9995.55028   175.67180  0.00  1.00
+HIVw+f        58  8.62000   -4839.90549  9795.81098   9811.33025   10040.25825  220.37977  0.00  1.00
+HIVb+f        58  8.62000   -4845.99268  9807.98536   9823.50463   10052.43263  232.55415  0.00  1.00
+AB+G          40  12.50000  -4910.22076  9900.44152   9907.58749   10069.02584  249.14736  0.00  1.00
+WAG+G         40  12.50000  -4910.24193  9900.48386   9907.62983   10069.06818  249.18970  0.00  1.00
+VT+G          40  12.50000  -4916.81420  9913.62840   9920.77437   10082.21272  262.33424  0.00  1.00
+JTT+f         58  8.62000   -4865.61699  9847.23398   9862.75325   10091.68125  271.80277  0.00  1.00
+WAG+f+G       59  8.47000   -4870.83180  9859.66360   9875.75451   10108.32548  288.44700  0.00  1.00
+AB            39  12.82000  -4933.84484  9945.68968   9952.47229   10110.05940  290.18092  0.00  1.00
+VT+f+G        59  8.47000   -4880.25893  9878.51786   9894.60877   10127.17974  307.30126  0.00  1.00
+LG+G          40  12.50000  -4946.47152  9972.94304   9980.08901   10141.52736  321.64888  0.00  1.00
+WAG           39  12.82000  -4961.23284  10000.46568  10007.24829  10164.83540  344.95692  0.00  1.00
+VT            39  12.82000  -4968.11339  10014.22678  10021.00939  10178.59650  358.71802  0.00  1.00
+DAYHOFF+G     40  12.50000  -4969.87622  10019.75244  10026.89841  10188.33676  368.45828  0.00  1.00
+DCMut+G       40  12.50000  -4970.16584  10020.33168  10027.47765  10188.91600  369.03752  0.00  1.00
+LG+f+G        59  8.47000   -4913.60179  9945.20358   9961.29449   10193.86546  373.98698  0.00  1.00
+DAYHOFF+f+G   59  8.47000   -4920.31326  9958.62652   9974.71743   10207.28840  387.40992  0.00  1.00
+DCMut+f+G     59  8.47000   -4920.53388  9959.06776   9975.15867   10207.72964  387.85116  0.00  1.00
+AB+f          58  8.62000   -4933.84484  9983.68968   9999.20895   10228.13695  408.25847  0.00  1.00
+BLOSUM62+G    40  12.50000  -5002.18584  10084.37168  10091.51765  10252.95600  433.07752  0.00  1.00
+LG            39  12.82000  -5008.95318  10095.90636  10102.68897  10260.27608  440.39760  0.00  1.00
+WAG+f         58  8.62000   -4961.23284  10038.46568  10053.98495  10282.91295  463.03447  0.00  1.00
+DAYHOFF       39  12.82000  -5021.06263  10120.12526  10126.90787  10284.49498  464.61650  0.00  1.00
+DCMut         39  12.82000  -5021.17208  10120.34416  10127.12677  10284.71388  464.83540  0.00  1.00
+VT+f          58  8.62000   -4968.11339  10052.22678  10067.74605  10296.67405  476.79557  0.00  1.00
+RtREV+G       40  12.50000  -5027.95301  10135.90602  10143.05199  10304.49034  484.61186  0.00  1.00
+BLOSUM62+f+G  59  8.47000   -4976.30875  10070.61750  10086.70841  10319.27938  499.40090  0.00  1.00
+RtREV+f+G     59  8.47000   -4984.38124  10086.76248  10102.85339  10335.42436  515.54588  0.00  1.00
+LG+f          58  8.62000   -5008.95318  10133.90636  10149.42563  10378.35363  558.47515  0.00  1.00
+BLOSUM62      39  12.82000  -5071.35214  10220.70428  10227.48689  10385.07400  565.19552  0.00  1.00
+DAYHOFF+f     58  8.62000   -5021.06263  10158.12526  10173.64453  10402.57253  582.69405  0.00  1.00
+DCMut+f       58  8.62000   -5021.17208  10158.34416  10173.86343  10402.79143  582.91295  0.00  1.00
+RtREV         39  12.82000  -5084.78701  10247.57402  10254.35663  10411.94374  592.06526  0.00  1.00
+BLOSUM62+f    58  8.62000   -5071.35214  10258.70428  10274.22355  10503.15155  683.27307  0.00  1.00
+RtREV+f       58  8.62000   -5084.78701  10285.57402  10301.09329  10530.02129  710.14281  0.00  1.00
 --------------------------------------------------------------------------------------------------
 * NOTE 1: when sites/K &lt; 40, the AICc is recommended over AIC.
-* NOTE 2: Best model selected by BIC, because AIC is biased in favour of parameter-rich models.
+* NOTE 2: The best model is selected by BIC, because AIC is biased, favoring parameter-rich models.
 
-... will estimate the ML tree under best-fitting model JTT+G selected by BIC
-13:30:04 # running: phyml -i primates_21_AA.phy -d aa -m JTT -c 4 -a e -o tlr -s BEST
+==================================================================================================
+... will estimate the ML tree under best-fitting model HIVb+G selected by BIC
+18:36:09 # running: phyml -i primates_21_AA.phy -d aa -m HIVb -f m -c 4 -a e -o tlr -s BEST
 # Your results:
-  - primates_21_AA.phy_JTT+G_phyml_stats.txt
-  - primates_21_AA.phy_JTT+G_phyml_tree.txt
+  - primates_21_AA.phy_HIVb+G_BESTmoves_phyml_stats.txt
+  - primates_21_AA.phy_HIVb+G_BESTmoves_phyml_tree.txt
 --------------------------------------------------------------------------------------------------
 
-Elapsed time: 0 days, 00 hr, 01 min, 33 sec
+Elapsed time: 0 days, 00 hr, 00 min, 33 sec
 Done!
-
+  ========================================================================================
+  If you use phyml_protModelFinder.sh v.0.9_2023-11-17 for your research,
+  I would appreciate that you:
+  
+  1. Cite the code in your work as:   
+  Pablo Vinuesa. phyml_protModelFinder.sh v.0.9_2023-11-17 
+       https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_protModelFinder.sh
+  
+  2. Give it a like on the https://github.com/vinuesa/TIB-filoinfo/ repo
+  
+  Thanks!
 </pre>
 <p>Podemos desplegar el árbol directamente en la terminal usando
 herramientas del paquete <a href="https://github.com/tjunier/newick_utils"><span class="math inline">\(newick\_utilities\)</span></a>.</p>
-<pre style="background: Cornsilk;"><code>nw_display &lt;(nw_reroot primates_21_AA.phy_JTT+G_BESTmoves_phyml_tree.txt)</code></pre>
+<pre style="background: Cornsilk;"><code>nw_display -w 120 &lt;(nw_reroot primates_21_AA.phy_HIVb+G_BESTmoves_phyml_tree.txt)</code></pre>
 <pre>
-                                                    ++ DLangur                  
-                                                   ++ 0.732394                  
-                                                   |+-+ Colobus                 
-                                                   |                            
-                                    +--------------+ 1.000000 Patas             
-                                    |              |  |                         
-                                    |              +--+ 0.999999 cDNA           
-                                    |                 | +-+ 1.000000            
-                                    |                 | | ++ Tant cDNA          
-                                    |                 +-+ 0.999993              
- +----------------------------------+ 1.000000          |+ Baboon               
- |                                  |                   | 0.949656              
- |                                  |                   +---+ Rhes cDNA         
- |                                  |                                           
- |                                  |          +------+ Orangutan               
- |                                  |        +-+ 0.836636                       
- |                                  |        | +----------------+ Gibbon        
- |                                  +--------+ 0.999996                         
- |                                           |  +-+ Gorilla                     
- |                                           |  |                               
-=|                                           +--++0.999920                      
- |                                              ++ 0.982686                     
- |                                               +---+ Human                    
- |                                                                              
- |                                   +---------------+ Owl                      
- |                                   |                                          
- |                                  ++ 0.415323------------------+ Squirrel     
- |                                  || |                                        
- |                                  |+-+ 0.702162-----+ PMarmoset               
- |                                  |  +--------+ 1.000000                      
- +----------------------------------+ 0.471304  +----------+ Tamarin            
-                                    |                                           
-                                    |        +--------+ Titi                    
-                                    |+-------+ 1.000000                         
-                                    ||       +---------+ Saki                   
-                                    ++ 1.000000                                 
-                                     |         +---------------------+ Howler   
-                                     |         |                                
-                                     +---------+ 0.999729-+ Spider              
-                                               +---+                            
-                                                   +----------+ Woolly          
-                                                                                
- |-----------|-----------|----------|-----------|-----------|---------          
- 0        0.05         0.1       0.15         0.2        0.25                   
+                                                                            +-+ Gorilla                                 
+                                                                            |                                           
+                                                                        +---+ 0.999542Human                             
+                                                                        |   +-+ 0.988925                                
+                                                          +-------------+ 0.999985Chimp                                 
+                                                          |             |                                               
+                                                          |             |+-------------------------+ Gibbon             
+                                                          |             ++ 0.731672                                     
+                                                          |              +----------+ Orangutan                         
+                                                          |                                                             
+ +--------------------------------------------------------+ 1.000000                 +--------+ Patas                   
+ |                                                        |                          |                                  
+ |                                                        |                      +---+ 1.000000AGM cDNA                 
+ |                                                        |                      |   |  +--+ 1.000000                   
+ |                                                        |                      |   |  |  +-+ Tant cDNA                
+ |                                                        |                      |   +--+ 0.999995                      
+ |                                                        |                      |      |-+ Baboon                      
+ |                                                        +----------------------+ 1.000000.977694                      
+ |                                                                               |      +----+ Rhes cDNA                
+ |                                                                               |                                      
+=|                                                                               |+--+ Colobus                          
+ |                                                                               ++ 0.776704                            
+ |                                                                                +-+ DLangur                           
+ |                                                                                                                      
+ |                                                          +-----------------------+ Owl                               
+ |                                                          |                                                           
+ |                                                        +-+ 0.550063    +---------------+ Tamarin                     
+ |                                                        | +-------------+ 1.000000                                    
+ |                                                        |               +---------+ PMarmoset                         
+ |                                                        |                                                             
+ +--------------------------------------------------------+ 0.419386----------------------------------+ Squirrel        
+                                                          |  |                                                          
+                                                          |+-+ 0.633907+-------------+ Titi                             
+                                                          || +---------+ 1.000000                                       
+                                                          ++ 1.000000  +----------------+ Saki                          
+                                                           |                                                            
+                                                           |               +---------------------------------+ Howler   
+                                                           |               |                                            
+                                                           +---------------+ 0.999170-------------+ Woolly              
+                                                                           +-----+                                      
+                                                                                 +----------+ Spider                    
+                                                                                                                        
+ |----------------|-----------------|----------------|----------------|-----------------|----------------|----          
+ 0             0.05               0.1             0.15              0.2              0.25              0.3              
  substitutions/site
-
 </pre>
 <p><strong>Figura 6.</strong> Filogenia de máxima verosimilitud bajo el
-modelo <span class="math inline">\(JTT+G\)</span> seleccionado
+modelo <span class="math inline">\(HIVb+G\)</span> seleccionado
 automáticamente por <span class="math inline">\(phyml\_protModelFinder.sh\)</span> en base a
 valores de <span class="math inline">\(BIC\)</span>, y desplegada
 directamente en la terminal con herramientas del paquete <a href="https://github.com/tjunier/newick_utils"><span class="math inline">\(newick\_utilities\)</span></a></p>
@@ -2105,16 +2096,13 @@ paste &quot;${infile}&quot;_sorted_model_set_&quot;${model_set}&quot;_fits.tsv \
 <div id="el-criterio-bayesiano-de-información-bic" class="section level3" number="5.1.1">
 <h3><span class="header-section-number">5.1.1</span> El criterio
 bayesiano de información (<span class="math inline">\(BIC\)</span>)</h3>
-<p>Noten que el mejor modelo seleccionado por <span class="math inline">\(BIC\)</span> caso es <span class="math inline">\(JTT+G\)</span>, mientras que <span class="math inline">\(AIC\)</span> selecciona <span class="math inline">\(JTT+f+G\)</span>. Es más, vemos que <span class="math inline">\(JTT+f+G\)</span> tiene un <span class="math inline">\(\Delta_{BIC}\)</span> &gt; 43, por lo que es un
-modelo muchísimo peor que el <span class="math inline">\(JTT+G\)</span>.
-Es tan grande la distancia <span class="math inline">\(\Delta_{BIC}\)</span> entre ambos modelos, que el
-intervalo de credibilidad del 100% incluye sólo al modelo <span class="math inline">\(JTT+G\)</span>, como indican las columnas de <span class="math inline">\(BIC_w\)</span> y <span class="math inline">\(BIC_{cumW}\)</span>.</p>
+<p>Noten que el mejor modelo seleccionado por <span class="math inline">\(BIC\)</span> caso es <span class="math inline">\(HIVb+G\)</span>, mientras que <span class="math inline">\(AIC\)</span> selecciona <span class="math inline">\(HIVw+f+G\)</span>. Es más, vemos que <span class="math inline">\(HIVw+f+G\)</span> tiene un <span class="math inline">\(\Delta_{BIC}\)</span> &gt; 6, por lo que es un
+modelo claramente peor que el <span class="math inline">\(HIVb+G\)</span>. Es tan grande la distancia <span class="math inline">\(\Delta_{BIC}\)</span> entre ambos modelos, que
+<span class="math inline">\(HIVw+f+G\)</span> tiene un <span class="math inline">\(BIC_w\ =\ 0.03\)</span>.</p>
 <p>¿A qué se debe esta disparidad entre <span class="math inline">\(AIC\)</span> y <span class="math inline">\(BIC\)</span>? El criterio de información de Akaike
 (<span class="math inline">\(AIC\)</span>) es sabido que tiende a
 favorecer modelos con más parámetros, y con frecuencia selecciona
 modelos sobreparametrizados.</p>
-<p>En cambio, el <span class="math inline">\(BIC\)</span> es más
-conservador y no adolece del problema de sobreparametrización.</p>
 <p>Por ello los <span class="math inline">\(scripts\)</span> <span class="math inline">\(phyml\_protModelFinder.sh\)</span> y <span class="math inline">\(phyml\_DNAmodelFinder.sh\)</span> usan el <span class="math inline">\(BIC\)</span> para la selección de modelos.</p>
 <p>El <span class="math inline">\(BIC\)</span> para un modelo se define
 de la siguiente manera:</p>
@@ -2146,16 +2134,15 @@ seleccionar modelos con menos parámetros que <span class="math inline">\(AIC\)<
 <p>Con <span class="math inline">\(BIC\)</span> podemos comparar todos
 los modelos en competición, independientemente de si están o no
 anidados.</p>
-<ul>
-<li><strong>Tarea</strong>
-<ol style="list-style-type: decimal">
-<li>Calcula manualmente los valores de <span class="math inline">\(BICi\)</span>, <span class="math inline">\(BIC_{MIN}\)</span> y <span class="math inline">\(\Delta_{BIC}\)</span> $para los modelo <span class="math inline">\(JTT+G\)</span> y <span class="math inline">\(JTT+f+G\)</span> del alineamiento de
-primates_21_AA.phy, usando la fórmula mostrada en la sección de <span class="math inline">\(BIC\)</span> y los datos que imprime <span class="math inline">\(phyml\_protModelFinder.sh\)</span> al inicio de su
-salida.</li>
-<li>Vuelve a correr el script, pero evaluando todos los modelos. <span class="math inline">\(phyml\_protModelFinder.sh\)</span> ¿Hay alguna
-diferencia? Comenta el resultado.</li>
-</ol></li>
-</ul>
+</div>
+<div id="tarea-selección-de-modelos-con-bic" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Tarea: selección de
+modelos con BIC</h3>
+<pre><code>1. Calcula manualmente los valores de $BICi$, $BIC_{MIN}$ y $\Delta_{BIC}$ $para los modelo $HIVb+G$ y $HIVb+f+G$ 
+del alineamiento de primates_21_AA.phy, usando la fórmula mostrada en la sección de $BIC$ y los datos que imprime 
+$phyml\_protModelFinder.sh$ al inicio de su salida. 
+2. Vuelve a correr el script, pero evaluando todos los modelos. $phyml\_protModelFinder.sh$ ¿Hay alguna diferencia? Comenta el resultado.
+3. Si no lo has hecho aún, repite el ejercicio de selección de modelos paramétricos (de DNA) con las secuencias *primates.phy*, usando $BIC$.</code></pre>
 <hr />
 </div>
 </div>
@@ -2254,7 +2241,8 @@ de modelos</h3>
 
 =========================================================================================
 # Bash version 5.1 OK
-# phyml_DNAmodelFinder.sh v0.8_2022-12-04 running on alisio. Run started on: 2022-12-04 at 18:41:12
+# running with phyml v.3.3_2023
+# phyml_DNAmodelFinder.sh v1.2.0_2023-11-18 running on alisio. Run started on: 2023-11-19 at 18:54:14
 # workding directory: /home/vinuesa/Cursos/LCG/ENS_y_PANGENOMICA/tema12_maxima_verosimilitud/data
 /home/vinuesa/anaconda3/bin/mpirun
 /usr/bin/phyml-mpi
@@ -2269,7 +2257,7 @@ de modelos</h3>
 # infile:primates.phy; model_set:2 =&gt; extended_models; seed trees: 1; delta_BIC_cutoff=2
 =========================================================================================
 
-18:41:12  # 1. Computing sequence stats for primates.phy:
+18:54:14  # 1. Computing sequence stats for primates.phy:
 - number of sequences: 12
 - number of sites: 898
 - number of branches: 21
@@ -2296,49 +2284,47 @@ para los modelos arriba enlistados, en base a los cuales toma la
 decisión de qué tipo de modelos adicionales evaluar.</li>
 </ol>
 <pre>
-
-18:41:12 1. Computing NJ-JC tree for input file primates.phy with 12 sequences
+18:54:14 1. Computing NJ-JC tree for input file primates.phy with 12 sequences
 --------------------------------------------------------------------------------
 2.1. running in a for loop to combine all base models in model_set 2=&gt;extended_models,
-      with (or not) +G and or +I, and compute the model lnL, after optimizing branch lengths and rates
-18:41:12 # running: phyml -i primates.phy -d nt -m JC69 -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+     with (or without) +G and or +I, and compute the model lnL, after optimizing branch lengths and rates
+18:54:14 # running: phyml -i primates.phy -d nt -m JC69 -f m -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
 JC_BICi: 12991.20847
-18:41:12 # running: phyml -i primates.phy -d nt -m JC69 -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
-18:41:12 # running: phyml -i primates.phy -d nt -m JC69 -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
-18:41:12 # running: phyml -i primates.phy -d nt -m JC69 -u primates.phy_JC-NJ.nwk -v e -a e -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m K80 -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m K80 -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m K80 -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m K80 -u primates.phy_JC-NJ.nwk -v e -a e -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m F81 -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-F81_BICi: 12770.52584
-18:41:13 # running: phyml -i primates.phy -d nt -m F81 -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m F81 -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m F81 -u primates.phy_JC-NJ.nwk -v e -a e -o lr
-18:41:14 # running: phyml -i primates.phy -d nt -m HKY85 -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-HKY85_BICi: 12139.08997
-18:41:14 # running: phyml -i primates.phy -d nt -m HKY85 -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
-HKY85+G_BICi: 11508.12632
-18:41:14 # running: phyml -i primates.phy -d nt -m HKY85 -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
-18:41:14 # running: phyml -i primates.phy -d nt -m HKY85 -u primates.phy_JC-NJ.nwk -v e -a e -o lr
-HKY85+I+G_BICi: 11510.12698
-18:41:15 # running: phyml -i primates.phy -d nt -m TN93 -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-TN93_BICi: 12139.59732
-18:41:15 # running: phyml -i primates.phy -d nt -m TN93 -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
-18:41:15 # running: phyml -i primates.phy -d nt -m TN93 -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
-18:41:15 # running: phyml -i primates.phy -d nt -m TN93 -u primates.phy_JC-NJ.nwk -v e -a e -o lr
+18:54:15 # running: phyml -i primates.phy -d nt -m JC69 -f m -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:15 # running: phyml -i primates.phy -d nt -m JC69 -f m -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
+18:54:15 # running: phyml -i primates.phy -d nt -m JC69 -f m -u primates.phy_JC-NJ.nwk -v e -a e -o lr
+18:54:15 # running: phyml -i primates.phy -d nt -m K80 -f m -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:15 # running: phyml -i primates.phy -d nt -m K80 -f m -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:15 # running: phyml -i primates.phy -d nt -m K80 -f m -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
+18:54:15 # running: phyml -i primates.phy -d nt -m K80 -f m -u primates.phy_JC-NJ.nwk -v e -a e -o lr
+18:54:16 # running: phyml -i primates.phy -d nt -m F81 -f m -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+F81_BICi: 12733.19534
+18:54:16 # running: phyml -i primates.phy -d nt -m F81 -f m -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:16 # running: phyml -i primates.phy -d nt -m F81 -f m -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
+18:54:16 # running: phyml -i primates.phy -d nt -m F81 -f m -u primates.phy_JC-NJ.nwk -v e -a e -o lr
+18:54:16 # running: phyml -i primates.phy -d nt -m HKY85 -f m -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+HKY85_BICi: 12133.44475
+18:54:16 # running: phyml -i primates.phy -d nt -m HKY85 -f m -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+HKY85+G_BICi: 11475.87798
+18:54:17 # running: phyml -i primates.phy -d nt -m HKY85 -f m -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
+18:54:17 # running: phyml -i primates.phy -d nt -m HKY85 -f m -u primates.phy_JC-NJ.nwk -v e -a e -o lr
+HKY85+I+G_BICi: 11477.88060
+18:54:18 # running: phyml -i primates.phy -d nt -m TN93 -f m -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+TN93_BICi: 12134.51460
+18:54:18 # running: phyml -i primates.phy -d nt -m TN93 -f m -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:18 # running: phyml -i primates.phy -d nt -m TN93 -f m -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
+18:54:18 # running: phyml -i primates.phy -d nt -m TN93 -f m -u primates.phy_JC-NJ.nwk -v e -a e -o lr
 --------------------------------------------------------------------------------
-18:41:16 # Starting evaluation and automatic selection of extended model set
+18:54:20 # Starting evaluation and automatic selection of extended model set
 # setting compositional_heterogeneity flag to: 1
 --------------------------------------------------------------------------------
-18:41:16 # ... evaluation and automatic selection of extended model set
+18:54:20 # ... evaluation and automatic selection of extended model set
 # setting transitional_heterogeneity flag to: 0
 --------------------------------------------------------------------------------
-18:41:16 # ... evaluation and automatic selection of extended model set
+18:54:20 # ... evaluation and automatic selection of extended model set
 # setting use_pInv flag to: 0
 # will evaluate models with unequal frequencies
 --------------------------------------------------------------------------------
-
 </pre>
 <p>Como ven arriba, el <span class="math inline">\(script\)</span>
 detecta:</p>
@@ -2354,49 +2340,7 @@ ajuste, por lo que <code>use_pInv_flag=0</code></li>
 <p>En el siguiente ciclo, el programa evaluará sólo modelos <span class="math inline">\(TVM*\)</span> del set extendido, con estima
 empírica de la frecuencia de las bases, sin <span class="math inline">\(pInv\)</span></p>
 <pre>
-
-18:41:12 1. Computing NJ-JC tree for input file primates.phy with 12 sequences
---------------------------------------------------------------------------------
-2.1. running in a for loop to combine all base models in model_set 2=&gt;extended_models,
-      with (or not) +G and or +I, and compute the model lnL, after optimizing branch lengths and rates
-18:41:12 # running: phyml -i primates.phy -d nt -m JC69 -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-JC_BICi: 12991.20847
-18:41:12 # running: phyml -i primates.phy -d nt -m JC69 -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
-18:41:12 # running: phyml -i primates.phy -d nt -m JC69 -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
-18:41:12 # running: phyml -i primates.phy -d nt -m JC69 -u primates.phy_JC-NJ.nwk -v e -a e -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m K80 -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m K80 -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m K80 -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m K80 -u primates.phy_JC-NJ.nwk -v e -a e -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m F81 -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-F81_BICi: 12770.52584
-18:41:13 # running: phyml -i primates.phy -d nt -m F81 -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m F81 -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
-18:41:13 # running: phyml -i primates.phy -d nt -m F81 -u primates.phy_JC-NJ.nwk -v e -a e -o lr
-18:41:14 # running: phyml -i primates.phy -d nt -m HKY85 -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-HKY85_BICi: 12139.08997
-18:41:14 # running: phyml -i primates.phy -d nt -m HKY85 -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
-HKY85+G_BICi: 11508.12632
-18:41:14 # running: phyml -i primates.phy -d nt -m HKY85 -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
-18:41:14 # running: phyml -i primates.phy -d nt -m HKY85 -u primates.phy_JC-NJ.nwk -v e -a e -o lr
-HKY85+I+G_BICi: 11510.12698
-18:41:15 # running: phyml -i primates.phy -d nt -m TN93 -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-TN93_BICi: 12139.59732
-18:41:15 # running: phyml -i primates.phy -d nt -m TN93 -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
-18:41:15 # running: phyml -i primates.phy -d nt -m TN93 -v e -c 1 -u primates.phy_JC-NJ.nwk -o lr
-18:41:15 # running: phyml -i primates.phy -d nt -m TN93 -u primates.phy_JC-NJ.nwk -v e -a e -o lr
---------------------------------------------------------------------------------
-18:41:16 # Starting evaluation and automatic selection of extended model set
-# setting compositional_heterogeneity flag to: 1
---------------------------------------------------------------------------------
-18:41:16 # ... evaluation and automatic selection of extended model set
-# setting transitional_heterogeneity flag to: 0
---------------------------------------------------------------------------------
-18:41:16 # ... evaluation and automatic selection of extended model set
-# setting use_pInv flag to: 0
-# will evaluate models with unequal frequencies
---------------------------------------------------------------------------------
-18:41:16 2.2. running a loop to combine the extended models in model_set 2=&gt;extended_models,
+18:54:20 2.2. running a loop to combine the extended models in model_set 2=&gt;extended_models,
       with (or not) +G and or +I, and compute the model lnL, after optimizing branch lengths and rates
 skipping TN|TIM|SYM matrix 012230
 skipping TN|TIM|SYM matrix 010023
@@ -2418,56 +2362,90 @@ skipping TN|TIM|SYM matrix 001021
 skipping TN|TIM|SYM matrix 012234
 skipping TN|TIM|SYM matrix 010231
 skipping TN|TIM|SYM matrix 011020
+skipping TN|TIM|SYM matrix 011230
 skipping TN|TIM|SYM matrix 012130
 skipping TN|TIM|SYM matrix 010121
 skipping TN|TIM|SYM matrix 010122
 skipping TN|TIM|SYM matrix 010123
-skipping TN|TIM|SYM matrix 012345
-18:41:16 # running: phyml -i primates.phy -d nt -m 012210  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:16 # running: phyml -i primates.phy -d nt -m 012210  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+skipping TN|TIM|SYM matrix 001020
+skipping TN|TIM|SYM matrix 000123
+skipping TN|TIM|SYM matrix 010203
+skipping TN|TIM|SYM matrix 010223
+skipping TN|TIM|SYM matrix 010230
+skipping TN|TIM|SYM matrix 012032
+skipping TN|TIM|SYM matrix 010233
+skipping TN|TIM|SYM matrix 001234
+skipping TN|TIM|SYM matrix 010234
+skipping TN|TIM|SYM matrix 011234
+skipping TN|TIM|SYM matrix 012134
+skipping TN|TIM|SYM matrix 012304
+skipping TN|TIM|SYM matrix 012324
+skipping TN|TIM|SYM matrix 012334
+skipping TN|TIM|SYM matrix 012341
+skipping TN|TIM|SYM matrix 012344
+18:54:20 # running: phyml -i primates.phy -d nt -m 012210  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:20 # running: phyml -i primates.phy -d nt -m 012210  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  012210+I and 012210+I+G
-18:41:17 # running: phyml -i primates.phy -d nt -m 012314  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:17 # running: phyml -i primates.phy -d nt -m 012314  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:20 # running: phyml -i primates.phy -d nt -m 012314  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:20 # running: phyml -i primates.phy -d nt -m 012314  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  012314+I and 012314+I+G
-18:41:17 # running: phyml -i primates.phy -d nt -m 012310  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:17 # running: phyml -i primates.phy -d nt -m 012310  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:21 # running: phyml -i primates.phy -d nt -m 012310  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:21 # running: phyml -i primates.phy -d nt -m 012310  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  012310+I and 012310+I+G
-18:41:18 # running: phyml -i primates.phy -d nt -m 010213  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:18 # running: phyml -i primates.phy -d nt -m 010213  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:21 # running: phyml -i primates.phy -d nt -m 010213  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:21 # running: phyml -i primates.phy -d nt -m 010213  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  010213+I and 010213+I+G
-18:41:18 # running: phyml -i primates.phy -d nt -m 012213  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:18 # running: phyml -i primates.phy -d nt -m 012213  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:22 # running: phyml -i primates.phy -d nt -m 012213  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:22 # running: phyml -i primates.phy -d nt -m 012213  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  012213+I and 012213+I+G
-18:41:18 # running: phyml -i primates.phy -d nt -m 012013  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:19 # running: phyml -i primates.phy -d nt -m 012013  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:22 # running: phyml -i primates.phy -d nt -m 012013  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:22 # running: phyml -i primates.phy -d nt -m 012013  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  012013+I and 012013+I+G
-18:41:19 # running: phyml -i primates.phy -d nt -m 010012  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:19 # running: phyml -i primates.phy -d nt -m 010012  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:23 # running: phyml -i primates.phy -d nt -m 010012  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:23 # running: phyml -i primates.phy -d nt -m 010012  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  010012+I and 010012+I+G
-18:41:19 # running: phyml -i primates.phy -d nt -m 012012  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:19 # running: phyml -i primates.phy -d nt -m 012012  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:23 # running: phyml -i primates.phy -d nt -m 012012  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:23 # running: phyml -i primates.phy -d nt -m 012012  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  012012+I and 012012+I+G
-18:41:20 # running: phyml -i primates.phy -d nt -m 010212  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:20 # running: phyml -i primates.phy -d nt -m 010212  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:24 # running: phyml -i primates.phy -d nt -m 010212  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:24 # running: phyml -i primates.phy -d nt -m 010212  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  010212+I and 010212+I+G
-18:41:20 # running: phyml -i primates.phy -d nt -m 012313  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:20 # running: phyml -i primates.phy -d nt -m 012313  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:24 # running: phyml -i primates.phy -d nt -m 012313  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:24 # running: phyml -i primates.phy -d nt -m 012313  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  012313+I and 012313+I+G
-18:41:21 # running: phyml -i primates.phy -d nt -m 010011  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:21 # running: phyml -i primates.phy -d nt -m 010011  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:24 # running: phyml -i primates.phy -d nt -m 010011  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:24 # running: phyml -i primates.phy -d nt -m 010011  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  010011+I and 010011+I+G
-18:41:21 # running: phyml -i primates.phy -d nt -m 012212  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:21 # running: phyml -i primates.phy -d nt -m 012212  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:25 # running: phyml -i primates.phy -d nt -m 012212  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:25 # running: phyml -i primates.phy -d nt -m 012212  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  012212+I and 012212+I+G
-18:41:21 # running: phyml -i primates.phy -d nt -m 010210  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:21 # running: phyml -i primates.phy -d nt -m 010210  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:25 # running: phyml -i primates.phy -d nt -m 010210  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:25 # running: phyml -i primates.phy -d nt -m 010210  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  010210+I and 010210+I+G
-18:41:22 # running: phyml -i primates.phy -d nt -m 011010  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:22 # running: phyml -i primates.phy -d nt -m 011010  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:25 # running: phyml -i primates.phy -d nt -m 011010  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:26 # running: phyml -i primates.phy -d nt -m 011010  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  011010+I and 011010+I+G
-18:41:22 # running: phyml -i primates.phy -d nt -m 001101  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
-18:41:22 # running: phyml -i primates.phy -d nt -m 001101  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+18:54:26 # running: phyml -i primates.phy -d nt -m 001101  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:26 # running: phyml -i primates.phy -d nt -m 001101  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
 skipping  001101+I and 001101+I+G
+18:54:26 # running: phyml -i primates.phy -d nt -m 000100  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:26 # running: phyml -i primates.phy -d nt -m 000100  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+skipping  000100+I and 000100+I+G
+18:54:26 # running: phyml -i primates.phy -d nt -m 000101  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:26 # running: phyml -i primates.phy -d nt -m 000101  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+skipping  000101+I and 000101+I+G
+18:54:26 # running: phyml -i primates.phy -d nt -m 010110  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:27 # running: phyml -i primates.phy -d nt -m 010110  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+skipping  010110+I and 010110+I+G
+18:54:27 # running: phyml -i primates.phy -d nt -m 000102  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:27 # running: phyml -i primates.phy -d nt -m 000102  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+skipping  000102+I and 000102+I+G
+18:54:27 # running: phyml -i primates.phy -d nt -m 010112  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:27 # running: phyml -i primates.phy -d nt -m 010112  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+skipping  010112+I and 010112+I+G
+18:54:27 # running: phyml -i primates.phy -d nt -m 010211  -f m  -u primates.phy_JC-NJ.nwk -c 1 -v 0 -o lr
+18:54:27 # running: phyml -i primates.phy -d nt -m 010211  -f m  -c 4 -a e -u primates.phy_JC-NJ.nwk -o lr
+skipping  010211+I and 010211+I+G
 --------------------------------------------------------------------------------
 
 </pre>
@@ -2482,60 +2460,71 @@ información, tanto de Akaike como bayesiano, ordenando los resultados
 por valores crecientes de <span class="math inline">\(BIC\)</span>, e
 imprimiendo también los valores de <span class="math inline">\(\Delta_{BIC}\)</span>, <span class="math inline">\(BIC_{w_i}\)</span> y <span class="math inline">\(BICcumW\)</span>.</p>
 <pre>
-
-18:41:22 # writing primates.phy_sorted_model_set_2_fits.tsv, sorted by BIC; extmodels+F true
+18:54:28 # writing primates.phy_sorted_model_set_2_fits.tsv, sorted by BIC; extmodels+F true
 --------------------------------------------------------------------------------
 model       K   sites/K   lnL          AIC          AICc         BIC          deltaBIC    BICw  BICcumW
-010212+G+F  27  33.25000  -5721.62321  11497.24642  11498.98435  11626.85101  0           0.44  0.44
-012212+G+F  27  33.25000  -5722.51024  11499.02048  11500.75841  11628.62507  1.77406     0.18  0.63
-010012+G+F  27  33.25000  -5722.63081  11499.26162  11500.99955  11628.86621  2.01520     0.16  0.79
-012313+G+F  28  32.07000  -5719.92281  11495.84562  11497.71443  11630.25038  3.39937     0.08  0.87
-012213+G+F  28  32.07000  -5720.26835  11496.53670  11498.40551  11630.94146  4.09045     0.06  0.93
-010213+G+F  28  32.07000  -5721.18532  11498.37064  11500.23945  11632.77540  5.92439     0.02  0.95
-HKY85+G     26  34.53000  -5728.06316  11508.12632  11509.73826  11632.93074  6.07973     0.02  0.97
-012013+G+F  28  32.07000  -5722.34474  11500.68948  11502.55829  11635.09424  8.24323     0.01  0.98
-010210+G+F  27  33.25000  -5725.84769  11505.69538  11507.43331  11635.29997  8.44896     0.01  0.99
-012012+G+F  27  33.25000  -5726.25023  11506.50046  11508.23839  11636.10505  9.25404     0.00  0.99
-012314+G+F  29  30.96000  -5719.45649  11496.91298  11498.91759  11636.11791  9.26690     0.00  1.00
-012210+G+F  27  33.25000  -5726.65821  11507.31642  11509.05435  11636.92101  10.07000    0.00  1.00
-TN93+G      27  33.25000  -5728.05896  11510.11792  11511.85585  11639.72251  12.87150    0.00  1.00
-HKY85+I+G   27  33.25000  -5728.06349  11510.12698  11511.86491  11639.73157  12.88056    0.00  1.00
-012310+G+F  28  32.07000  -5725.20155  11506.40310  11508.27191  11640.80786  13.95685    0.00  1.00
-TN93+I+G    28  32.07000  -5728.05990  11512.11980  11513.98861  11646.52456  19.67355    0.00  1.00
-HKY85+I     26  34.53000  -5773.30564  11598.61128  11600.22322  11723.41570  96.56469    0.00  1.00
-TN93+I      27  33.25000  -5773.00614  11600.01228  11601.75021  11729.61687  102.76586   0.00  1.00
-010011+G+F  26  34.53000  -5810.83202  11673.66404  11675.27598  11798.46846  171.61745   0.00  1.00
-001101+G+F  26  34.53000  -5913.85413  11879.70826  11881.32020  12004.51268  377.66167   0.00  1.00
-011010+G+F  26  34.53000  -5917.56175  11887.12350  11888.73544  12011.92792  385.07691   0.00  1.00
-K80+G       23  39.04000  -5950.87340  11947.74680  11949.00996  12058.15071  431.29970   0.00  1.00
-K80+I+G     24  37.41000  -5950.57605  11949.15210  11950.52667  12064.35618  437.50517   0.00  1.00
-012313+F    27  33.25000  -5950.31559  11954.63118  11956.36911  12084.23577  457.38476   0.00  1.00
-012213+F    27  33.25000  -5952.11058  11958.22116  11959.95909  12087.82575  460.97474   0.00  1.00
-012314+F    28  32.07000  -5949.09947  11954.19894  11956.06775  12088.60370  461.75269   0.00  1.00
-010212+F    26  34.53000  -5959.18463  11970.36926  11971.98120  12095.17368  468.32267   0.00  1.00
-012212+F    26  34.53000  -5959.65943  11971.31886  11972.93080  12096.12328  469.27227   0.00  1.00
-010213+F    27  33.25000  -5957.06064  11968.12128  11969.85921  12097.72587  470.87486   0.00  1.00
-K80+I       23  39.04000  -5974.90514  11995.81028  11997.07344  12106.21419  479.36318   0.00  1.00
-010012+F    26  34.53000  -5964.74421  11981.48842  11983.10036  12106.29284  479.44183   0.00  1.00
-012013+F    27  33.25000  -5962.12925  11978.25850  11979.99643  12107.86309  481.01208   0.00  1.00
-012012+F    26  34.53000  -5974.64960  12001.29920  12002.91114  12126.10362  499.25261   0.00  1.00
-010210+F    26  34.53000  -5976.57456  12005.14912  12006.76106  12129.95354  503.10253   0.00  1.00
-012310+F    27  33.25000  -5973.19079  12000.38158  12002.11951  12129.98617  503.13516   0.00  1.00
-012210+F    26  34.53000  -5977.70123  12007.40246  12009.01440  12132.20688  505.35587   0.00  1.00
-HKY85       25  35.92000  -5984.54286  12019.08572  12020.57655  12139.08997  512.23896   0.00  1.00
-TN93        26  34.53000  -5981.39645  12014.79290  12016.40484  12139.59732  512.74631   0.00  1.00
-001101+F    25  35.92000  -6089.44631  12228.89262  12230.38345  12348.89687  722.04586   0.00  1.00
-010011+F    25  35.92000  -6094.74661  12239.49322  12240.98405  12359.49747  732.64646   0.00  1.00
-F81+G       25  35.92000  -6125.74552  12301.49104  12302.98187  12421.49529  794.64428   0.00  1.00
-F81+I+G     26  34.53000  -6122.75602  12297.51204  12299.12398  12422.31646  795.46545   0.00  1.00
-K80         22  40.81000  -6142.42909  12328.85818  12330.01475  12434.46192  807.61091   0.00  1.00
-F81+I       25  35.92000  -6134.16048  12318.32096  12319.81179  12438.32521  811.47420   0.00  1.00
-011010+F    25  35.92000  -6167.29688  12384.59376  12386.08459  12504.59801  877.74700   0.00  1.00
-JC69+G      22  40.81000  -6272.46906  12588.93812  12590.09469  12694.54186  1067.69085  0.00  1.00
-JC69+I+G    23  39.04000  -6269.14954  12584.29908  12585.56224  12694.70299  1067.85198  0.00  1.00
-JC69+I      22  40.81000  -6277.78094  12599.56188  12600.71845  12705.16562  1078.31461  0.00  1.00
-F81         24  37.41000  -6303.66088  12655.32176  12656.69633  12770.52584  1143.67483  0.00  1.00
-JC69        21  42.76000  -6424.20245  12890.40490  12891.45969  12991.20847  1364.35746  0.00  1.00
+HKY85+G     26  34.53000  -5711.93899  11475.87798  11477.48992  11600.68240  0           0.85  0.85
+TN93+G      27  33.25000  -5710.55176  11475.10352  11476.84145  11604.70811  4.02571     0.11  0.97
+HKY85+I+G   27  33.25000  -5711.94030  11477.88060  11479.61853  11607.48519  6.80279     0.03  1.00
+TN93+I+G    28  32.07000  -5710.55229  11477.10458  11478.97339  11611.50934  10.82694    0.00  1.00
+010212+G+F  27  33.25000  -5721.62318  11497.24636  11498.98429  11626.85095  26.16855    0.00  1.00
+012212+G+F  27  33.25000  -5722.51008  11499.02016  11500.75809  11628.62475  27.94235    0.00  1.00
+010012+G+F  27  33.25000  -5722.63081  11499.26162  11500.99955  11628.86621  28.18381    0.00  1.00
+012313+G+F  28  32.07000  -5719.92282  11495.84564  11497.71445  11630.25040  29.56800    0.00  1.00
+012213+G+F  28  32.07000  -5720.26837  11496.53674  11498.40555  11630.94150  30.25910    0.00  1.00
+010213+G+F  28  32.07000  -5720.86864  11497.73728  11499.60609  11632.14204  31.45964    0.00  1.00
+012013+G+F  28  32.07000  -5722.34471  11500.68942  11502.55823  11635.09418  34.41178    0.00  1.00
+010210+G+F  27  33.25000  -5725.84777  11505.69554  11507.43347  11635.30013  34.61773    0.00  1.00
+012012+G+F  27  33.25000  -5726.25000  11506.50000  11508.23793  11636.10459  35.42219    0.00  1.00
+012314+G+F  29  30.96000  -5719.45652  11496.91304  11498.91765  11636.11797  35.43557    0.00  1.00
+012210+G+F  27  33.25000  -5726.65816  11507.31632  11509.05425  11636.92091  36.23851    0.00  1.00
+012310+G+F  28  32.07000  -5725.20152  11506.40304  11508.27185  11640.80780  40.12540    0.00  1.00
+HKY85+I     26  34.53000  -5768.00399  11588.00798  11589.61992  11712.81240  112.13000   0.00  1.00
+TN93+I      27  33.25000  -5766.10222  11586.20444  11587.94237  11715.80903  115.12663   0.00  1.00
+010211+G+F  27  33.25000  -5804.50691  11663.01382  11664.75175  11792.61841  191.93601   0.00  1.00
+010011+G+F  26  34.53000  -5810.83201  11673.66402  11675.27596  11798.46844  197.78604   0.00  1.00
+010112+G+F  27  33.25000  -5816.57851  11687.15702  11688.89495  11816.76161  216.07921   0.00  1.00
+010110+G+F  26  34.53000  -5823.31701  11698.63402  11700.24596  11823.43844  222.75604   0.00  1.00
+001101+G+F  26  34.53000  -5913.85413  11879.70826  11881.32020  12004.51268  403.83028   0.00  1.00
+011010+G+F  26  34.53000  -5917.56175  11887.12350  11888.73544  12011.92792  411.24552   0.00  1.00
+K80+G       23  39.04000  -5950.87340  11947.74680  11949.00996  12058.15071  457.46831   0.00  1.00
+K80+I+G     24  37.41000  -5950.57605  11949.15210  11950.52667  12064.35618  463.67378   0.00  1.00
+012313+F    27  33.25000  -5950.31559  11954.63118  11956.36911  12084.23577  483.55337   0.00  1.00
+012213+F    27  33.25000  -5952.11058  11958.22116  11959.95909  12087.82575  487.14335   0.00  1.00
+012314+F    28  32.07000  -5949.09947  11954.19894  11956.06775  12088.60370  487.92130   0.00  1.00
+010212+F    26  34.53000  -5959.18463  11970.36926  11971.98120  12095.17368  494.49128   0.00  1.00
+012212+F    26  34.53000  -5959.65943  11971.31886  11972.93080  12096.12328  495.44088   0.00  1.00
+010213+F    27  33.25000  -5957.06064  11968.12128  11969.85921  12097.72587  497.04347   0.00  1.00
+K80+I       23  39.04000  -5974.90514  11995.81028  11997.07344  12106.21419  505.53179   0.00  1.00
+010012+F    26  34.53000  -5964.74421  11981.48842  11983.10036  12106.29284  505.61044   0.00  1.00
+012013+F    27  33.25000  -5962.12925  11978.25850  11979.99643  12107.86309  507.18069   0.00  1.00
+012012+F    26  34.53000  -5974.64960  12001.29920  12002.91114  12126.10362  525.42122   0.00  1.00
+010210+F    26  34.53000  -5976.57458  12005.14916  12006.76110  12129.95358  529.27118   0.00  1.00
+012310+F    27  33.25000  -5973.19079  12000.38158  12002.11951  12129.98617  529.30377   0.00  1.00
+012210+F    26  34.53000  -5977.70123  12007.40246  12009.01440  12132.20688  531.52448   0.00  1.00
+HKY85       25  35.92000  -5981.72025  12013.44050  12014.93133  12133.44475  532.76235   0.00  1.00
+TN93        26  34.53000  -5978.85509  12009.71018  12011.32212  12134.51460  533.83220   0.00  1.00
+000101+G+F  26  34.53000  -6028.02955  12108.05910  12109.67104  12232.86352  632.18112   0.00  1.00
+000102+G+F  27  33.25000  -6027.15138  12108.30276  12110.04069  12237.90735  637.22495   0.00  1.00
+010112+F    26  34.53000  -6065.15408  12182.30816  12183.92010  12307.11258  706.43018   0.00  1.00
+000100+G+F  26  34.53000  -6079.11681  12210.23362  12211.84556  12335.03804  734.35564   0.00  1.00
+010211+F    26  34.53000  -6080.81607  12213.63214  12215.24408  12338.43656  737.75416   0.00  1.00
+001101+F    25  35.92000  -6089.44631  12228.89262  12230.38345  12348.89687  748.21447   0.00  1.00
+010110+F    25  35.92000  -6090.63982  12231.27964  12232.77047  12351.28389  750.60149   0.00  1.00
+010011+F    25  35.92000  -6094.74661  12239.49322  12240.98405  12359.49747  758.81507   0.00  1.00
+F81+G       25  35.92000  -6106.18486  12262.36972  12263.86055  12382.37397  781.69157   0.00  1.00
+F81+I+G     26  34.53000  -6103.95758  12259.91516  12261.52710  12384.71958  784.03718   0.00  1.00
+F81+I       25  35.92000  -6117.43632  12284.87264  12286.36347  12404.87689  804.19449   0.00  1.00
+K80         22  40.81000  -6142.42909  12328.85818  12330.01475  12434.46192  833.77952   0.00  1.00
+011010+F    25  35.92000  -6167.29688  12384.59376  12386.08459  12504.59801  903.91561   0.00  1.00
+000101+F    25  35.92000  -6198.63537  12447.27074  12448.76157  12567.27499  966.59259   0.00  1.00
+000102+F    26  34.53000  -6197.84929  12447.69858  12449.31052  12572.50300  971.82060   0.00  1.00
+000100+F    25  35.92000  -6259.08395  12568.16790  12569.65873  12688.17215  1087.48975  0.00  1.00
+JC69+G      22  40.81000  -6272.46906  12588.93812  12590.09469  12694.54186  1093.85946  0.00  1.00
+JC69+I+G    23  39.04000  -6269.14954  12584.29908  12585.56224  12694.70299  1094.02059  0.00  1.00
+JC69+I      22  40.81000  -6277.78094  12599.56188  12600.71845  12705.16562  1104.48322  0.00  1.00
+F81         24  37.41000  -6284.99563  12617.99126  12619.36583  12733.19534  1132.51294  0.00  1.00
+JC69        21  42.76000  -6424.20245  12890.40490  12891.45969  12991.20847  1390.52607  0.00  1.00
 --------------------------------------------------------------------------------------------------
 * NOTE 1: when sites/K &lt; 40, the AICc is recommended over AIC
 * NOTE 2: The best model is selected by BIC, because AIC is biased, favoring parameter-rich models
@@ -2544,103 +2533,110 @@ JC69        21  42.76000  -6424.20245  12890.40490  12891.45969  12991.20847  13
 <p>En la columna de <span class="math inline">\(BIC_{w_i}\)</span> se
 aprecia que:</p>
 <ol style="list-style-type: decimal">
-<li>El <strong>modelo de tres tasas 010212+G</strong> con estima de
-frecuencias es el mejor, con un peso del 55%.</li>
-<li>El segundo mejor está a una <span class="math inline">\(\Delta_{BIC}\)</span> con respecto al <span class="math inline">\(BIC_{min}\)</span> de 2.07 unidades y con un peso
-relativo de 19%.</li>
-<li>El modelo <span class="math inline">\(HKY85+G\)</span> que
-seleccionamos inicialmente no está comprendido siguiera dentro del
-intervalo de confianza del 95%, el cual comprende exclusivamente
-diferentes modelos TVM* del set extendido.</li>
+<li>El <strong>modelo de dos tasas HKY85+G (010010+G)</strong> es el
+mejor, con un peso <span class="math inline">\(BIC_w\ =\
+0.85\)</span>.</li>
+<li>El segundo mejor (<span class="math inline">\(TN93+G\)</span>) está
+a una <span class="math inline">\(\Delta_{BIC}\ =\ 4.026\)</span> con
+respecto al <span class="math inline">\(BIC_{min}\)</span>, con un peso
+relativo <span class="math inline">\(BIC_w\ =\ 0.11\)</span>.</li>
+<li>Recuerden que el modelo seleccionado por <span class="math inline">\(AIC\)</span> fue el <span class="math inline">\(TN93G\)</span>, demostrando que tiende a
+seleccionar modelos más parametrizados que el <span class="math inline">\(BIC\)</span>.</li>
 </ol>
 <p>Finalmente, se infiere la filogenia bajo el mejor modelo seleccionado
-por BIC, en este caso <span class="math inline">\(010212+G+f\)</span></p>
+por BIC, en este caso <span class="math inline">\(HKY85+G\)</span></p>
 <pre>
-
 ==================================================================================================
-#  Will estimate the ML tree under best-fitting model $best_model selected by BIC
+#  Will estimate the ML tree under best-fitting model HKY85+G selected by BIC
 --------------------------------------------------------------------------------------------------
-18:41:24 # running: phyml -i primates.phy -d nt -m 010212 -v 0 -c 4 -a e -o tlr -s BEST
+18:54:31 # running: phyml -i primates.phy -d nt -m HKY85 -c 4 -a e -o tlr -s BEST
 # Your results:
-  - primates.phy_010212+G_BESTmoves_phyml_stats.txt
-  - primates.phy_010212+G_BESTmoves_phyml_tree.txt
+  - primates.phy_HKY85+G_BESTmoves_phyml_stats.txt
+  - primates.phy_HKY85+G_BESTmoves_phyml_tree.txt
 --------------------------------------------------------------------------------------------------
 
-Elapsed time: 0 days, 00 hr, 00 min, 13 sec
+Elapsed time: 0 days, 00 hr, 00 min, 18 sec
 Done!
-
+  ========================================================================================
+  If you use phyml_DNAmodelFinder.sh v.1.2.0_2023-11-18 for your research,
+  I would appreciate that you:
+  
+  1. Cite the code in your work as:   
+  Pablo Vinuesa. phyml_DNAmodelFinder.sh v.1.2.0_2023-11-18 
+       https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_DNAmodelFinder.sh
+  
+  2. Give it a like on the https://github.com/vinuesa/TIB-filoinfo/ repo
+  
+  Thanks!
 </pre>
 <p>Podemos desplegar el árbol directamente en la línea de comandos con
 <span class="math inline">\(nw\_display\)</span>, enraizando previamente
 en <em>Tarsius syrichta</em> y <em>Lemur catta</em> con <span class="math inline">\(nw\_reroot\)</span>, como se muestra abajo:</p>
-<pre style="background: Cornsilk;"><code>nw_display &lt;(nw_reroot primates.phy_010212+G_BESTmoves_phyml_tree.txt Tarsius_sy Lemur_catt)</code></pre>
+<pre style="background: Cornsilk;"><code>nw_display &lt;(nw_reroot primates.phy_HKY85+G_BESTmoves_phyml_tree.txt Tarsius_sy)</code></pre>
 <pre>
-
-               +----------------------------------------------------+ Tarsius sy
- +-------------+ 1.000000                                                       
- |             +-----------------------------------+ Lemur catt                 
+ +----------------+ Tarsius sy                                                  
  |                                                                              
- |             +-----------------------------------------------+ Saimiri sc     
-=|             |                                                                
- |             |                       +------------------+ Hylobates           
- |             |                       |                                        
- +-------------+ 0.995928  +-----------+ 1.000000----------+ Pongo              
-               |           |           |     |                                  
-               |           |           +-----+ 0.995309----+ Gorilla            
-               |           |                 |       |                          
-               |           |                 +-------+ 1.000000Homo sapie       
-               +-----------+ 1.000000                +-+ 0.999253               
-                           |                           +------+ Pan             
-                           |                                                    
-                           |                         +-------+ M. sylvanu       
-                           |                         |                          
-                           +-------------------------+ 0.990755-+ M. fascicu    
-                                                     |    |                     
-                                                     +----+ 0.999990aca fus     
-                                                          +--+                  
-                                                             +--+ M. mulatta    
+=|                +-----------------------+ Lemur catt                          
+ |                |                                                             
+ |                |                  +-----------------------------+ Saimiri sc 
+ +----------------+                  |                                          
+                  |                  |                        +---+ M. sylvanu  
+                  |                  |                        |                 
+                  +------------------+ 1.000000---------------+ 1.000000 fascicu
+                                     |      |                 | |               
+                                     |      |                 +-+ 0.987818ulatta
+                                     |      |                   +--+ 0.999992   
+                                     +------+ 0.992860             ++ Macaca fus
+                                            |                                   
+                                            |        +----------+ Hylobates     
+                                            |        |                          
+                                            +--------+ 1.000000--+ Pongo        
+                                                     |  |                       
+                                                     +--+ 0.994098 Gorilla      
+                                                        |    |                  
+                                                        +----+ 1.000000n        
+                                                             +-+ 0.999171       
+                                                               +--+ Homo sapie  
                                                                                 
- |---------------------|--------------------|---------------------|--           
- 0                   0.2                  0.4                   0.6             
- substitutions/site                                           
-                                                         
+ |---------------|----------------|---------------|---------------|--           
+ 0            0.25              0.5            0.75               1             
+ substitutions/site                                                             
+                  
 </pre>
 <p><strong>Figura 7.</strong> Filogenia de máxima verosimilitud bajo el
-model <span class="math inline">\(010212+f+G\)</span> seleccionado
-automáticamente por <em>phyml_DNAmodelFinder</em> y desplegada con
+model <span class="math inline">\(HKY85+G\)</span> seleccionado
+automáticamente por <em>phyml_DNAmodelFinder</em> mediante <span class="math inline">\(BIC\)</span> y desplegada con
 <em>nw_display</em>.</p>
-</div>
-</div>
-<div id="comparación-del-rendimiento-benchmarking-de-phyml_dnamodelfinder-con-jmodeltesst2" class="section level2" number="5.3">
-<h2><span class="header-section-number">5.3</span> Comparación del
-rendimiento (<em>benchmarking</em>) de <em>phyml_DNAmodelFinder</em> con
-<em>jModelTesst2</em></h2>
-<p>Para finalizar, vamos a comparar los resultados y rendimiento
-computacional de <em>phyml_DNAmodelFinder</em> con respecto a <a href="https://github.com/ddarriba/jmodeltest2"><em>jModelTesst2</em></a>,
-que puede ser considerado el software de referencia para selección de
-modelos de DNA.</p>
-<p>Las corridas de ambos programas se realizaron sobre la misma máquina
-con las siguientes características:</p>
+<!--
+
+## Comparación del rendimiento (*benchmarking*) de *phyml_DNAmodelFinder* con *jModelTesst2*
+
+Para finalizar, vamos a comparar los resultados y rendimiento computacional de *phyml_DNAmodelFinder* 
+con respecto a [*jModelTesst2*](https://github.com/ddarriba/jmodeltest2), que puede ser considerado 
+el software de referencia para selección de modelos de DNA. 
+
+Las corridas de ambos programas se realizaron sobre la misma máquina con las siguientes características:
+
 <pre>
 - Linux 5.15.0-56-generic, arch: amd64, bits: 64, numcores: 12
 - Intel Corporation 8th Gen Core Processor Host Bridge/DRAM Registers (rev 07)
 </pre>
-<div id="rendimiento-de-phyml_dnamodelfinder" class="section level3" number="5.3.1">
-<h3><span class="header-section-number">5.3.1</span> Rendimiento de
-<em>phyml_DNAmodelFinder</em></h3>
-<ul>
-<li>Llamada a <em>phyml_DNAmodelFinder</em> v0.7 corriendo
-<em>phyml</em> v3.3.20220408 (<em>single threaded</em>) sobre un solo
-núcleo.</li>
-</ul>
-<pre style="background: Cornsilk;"><code>time phyml_DNAmodelFinder.sh primates.phy 2 &amp;&gt; /dev/null </code></pre>
+
+### Rendimiento de *phyml_DNAmodelFinder*
+- Llamada a *phyml_DNAmodelFinder* v0.7 corriendo *phyml* v3.3.20220408 (*single threaded*) sobre un solo núcleo. 
+
+```{style="background: Cornsilk;"}
+time phyml_DNAmodelFinder.sh primates.phy 2 &> /dev/null 
+```
+
 <pre>
 real    0m12.977s
 user    0m12.175s
 sys 0m1.074s
 </pre>
-<p>con los siguientes modelos seleccionados por <span class="math inline">\(BIC\)</span> conformando el intervalo de
-credibilidad del 100%</p>
+
+con los siguientes modelos seleccionados por $BIC$ conformando el intervalo de credibilidad del 100%
+
 <pre>
 model       K   sites/K   lnL          AIC          AICc         BIC          deltaBIC    BICw  BICcumW
 010212+G+F  27  33.25000  -5721.62321  11497.24642  11498.98435  11626.85101  0           0.44  0.44
@@ -2655,28 +2651,26 @@ HKY85+G     26  34.53000  -5728.06316  11508.12632  11509.73826  11632.93074  6.
 012012+G+F  27  33.25000  -5726.25023  11506.50046  11508.23839  11636.10505  9.25404     0.00  0.99
 012314+G+F  29  30.96000  -5719.45649  11496.91298  11498.91759  11636.11791  9.26690     0.00  1.00
 </pre>
-<p>Nota: todos los modelos arriba enlistados como códigos incorporan la
-estima de frecuencia de bases, como indica ‘la decoración’ <span class="math inline">\(+F\)</span>, (compositional_heterogeneity flag to:
-1).</p>
-</div>
-<div id="rendimiento-de-jmodeltest2" class="section level3" number="5.3.2">
-<h3><span class="header-section-number">5.3.2</span> Rendimiento de
-<em>jModelTest2</em></h3>
-<p>La versión de <span class="math inline">\(jmodeltest2\)</span>
-empleada es la que viene pre-empacada para Ubuntu 22.04.1 LTS</p>
-<ul>
-<li>Llamada a <em>jModelTest2</em> v2.1.10 v20160303 corriendo
-<em>phyml-mpi</em> PhyML_3.0_linux64 v20130103 sobre 12 cores asignados
-automáticamente</li>
-</ul>
-<pre style="background: Cornsilk;"><code>time jmodeltest -d primates.phy -i -f -g 4 -BIC -v -a -t fixed -s 203 -H BIC &amp;&gt; /dev/null </code></pre>
+
+Nota: todos los modelos arriba enlistados como códigos incorporan la estima de frecuencia de bases, 
+como indica 'la decoración' $+F$, (compositional_heterogeneity flag to: 1).
+
+### Rendimiento de *jModelTest2*
+La versión de $jmodeltest2$ empleada es la que viene pre-empacada para Ubuntu 22.04.1 LTS
+
+- Llamada a *jModelTest2* v2.1.10 v20160303 corriendo *phyml-mpi* PhyML_3.0_linux64 v20130103  sobre 12 cores asignados automáticamente 
+```{style="background: Cornsilk;"}
+time jmodeltest -d primates.phy -i -f -g 4 -BIC -v -a -t fixed -s 203 -H BIC &> /dev/null 
+```
+
 <pre>
 real    1m30.086s
 user    13m27.152s
 sys 0m1.791s
 </pre>
-<p>con los siguientes modelos seleccionados por <span class="math inline">\(BIC\)</span> conformando el intervalo de
-credibilidad del 100%</p>
+
+con los siguientes modelos seleccionados por $BIC$ conformando el intervalo de credibilidad del 100%
+
 <pre>
 * BIC MODEL SELECTION : Selection uncertainty
  
@@ -2694,77 +2688,73 @@ TIM1+G      5710.43657   28  11611.277902  10.595680    0.003542   0.993445
 TrN+I+G     5710.55181   28  11611.508382  10.826160    0.003157   0.996602 
 ... truncado, basado en redondeo de 0.996602 ~= 1
 </pre>
-</div>
-<div id="benchmark-entre-phyml_dnamodelfinder.sh-y-jmodeltest2" class="section level3" number="5.3.3">
-<h3><span class="header-section-number">5.3.3</span> Benchmark entre
-<span class="math inline">\(phyml\_DNAmodelFinder.sh\)</span> y <span class="math inline">\(jModelTest2\)</span></h3>
-<p>Un análisis comparativo, basado en 75 alineamientos con 7-30
-secuencias entre 132 y 1234 nucleótidos, resultó en los siguientes
-resultados:</p>
-<ul>
-<li>jmodeltest2_12_threads-time.out
+
+
+### Benchmark entre $phyml\_DNAmodelFinder.sh$ y $jModelTest2$
+Un análisis comparativo, basado en 75 alineamientos con 7-30 secuencias entre 132 y 1234 nucleótidos,
+resultó en los siguientes resultados:
+
+- jmodeltest2_12_threads-time.out
 <pre>
 real    57m38.413s
 user    526m10.365s
 sys 2m39.542s
-</pre></li>
-<li>phyml_DNAmodelFinder_v08_phyml22_PARALLEL_BICcutoff2_fm-time.out
+</pre>
+
+- phyml_DNAmodelFinder_v08_phyml22_PARALLEL_BICcutoff2_fm-time.out
 <pre>
 real    4m45.518s
 user    45m9.525s
 sys 0m55.629s
-</pre></li>
-</ul>
-<p>En promedio, ambos programas encuentran modelos muy parecidos para
-los 75 alineamientos, como se deduce de:</p>
-<p><span class="math inline">\(\sum_{n=1}^{75}BIC_{phyml\_DNAmodelFinder} -
-\sum_{n=1}^{75}BICcum_{jmodeltest2} = -0.411463\)</span>,</p>
-<p>resultado que favorece mínimamente a <span class="math inline">\(phyml\_DNAmodelFinder\)</span>.</p>
-<p>Que ambos programas seleccionan modelos idénticos o muy parecidos se
-deduce del hecho de que los 75 modelos seleccionados por cada uno de los
-programas tiene el mismo promedio de 43 parámetros:</p>
-<p>(<span class="math inline">\(\overline{K}_{phyml\_DNAmodelFinder} =
-\overline{K}_{jModelTest2} = 43\)</span>).</p>
-<div id="conclusión-2" class="section level4" number="5.3.3.1">
-<h4><span class="header-section-number">5.3.3.1</span> Conclusión</h4>
+</pre>
+
+En promedio, ambos programas encuentran modelos muy parecidos
+para los 75 alineamientos, como se deduce de:
+
+$\sum_{n=1}^{75}BIC_{phyml\_DNAmodelFinder} - \sum_{n=1}^{75}BICcum_{jmodeltest2} = -0.411463$,
+
+resultado que favorece mínimamente a $phyml\_DNAmodelFinder$. 
+
+Que ambos programas seleccionan modelos idénticos o muy parecidos se 
+deduce del hecho de que los 75 modelos seleccionados por cada uno de
+los programas tiene el mismo promedio de 43 parámetros:
+
+($\overline{K}_{phyml\_DNAmodelFinder} = \overline{K}_{jModelTest2} = 43$).
+
+-->
+</div>
+<div id="conclusión-1" class="section level3" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Conclusión</h3>
 <p>El <span class="math inline">\(script\)</span> <span class="math inline">\(phyml\_DNAmodelFinder\)</span> es una herramienta
 muy ligera, eficiente y competitiva para encontrar modelos de
 sustitución de nucleótidos de entre los 203 modelos de la familia <span class="math inline">\(GTR+G+I\)</span>, haciendo uso excluisvamente de
 <span class="math inline">\(phyml\)</span>, <span class="math inline">\(Bash\)</span> y <span class="math inline">\(awk\)</span>, junto a algunas otras herramientas
 de <span class="math inline">\(linux\)</span>, como <span class="math inline">\(bc\)</span>, <span class="math inline">\(sed\)</span> y <span class="math inline">\(sort\)</span>.</p>
-<p>Es de hecho una herramienta mucho más rápida (~ 7x) que <a href="https://github.com/ddarriba/jmodeltest2"><span class="math inline">\(jModelTest2\)</span></a>, en la comparación
-mostrada arriba para el alineamiento de <em>primates.phy</em>,
-seleccionando modelos parecidos.</p>
+<p>Es de hecho una herramienta más rápida que <a href="https://github.com/ddarriba/jmodeltest2"><span class="math inline">\(jModelTest2\)</span></a> (Vinuesa, benchmark sin
+publicar), seleccionando el mismo modelo o modelos muy parecidos.</p>
 <p><span class="math inline">\(phyml\_DNAmodelFinder.sh\)</span> usa
 exclusivamente el criterio bayesiano de información (<span class="math inline">\(BIC\)</span>), lo cual minimiza el riesgo de
 sobreparametrización.</p>
-</div>
-</div>
-<div id="impacto-de-modeltest-y-su-sucesor-jmodeltest2-en-el-campo-de-la-filogenética" class="section level3" number="5.3.4">
-<h3><span class="header-section-number">5.3.4</span> Impacto de <span class="math inline">\(modelTest\)</span> y su sucesor <span class="math inline">\(jModelTest2\)</span> en el campo de la
-filogenética</h3>
-<p><span class="math inline">\(modelTest\)</span> y su sucesor <a href="https://github.com/ddarriba/jmodeltest2"><span class="math inline">\(jModelTest2\)</span></a>, sin duda alguna
-representan un hito en la popularización del uso riguroso de selección
-de modelos para filogenética, siendo una herramienta muy versátil y
-poderosa, que implementa cinco estrategias para la selección de modelos:
-LRTs jerárquicos(<span class="math inline">\(hLRT\)</span>) y dinámicos
-(<span class="math inline">\(dLRT\)</span>), criterios de información de
-Akaike (<span class="math inline">\(AIC\)</span>) y bayesianos (<span class="math inline">\(BIC\)</span>) y un método de decisión teórica
-(<span class="math inline">\(DT\)</span>). Además calcula ponderaciones
-o pesos de Akaike o bayesianos de los parámetros de todos los modelos
-evaluados y hace promediado de modelos y de sus parámetros, ¡una
-joya!</p>
-<p>El trabajo del <a href="https://dposada.webs.uvigo.es/david-posada/">Dr. David Posada</a>
-y su grupo sobre selección de modelos filogenéticos ha tenido un enorme
-impacto en el campo y recomiendo mucho que lean sus trabajos. ¡Gracias
-David!.</p>
-<p>No obstante, algunos autores son también críticos con respecto al uso
-generalizado de <span class="math inline">\(modeltest\)</span>. En
-palabras del <a href="http://abacus.gene.ucl.ac.uk/">Prof. Ziheng
-Yang</a>, la aplicación masiva de <span class="math inline">\(jModelTest2\)</span> a datos biológicos reales ha
-contribuido al uso extendido de los modelos más complejos, incluyendo
-los “modelos patológicos” <span class="math inline">\(+I+\Gamma\)</span>, como describe en su infuyente
-libro (Yang Z. 2014. Molecular Evolution, pp. 149).</p>
+<!--
+### Impacto de $modelTest$ y su sucesor $jModelTest2$ en el campo de la filogenética
+$modelTest$ y su sucesor [$jModelTest2$](https://github.com/ddarriba/jmodeltest2),
+sin duda alguna representan un hito en la popularización del uso riguroso de selección de modelos para filogenética,
+siendo una herramienta muy versátil y poderosa, que implementa cinco estrategias para la selección de modelos:
+LRTs jerárquicos($hLRT$) y dinámicos ($dLRT$), criterios de información de Akaike ($AIC$) y bayesianos ($BIC$) 
+y un método de decisión teórica ($DT$). Además calcula ponderaciones o pesos de Akaike o bayesianos de los
+parámetros de todos los modelos evaluados y hace promediado de modelos y de sus parámetros, ¡una joya!
+
+El trabajo del [Dr. David Posada](https://dposada.webs.uvigo.es/david-posada/) y su grupo sobre selección 
+de modelos filogenéticos ha tenido un enorme impacto en el campo y recomiendo mucho que lean sus trabajos. 
+¡Gracias David!.
+
+No obstante, algunos autores son también críticos con respecto al uso generalizado de $modeltest$.
+En palabras del [Prof. Ziheng Yang](http://abacus.gene.ucl.ac.uk/), la aplicación masiva de $jModelTest2$ 
+a datos biológicos reales ha contribuido al uso extendido de los modelos más complejos,
+incluyendo los "modelos patológicos" $+I+\Gamma$, 
+como describe en su infuyente libro (Yang Z. 2014. Molecular Evolution, pp. 149). 
+
+-->
 <hr />
 </div>
 </div>
@@ -2777,7 +2767,7 @@ y los scripts <em>phyml_DNAmodelFinder</em> y
 tesis o publicaciones, y/o le des un “like” en el <a href="https://github.com/vinuesa/TIB-filoinfo">repositorio GitHub de los
 TIB</a>.</p>
 <ul>
-<li><strong>Cita</strong>: Vinuesa P. (2022). Efficient two-step
+<li><strong>Cita</strong>: Vinuesa P. (2023). Efficient two-step
 selection of DNA models with <span class="math inline">\(phyml\_DNAmodelFinder\)</span>. <a href="https://github.com/vinuesa/TIB-filoinfo" class="uri">https://github.com/vinuesa/TIB-filoinfo</a></li>
 </ul>
 </div>

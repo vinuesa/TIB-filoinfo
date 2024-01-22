@@ -1,18 +1,18 @@
-# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2022-FILO" width="115" height="115" align="middle"> <b>TIB2022-FILO</b>
+# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2024-FILO" width="115" height="115" align="middle"> <b>TIB2024-FILO</b>
 
 <img src="docs/pics/foto_grupo_TIB22.png" alt="TIB2022 foto de grupo" align="middle">
 
 **TIB22 participants, 2022-08-03**
 
-# <b>Talleres Internacionales de Bioinform&aacute;tica - Centro de Ciencias Gen&oacute;micas, UNAM, Cuernavaca, M&eacute;xico (TIB2022-FILO)</b>
-Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/) (#TIB2022-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2019 (TIB2019-T3). 
+# <b>Talleres Internacionales de Bioinform&aacute;tica - Centro de Ciencias Gen&oacute;micas, UNAM, Cuernavaca, M&eacute;xico (TIB2024-FILO)</b>
+Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer regularmente el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/) (#TIB2024-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2022 (TIB2022). 
 
  
 ## Presentaci&oacute;n
 Este taller de nivel b&aacute;sico-intermedio te proporcionar&aacute; una s&oacute;lida base de conocimientos te&oacute;ricos y pr&aacute;cticos sobre aspectos fundamentales de bioc&oacute;mputo para inferencia filogen&eacute;tica, evoluci&oacute;n molecular y gen&oacute;mica microbiana, con &eacute;nfasis en an&aacute;lisis pangen&oacute;micos y filogen&oacute;micos.
 
 ### Descripci&oacute;n
-En el taller (40 hrs) tendremos sesiones te&oacute;ricas y pr&aacute;cticas que cubrir&aacute;n un amplio espectro del t&oacute;pico como:
+En el taller (~36 hrs) tendremos sesiones te&oacute;ricas y pr&aacute;cticas que cubrir&aacute;n un amplio espectro del t&oacute;pico como:
 
 - introducci&oacute;n al bioc&oacute;mputo en sistemas Linux para procesamiento eficiente de secuencias y datos moleculares
 - formateo y escrutinio de bases de datos locales de secuencias mediante BLAST
@@ -27,14 +27,14 @@ Al final del curso tendr&aacute;n una amplia visi&oacute;n sobre el espectro de 
 
 ### Requisitos
 #### Conocimientos previos
-Es recomendable tener conocimientos b&aacute;sicos de Unix/Linux a nivel b&aacute;sico, ya que todas las demostraciones de software se har&aacute;n en este sistema operativo.
+Es recomendable tener conocimientos b&aacute;sicos de Unix/Linux, ya que todas las demostraciones de software se har&aacute;n en este sistema operativo.
 
 #### Requisitos t&eacute;cnicos
-Es necesario que el alumno traiga su computadora personal, de preferencia con Linux (o MacOS X) como sistema operativo. 
+Es necesario que traigas tu computadora personal, de preferencia con Linux (o MacOS X) como sistema operativo. 
 
-<b>Si usan Windows, deber&aacute;n tener instalado [MobaXterm](https://mobaxterm.mobatek.net/download-home-edition.html) (para Ms Windows) antes de llegar al taller!</b>. 
+<b>Si usas Windows, deber&aacute;s tener instalado [MobaXterm](https://mobaxterm.mobatek.net/download-home-edition.html) (para Ms Windows) antes de llegar al taller!</b>. 
 
-Aqu&iacute; tienen [instrucciones para la instalaci&oacute;n de MobaXterm en Windows](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/Instalaci&oacute;n_de_mobaXterm_en_Windows.pdf)
+Aqu&iacute; tienes [instrucciones para la instalaci&oacute;n de MobaXterm en Windows](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/Instalaci&oacute;n_de_mobaXterm_en_Windows.pdf)
 
 <!-- - Otra opci&oacute;n, para quienes tengan <b>Windows 10 o superior corriendo en una m&aacute;quina de 64 bits</b>, es [instalar Bash para Windows, habilitando "Windows Subsystem for Linux", como se explica aqu&iacute;](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/). -->
 
@@ -48,7 +48,7 @@ integran la gen&oacute;mica y la bioinform&aacute;tica con la biolog&iacute;a y 
 la evoluci&oacute;n y emergencia de pat&oacute;genos oportunistas a partir de microbios ambientales.
 
 ### Sobre los ayudantes
-Tenemos el privilegio de contar con la M.C.Bioq. <b>Stefany Argueta</b> y al M.C.Biol. <b>Julio Valerdi Negrero</b> como ayudantes del [Taller](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/). Ambos son personas con un excelente trato, adem&aacute;s de ser alumn@s de posgardo de la UNAM con amplia experiencia en bionform&aacute;tica y filogen&eacute;tica.
+Tenemos el privilegio de contar con la ayuda de <b>Daniela Hernández</b> y <b>Mauricio Osorio</b> como ayudantes del [Taller](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/). Ambos son personas con un excelente trato, adem&aacute;s de ser alumn@s de posgardo de la UNAM con amplia experiencia en bionform&aacute;tica y filogen&eacute;tica.
 
 ### Sobre medidas de seguridad sanitaria para minimizar riesgo de infecci&oacute;n por SARS-CoV-2
 Seguiremos estrictas medidas de seguridad para minimizar el riesgo latente de contraer COVID-19
@@ -61,14 +61,14 @@ Seguiremos estrictas medidas de seguridad para minimizar el riesgo latente de co
 *** 
 
 ## Sobre el material did&aacute;ctico
-A trav&eacute;s de estas p&aacute;ginas se distribuyen los apuntes, ejercicios y datos que se usar&aacute;n en el [Taller sobre Pangen&oacute;mica y Filogen&oacute;mica Microbiana](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/).
+A trav&eacute;s de estas p&aacute;ginas se distribuyen los apuntes, ejercicios y datos que se usar&aacute;n en el [Taller sobre Pangen&oacute;mica y Filogen&oacute;mica Microbiana](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/).
 Para tu convenienca, se distribuye en formatos pdf y html.
 
 Puedes ver en mi sitio Web el [listados de cursos](http://www.ccg.unam.mx/~vinuesa/cursos.html) y materiales asociados, que pongo libremente disponible para la comunidad.
 
 
 ### Sobre el repositorio
-Este repositorio contiene el material para el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/),  los [Talleres Internacionales de Bioinform&aacute;tica - TIB2022](http://congresos.nnb.unam.mx/TIB2022), a celebrarse en el [Centro de Ciencias Gen&oacute;micas](http://www.ccg.unam.mx) de la [Universidad Nacional Aut&oacute;noma de M&eacute;xico](http://www.ccg.unam.mx), del 1 al 5 de agosto de 2022.
+Este repositorio contiene el material para el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/) de los [Talleres Internacionales de Bioinform&aacute;tica - TIB2024](https://www.nnb.unam.mx/talleres/), a celebrarse en el [Centro de Ciencias Gen&oacute;micas](http://www.ccg.unam.mx) de la [Universidad Nacional Aut&oacute;noma de M&eacute;xico](http://www.ccg.unam.mx), del 22 al 26 de enero de 2024.
 
 
 ### Clonaci&oacute;n del repositorio
@@ -93,7 +93,7 @@ que indican c&oacute;mo instalar el <i>Git plugin</i> de MobaXterm.
 
 
 ### Licencia y t&eacute;rminos de uso
-El material del [Taller, TIB-filoinfo](https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/) lo distribuyo p&uacute;blicamente a trav&eacute;s de este repositorio GitHub bajo la [**Licencia No Comercial Creative Commons 4.0**](https://creativecommons.org/licenses/by-nc/4.0/) 
+El material del [Taller, TIB-filoinfo](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/) lo distribuyo p&uacute;blicamente a trav&eacute;s de este repositorio GitHub bajo la [**Licencia No Comercial Creative Commons 4.0**](https://creativecommons.org/licenses/by-nc/4.0/) 
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0</a>
 
@@ -107,14 +107,14 @@ Quiero agradecer al [Nodo Nacional de Bioinform&aacute;tica - UNAM](https://www.
 
 ## <b>Sesiones y material asociado</b>
 ### Horario y lugar de impartici&oacute;n de las sesiones
-Las clases se imparten del 1 al 5 de Agosto en el auditorio Guillermo Sober&oacute;n del [CCG-UNAM](http://www.ccg.unam.mx/), Cuernavaca, Morelos
-de 9 a 17:00 hrs, seg&uacute;n el [programa del TIB2022](https://www.nnb.unam.mx/EBM2022/#talleres)
+Las clases se imparten del 22 al 26 de enero en el auditorio Guillermo Sober&oacute;n del [CCG-UNAM](http://www.ccg.unam.mx/), Cuernavaca, Morelos
+de 9 a 17:00 hrs, seg&uacute;n el [programa del TIB2024](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/)
 
 <img src="docs/pics/PV_impartiendo_clases_TIB19_2.png" alt="TIB2022-T3 foto de grupo" width="400" height="300">
 
 **Sesión del Taller TIB2019 en el Auditorio Guillermo Soberón del CCG-UNAM**
 
-### Lunes 1 de Agosto
+### Lunes 22 de enero
 
 #### <b>Sesi&oacute;n 1: Introducci&oacute;n a Linux (teor&iacute;a y pr&aacute;ctica)</b>
 - [presentaci&oacute;n - PDF: Primer contacto con un sistema GNU/Linux](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf)
@@ -150,7 +150,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ***
 
-### Martes 2 de Agosto
+### Martes 23 de enero
 
 #### <b>Sesi&oacute;n 3: B&uacute;squeda de hom&oacute;logos usando BLAST desde la l&iacute;nea de comandos (teor&iacute;a y pr&aacute;cticas)</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/Tema3_BLAST_OVERVIEW.pdf)
@@ -182,7 +182,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ***
 
-### Mi&eacute;rcoles 3 de Agosto
+### Mi&eacute;rcoles 24 de enero
 
 #### <b>Sesi&oacute;n 5: Introducci&oacute;n a los m&eacute;todos filogen&eacute;ticos, modelos de sustituci&oacute;n y algoritmos de b&uacute;squeda de &aacute;rboles</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion5_metodos_filogeneticos_y_modelos/Tema5_metodos_filogeneticos_y_modelos.pdf)
@@ -210,7 +210,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ***
 
-### Jueves 4 de Agosto
+### Jueves 25 de enero
 #### <b>C&oacute;mputo de familias de genes hom&oacute;logos con datos gen&oacute;micos usando GET_HOMOLOGUES(teor&iacute;a)</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion7_pangenomica_GET_HOMOLOGUES/pangenomica_microbiana_y_GET_HOMOLOGUES.pdf)
 - [pr&aacute;ctica GET_HOMOLOUGES+GET_PHYLOMARKERS- html](https://vinuesa.github.io/TIB-filoinfo/sesion7_pangenomica_GET_HOMOLOGUES/) 
@@ -225,7 +225,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ***
 
-### Viernes 5 de Agosto
+### Viernes 26 de enero
 #### <b>Estrategias para la estima de filogenias gen&oacute;micas</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion8_filogenomica_GET_PHYLOMARKERS/get_phylomarkers_overview.pdf)
 - [tutorial GET_PHYLOMARKERS - html](https://github.com/vinuesa/get_phylomarkers/blob/master/docs/GET_PHYLOMARKERS_manual.md#get_phylomarkers-tutorial)
@@ -249,6 +249,18 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 - [GET_HOMOLOGUES](https://github.com/eead-csic-compbio/get_homologues/releases)
 - [GET_PHYLOMARKERS](https://github.com/vinuesa/get_phylomarkers)
 
+## Lista de scripts
+
+- [blast-imager.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/blast-imager.pl)
+- [col_sumStats.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/col_freqAndHistogram.sh)
+- [compute_RBH_clusters.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/compute_RBH_clusters.sh)
+- [convert_aln_format_batch_bp.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/convert_aln_format_batch_bp.pl)
+- [fasta_toolkit.awk](https://github.com/vinuesa/TIB-filoinfo/blob/master/fasta_toolkit.awk)
+- [phyml_DNAmodelFinder.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_DNAmodelFinder.sh)
+- [phyml_protModelFinder.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_protModelFinder.sh)
+- [prot2cdnAln.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/prot2cdnAln.pl)
+- [split_fasta.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/split_fasta.pl)
+- [translate_fastas.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/translate_fastas.pl)
 
 <!--- [MrBayes](http://nbisweden.github.io/MrBayes/)-->
 

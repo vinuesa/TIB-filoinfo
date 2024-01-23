@@ -1,10 +1,10 @@
 ###################
-# >>> TIB2022 <<< #
+# >>> TIB2024 <<< #
 ###################
 # Practicas de alineamiento multiple usando programas de la familia clustal
 # Autor: Pablo Vinuesa; CCG-UNAM; https://www.ccg.unam.mx:/~vinuesa/ @pvinmex
 # https://github.com/vinuesa/TIB-filoinfo
-# V3: 2022-08-02
+# V4: 2024-01-22
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -26,10 +26,31 @@ clustalw -infile=archivo.fasta -align -pwmatrix=blosum -pwgapopen=12
 -convert -outfile=archivo_aln1.phy -output=phylip
 #======================================================================================
 
+##############################
+>>> Descarga de archivos <<< #
+##############################
+
+# 1. Descarga de los archivos de secuencia
+wget -c https://github.com/vinuesa/TIB-filoinfo/raw/master/docs/sesion4_alineamientos/sequences_for_alingment.tgz
+
+
+# 2. Descarga de scripts en ~/bin haciendo uso de un bucle for
+base_url=https://github.com/vinuesa/TIB-filoinfo/raw/master
+
+cd ~/bin
+
+for f in split_fasta.pl translate_fastas.pl prot2cdnAlns.pl convert_alnFormats_using_clustalw.sh convert_aln_format_batch_bp.pl
+do
+    wget -c $base_url/$f
+done 
+
+cd -
+
 
 ##################################
 #>>> I) ejemplos con clustalw <<<#
 ##################################
+
 
 # 1) alineamiento estandar de aminoacidos
 clustalw -infile=4_GDP_procar_ualn.faa -outfile=4_GDP_procar_cluAln.faa -output=fasta

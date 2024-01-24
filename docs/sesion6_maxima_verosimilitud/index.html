@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México. GitHub repos; @pvinmex" />
 
-<meta name="date" content="2023-11-19" />
+<meta name="date" content="2024-01-23" />
 
 <title>Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</title>
 
@@ -337,7 +337,7 @@ display: none;
 de modelos y búsquedas intensivas de árboles</h1>
 <h4 class="author"><a href="https://www.ccg.unam.mx/~vinuesa/">Pablo
 Vinuesa, CCG-UNAM, Cuernavaca, México</a>. <a href="https://github.com/vinuesa">GitHub repos</a>; <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a></h4>
-<h4 class="date">2023-11-19</h4>
+<h4 class="date">2024-01-23</h4>
 
 </div>
 
@@ -1697,11 +1697,18 @@ cp /home/vinuesa/cursos/LCG-ENS/scripts/phyml_DNAmodelFinder.sh ~/bin</code></pr
 <p>o descargar directamente desde el <a href="https://github.com/vinuesa/TIB-filoinfo">repositorio GitHub de los
 TIB</a>, usando <span class="math inline">\(wget\)</span> desde la línea
 de comandos:</p>
-<pre style="background: Cornsilk;"><code>[ ! -d ~/bin ] &amp;&amp; mkdir ~/bin 
-cd ~/bin
-wget https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_protModelFinder.sh
-wget https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_DNAmodelFinder.sh
+<pre style="background: Cornsilk;"><code># si no existe el directorio ~/bin, entonces generalo
+[ ! -d ~/bin ] &amp;&amp; mkdir ~/bin 
 
+# cámbiate al directorio ~/bin y llama a wget para decargar los scripts
+cd ~/bin
+wget -c https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_protModelFinder.sh
+wget -c https://raw.githubusercontent.com/vinuesa/TIB-filoinfo/master/phyml_DNAmodelFinder.sh
+
+# haz ejecutables los scripts de shell (*.sh) descargados
+chmod 755 *sh
+
+# regresa al directorio previo (de trabajo)
 cd -</code></pre>
 <p>Estos <span class="math inline">\(scripts\)</span>, además de hacer
 las llamadas a <span class="math inline">\(phyml\)</span>, evalúa los

@@ -191,11 +191,17 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 #### <b>Sesi&oacute;n 6: Selecci&oacute;n de modelos e inferencia de filogenias bajo m&aacute;xima verosimilitud (teor&iacute;a y pr&aacute;ctica)</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/Tema6_maxima_verosimilitud_y_seleccion_de_models.pdf)
-- pr&aacute;ctica
+
+#### <b>pr&aacute;ctica</b>
   - [tutorial phyml, comandos - html](https://vinuesa.github.io/TIB-filoinfo/sesion6_maxima_verosimilitud/)
   - [tutorial phyml (secuencias), tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/phyml_tutorial_data.tgz)
   - [tutorial jmodeltest (presentaci&oacute;n) - pdf](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/jmodeltest_tutorial.pdf)
   - [tutorial jmodeltest (comandos y secuencias), tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/jmodeltest_tutorial.tgz)
+
+##### <b>Scripts para selección automática y eficiente de modelos de DNA y proteína y estima de filogenia con PhyML<\b>
+- [phyml_DNAmodelFinder.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_DNAmodelFinder.sh)
+- [phyml_protModelFinder.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_protModelFinder.sh)
+
 - Lecturas recomendadas
   - Lefort V, Longueville JE, Gascuel O. SMS: Smart Model Selection in PhyML. [Mol Biol Evol. 2017 Sep 1;34(9):2422-2424](https://www.ncbi.nlm.nih.gov/pubmed/28472384)
   - Criscuolo A. morePhyML: improving the phylogenetic tree space exploration with PhyML 3. Mol [Phylogenet Evol. 2011 Dec;61(3):944-8](https://www.ncbi.nlm.nih.gov/pubmed/21925283)

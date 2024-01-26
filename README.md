@@ -2,7 +2,7 @@
 
 <img src="docs/pics/TIB24_23ene24-1280_cropped.png" alt="TIB2024 foto de grupo" align="middle">
 
-**Participantes TIB23, 2024-01-23**
+**Participantes TIB2024-1, Taller de Pangenómica y Filogenómica Microbiana, 2024-01-23**
 
 <!--<img src="docs/pics/foto_grupo_TIB22.png" alt="TIB2022 foto de grupo" align="middle">
 **TIB22 participants, 2022-08-03** -->

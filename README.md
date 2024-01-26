@@ -1,15 +1,20 @@
 # <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2024-FILO" width="115" height="115" align="middle"> <b>TIB2024-FILO</b>
 
-<img src="docs/pics/foto_grupo_TIB22.png" alt="TIB2022 foto de grupo" align="middle">
+<img src="docs/pics/TIB24_23ene24-1280_cropped.png" alt="TIB2024 foto de grupo" align="middle">
 
-**TIB22 participants, 2022-08-03**
+**Participantes TIB23, 2024-01-23**
 
-# <b>Talleres Internacionales de Bioinform&aacute;tica - Centro de Ciencias Gen&oacute;micas, UNAM, Cuernavaca, M&eacute;xico (TIB2024-FILO)</b>
+<!--<img src="docs/pics/foto_grupo_TIB22.png" alt="TIB2022 foto de grupo" align="middle">
+**TIB22 participants, 2022-08-03** -->
+
+
+# <b>Talleres Internacionales de Bioinform&aacute;tica - [Centro de Ciencias Gen&oacute;micas, UNAM](https://www.ccg.unam.mx/), Cuernavaca, M&eacute;xico (TIB2024-FILO)</b>
 Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer regularmente el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/) (#TIB2024-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2022 (TIB2022). 
 
- 
+
+
 ## Presentaci&oacute;n
-Este taller de nivel b&aacute;sico-intermedio te proporcionar&aacute; una s&oacute;lida base de conocimientos te&oacute;ricos y pr&aacute;cticos sobre aspectos fundamentales de bioc&oacute;mputo para inferencia filogen&eacute;tica, evoluci&oacute;n molecular y gen&oacute;mica microbiana, con &eacute;nfasis en an&aacute;lisis pangen&oacute;micos y filogen&oacute;micos.
+Este taller de nivel b&aacute;sico-intermedio te proporcionar&aacute; una s&oacute;lida introducci&oacute;n al bioc&oacute;mputo en sistemas Linux y para trabajar con eficiencia en inferencia filogen&eacute;tica, evoluci&oacute;n molecular y gen&oacute;mica microbiana, con &eacute;nfasis en pangen&oacute;mica y filogen&oacute;mica.
 
 ### Descripci&oacute;n
 En el taller (~36 hrs) tendremos sesiones te&oacute;ricas y pr&aacute;cticas que cubrir&aacute;n un amplio espectro del t&oacute;pico como:
@@ -198,7 +203,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
   - [tutorial jmodeltest (presentaci&oacute;n) - pdf](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/jmodeltest_tutorial.pdf)
   - [tutorial jmodeltest (comandos y secuencias), tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion6_maxima_verosimilitud/jmodeltest_tutorial.tgz)
 
-##### <b>Scripts para selección automática y eficiente de modelos de DNA y proteína y estima de filogenia con PhyML<\b>
+##### <b>Scripts para selección automática y eficiente de modelos de DNA y proteína y estima de filogenia con PhyML</b>
 - [phyml_DNAmodelFinder.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_DNAmodelFinder.sh)
 - [phyml_protModelFinder.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_protModelFinder.sh)
 

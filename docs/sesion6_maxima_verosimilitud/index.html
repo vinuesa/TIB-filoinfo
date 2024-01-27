@@ -1629,7 +1629,8 @@ mayor que la penalización consiguiente <span class="math inline">\(2Ni=38+39\)<
 <h2><span class="header-section-number">4.3</span> Búsqueda intensiva
 bajo el mejor modelo, usando rearreglos tipo BEST y 5 árboles de
 semilla</h2>
-<pre style="background: Cornsilk;"><code># finalmente, hagamos una busqueda intensiva bajo este modelo, usando el algoritmo BEST the rearreglo de ramas, con 5 arboles de semilla y -o tlr
+<pre style="background: Cornsilk;"><code># finalmente, hagamos una busqueda intensiva bajo este modelo, usando el algoritmo BEST de rearreglo de ramas (evalúa NNI y SPR en cada iteración), 
+#  con 5 arboles de semilla y -o tlr
 phyml -i primates_21_AA.phy -d aa -m JTT -c 4 -a e -f m -s BEST --rand_start --n_rand_starts 5</code></pre>
 <div id="despliegue-y-edición-del-árbol-con-figtree-1" class="section level3" number="4.3.1">
 <h3><span class="header-section-number">4.3.1</span> Despliegue y

@@ -4,7 +4,7 @@
 # Practicas de alineamiento multiple usando programas de la familia clustal
 # Autor: Pablo Vinuesa; CCG-UNAM; https://www.ccg.unam.mx:/~vinuesa/ @pvinmex
 # https://github.com/vinuesa/TIB-filoinfo
-# V4: 2024-01-22
+# V5: 2024-01-26
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -30,9 +30,24 @@ clustalw -infile=archivo.fasta -align -pwmatrix=blosum -pwgapopen=12
 >>> Descarga de archivos <<< #
 ##############################
 
-# 1. Descarga de los archivos de secuencia
+# 0. Prapara tu directorio de trabajo para esta sesión
+mkdir ~/sesion4_alineamientos && cd sesion4_alineamientos
+
+# 1. Descarga de los archivos de secuencias desde el directorio sesion4_alineamientos y desempaca el tarro comprimido
 wget -c https://github.com/vinuesa/TIB-filoinfo/raw/master/docs/sesion4_alineamientos/sequences_for_alingment.tgz
 
+if [ -s sequences_for_aligments.tgz ] 
+then
+     if file sequences_for_alingment.tgz | grep gzip &> /dev/null
+     then 
+         echo "unpacking sequences_for_aligments.tgz ..."
+         tar -xzf sequences_for_aligments.tgz 
+     else 
+         echo "ERROR: This is not a gzip file"
+     fi
+else
+    echo "ERROR: sequences_for_aligments.tgz not found"
+fi
 
 # 2. Descarga de scripts en ~/bin haciendo uso de un bucle for
 base_url=https://github.com/vinuesa/TIB-filoinfo/raw/master
@@ -41,9 +56,10 @@ cd ~/bin
 
 for f in split_fasta.pl translate_fastas.pl prot2cdnAlns.pl convert_alnFormats_using_clustalw.sh convert_aln_format_batch_bp.pl
 do
-    wget -c $base_url/$f
+    wget -c "$base_url"/"$f"
 done 
 
+# cd - nos regresa al directorio sesion4_alineamientos, para poder seguir trabajando desde él
 cd -
 
 
@@ -163,6 +179,7 @@ leuA-Bacillales_cluoAln.fas
 #>>> III) Conversión de formatos <<< #
 ######################################
 
+# NOTA: el script convert_alnFormats_using_clustalw.sh require que esté instalado el módulo Bio::AlignIO de BioPerl
 # explora el script ./convert_alnFormats_using_clustalw.sh para que entiendas lo que hace
 ./convert_alnFormats_using_clustalw.sh leuA-Bacillales_cdnaln.fas nexus
 

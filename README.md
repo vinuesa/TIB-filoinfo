@@ -57,7 +57,7 @@ integran la gen&oacute;mica y la bioinform&aacute;tica con la biolog&iacute;a y 
 la evoluci&oacute;n y emergencia de pat&oacute;genos oportunistas a partir de microbios ambientales. 
 
 ### Sobre los ayudantes
-Tenemos el privilegio de contar con la ayuda de <b>Daniela Hernández</b> y <b>Mauricio Osorio</b> como ayudantes del [Taller](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/). Ambos son personas con un excelente trato, adem&aacute;s de ser alumn@s de posgardo de la UNAM con amplia experiencia en bionform&aacute;tica y filogen&eacute;tica.
+Tenemos el privilegio de contar con la ayuda de <b>Daniela Hernández</b> y <b>Mauricio Osorio</b> como ayudantes del [Taller](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/). Ambos son personas con un excelente trato y alumn@s de licenciatura de la Facultade de Ciencias de la UNAM con amplia experiencia en los tópicos de este taller.
 
 ### Sobre medidas de seguridad sanitaria para minimizar riesgo de infecci&oacute;n por SARS-CoV-2
 Seguiremos estrictas medidas de seguridad para minimizar el riesgo latente de contraer COVID-19

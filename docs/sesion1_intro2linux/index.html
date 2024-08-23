@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, Centro de Ciencias Genómicas - UNAM" />
 
-<meta name="date" content="2024-01-22" />
+<meta name="date" content="2024-08-22" />
 
 <title>Sesión 1. Introducción al biocómputo en sistemas GNU/Linux</title>
 
@@ -354,7 +354,7 @@ display: none;
 sistemas GNU/Linux</h1>
 <h4 class="author">Pablo Vinuesa, Centro de Ciencias Genómicas -
 UNAM</h4>
-<h4 class="date">2024-01-22</h4>
+<h4 class="date">2024-08-22</h4>
 
 </div>
 
@@ -618,7 +618,7 @@ Internacionales de Bioinformática <a href="https://www.nnb.unam.mx/talleres/">T
 el <a href="http://www.ccg.unam.mx">Centro de Ciencias Genómicas</a> de
 la <a href="http://www.ccg.unam.mx">Universidad Nacional Autónoma de
 México</a>, del 22 al 26 de enero de 2024 por <a href="http://www.ccg.unan.mx/~vinuesa/">Pablo Vinuesa, CCG-UNAM</a> <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a>.</p>
-<p>Version: 2024-01-22</p>
+<p>Version: 2024-08-22</p>
 <p>Si éste es tu primer contacto con Linux, te recomiendo que leas
 primero esta <a href="https://github.com/vinuesa/TIB-filoinfo/blob/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf">presentación
 sobre introducción al biocómputo en sistemas Linux - PDF</a>.</p>
@@ -691,7 +691,7 @@ hostname -I</code></pre>
 <pre class="bash"><code>uname
 uname -a</code></pre>
 <pre><code>## Linux
-## Linux alisio 6.5.0-14-generic #14~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Mon Nov 20 18:15:30 UTC 2 x86_64 x86_64 x86_64 GNU/Linux</code></pre>
+## Linux alisio 6.8.0-40-generic #40~22.04.3-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 30 17:30:19 UTC 2 x86_64 x86_64 x86_64 GNU/Linux</code></pre>
 </div>
 <div id="top-o-htop-muestran-los-procesos-en-ejecución-y-los-recursos-que-consumen" class="section level3" number="2.1.4">
 <h3><span class="header-section-number">2.1.4</span>
@@ -727,7 +727,7 @@ comandos</p>
 <strong>pwd</strong> imprime la ruta absoluta del directorio actual</h3>
 <pre class="bash"><code># dónde me encuentro en el sistema?
 pwd</code></pre>
-<pre><code>## /home/vinuesa/Cursos/TIB/TIB24/sesion1_intro2linux</code></pre>
+<pre><code>## /home/vinuesa/Cursos/intro_biocomp4genomics_TFC/sesion1_intro2linux</code></pre>
 </div>
 <div id="ls-lista-contenidos-del-directorio" class="section level3" number="2.2.2">
 <h3><span class="header-section-number">2.2.2</span> <strong>ls</strong>
@@ -736,14 +736,14 @@ lista contenidos del directorio</h3>
 ls | head</code></pre>
 <pre><code>## 800px-Evolución_UNIX.png
 ## assembly_summary.txt.gz
+## aux_fun_lib
+## bash_man_5.1.html
+## bin
 ## comandos_de_linux.tab
+## data
 ## Evolución_UNIX.png
 ## fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## github_TIB-filoinfo_screenshot.png
-## Instalación_de_mobaXterm_en_Windows.pdf
-## intro_biocomputo_Linux_pt1.odp
-## Intro_biocomputo_Linux_pt1.pdf
-## linux_basic_commands.tab</code></pre>
+## github_TIB-filoinfo_screenshot.png</code></pre>
 <p>Como vimos en la presentación general, los comandos de Linux están
 enfocados a hacer una sola tarea, pero con muchas opciones.</p>
 <p>Las opciones de los comandos pueden tener las siguientes formas:</p>
@@ -773,40 +773,51 @@ las opciones disponibles para dicho comando</h3>
 ls --help</code></pre>
 <pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos, y sus propiedades (-l, long format)
 ls -al </code></pre>
-<pre><code>## total 30788
-## drwxr-xr-x  6 vinuesa vinuesa     4096 ene 22 18:11 .
-## drwxr-xr-x 13 vinuesa vinuesa     4096 ene 21 22:57 ..
-## -rw-r--r--  1 vinuesa vinuesa   110128 ene 21 20:16 800px-Evolución_UNIX.png
-## -rw-r--r--  1 vinuesa vinuesa  6780296 ene 21 20:16 assembly_summary.txt.gz
-## -rw-rw-r--  1 vinuesa vinuesa     2000 ene 21 20:16 .cmds
-## -rwxr-xr-x  1 vinuesa vinuesa    10193 ene 21 20:16 comandos_de_linux.tab
-## -rw-r--r--  1 vinuesa vinuesa   438308 ene 21 20:16 Evolución_UNIX.png
-## -rw-r--r--  1 vinuesa vinuesa   222602 ene 21 20:16 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## -rw-r--r--  1 vinuesa vinuesa    87065 ene 21 20:16 github_TIB-filoinfo_screenshot.png
-## -rw-rw-r--  1 vinuesa vinuesa  2724055 ene 21 21:26 Instalación_de_mobaXterm_en_Windows.pdf
-## -rw-r--r--  1 vinuesa vinuesa  8095138 ene 21 22:33 intro_biocomputo_Linux_pt1.odp
-## -rw-r--r--  1 vinuesa vinuesa 10739713 ene 21 22:32 Intro_biocomputo_Linux_pt1.pdf
-## -rwxr-xr-x  1 vinuesa vinuesa    10193 ene 21 20:16 linux_basic_commands.tab
-## -rwxr-xr-x  1 vinuesa vinuesa    10193 ene 21 20:16 linux_commands.tab
-## -rwxr-xr-x  1 vinuesa vinuesa     1024 ene 21 20:16 .linux_commands.tab.swp
-## -rwxr-xr-x  1 vinuesa vinuesa     1705 ene 21 20:16 linux_very_basic_commands_table.csv
-## -rw-rw-r--  1 vinuesa vinuesa   106127 ene 21 20:16 MobaXTerm_plugins_page_screenshot.png
-## drwxr-xr-x  2 vinuesa vinuesa     4096 ene 21 20:16 MobaXterm_screen_shots
-## -rw-r--r--  1 vinuesa vinuesa    77803 ene 21 20:16 recA_Bradyrhizobium_vinuesa.fna
-## -rw-r--r--  1 vinuesa vinuesa    17704 ene 22 18:11 recA_Byuanmingense.fna
-## drwxr-xr-x  2 vinuesa vinuesa     4096 ene 21 20:16 recA_seq_data
-## -rwxr-xr-x  1 vinuesa vinuesa        8 ene 21 22:56 .Rhistory
-## -rw-rw-r--  1 vinuesa vinuesa    51271 ene 21 20:16 sesion_local_capt_pantalla.png
-## -rw-r--r--  1 vinuesa vinuesa    40746 ene 21 20:16 sesion_remota_bonampak_capt_pantalla1.png
-## -rw-r--r--  1 vinuesa vinuesa     4468 ene 21 20:16 sesion_remota_bonampak_capt_pantalla2.png
-## -rw-rw-r--  1 vinuesa vinuesa   408580 ene 21 20:16 sesion_remota_bonampak_capt_pantalla.png
-## drwxr-xr-x  3 vinuesa vinuesa     4096 ene 21 20:16 TIB2019-T3
-## drwxrwxr-x  3 vinuesa vinuesa     4096 ene 21 20:16 TIB-filo
-## -rwxr-xr-x  1 vinuesa vinuesa     6047 ene 21 20:16 working_with_linux_commands.code
-## -rw-r--r--  1 vinuesa vinuesa  1177407 ene 21 21:18 working_with_linux_commands.html
-## -rw-rw-r--  1 vinuesa vinuesa    34046 ene 22 18:11 working_with_linux_commands.log
-## -rw-r--r--  1 vinuesa vinuesa    90229 ene 22 18:11 working_with_linux_commands.Rmd
-## -rw-rw-r--  1 vinuesa vinuesa   190939 ene 22 18:11 working_with_linux_commands.tex</code></pre>
+<pre><code>## total 30060
+## drwxr-xr-x 11 vinuesa vinuesa     4096 ago 22 23:23 .
+## drwxr-xr-x 14 vinuesa vinuesa     4096 dic  7  2023 ..
+## -rw-r--r--  1 vinuesa vinuesa   110128 ago 22  2022 800px-Evolución_UNIX.png
+## -rw-r--r--  1 vinuesa vinuesa  6780296 ago 22  2022 assembly_summary.txt.gz
+## -rw-rw-r--  1 vinuesa vinuesa     1813 sep 26  2022 aux_fun_lib
+## -rw-rw-r--  1 vinuesa vinuesa   471463 ago 26  2023 bash_man_5.1.html
+## drwxrwxr-x  2 vinuesa vinuesa     4096 ago 18  2023 bin
+## -rw-rw-r--  1 vinuesa vinuesa     2000 ago 22  2022 .cmds
+## -rwxr-xr-x  1 vinuesa vinuesa    10193 ago 22  2022 comandos_de_linux.tab
+## drwxrwxr-x  2 vinuesa vinuesa     4096 ago 25  2023 data
+## -rw-r--r--  1 vinuesa vinuesa   438308 ago 22  2022 Evolución_UNIX.png
+## -rw-r--r--  1 vinuesa vinuesa   222602 ago 22  2022 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
+## -rw-r--r--  1 vinuesa vinuesa    87065 ago 22  2022 github_TIB-filoinfo_screenshot.png
+## -rwxr-xr-x  1 vinuesa vinuesa       79 ago 26  2023 groff_man2html.cmd
+## -rw-r--r--  1 vinuesa vinuesa  7422966 ago  6 19:49 intro_biocomputo_Linux_pt1.odp
+## -rw-r--r--  1 vinuesa vinuesa 11074582 ago  6 19:51 Intro_biocomputo_Linux_pt1.pdf
+## -rwxr-xr-x  1 vinuesa vinuesa    10193 ago 22  2022 linux_basic_commands.tab
+## -rwxr-xr-x  1 vinuesa vinuesa    10193 ago 22  2022 linux_commands.tab
+## -rwxr-xr-x  1 vinuesa vinuesa     1024 ago 22  2022 .linux_commands.tab.swp
+## -rwxr-xr-x  1 vinuesa vinuesa     1705 ago 22  2022 linux_very_basic_commands_table.csv
+## -rw-rw-r--  1 vinuesa vinuesa   106127 ago 22  2022 MobaXTerm_plugins_page_screenshot.png
+## drwxr-xr-x  2 vinuesa vinuesa     4096 ago 22  2022 MobaXterm_screen_shots
+## drwxrwxr-x  2 vinuesa vinuesa     4096 ago 22  2022 pics
+## -rw-r--r--  1 vinuesa vinuesa    77803 ago 25  2023 recA_Bradyrhizobium_vinuesa.fna
+## -rw-r--r--  1 vinuesa vinuesa    17704 ago 22 23:23 recA_Byuanmingense.fna
+## drwxr-xr-x  2 vinuesa vinuesa     4096 ago 22  2022 recA_seq_data
+## -rwxr-xr-x  1 vinuesa vinuesa        8 sep 28  2023 .Rhistory
+## -rw-rw-r--  1 vinuesa vinuesa    51271 ago 22  2022 sesion_local_capt_pantalla.png
+## -rw-r--r--  1 vinuesa vinuesa    40746 ago 22  2022 sesion_remota_bonampak_capt_pantalla1.png
+## -rw-r--r--  1 vinuesa vinuesa     4468 ago 22  2022 sesion_remota_bonampak_capt_pantalla2.png
+## -rw-rw-r--  1 vinuesa vinuesa   408580 ago 22  2022 sesion_remota_bonampak_capt_pantalla.png
+## -rw-rw-r--  1 vinuesa vinuesa     4600 oct 10  2022 soluciones_ejercicio.txt
+## -rw-rw-r--  1 vinuesa vinuesa   624651 ago 18  2023 tarea1.html
+## -rw-rw-r--  1 vinuesa vinuesa     1096 ago 18  2023 tarea1.Rmd
+## drwxrwxr-x  3 vinuesa vinuesa     4096 ago 24  2023 tareas
+## drwxr-xr-x  3 vinuesa vinuesa     4096 ago 22  2022 TIB2019-T3
+## drwxrwxr-x  3 vinuesa vinuesa     4096 ago 22  2022 TIB-filo
+## -rwxr--r--  1 vinuesa vinuesa     6047 ago 16 08:49 working_with_linux_commands.code
+## -rw-r--r--  1 vinuesa vinuesa  1179587 ago 22 23:23 working_with_linux_commands.html
+## -rw-r--r--  1 vinuesa vinuesa  1177960 ago 16 08:49 working_with_linux_commands.html.txt
+## -rw-r--r--  1 vinuesa vinuesa    34046 ago 16 08:49 working_with_linux_commands.log
+## drwxrwxr-x  2 vinuesa vinuesa     4096 ago 18 20:57 working_with_linux_commands_long
+## -rw-r--r--  1 vinuesa vinuesa    90717 ago 22 23:33 working_with_linux_commands.Rmd
+## -rw-r--r--  1 vinuesa vinuesa   190939 ago 16 08:49 working_with_linux_commands.tex</code></pre>
 <div id="veamos-el-contenido-del-directorio-raiz-salida-recortada-a-sólo-10-entradas-al-pasar-la-salida-de-ls-al-comando-head-mediante-un-pipe" class="section level4" number="2.2.3.1">
 <h4><span class="header-section-number">2.2.3.1</span> Veamos el
 contenido del directorio raiz (salida recortada a sólo 10 entradas al
@@ -838,31 +849,30 @@ al <span class="math inline">\(directorio\ raíz\ /\)</span></li>
 <pre class="bash"><code>ls -l / | head -20</code></pre>
 <pre><code>## total 132
 ## lrwxrwxrwx   1 root root     7 oct  4  2020 bin -&gt; usr/bin
-## drwxr-xr-x   4 root root  4096 ene 20 04:59 boot
+## drwxr-xr-x   4 root root  4096 ago 21 17:16 boot
 ## drwxr-xr-x   2 root root  4096 oct  4  2020 cdrom
-## drwxr-xr-x  20 root root  5080 ene 22 17:55 dev
-## drwxr-xr-x 167 root root 12288 ene 22 17:55 etc
+## drwxr-xr-x  19 root root  5140 ago 22 18:09 dev
+## drwxr-xr-x 167 root root 12288 ago 21 17:19 etc
 ## drwxr-xr-x   5 root root  4096 abr 15  2020 home
 ## lrwxrwxrwx   1 root root     7 oct  4  2020 lib -&gt; usr/lib
-## drwxr-xr-x   2 root root  4096 ene 10 16:52 lib32
+## drwxr-xr-x   2 root root  4096 may 30 16:23 lib32
 ## lrwxrwxrwx   1 root root     9 oct  4  2020 lib64 -&gt; usr/lib64
 ## lrwxrwxrwx   1 root root    10 oct  4  2020 libx32 -&gt; usr/libx32
 ## drwx------   2 root root 16384 oct  4  2020 lost+found
 ## drwxr-xr-x   3 root root  4096 oct  5  2020 media
 ## drwxr-xr-x   2 root root  4096 jul 31  2020 mnt
-## drwxr-xr-x   5 root root  4096 ago 28 17:57 opt
-## dr-xr-xr-x 415 root root     0 ene 22 17:54 proc
+## drwxr-xr-x   6 root root  4096 feb 29 18:47 opt
+## dr-xr-xr-x 431 root root     0 ago 22 18:09 proc
 ## drwx------  15 root root  4096 nov 27  2022 root
-## drwxr-xr-x  39 root root  1040 ene 22 18:11 run
+## drwxr-xr-x  38 root root  1020 ago 22 18:37 run
 ## lrwxrwxrwx   1 root root     8 oct  4  2020 sbin -&gt; usr/sbin
-## drwxr-xr-x  29 root root  4096 oct 29 10:02 snap</code></pre>
+## drwxr-xr-x  33 root root  4096 ago 15 17:12 snap</code></pre>
 <pre class="bash"><code># idem, pero ordenando los archivos por fechas de modificacion (-t), listando los mas recientes al final (-r), es decir, en orden reverso
 ls -ltr / | head -20</code></pre>
 <pre><code>## total 132
 ## drwxr-xr-x   5 root root  4096 abr 15  2020 home
 ## drwxr-xr-x   2 root root  4096 jul 31  2020 srv
 ## drwxr-xr-x   2 root root  4096 jul 31  2020 mnt
-## drwxr-xr-x  14 root root  4096 jul 31  2020 var
 ## drwx------   2 root root 16384 oct  4  2020 lost+found
 ## lrwxrwxrwx   1 root root    10 oct  4  2020 libx32 -&gt; usr/libx32
 ## lrwxrwxrwx   1 root root     9 oct  4  2020 lib64 -&gt; usr/lib64
@@ -873,11 +883,12 @@ ls -ltr / | head -20</code></pre>
 ## drwxr-xr-x   3 root root  4096 oct  5  2020 media
 ## drwxr-xr-x  14 root root  4096 sep 14  2022 usr
 ## drwx------  15 root root  4096 nov 27  2022 root
-## drwxr-xr-x   5 root root  4096 ago 28 17:57 opt
-## drwxr-xr-x  29 root root  4096 oct 29 10:02 snap
-## drwxr-xr-x   2 root root  4096 ene 10 16:52 lib32
-## drwxr-xr-x   4 root root  4096 ene 20 04:59 boot
-## dr-xr-xr-x  13 root root     0 ene 22 17:54 sys</code></pre>
+## drwxr-xr-x   6 root root  4096 feb 29 18:47 opt
+## drwxr-xr-x   2 root root  4096 may 30 16:23 lib32
+## drwxr-xr-x  15 root root  4096 jul  6 20:29 var
+## drwxr-xr-x  33 root root  4096 ago 15 17:12 snap
+## drwxr-xr-x   4 root root  4096 ago 21 17:16 boot
+## drwxr-xr-x 167 root root 12288 ago 21 17:19 etc</code></pre>
 </div>
 </div>
 <div id="expansión-de-caracteres-con-y" class="section level3" number="2.2.4">
@@ -1259,7 +1270,7 @@ para copiar o mover archivos por el sistema.</p>
 <h3><span class="header-section-number">2.4.1</span> ¿dónde estoy?:
 imprime directorio actual con <b>pwd</b></h3>
 <pre class="bash"><code>pwd </code></pre>
-<pre><code>## /home/vinuesa/Cursos/TIB/TIB24/sesion1_intro2linux</code></pre>
+<pre><code>## /home/vinuesa/Cursos/intro_biocomp4genomics_TFC/sesion1_intro2linux</code></pre>
 </div>
 <div id="sube-un-directorio-usando-ruta-relativa-cd-.." class="section level3" number="2.4.2">
 <h3><span class="header-section-number">2.4.2</span> sube un directorio
@@ -1269,7 +1280,7 @@ usando RUTA RELATIVA: <b>cd ..</b></h3>
 <li>¿dónde estoy?</li>
 </ul>
 <pre class="bash"><code>pwd </code></pre>
-<pre><code>## /home/vinuesa/Cursos/TIB/TIB24/sesion1_intro2linux</code></pre>
+<pre><code>## /home/vinuesa/Cursos/intro_biocomp4genomics_TFC/sesion1_intro2linux</code></pre>
 </div>
 <div id="regresa-a-tu-home-con-cd" class="section level3" number="2.4.3">
 <h3><span class="header-section-number">2.4.3</span> regresa a tu home
@@ -1305,14 +1316,14 @@ pwd</code></pre>
 <pre class="bash"><code>ls | head</code></pre>
 <pre><code>## 800px-Evolución_UNIX.png
 ## assembly_summary.txt.gz
+## aux_fun_lib
+## bash_man_5.1.html
+## bin
 ## comandos_de_linux.tab
+## data
 ## Evolución_UNIX.png
 ## fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## github_TIB-filoinfo_screenshot.png
-## Instalación_de_mobaXterm_en_Windows.pdf
-## intro_biocomputo_Linux_pt1.odp
-## Intro_biocomputo_Linux_pt1.pdf
-## linux_basic_commands.tab</code></pre>
+## github_TIB-filoinfo_screenshot.png</code></pre>
 <ul>
 <li>regresa al directorio en el que estuviste anteriormente con <b>cd
 -</b></li>
@@ -1335,7 +1346,7 @@ fi</code></pre>
 <li>comprueba los <strong>permisos</strong> del nuevo directorio</li>
 </ul>
 <pre class="bash"><code>ls -ld TIB-filo</code></pre>
-<pre><code>## drwxrwxr-x 3 vinuesa vinuesa 4096 ene 21 20:16 TIB-filo</code></pre>
+<pre><code>## drwxrwxr-x 3 vinuesa vinuesa 4096 ago 22  2022 TIB-filo</code></pre>
 <ul>
 <li>generemos un subdirectorio por debajo del que acabamos de
 crear:</li>
@@ -1499,16 +1510,16 @@ fi
 # confirmamos que se generaron las ligascomandos_de_linux.tab
 ls -l | head</code></pre>
 <pre><code>## ln: failed to create symbolic link &#39;comandos_de_linux.tab&#39;: File exists
-## total 30768
-## -rw-r--r-- 1 vinuesa vinuesa   110128 ene 21 20:16 800px-Evolución_UNIX.png
-## -rw-r--r-- 1 vinuesa vinuesa  6780296 ene 21 20:16 assembly_summary.txt.gz
-## -rwxr-xr-x 1 vinuesa vinuesa    10193 ene 21 20:16 comandos_de_linux.tab
-## -rw-r--r-- 1 vinuesa vinuesa   438308 ene 21 20:16 Evolución_UNIX.png
-## -rw-r--r-- 1 vinuesa vinuesa   222602 ene 21 20:16 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## -rw-r--r-- 1 vinuesa vinuesa    87065 ene 21 20:16 github_TIB-filoinfo_screenshot.png
-## -rw-rw-r-- 1 vinuesa vinuesa  2724055 ene 21 21:26 Instalación_de_mobaXterm_en_Windows.pdf
-## -rw-r--r-- 1 vinuesa vinuesa  8095138 ene 21 22:33 intro_biocomputo_Linux_pt1.odp
-## -rw-r--r-- 1 vinuesa vinuesa 10739713 ene 21 22:32 Intro_biocomputo_Linux_pt1.pdf</code></pre>
+## total 30040
+## -rw-r--r-- 1 vinuesa vinuesa   110128 ago 22  2022 800px-Evolución_UNIX.png
+## -rw-r--r-- 1 vinuesa vinuesa  6780296 ago 22  2022 assembly_summary.txt.gz
+## -rw-rw-r-- 1 vinuesa vinuesa     1813 sep 26  2022 aux_fun_lib
+## -rw-rw-r-- 1 vinuesa vinuesa   471463 ago 26  2023 bash_man_5.1.html
+## drwxrwxr-x 2 vinuesa vinuesa     4096 ago 18  2023 bin
+## -rwxr-xr-x 1 vinuesa vinuesa    10193 ago 22  2022 comandos_de_linux.tab
+## drwxrwxr-x 2 vinuesa vinuesa     4096 ago 25  2023 data
+## -rw-r--r-- 1 vinuesa vinuesa   438308 ago 22  2022 Evolución_UNIX.png
+## -rw-r--r-- 1 vinuesa vinuesa   222602 ago 22  2022 fetch_recA_bradys_vinuesa_nuccore_screenshot.png</code></pre>
 <div id="renombramos-la-liga-o-cualquier-archivo-o-directorio" class="section level3" number="2.9.1">
 <h3><span class="header-section-number">2.9.1</span> renombramos la liga
 (o cualquier archivo o directorio)</h3>
@@ -1637,19 +1648,21 @@ gedit linux_commands.tab &amp;
 <div id="edición-de-archivos-con-el-editor-de-flujo-sed-stream-editor" class="section level2" number="2.12">
 <h2><span class="header-section-number">2.12</span> Edición de archivos
 con el editor de flujo <b>sed</b> (stream editor)</h2>
-<p>sed (stream editor) es un editor de flujo, una potente herramienta de
-tratamiento de texto para el sistema operativo Unix que acepta como
-entrada un archivo, lo lee y modifica línea a línea de acuerdo a un
-script, mostrando el resultado por salida estándar (normalmente en
-pantalla, a menos que se realice una redirección). Sed permite manipular
-flujos de datos, como por ejemplo cortar líneas, buscar y reemplazar
-texto (con soporte de <b>xpresiones regulares</b>), entre otras cosas.
-Posee muchas características de ed y ex.</p>
-<p>La sintaxis general de la orden sed es:</p>
-<pre><code>$ sed [-n] [-e&#39;script&#39;] [-f archivo] archivo1 archivo2 ...</code></pre>
+<p><span class="math inline">\(sed\)</span> (stream editor) es un editor
+de flujo, una potente herramienta de tratamiento de texto para el
+sistema operativo Unix que acepta como entrada un archivo, lo lee y
+modifica línea a línea de acuerdo a unas instrucciones (script) dado en
+la línea de comandos o leído de un archivo, mostrando el resultado por
+salida estándar (normalmente en pantalla, a menos que se realice una
+redirección). Sed permite manipular flujos de datos, como por ejemplo
+cortar líneas, buscar y reemplazar texto (con soporte de <b>expresiones
+regulares</b>), entre muchas otras operaciones. Posee características de
+<span class="math inline">\(ed\)</span> y <span class="math inline">\(ex\)</span>.</p>
+<p>La sintaxis general de la orden <span class="math inline">\(sed\)</span> es:</p>
+<pre><code>$ sed [-n] [-e &#39;script&#39;] [-f archivo] archivo1 archivo2 ...</code></pre>
 <p>donde:</p>
 <pre><code>-n indica que se suprima la salida estándar.
--e indica que se ejecute el script que viene a continuación. Si no se emplea la opción -f se puede omitir -e.
+-e indica que se ejecute el script que viene a continuación en la línea de comando, entre comillado. Si no se emplea la opción -f se puede omitir -e.
 -f indica que las órdenes se tomarán de un archivo</code></pre>
 <div id="ejemplos-de-uso-básico-de-sed" class="section level3" number="2.12.1">
 <h3><span class="header-section-number">2.12.1</span> Ejemplos de uso
@@ -1666,8 +1679,8 @@ básico de <b>sed</b>:</h3>
 <li>Elimina las líneas en blanco. Nótese el uso de <b>expresiones
 regulares</b>, done:
 <ul>
-<li><b>//</b> delimitan la expresión regular. Noten que hay que
-escaparla entre commillas sencillas.</li>
+<li><b>//</b> delimitan la expresión regular. Noten que hay que proteger
+la orden o código entre comillas sencillas.</li>
 <li><b>^</b> indica el inicio de la línea</li>
 <li><b>$</b> indica el término de la línea</li>
 </ul></li>
@@ -1680,7 +1693,7 @@ archivo linux_commands.tab
 <li><b>//</b> delimitan la expresión regular. Noten que hay que
 escaparla entre commillas sencillas.</li>
 <li><b>\t</b> representa al tabulador</li>
-<li><b>\m</b> representa el salto de línea</li>
+<li><b>\n</b> representa el salto de línea</li>
 <li><b>//g</b> la <b>g</b> indica que se reemplacen todas las
 instancias</li>
 </ul></li>
@@ -1708,11 +1721,11 @@ siguientes comandos:</p>
 # wget -c ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt &lt;&lt;&lt; 
 # gzip assembly_summary.txt
 
-# descarguemos esta versión un poco más viejita y mucho más pequeña del mismo
+# Para el ejercicio descarguemos mejor esta versión del mismo, mucho más vieja y pequeña
 wget -c https://github.com/vinuesa/TIB-filoinfo/raw/master/docs/sesion1_intro2linux/data/assembly_summary.txt.gz</code></pre>
 <ul>
-<li>Exploremos el archivo comprimido (con compresión gnu zip) con usando
-los comandos <b>zless</b> o <b>zcat</b></li>
+<li>Exploremos el archivo comprimido (con compresión gnu zip) usando los
+comandos <b>zless</b> o <b>zcat</b></li>
 </ul>
 <pre><code>zless assembly_summary.txt.gz </code></pre>
 <pre class="bash"><code># veamos las 5 primeras líneas del archivo
@@ -1726,42 +1739,43 @@ zcat assembly_summary.txt.gz | head -5</code></pre>
 <h3><span class="header-section-number">2.13.1</span> Ejemplos de
 herramientas de filtrado de texto en acción</h3>
 <ul>
-<li><p><code>cut</code> corta líneas de texto/tablas por delimitadores
-de campo (-d) específicos (TAB por defecto), extrayendo los campos
-indicados con -f (cut -d’ ’ -f1-3,5,9)</p></li>
-<li><p><code>sort</code> ordena (sor -u; sort -nrk2; sort -dk1)</p></li>
-<li><p><code>wc</code> cuenta líneas, palabras y caracteres (wc
--l)</p></li>
-<li><p><code>uniq</code> regresa listas de valores únicos (uniq
--c)</p></li>
-<li><p><code>grep</code> Filtra las lineas de un archivo que contienen
-(o no) caracteres o expresiones regulares (grep -E ‘^XXX|YYY|zzz$’; grep
--v ‘^#’)</p></li>
-<li><p>el pipe <code>‘|’</code> conecta la salida de un comando <STDOUT>
-con la entrada &gt;STDIN&gt; de otro</p></li>
-<li><p>¿cuántas líneas tiene el archivo
-assembly_summary.txt.gz?</p></li>
+<li><code>cut</code> corta líneas de texto/tablas por delimitadores de
+campo (-d) específicos (TAB por defecto), extrayendo los campos
+indicados con -f (cut -d’ ’ -f1-3,5,9 # corta usando espacios como
+delimitador, seleccionando los campos 1 al 3, 5 y 9)</li>
+<li><code>sort</code> ordena (sor -u; sort -nrk2; sort -dk1)</li>
+<li><code>wc</code> cuenta líneas, palabras y caracteres (wc -l)</li>
+<li><code>uniq</code> regresa listas de valores únicos (uniq -c)</li>
+<li><code>grep</code> Filtra las lineas de un archivo que contienen (o
+no) caracteres o expresiones regulares (grep -E ‘^XXX|YYY|zzz$’; grep -v
+‘^#’)</li>
+<li>el pipe <code>‘|’</code> conecta la salida de un comando <STDOUT>
+con la entrada &gt;STDIN&gt; de otro</li>
 </ul>
+<p>Veamos estos comandos en acción:</p>
+<ol style="list-style-type: decimal">
+<li>¿Cuántas líneas tiene el archivo assembly_summary.txt.gz?</li>
+</ol>
 <pre class="bash"><code># ¿cuántas líneas tiene el archivo assembly_summary.txt.gz?
 zcat assembly_summary.txt.gz | wc
 zcat assembly_summary.txt.gz | wc -l</code></pre>
 <pre><code>##  161297 3788695 48497020
 ## 161297</code></pre>
-<ul>
-<li>la columna assembly_level (#12) indica el estado del ensamble.
-¿Cuáles son los niveles de la variable categórica assembly_level
-(valores únicos) de la misma?</li>
-</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>La columna assembly_level (#12) indica el estado del ensamble.
+¿Cuáles son los niveles (valores únicos) de la variable categórica
+assembly_level de la misma?</li>
+</ol>
 <pre class="bash"><code># la columna assembly_level (#12) indica el estado del ensamble. ¿Cuáles son los niveles de la variable categórica assembly_level (valores únicos de la misma?
 zcat assembly_summary.txt.gz | grep -v &quot;^#&quot; | cut -f 12 | sort -u</code></pre>
 <pre><code>## Chromosome
 ## Complete Genome
 ## Contig
 ## Scaffold</code></pre>
-<ul>
-<li>¿cuántos genomas hay por nivel de la variable categórica
+<ol start="3" style="list-style-type: decimal">
+<li>¿Cuántos genomas hay por nivel de la variable categórica
 assembly_level?</li>
-</ul>
+</ol>
 <pre class="bash"><code># ¿cuántos genomas hay por nivel de la variable categórica assembly_level?
 # nota que usamoms sed &#39;ed&#39; para eliminar las 1as 2 líneas con comentarios y 
 # pasamos la salida ordenada con sort a uniq -c para contar las instancias 
@@ -1772,10 +1786,10 @@ zcat assembly_summary.txt.gz | sed &#39;2d&#39; | cut -f 12 | sort | uniq -c</co
 ##   82755 Contig
 ##   62539 Scaffold
 ##       1 #   See ftp://ftp.ncbi.nlm.nih.gov/genomes/README_assembly_summary.txt for a description of the columns in this file.</code></pre>
-<ul>
-<li>asocia cada nombre de columna de la cabecera con el número de la
+<ol start="4" style="list-style-type: decimal">
+<li>Asocia cada nombre de columna de la cabecera con el número de la
 columna correspondiente</li>
-</ul>
+</ol>
 <pre class="bash"><code># asocia cada nombre de columna de la cabecera con el número de la columna correspondiente
 zcat assembly_summary.txt.gz | head -2 | sed &#39;1d; s/\t/\n/g&#39; | cat -n</code></pre>
 <pre><code>##      1   # assembly_accession
@@ -1800,10 +1814,10 @@ zcat assembly_summary.txt.gz | head -2 | sed &#39;1d; s/\t/\n/g&#39; | cat -n</c
 ##     20   ftp_path
 ##     21   excluded_from_refseq
 ##     22   relation_to_type_material</code></pre>
-<ul>
-<li>genera una estadística del número de genomas por especie (columna #
-8), y muestra sólo las 10 especies con más genomas secuenciados!</li>
-</ul>
+<ol start="5" style="list-style-type: decimal">
+<li>Genera una estadística del número de genomas por especie (columna #
+8), y muestra sólo las 10 especies con más genomas secuenciados</li>
+</ol>
 <pre class="bash"><code># genera una estadística del número de genomas por especie (columna # 8), y muestra sólo las 10 especies con más genomas secuenciados!
 zcat assembly_summary.txt.gz | grep -v &quot;^#&quot; | cut -f8 | sort | uniq -c | sort -nrk1 | head -10</code></pre>
 <pre><code>##   14089 Escherichia coli
@@ -1816,9 +1830,9 @@ zcat assembly_summary.txt.gz | grep -v &quot;^#&quot; | cut -f8 | sort | uniq -c
 ##    2789 Listeria monocytogenes
 ##    2173 Salmonella enterica subsp. enterica serovar Typhi
 ##    1792 Clostridioides difficile</code></pre>
-<ul>
-<li>¿Cuántos genomas completos hay del género Acinetobacter?</li>
-</ul>
+<ol start="6" style="list-style-type: decimal">
+<li>¿Cuántos genomas completos hay del género <i>Acinetobacter</i>?</li>
+</ol>
 <pre class="bash"><code># ¿Cuántos genomas completos hay del género Acinetobacter?
 zcat assembly_summary.txt.gz | grep Acinetobacter | grep Complete | wc -l
 
@@ -1831,18 +1845,18 @@ zgrep acinetobacter assembly_summary.txt.gz | grep Complete | wc -l # no encuent
 <pre class="bash"><code># grep -i lo hace insensible a la fuente
 zgrep -i acinetobacter assembly_summary.txt.gz | grep Complete | wc -l</code></pre>
 <pre><code>## 220</code></pre>
-<ul>
-<li>filtra y cuenta las lineas que contienen Acinetobacter o
+<ol start="7" style="list-style-type: decimal">
+<li>Filtra y cuenta las lineas que contienen Acinetobacter o
 Stenotrophomonas</li>
-</ul>
+</ol>
 <pre class="bash"><code># filtra y cuenta las lineas que contienen Acinetobacter o Stenotrophomonas
 zgrep -E &#39;Acinetobacter|Stenotrophomonas&#39; assembly_summary.txt.gz | wc -l</code></pre>
 <pre><code>## 5170</code></pre>
-<ul>
+<ol start="8" style="list-style-type: decimal">
 <li>Cuenta los genomas de Acinetobacter, Pseudomonas y Klebsiella (por
 género) y presenta una lista ordenada por número decreciente de
 genomas</li>
-</ul>
+</ol>
 <pre class="bash"><code># Cuenta los genomas de Acinetobacter, Pseudomonas y Klebsiella (por género) y presenta una lista ordenada por número decreciente de genomas
 zgrep -E &#39;Acinetobacter|Pseudomonas|Klebsiella&#39; assembly_summary.txt.gz | cut -f 8 | cut -d&#39; &#39; -f1 |sort | uniq -c |sort -nrk1</code></pre>
 <pre><code>##    8951 Pseudomonas
@@ -1850,10 +1864,10 @@ zgrep -E &#39;Acinetobacter|Pseudomonas|Klebsiella&#39; assembly_summary.txt.gz 
 ##    4747 Acinetobacter
 ##       7 [Pseudomonas]
 ##       1 Candidatus</code></pre>
-<ul>
+<ol start="9" style="list-style-type: decimal">
 <li>Cuenta los genomas de Acinetobacter, Pseudomonas y Klebsiella (por
 género), con salida ordenada alfabéticamente por género</li>
-</ul>
+</ol>
 <pre class="bash"><code># filtra las lineas que contienen Filesystem o Text processing y ordénalas alfabéticamente según las entradas de la segunda columna
 # eliminando las entradas de Candidatus y [Pseudomonas]
 zgrep -E &#39;Acinetobacter|Pseudomonas|Klebsiella&#39; assembly_summary.txt.gz | cut -f 8 | cut -d&#39; &#39; -f1 | grep -Ev &#39;^\[|^Cand&#39; | sort | uniq -c | sort -dk2</code></pre>
@@ -1865,6 +1879,9 @@ zgrep -E &#39;Acinetobacter|Pseudomonas|Klebsiella&#39; assembly_summary.txt.gz 
 <div id="redireccionado-de-la-salida-stout-a-un-archivo-con-el-comando" class="section level2" number="2.14">
 <h2><span class="header-section-number">2.14</span> redireccionado de la
 salida STOUT a un archivo con el comando <b>&gt;</b></h2>
+<p>Cuando queremos guardar la salida de un comando o pipeline en un
+archivo, hacemos uso del comando <code>comando &gt; archivo</code>,
+resultando en un archivo de texto plano (formato ASCII).</p>
 <pre class="bash"><code>zgrep Stenotrophomonas assembly_summary.txt.gz | cut -f8,20 &gt; Stenotrophomonas_complete_genomes_and_ftp_paths.txt</code></pre>
 <ul>
 <li>ahora podemos explorar el archivo con <span class="math inline">\(head\)</span> u otros comandos como <span class="math inline">\(less\)</span></li>
@@ -1875,14 +1892,14 @@ salida STOUT a un archivo con el comando <b>&gt;</b></h2>
 ## Stenotrophomonas maltophilia JV3 ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/223/885/GCF_000223885.1_ASM22388v1</code></pre>
 <p>Veremos la gran utilidad y versatilidad de combinaciones de estos
 comandos para el procesamiento de archivos de secuencias en un ejercicio
-más adelante.</p>
+posterior.</p>
 </div>
 <div id="manual-de-cada-comando-man-command" class="section level2" number="2.15">
 <h2><span class="header-section-number">2.15</span> Manual de cada
 comando: <b>man command</b></h2>
 <pre class="bash"><code># mira las opciones de cut y sort en la manpage
 man cut | head -30</code></pre>
-<pre><code>## CUT(1)                                                          User Commands                                                         CUT(1)
+<pre><code>## CUT(1)                                                                             User Commands                                                                             CUT(1)
 ## 
 ## NAME
 ##        cut - remove sections from each line of files
@@ -1917,7 +1934,7 @@ man cut | head -30</code></pre>
 <h2><span class="header-section-number">2.16</span> Ayuda de comandos
 del <span class="math inline">\(Shell\)</span>: <b>command
 –help</b></h2>
-<pre class="bash"><code># mira las opciones de cut y sort en la manpage
+<pre class="bash"><code># revisa las opciones de cut y sort en la manpage
 cut --help</code></pre>
 <pre><code>## Usage: cut OPTION... [FILE]...
 ## Print selected parts of lines from each FILE to standard output.
@@ -1973,8 +1990,8 @@ indicado, como por ejemplo</p>
 <p><code>find ~/bin | wc -l</code></p>
 <pre><code>7712</code></pre>
 <p>El poder y belleza de <span class="math inline">\(find\)</span>
-radica en que puede usarse para identificar archivos por que cumplen
-ciertos criterios (atributos), aplicando <span class="math inline">\(tests\)</span>, <span class="math inline">\(acciones\)</span> y <span class="math inline">\(opciones\)</span>.</p>
+radica en que puede usarse para identificar archivos que cumplen ciertos
+criterios (atributos), aplicando <span class="math inline">\(tests\)</span>, <span class="math inline">\(acciones\)</span> y <span class="math inline">\(opciones\)</span>.</p>
 <div id="find---tests" class="section level3" number="2.17.1">
 <h3><span class="header-section-number">2.17.1</span> <span class="math inline">\(find\)</span> - tests</h3>
 <ul>
@@ -2210,21 +2227,21 @@ find borrame/ -type f -name &#39;arch-A&#39; | wc -l</code></pre>
 de <code>-exec ls -l</code></li>
 </ul>
 <pre class="bash"><code>find borrame/ -type f -name arch-B -exec ls -l &#39;{}&#39; + | head -5</code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 borrame/dir-001/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 borrame/dir-002/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 borrame/dir-003/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 borrame/dir-004/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 borrame/dir-005/arch-B</code></pre>
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-001/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-002/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-003/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-004/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-005/arch-B</code></pre>
 <ul>
 <li>lista en formato largo los primeros 5 archivos arch-B haciendo uso
 de <code>xargs ls -l</code></li>
 </ul>
 <pre class="bash"><code>find borrame/ -type f -name arch-B | xargs ls -l | head -5</code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 borrame/dir-001/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 borrame/dir-002/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 borrame/dir-003/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 borrame/dir-004/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 borrame/dir-005/arch-B</code></pre>
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-001/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-002/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-003/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-004/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-005/arch-B</code></pre>
 <p>-¿qué hace este comando?</p>
 <pre><code>find borrame/ -type f -name &#39;arch-*&#39; | xargs ls -l | tail -3</code></pre>
 <p>-¿qué hace este comando?</p>
@@ -2267,19 +2284,19 @@ disponible en el sistema y en cada partición o dispositivo montados en
 el sistema de archivos.</p>
 <pre class="bash"><code>df        </code></pre>
 <pre><code>## Filesystem      1K-blocks       Used Available Use% Mounted on
-## tmpfs             3278892       2100   3276792   1% /run
-## /dev/nvme0n1p3  465816208   89266804 352813752  21% /
-## tmpfs            16394448      33156  16361292   1% /dev/shm
+## tmpfs             3279752       2164   3277588   1% /run
+## /dev/nvme0n1p3  465816208  149294040 292786516  34% /
+## tmpfs            16398740      58624  16340116   1% /dev/shm
 ## tmpfs                5120          4      5116   1% /run/lock
 ## efivarfs              128         64        60  52% /sys/firmware/efi/efivars
+## /dev/sda1      1921724608 1233218684 590813868  68% /home
 ## /dev/nvme0n1p1    1994928       6220   1988708   1% /boot/efi
-## /dev/sda1      1921724608 1256590984 567441568  69% /home
-## tmpfs             3278888        148   3278740   1% /run/user/1000</code></pre>
+## tmpfs             3279748       2492   3277256   1% /run/user/1000</code></pre>
 <p>Si le pasamos como argumento un directorio o partición, nos da la
 información correspondiente al espacio disponible.</p>
 <pre class="bash"><code>df /</code></pre>
-<pre><code>## Filesystem     1K-blocks     Used Available Use% Mounted on
-## /dev/nvme0n1p3 465816208 89266804 352813752  21% /</code></pre>
+<pre><code>## Filesystem     1K-blocks      Used Available Use% Mounted on
+## /dev/nvme0n1p3 465816208 149294040 292786516  34% /</code></pre>
 </div>
 <div id="opciones-más-comunes-de-df" class="section level3" number="2.18.2">
 <h3><span class="header-section-number">2.18.2</span> Opciones más
@@ -2311,19 +2328,19 @@ echo
 echo
 df -h /home</code></pre>
 <pre><code>## Filesystem     1M-blocks     Used Available Use% Mounted on
-## tmpfs              3203M       3M     3200M   1% /run
-## /dev/nvme0n1p3   454899M   87175M   344545M  21% /
-## tmpfs             16011M      33M    15978M   1% /dev/shm
+## tmpfs              3203M       3M     3201M   1% /run
+## /dev/nvme0n1p3   454899M  145795M   285925M  34% /
+## tmpfs             16015M      60M    15956M   1% /dev/shm
 ## tmpfs                 5M       1M        5M   1% /run/lock
 ## efivarfs              1M       1M        1M  52% /sys/firmware/efi/efivars
+## /dev/sda1       1876685M 1204316M   576967M  68% /home
 ## /dev/nvme0n1p1     1949M       7M     1943M   1% /boot/efi
-## /dev/sda1       1876685M 1227140M   554143M  69% /home
-## tmpfs              3203M       1M     3202M   1% /run/user/1000
-## total           2355951M 1314355M   923014M  59% -
+## tmpfs              3203M       3M     3201M   1% /run/user/1000
+## total           2355957M 1350181M   887195M  61% -
 ## 
 ## 
 ## Filesystem      Size  Used Avail Use% Mounted on
-## /dev/sda1       1.8T  1.2T  542G  69% /home</code></pre>
+## /dev/sda1       1.8T  1.2T  564G  68% /home</code></pre>
 <!-- ### >>> AVANZADO -->
 <!--  ahora con un bucle for, con la sintaxis: [for ALIAS in LIST; do YOUR_CODE; done] -->
 <!-- for letter in b c d e f; do echo ">>> $letter"; ls /bin/${letter}*; echo '--------------'; done -->
@@ -2396,7 +2413,7 @@ echo &#39; &gt;&gt;&gt; Ojo, VARIABLE ENTRE COMILLAS SENCILLAS NO INTERPOLA: $sa
 echo</code></pre>
 <pre><code>## linux_commands.tab
 ## var2: Cadena con espacios, entre comillas sencillas
-## Bienvenido a alisio, vinuesa! Te recuerdo que hoy es lun 22 ene 2024 18:12:05 CST
+## Bienvenido a alisio, vinuesa! Te recuerdo que hoy es jue 22 ago 2024 23:37:09 CST
 ##  &gt;&gt;&gt; Ojo, VARIABLE ENTRE COMILLAS SENCILLAS NO INTERPOLA: $saludo_inicial; se imprime literalmente</code></pre>
 <p>No es necesario hacer llamados a las variables entre comillas dobles,
 pero es una buena práctica, como se muestra en los ejemplos del bloque
@@ -2409,7 +2426,7 @@ salida de un comando en una variable con <b>var=$(comando)</b></h3>
 date=$(date | awk &#39;{print $3,$2,$6}&#39; | sed &#39;s/ //g&#39;)
 h=$HOSTNAME
 echo &quot;&gt;&gt;&gt; working in: $wkdir at &lt;$h&gt; on &lt;$date&gt;&quot;</code></pre>
-<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/TIB/TIB24/sesion1_intro2linux at &lt;alisio&gt; on &lt;ene22CST&gt;</code></pre>
+<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/intro_biocomp4genomics_TFC/sesion1_intro2linux at &lt;alisio&gt; on &lt;ago22CST&gt;</code></pre>
 </div>
 <div id="modificación-de-variables-y-operaciones-con-ellas" class="section level3" number="3.1.3">
 <h3><span class="header-section-number">3.1.3</span> Modificación de
@@ -2427,9 +2444,9 @@ echo &quot;path to basedir: ${wkdir%/*}  # \${wkdir%/*}&quot;
 # 3. contar el número de caracteres (longitud) de la variable
 echo &quot;basedir has ${#basedir} characters  # \${#basedir}&quot;
 </code></pre>
-<pre><code>## wkdir: /home/vinuesa/Cursos/TIB/TIB24/sesion1_intro2linux
+<pre><code>## wkdir: /home/vinuesa/Cursos/intro_biocomp4genomics_TFC/sesion1_intro2linux
 ## basedir: sesion1_intro2linux  # ${wkdir##*/}
-## path to basedir: /home/vinuesa/Cursos/TIB/TIB24  # ${wkdir%/*}
+## path to basedir: /home/vinuesa/Cursos/intro_biocomp4genomics_TFC  # ${wkdir%/*}
 ## basedir has 19 characters  # ${#basedir}</code></pre>
 </div>
 </div>
@@ -2440,15 +2457,15 @@ echo &quot;basedir has ${#basedir} characters  # \${#basedir}&quot;
 <li>La sintaxis básica de un condicional simple en formato de una línea
 es así</li>
 </ul>
-<p><code>if [ condición ]; then orden1; orden2 …; fi</code></p>
+<p><code>if [ condición ]; then comando1; comando2 …; fi</code></p>
 <ul>
-<li>también hay una versión más corta para test siples</li>
+<li>también hay una versión más corta para test simples</li>
 </ul>
-<p><code>[ condición ] &amp;&amp; setecia1 &amp;&amp;
+<p><code>[ condición ] &amp;&amp; sentecia1 &amp;&amp;
 sentencia2</code></p>
 <ul>
-<li>En un script, lo escibimos generalmente como un bloque indentado,
-para mejor legibilidad</li>
+<li>En un script generalmente escibimos los condicionales como un bloque
+indentado, para mejor legibilidad:</li>
 </ul>
 <pre><code>if [ condición ]; then 
     orden1
@@ -2503,8 +2520,8 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ene 22 18:12 empty_file
-## -rw-r--r-- 1 vinuesa vinuesa 6780296 ene 21 20:16 assembly_summary.txt.gz
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 empty_file
+## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago 22  2022 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty
 ## assembly_summary.txt.gz exists and has size: 6.5M</code></pre>
@@ -2727,9 +2744,14 @@ demás pueden ejecutarlo (<span class="math inline">\(x\)</span>)</p>
 <p>y ya puedes usarlo:</p>
 <pre class="bash"><code>ls_dir</code></pre>
 <pre><code>## TIB-filo
+## tareas
+## data
+## pics
 ## TIB2019-T3
 ## recA_seq_data
-## MobaXterm_screen_shots</code></pre>
+## bin
+## MobaXterm_screen_shots
+## working_with_linux_commands_long</code></pre>
 <p>Nota: el script <em>ls_dir</em> funciona perfectamente, pero no es la
 manera más eficiente de buscar directorios. La función <span class="math inline">\(find\)</span> de <span class="math inline">\(Linux\)</span> es mucho más eficiente.</p>
 </div>
@@ -3250,7 +3272,7 @@ líneas del archivo /proc/cpuinfo :</li>
 </ul>
 <pre class="bash"><code>head -20 /proc/cpuinfo | awk &#39;length &gt;= 30&#39;</code></pre>
 <pre><code>## model name   : Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
-## flags        : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d arch_capabilities</code></pre>
+## flags        : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d arch_capabilities</code></pre>
 <hr />
 </div>
 </div>

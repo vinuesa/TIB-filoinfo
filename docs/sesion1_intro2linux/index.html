@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, Centro de Ciencias Genómicas - UNAM" />
 
-<meta name="date" content="2024-08-22" />
+<meta name="date" content="2024-09-01" />
 
 <title>Sesión 1. Introducción al biocómputo en sistemas GNU/Linux</title>
 
@@ -354,7 +354,7 @@ display: none;
 sistemas GNU/Linux</h1>
 <h4 class="author">Pablo Vinuesa, Centro de Ciencias Genómicas -
 UNAM</h4>
-<h4 class="date">2024-08-22</h4>
+<h4 class="date">2024-09-01</h4>
 
 </div>
 
@@ -511,8 +511,8 @@ operaciones con ellas</a></li>
 condicionales</a></li>
 <li><a href="#comparación-de-cadenas-de-caracteres-en-condicionales" id="toc-comparación-de-cadenas-de-caracteres-en-condicionales"><span class="toc-section-number">3.2.2</span> Comparación de cadenas de
 caracteres en condicionales</a></li>
-<li><a href="#comprobación-de-la-existencia-de-un-archivo-de-tamaño-0-bytes" id="toc-comprobación-de-la-existencia-de-un-archivo-de-tamaño-0-bytes"><span class="toc-section-number">3.2.3</span> Comprobación de la existencia de
-un archivo de tamaño &gt; 0 bytes</a></li>
+<li><a href="#comprobación-de-la-existencia--e-file-de-un-archivo-de-tamaño-0-bytes" id="toc-comprobación-de-la-existencia--e-file-de-un-archivo-de-tamaño-0-bytes"><span class="toc-section-number">3.2.3</span> Comprobación de la existencia
+(<b>[ -e file ]</b>) de un archivo de tamaño &gt; 0 bytes</a></li>
 <li><a href="#la-versión-corta-de-test-condición-comando1-comando2" id="toc-la-versión-corta-de-test-condición-comando1-comando2"><span class="toc-section-number">3.2.4</span> La versión corta de test
 <strong>[ condición ] &amp;&amp; comando1 &amp;&amp; comando2</strong>
 …</a></li>
@@ -524,24 +524,29 @@ else</strong></a></li>
 <li><a href="#ejemplo-de-bucle-for-acoplado-a-las-herramientas-de-filtrado-y-de-manipulación-de-variables" id="toc-ejemplo-de-bucle-for-acoplado-a-las-herramientas-de-filtrado-y-de-manipulación-de-variables"><span class="toc-section-number">3.3.1</span> Ejemplo de bucle for, acoplado a
 las herramientas de filtrado y de manipulación de variables</a></li>
 </ul></li>
-<li><a href="#bash-scripts---primeros-pasos" id="toc-bash-scripts---primeros-pasos"><span class="toc-section-number">3.4</span> <strong><span class="math inline">\(Bash\)</span> scripts</strong> - primeros
+<li><a href="#bucles-while" id="toc-bucles-while"><span class="toc-section-number">3.4</span> <strong>Bucles while</strong></a>
+<ul>
+<li><a href="#procesamiento-dea-archivos-con-bucles-while-read" id="toc-procesamiento-dea-archivos-con-bucles-while-read"><span class="toc-section-number">3.4.1</span> Procesamiento dea archivos con
+bucles <i>while read</i></a></li>
+</ul></li>
+<li><a href="#bash-scripts---primeros-pasos" id="toc-bash-scripts---primeros-pasos"><span class="toc-section-number">3.5</span> <strong><span class="math inline">\(Bash\)</span> scripts</strong> - primeros
 pasos</a>
 <ul>
-<li><a href="#la-shebang-line-usrbinenv-bash-y-permisos-de-ejecución---el-script-ls_dir" id="toc-la-shebang-line-usrbinenv-bash-y-permisos-de-ejecución---el-script-ls_dir"><span class="toc-section-number">3.4.1</span> la “<strong>shebang
+<li><a href="#la-shebang-line-usrbinenv-bash-y-permisos-de-ejecución---el-script-ls_dir" id="toc-la-shebang-line-usrbinenv-bash-y-permisos-de-ejecución---el-script-ls_dir"><span class="toc-section-number">3.5.1</span> la “<strong>shebang
 line</strong>” (#!/usr/bin/env bash) y permisos de ejecución - el script
 <em>ls_dir</em></a></li>
-<li><a href="#paso-de-argumentos-posicionales-a-un-script-o-función---el-script-find_dir" id="toc-paso-de-argumentos-posicionales-a-un-script-o-función---el-script-find_dir"><span class="toc-section-number">3.4.2</span> Paso de <strong>argumentos
+<li><a href="#paso-de-argumentos-posicionales-a-un-script-o-función---el-script-find_dir" id="toc-paso-de-argumentos-posicionales-a-un-script-o-función---el-script-find_dir"><span class="toc-section-number">3.5.2</span> Paso de <strong>argumentos
 posicionales</strong> a un script o función - el script
 <em>find_dir</em></a></li>
 </ul></li>
-<li><a href="#funciones-en-bash" id="toc-funciones-en-bash"><span class="toc-section-number">3.5</span> Funciones en Bash</a>
+<li><a href="#funciones-en-bash" id="toc-funciones-en-bash"><span class="toc-section-number">3.6</span> Funciones en Bash</a>
 <ul>
-<li><a href="#llamada-a-la-función-print_numbered_table_header_fields-con-uno-o-dos-argumentos-posicionales" id="toc-llamada-a-la-función-print_numbered_table_header_fields-con-uno-o-dos-argumentos-posicionales"><span class="toc-section-number">3.5.1</span> Llamada a la función <span class="math inline">\(print\_numbered\_table\_header\_fields\)</span>
+<li><a href="#llamada-a-la-función-print_numbered_table_header_fields-con-uno-o-dos-argumentos-posicionales" id="toc-llamada-a-la-función-print_numbered_table_header_fields-con-uno-o-dos-argumentos-posicionales"><span class="toc-section-number">3.6.1</span> Llamada a la función <span class="math inline">\(print\_numbered\_table\_header\_fields\)</span>
 con uno o dos argumentos posicionales</a></li>
 </ul></li>
-<li><a href="#machote-de-un-bash-script-que-llama-a-funciones" id="toc-machote-de-un-bash-script-que-llama-a-funciones"><span class="toc-section-number">3.6</span> Machote de un Bash script que
+<li><a href="#machote-de-un-bash-script-que-llama-a-funciones" id="toc-machote-de-un-bash-script-que-llama-a-funciones"><span class="toc-section-number">3.7</span> Machote de un Bash script que
 llama a funciones</a></li>
-<li><a href="#alineamiento-múltiple-de-secuencias-e-interconversión-de-formatos-con-align_seqs_with_clustal_or_muscle.sh-y-convert_alnformats_using_clustalw.sh" id="toc-alineamiento-múltiple-de-secuencias-e-interconversión-de-formatos-con-align_seqs_with_clustal_or_muscle.sh-y-convert_alnformats_using_clustalw.sh"><span class="toc-section-number">3.7</span> Alineamiento múltiple de
+<li><a href="#alineamiento-múltiple-de-secuencias-e-interconversión-de-formatos-con-align_seqs_with_clustal_or_muscle.sh-y-convert_alnformats_using_clustalw.sh" id="toc-alineamiento-múltiple-de-secuencias-e-interconversión-de-formatos-con-align_seqs_with_clustal_or_muscle.sh-y-convert_alnformats_using_clustalw.sh"><span class="toc-section-number">3.8</span> Alineamiento múltiple de
 secuencias e interconversión de formatos con
 <em>align_seqs_with_clustal_or_muscle.sh</em> y
 <em>convert_alnFormats_using_clustalw.sh</em></a></li>
@@ -560,11 +565,7 @@ AWK:</a></li>
 AWK</a></li>
 </ul></li>
 <li><a href="#ejemplos-básicos-pero-muy-útiles-de-uso-de-awk" id="toc-ejemplos-básicos-pero-muy-útiles-de-uso-de-awk"><span class="toc-section-number">4.2</span> Ejemplos básicos pero muy útiles
-de uso de AWK</a>
-<ul>
-<li><a href="#filtrado-de-archivos-con-awk" id="toc-filtrado-de-archivos-con-awk"><span class="toc-section-number">4.2.1</span> filtrado de archivos con
-AWK</a></li>
-</ul></li>
+de uso de AWK</a></li>
 </ul></li>
 <li><a href="#ejercicios-integrativos-de-uso-de-herramientas-de-filtrado-del-shell" id="toc-ejercicios-integrativos-de-uso-de-herramientas-de-filtrado-del-shell"><span class="toc-section-number">5</span> Ejercicios integrativos de uso de
 herramientas de filtrado del Shell</a>
@@ -618,7 +619,7 @@ Internacionales de Bioinformática <a href="https://www.nnb.unam.mx/talleres/">T
 el <a href="http://www.ccg.unam.mx">Centro de Ciencias Genómicas</a> de
 la <a href="http://www.ccg.unam.mx">Universidad Nacional Autónoma de
 México</a>, del 22 al 26 de enero de 2024 por <a href="http://www.ccg.unan.mx/~vinuesa/">Pablo Vinuesa, CCG-UNAM</a> <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a>.</p>
-<p>Version: 2024-08-22</p>
+<p>Version: 2024-09-01</p>
 <p>Si éste es tu primer contacto con Linux, te recomiendo que leas
 primero esta <a href="https://github.com/vinuesa/TIB-filoinfo/blob/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf">presentación
 sobre introducción al biocómputo en sistemas Linux - PDF</a>.</p>
@@ -630,7 +631,7 @@ de Pagenómica y Filogenómica Microbiana</a> lo distribuyo públicamente a
 través de este <a href="https://github.com/vinuesa/TIB-filoinfo">repositorio GitHub</a>
 bajo la <a href="https://creativecommons.org/licenses/by-nc/4.0/"><strong>Licencia
 No Comercial Creative Commons 4.0</strong></a></p>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAMAAABUFvrSAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAEZ0FNQQAAsY58+1GTAAAAAXNSR0IB2cksfwAAAblQTFRF////////////////8fHx7+/v4+Pj39/f1tXV09bS0tXS0tXR0dTR0dTQ0NTQ0NPPz9PPztLOztHNzdHNzdHMz8/PzdDMzNDMzNDLzM/Ly8/Ly8/Ky87Kys3Jyc3Jyc3IyMzIyMzHx8vHxsrGxsrFxcnFyMfHxcnExMnExMjDw8jDxMfDw8fCwsfCwcXAwMXAwMW/wMS/v8S+v8O+vsO+vsK9vcK9vcK8v7+/vMG8vMG7vMC8u8C7u8C6ur+6ur+5ub65ub64uL23t7y2urm5tru1tbq0tLqztLmzs7iysrixsrexsbewsbawsLavsLWvr7Wur7SusLOvrrStrrOtr7KvrbOsrLKrr6+vq7GqrKurn6OenqCdn5+fnp2dmpiZlpmWk5iTkZSRkZORkY+Pj4+PiYyJjIqLh4aHhIaEhIWEgoWChIGCgICAfX98fH98fnt8eXx5eHV2dnN0dXJzcHJvcHBwaGVmYGBgXV5dWldYUFFQUFBQQ0RDQEBAPj8+Pzs8NTY1MjMxMjExMDAwMS0uKSkpKCkoKCUmIx8gICAgHxscGxsbGRkZEBAQDg4ODQ4NDQwNAAAABjFVaAAAAAN0Uk5TAAoO5yEBUwAAA5NJREFUeNq1lo930lYUx7NdaUprjKZzQIlFHJtSGVarg+E6Slmx2OpwOihqt1mqm27oGJNh+VG3pbCwGvH7F+8kAUpC6Jl4+g4575xveJ933/e+d1+Y93EojWGARDwWuRyc9XlnRJfD4XKf8vr8wfnIYjyRXPv6djqdyb59Axgk4tHQxYDP4xZ4bsJunzjKC9MeX2AuFFXJqdvpzEhkBvFo6IL/jChwT2ptdRHt2mPuhNt7LvhZNJ64fjN1pxtyoaG+bhTMDEsdDGKhC36vk8/t7Ru0t8k7PGeDocX4yurNTsgPmkC9VKoDzQf9hCE6GEQu+r0OrgJAKefD4XxZAVA5/4Hn3Fwktpxc00O+9xpVloiIreJ1H2GYDgaXA2ecKlfJ20hvGwrQPO/wBuYXlhJayNlsE2UiAtTXaO4DdH1r26yDQdAn8hVAYqnXbBJQ4d2+YCi2nLxxK53JFFAd74Kpip6fBfz9PdHWqzfFMYOugmdPCzlAshEZyZsnPP5LC/Frq6k7mUwDffOyaHTHN/CP/PIP5H/CXYOugn1ubg/KSTI0m4I9btoX/DyWuK56gbqqlqEtnOroja///pssy8WxcaOugr1TT4A8mdoG8FjwBq5El5M3VHCJNCd0L0r74BLRJ0UAxXGDroJnjteg2IjC1Xo9r3cPiUhBjT+lerGydutgMNFYcVeWt78ygUWurS4wrO3g+rrWldVlt4+6z859sXRtLXWQFUR05Dsal2VZfmm0wjUJPCSS0GLDrQ0JErve2tC8mHD5gpGlxGoq3U2eHrAheSzRtry7i+LdX/81Js9pB8LqmLw+tGN3GLA7PuqCC6iS9XarEo398urN1pGB7fa/wP0HpDR4QH7cNusGK2wnW3kJktqZrRjlSHeS18laL3kltDmxl7xs9l4TkMolyVyEhujadqtAod52W69rHbVQ42f8l77Ut9soZdM7ldO8sDogn15ZXE7qVejtC/3H2pFmDz7So4BnTwv3rYpQTvDMzi/EV7QiNAoYz0T+BSD1lSFWK5viz+90TQN47jrWX+hteQX4k3M+w7uC8dRx7IXpauI+/MH0T/18QH/6df0hsgDjqYu/33+Z5ninmQvq/Ghgwo5KFmA8FwUu173+NzlBHPShWzYHJySL6bpg/PWte+o4N2m3T3K8MP3NzqBp1kZ0bRgWMYCdR1dFl9PpEq8+2rHKxvCID/D4ML4K3zsk7n9pO/RNngRtJQAAAABJRU5ErkJggg==" /></a><br />This
+<p><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAMAAABUFvrSAAAAAXNSR0IB2cksfwAAAARnQU1BAACxjnz7UZMAAAAgY0hSTQAAeiUAAICDAAD5/wAAgOkAAHUwAADqYAAAOpgAABdvkl/FRgAAAblQTFRFAAAAAAAA////////////8fHx7+/v4+Pj39/f1tXV09bS0tXS0tXR0dTR0dTQ0NTQ0NPPz9PPztLOztHNzdHNzdHMz8/PzdDMzNDMzNDLzM/Ly8/Ly8/Ky87Kys3Jyc3Jyc3IyMzIyMzHx8vHxsrGxsrFxcnFyMfHxcnExMnExMjDw8jDxMfDw8fCwsfCwcXAwMXAwMW/wMS/v8S+v8O+vsO+vsK9vcK9vcK8v7+/vMG8vMG7vMC8u8C7u8C6ur+6ur+5ub65ub64uL23t7y2urm5tru1tbq0tLqztLmzs7iysrixsrexsbewsbawsLavsLWvr7Wur7SusLOvrrStrrOtr7KvrbOsrLKrr6+vq7GqrKurn6OenqCdn5+fnp2dmpiZlpmWk5iTkZSRkZORkY+Pj4+PiYyJjIqLh4aHhIaEhIWEgoWChIGCgICAfX98fH98fnt8eXx5eHV2dnN0dXJzcHJvcHBwaGVmYGBgXV5dWldYUFFQUFBQQ0RDQEBAPj8+Pzs8NTY1MjMxMjExMDAwMS0uKSkpKCkoKCUmIx8gICAgHxscGxsbGRkZEBAQDg4ODQ4NDQwN8PP1VAAAAAR0Uk5T/wAKDnDBpeYAAANiSURBVHjavZWNV9JQGMbfaiGirSVmgExptlKUyM8kzPzKbzNNUzOtFLO0yIwkVJxWCEE68S/uvWPjKkPPEY89wLnnPGM/Xp5733dwBS5El/DT09XhbXRXi0I5b7NYbPYyQXS6G7ztXT39Q8/HJiYmX51doHDbmutcosNu5tgCk6ngGmcudYiu2uY2Qh4Zm5jMkYzcB84K3swubyUBldxaYovsQpX7IZIHhkfGtZJXo4CKrtK7T/HR6UCuYOV8e5DW3jxncVS6m9u7+gaH1ZLnYgBSMCgBxObo/Xqfgr11TsHCbgKAHPJ7PP6QDACbNTcdVbXejm4MQyn59QGEjQzKGIYDStD7FNzoqrASruw3MCnNIjpWYxFcDa2dPVgyAccghFcAyGWIUUDKX9hI+xTsFnkOuREjk5YhgjVzdtHdjCU/G8UsViGcr4GZMKym84Xfb5G7fxjIU30Krr5t9iFXLZeS54sczvrWrt7BkfHJySgc+V0jRLX7o/AnvvMD/B9hWvUpWLSzeyCXMMdkkGGPLRXdjzp6BkgWIBE3BBAiqwTp+6Xv3+LxeCAvX/MpWCheBvAzGZoFWDILrqY2zIKAg8QEFFmDFIz+vQDagXzVp+DyG1sgYxCesCT5U8t7/JIMW1wZyaJvaPRUMCovsBuPbzzNAPNsEkIIBCJpSllC5G8nr9krax939g6NnBIF8a++YfLjqJ3jUdgKAbDECCSMnsRsBI/HVGJWyaLAJrq9eOAQrG4egG7z0N+I7+5CYPrr3+ObZzUBeBhGzVldlH9gstzRwHjcmOzHDf28z/uHC1epfxbw0QYJ6hvkwwb1s0RhKEn4MQqyZEZx5pamm6fumrqQ30+yfHrzkBADiISCkcwhpPfpcdsEmUkftylJWZgEHrdyZ/2T1HHLZWwKxT7MInuD3G9q7+4nnZfLoL+rtLTx5JbOFYxDaCbbEPKZHdUN2HhkCOUEhhWeW0dyCeUalbHJf4Jzas12/eigN/hlgJ+sdQXOrS+W6+sZjyb21js4rlR/gPKh0iy8nJVs42aOPkx9nJVyKUB5M5m+5mYlr+Hj36c9/udZM6/PQRubOl99naBfL+3FN9hCk6mQ5cylL7ZBJxqE3ifgE9nbiy28zWq18S2LBHuGijX4f9Lli8Fe+gfG6MwbUefR7wAAAABJRU5ErkJggg==" /></a><br />This
 work is licensed under a
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative
 Commons Attribution-NonCommercial 4.0</a></p>
@@ -773,15 +774,15 @@ las opciones disponibles para dicho comando</h3>
 ls --help</code></pre>
 <pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos, y sus propiedades (-l, long format)
 ls -al </code></pre>
-<pre><code>## total 30060
-## drwxr-xr-x 11 vinuesa vinuesa     4096 ago 22 23:23 .
+<pre><code>## total 30180
+## drwxr-xr-x 11 vinuesa vinuesa     4096 sep  1 23:24 .
 ## drwxr-xr-x 14 vinuesa vinuesa     4096 dic  7  2023 ..
 ## -rw-r--r--  1 vinuesa vinuesa   110128 ago 22  2022 800px-Evolución_UNIX.png
 ## -rw-r--r--  1 vinuesa vinuesa  6780296 ago 22  2022 assembly_summary.txt.gz
 ## -rw-rw-r--  1 vinuesa vinuesa     1813 sep 26  2022 aux_fun_lib
 ## -rw-rw-r--  1 vinuesa vinuesa   471463 ago 26  2023 bash_man_5.1.html
 ## drwxrwxr-x  2 vinuesa vinuesa     4096 ago 18  2023 bin
-## -rw-rw-r--  1 vinuesa vinuesa     2000 ago 22  2022 .cmds
+## -rw-rw-r--  1 vinuesa vinuesa     2000 sep  1 21:58 .cmds
 ## -rwxr-xr-x  1 vinuesa vinuesa    10193 ago 22  2022 comandos_de_linux.tab
 ## drwxrwxr-x  2 vinuesa vinuesa     4096 ago 25  2023 data
 ## -rw-r--r--  1 vinuesa vinuesa   438308 ago 22  2022 Evolución_UNIX.png
@@ -798,25 +799,28 @@ ls -al </code></pre>
 ## drwxr-xr-x  2 vinuesa vinuesa     4096 ago 22  2022 MobaXterm_screen_shots
 ## drwxrwxr-x  2 vinuesa vinuesa     4096 ago 22  2022 pics
 ## -rw-r--r--  1 vinuesa vinuesa    77803 ago 25  2023 recA_Bradyrhizobium_vinuesa.fna
-## -rw-r--r--  1 vinuesa vinuesa    17704 ago 22 23:23 recA_Byuanmingense.fna
+## -rw-r--r--  1 vinuesa vinuesa    17704 sep  1 23:24 recA_Byuanmingense.fna
 ## drwxr-xr-x  2 vinuesa vinuesa     4096 ago 22  2022 recA_seq_data
-## -rwxr-xr-x  1 vinuesa vinuesa        8 sep 28  2023 .Rhistory
+## -rwxr-xr-x  1 vinuesa vinuesa        8 ago 22 23:37 .Rhistory
 ## -rw-rw-r--  1 vinuesa vinuesa    51271 ago 22  2022 sesion_local_capt_pantalla.png
 ## -rw-r--r--  1 vinuesa vinuesa    40746 ago 22  2022 sesion_remota_bonampak_capt_pantalla1.png
 ## -rw-r--r--  1 vinuesa vinuesa     4468 ago 22  2022 sesion_remota_bonampak_capt_pantalla2.png
 ## -rw-rw-r--  1 vinuesa vinuesa   408580 ago 22  2022 sesion_remota_bonampak_capt_pantalla.png
 ## -rw-rw-r--  1 vinuesa vinuesa     4600 oct 10  2022 soluciones_ejercicio.txt
+## -rw-rw-r--  1 vinuesa vinuesa       94 sep  1 22:46 tabla.csv
+## -rw-rw-r--  1 vinuesa vinuesa       94 sep  1 23:24 tabla.tsv
 ## -rw-rw-r--  1 vinuesa vinuesa   624651 ago 18  2023 tarea1.html
 ## -rw-rw-r--  1 vinuesa vinuesa     1096 ago 18  2023 tarea1.Rmd
 ## drwxrwxr-x  3 vinuesa vinuesa     4096 ago 24  2023 tareas
 ## drwxr-xr-x  3 vinuesa vinuesa     4096 ago 22  2022 TIB2019-T3
 ## drwxrwxr-x  3 vinuesa vinuesa     4096 ago 22  2022 TIB-filo
+## -rw-rw-r--  1 vinuesa vinuesa    95026 sep  1 22:50 working_with_linux_commands_back.Rmd
 ## -rwxr--r--  1 vinuesa vinuesa     6047 ago 16 08:49 working_with_linux_commands.code
-## -rw-r--r--  1 vinuesa vinuesa  1179587 ago 22 23:23 working_with_linux_commands.html
+## -rw-r--r--  1 vinuesa vinuesa  1191821 sep  1 23:24 working_with_linux_commands.html
 ## -rw-r--r--  1 vinuesa vinuesa  1177960 ago 16 08:49 working_with_linux_commands.html.txt
 ## -rw-r--r--  1 vinuesa vinuesa    34046 ago 16 08:49 working_with_linux_commands.log
 ## drwxrwxr-x  2 vinuesa vinuesa     4096 ago 18 20:57 working_with_linux_commands_long
-## -rw-r--r--  1 vinuesa vinuesa    90717 ago 22 23:33 working_with_linux_commands.Rmd
+## -rw-r--r--  1 vinuesa vinuesa    97921 sep  1 23:26 working_with_linux_commands.Rmd
 ## -rw-r--r--  1 vinuesa vinuesa   190939 ago 16 08:49 working_with_linux_commands.tex</code></pre>
 <div id="veamos-el-contenido-del-directorio-raiz-salida-recortada-a-sólo-10-entradas-al-pasar-la-salida-de-ls-al-comando-head-mediante-un-pipe" class="section level4" number="2.2.3.1">
 <h4><span class="header-section-number">2.2.3.1</span> Veamos el
@@ -849,10 +853,10 @@ al <span class="math inline">\(directorio\ raíz\ /\)</span></li>
 <pre class="bash"><code>ls -l / | head -20</code></pre>
 <pre><code>## total 132
 ## lrwxrwxrwx   1 root root     7 oct  4  2020 bin -&gt; usr/bin
-## drwxr-xr-x   4 root root  4096 ago 21 17:16 boot
+## drwxr-xr-x   4 root root  4096 ago 25 17:26 boot
 ## drwxr-xr-x   2 root root  4096 oct  4  2020 cdrom
-## drwxr-xr-x  19 root root  5140 ago 22 18:09 dev
-## drwxr-xr-x 167 root root 12288 ago 21 17:19 etc
+## drwxr-xr-x  19 root root  5140 sep  1 10:28 dev
+## drwxr-xr-x 167 root root 12288 ago 29 07:16 etc
 ## drwxr-xr-x   5 root root  4096 abr 15  2020 home
 ## lrwxrwxrwx   1 root root     7 oct  4  2020 lib -&gt; usr/lib
 ## drwxr-xr-x   2 root root  4096 may 30 16:23 lib32
@@ -861,10 +865,10 @@ al <span class="math inline">\(directorio\ raíz\ /\)</span></li>
 ## drwx------   2 root root 16384 oct  4  2020 lost+found
 ## drwxr-xr-x   3 root root  4096 oct  5  2020 media
 ## drwxr-xr-x   2 root root  4096 jul 31  2020 mnt
-## drwxr-xr-x   6 root root  4096 feb 29 18:47 opt
-## dr-xr-xr-x 431 root root     0 ago 22 18:09 proc
+## drwxr-xr-x   6 root root  4096 feb 29  2024 opt
+## dr-xr-xr-x 438 root root     0 sep  1 10:28 proc
 ## drwx------  15 root root  4096 nov 27  2022 root
-## drwxr-xr-x  38 root root  1020 ago 22 18:37 run
+## drwxr-xr-x  38 root root  1020 sep  1 20:06 run
 ## lrwxrwxrwx   1 root root     8 oct  4  2020 sbin -&gt; usr/sbin
 ## drwxr-xr-x  33 root root  4096 ago 15 17:12 snap</code></pre>
 <pre class="bash"><code># idem, pero ordenando los archivos por fechas de modificacion (-t), listando los mas recientes al final (-r), es decir, en orden reverso
@@ -883,12 +887,12 @@ ls -ltr / | head -20</code></pre>
 ## drwxr-xr-x   3 root root  4096 oct  5  2020 media
 ## drwxr-xr-x  14 root root  4096 sep 14  2022 usr
 ## drwx------  15 root root  4096 nov 27  2022 root
-## drwxr-xr-x   6 root root  4096 feb 29 18:47 opt
+## drwxr-xr-x   6 root root  4096 feb 29  2024 opt
 ## drwxr-xr-x   2 root root  4096 may 30 16:23 lib32
 ## drwxr-xr-x  15 root root  4096 jul  6 20:29 var
 ## drwxr-xr-x  33 root root  4096 ago 15 17:12 snap
-## drwxr-xr-x   4 root root  4096 ago 21 17:16 boot
-## drwxr-xr-x 167 root root 12288 ago 21 17:19 etc</code></pre>
+## drwxr-xr-x   4 root root  4096 ago 25 17:26 boot
+## drwxr-xr-x 167 root root 12288 ago 29 07:16 etc</code></pre>
 </div>
 </div>
 <div id="expansión-de-caracteres-con-y" class="section level3" number="2.2.4">
@@ -1510,7 +1514,7 @@ fi
 # confirmamos que se generaron las ligascomandos_de_linux.tab
 ls -l | head</code></pre>
 <pre><code>## ln: failed to create symbolic link &#39;comandos_de_linux.tab&#39;: File exists
-## total 30040
+## total 30160
 ## -rw-r--r-- 1 vinuesa vinuesa   110128 ago 22  2022 800px-Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa  6780296 ago 22  2022 assembly_summary.txt.gz
 ## -rw-rw-r-- 1 vinuesa vinuesa     1813 sep 26  2022 aux_fun_lib
@@ -1899,7 +1903,7 @@ posterior.</p>
 comando: <b>man command</b></h2>
 <pre class="bash"><code># mira las opciones de cut y sort en la manpage
 man cut | head -30</code></pre>
-<pre><code>## CUT(1)                                                                             User Commands                                                                             CUT(1)
+<pre><code>## CUT(1)                                                                                         User Commands                                                                                         CUT(1)
 ## 
 ## NAME
 ##        cut - remove sections from each line of files
@@ -2227,21 +2231,22 @@ find borrame/ -type f -name &#39;arch-A&#39; | wc -l</code></pre>
 de <code>-exec ls -l</code></li>
 </ul>
 <pre class="bash"><code>find borrame/ -type f -name arch-B -exec ls -l &#39;{}&#39; + | head -5</code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-001/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-002/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-003/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-004/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-005/arch-B</code></pre>
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 borrame/dir-001/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 borrame/dir-002/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 borrame/dir-003/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 borrame/dir-004/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 borrame/dir-005/arch-B
+## find: ‘ls’ terminated by signal 13</code></pre>
 <ul>
 <li>lista en formato largo los primeros 5 archivos arch-B haciendo uso
 de <code>xargs ls -l</code></li>
 </ul>
 <pre class="bash"><code>find borrame/ -type f -name arch-B | xargs ls -l | head -5</code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-001/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-002/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-003/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-004/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 borrame/dir-005/arch-B</code></pre>
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 borrame/dir-001/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 borrame/dir-002/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 borrame/dir-003/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 borrame/dir-004/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 borrame/dir-005/arch-B</code></pre>
 <p>-¿qué hace este comando?</p>
 <pre><code>find borrame/ -type f -name &#39;arch-*&#39; | xargs ls -l | tail -3</code></pre>
 <p>-¿qué hace este comando?</p>
@@ -2284,19 +2289,19 @@ disponible en el sistema y en cada partición o dispositivo montados en
 el sistema de archivos.</p>
 <pre class="bash"><code>df        </code></pre>
 <pre><code>## Filesystem      1K-blocks       Used Available Use% Mounted on
-## tmpfs             3279752       2164   3277588   1% /run
-## /dev/nvme0n1p3  465816208  149294040 292786516  34% /
-## tmpfs            16398740      58624  16340116   1% /dev/shm
+## tmpfs             3279752       2160   3277592   1% /run
+## /dev/nvme0n1p3  465816208  149239784 292840772  34% /
+## tmpfs            16398740      58016  16340724   1% /dev/shm
 ## tmpfs                5120          4      5116   1% /run/lock
 ## efivarfs              128         64        60  52% /sys/firmware/efi/efivars
-## /dev/sda1      1921724608 1233218684 590813868  68% /home
+## /dev/sda1      1921724608 1233883848 590148704  68% /home
 ## /dev/nvme0n1p1    1994928       6220   1988708   1% /boot/efi
-## tmpfs             3279748       2492   3277256   1% /run/user/1000</code></pre>
+## tmpfs             3279748       1712   3278036   1% /run/user/1000</code></pre>
 <p>Si le pasamos como argumento un directorio o partición, nos da la
 información correspondiente al espacio disponible.</p>
 <pre class="bash"><code>df /</code></pre>
 <pre><code>## Filesystem     1K-blocks      Used Available Use% Mounted on
-## /dev/nvme0n1p3 465816208 149294040 292786516  34% /</code></pre>
+## /dev/nvme0n1p3 465816208 149239784 292840772  34% /</code></pre>
 </div>
 <div id="opciones-más-comunes-de-df" class="section level3" number="2.18.2">
 <h3><span class="header-section-number">2.18.2</span> Opciones más
@@ -2329,18 +2334,18 @@ echo
 df -h /home</code></pre>
 <pre><code>## Filesystem     1M-blocks     Used Available Use% Mounted on
 ## tmpfs              3203M       3M     3201M   1% /run
-## /dev/nvme0n1p3   454899M  145795M   285925M  34% /
-## tmpfs             16015M      60M    15956M   1% /dev/shm
+## /dev/nvme0n1p3   454899M  145742M   285978M  34% /
+## tmpfs             16015M      57M    15958M   1% /dev/shm
 ## tmpfs                 5M       1M        5M   1% /run/lock
 ## efivarfs              1M       1M        1M  52% /sys/firmware/efi/efivars
-## /dev/sda1       1876685M 1204316M   576967M  68% /home
+## /dev/sda1       1876685M 1204965M   576318M  68% /home
 ## /dev/nvme0n1p1     1949M       7M     1943M   1% /boot/efi
-## tmpfs              3203M       3M     3201M   1% /run/user/1000
-## total           2355957M 1350181M   887195M  61% -
+## tmpfs              3203M       2M     3202M   1% /run/user/1000
+## total           2355957M 1350774M   886602M  61% -
 ## 
 ## 
 ## Filesystem      Size  Used Avail Use% Mounted on
-## /dev/sda1       1.8T  1.2T  564G  68% /home</code></pre>
+## /dev/sda1       1.8T  1.2T  563G  68% /home</code></pre>
 <!-- ### >>> AVANZADO -->
 <!--  ahora con un bucle for, con la sintaxis: [for ALIAS in LIST; do YOUR_CODE; done] -->
 <!-- for letter in b c d e f; do echo ">>> $letter"; ls /bin/${letter}*; echo '--------------'; done -->
@@ -2392,9 +2397,9 @@ escalares</h3>
 escalar y uso de comillas</p>
 <pre><code>varName=VALUE</code></pre>
 <ul>
-<li>para recuperar el valor de una varialbe, le añadimos el prefijo
-<b>$</b>. Para imprimir el valor asignado a la variable, usamos <b>echo
-$varName</b></li>
+<li>para recuperar el valor de una variable, le añadimos el
+<i>prefijo</i> <b>$</b>. Para imprimir el valor asignado a la variable,
+usamos <code>echo $varName</code></li>
 </ul>
 <pre class="bash"><code>archivo_de_comandos_linux=linux_commands.tab
 echo &quot;$archivo_de_comandos_linux&quot;
@@ -2413,7 +2418,7 @@ echo &#39; &gt;&gt;&gt; Ojo, VARIABLE ENTRE COMILLAS SENCILLAS NO INTERPOLA: $sa
 echo</code></pre>
 <pre><code>## linux_commands.tab
 ## var2: Cadena con espacios, entre comillas sencillas
-## Bienvenido a alisio, vinuesa! Te recuerdo que hoy es jue 22 ago 2024 23:37:09 CST
+## Bienvenido a alisio, vinuesa! Te recuerdo que hoy es dom 01 sep 2024 23:26:27 CST
 ##  &gt;&gt;&gt; Ojo, VARIABLE ENTRE COMILLAS SENCILLAS NO INTERPOLA: $saludo_inicial; se imprime literalmente</code></pre>
 <p>No es necesario hacer llamados a las variables entre comillas dobles,
 pero es una buena práctica, como se muestra en los ejemplos del bloque
@@ -2426,7 +2431,7 @@ salida de un comando en una variable con <b>var=$(comando)</b></h3>
 date=$(date | awk &#39;{print $3,$2,$6}&#39; | sed &#39;s/ //g&#39;)
 h=$HOSTNAME
 echo &quot;&gt;&gt;&gt; working in: $wkdir at &lt;$h&gt; on &lt;$date&gt;&quot;</code></pre>
-<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/intro_biocomp4genomics_TFC/sesion1_intro2linux at &lt;alisio&gt; on &lt;ago22CST&gt;</code></pre>
+<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/intro_biocomp4genomics_TFC/sesion1_intro2linux at &lt;alisio&gt; on &lt;sep01CST&gt;</code></pre>
 </div>
 <div id="modificación-de-variables-y-operaciones-con-ellas" class="section level3" number="3.1.3">
 <h3><span class="header-section-number">3.1.3</span> Modificación de
@@ -2454,23 +2459,25 @@ echo &quot;basedir has ${#basedir} characters  # \${#basedir}&quot;
 <h2><span class="header-section-number">3.2</span>
 <strong>Condicionales</strong></h2>
 <ul>
-<li>La sintaxis básica de un condicional simple en formato de una línea
-es así</li>
+<li>La sintaxis básica de un condicional simple, llamado directamente
+desde la línea de comando (en formato de una línea) es así:</li>
 </ul>
 <p><code>if [ condición ]; then comando1; comando2 …; fi</code></p>
 <ul>
-<li>también hay una versión más corta para test simples</li>
+<li>también hay una versión más corta para test simples:</li>
 </ul>
-<p><code>[ condición ] &amp;&amp; sentecia1 &amp;&amp;
-sentencia2</code></p>
+<p><code>[ condición ] &amp;&amp; comando1 &amp;&amp;
+comando2</code></p>
 <ul>
-<li>En un script generalmente escibimos los condicionales como un bloque
-indentado, para mejor legibilidad:</li>
+<li>En un script generalmente escibimos los <b>condicionales como un
+bloque indentado</b>, para mejor legibilidad, como el que sigue:</li>
 </ul>
 <pre><code>if [ condición ]; then 
-    orden1
-    orden2 
+    comando1
+    comando2 
 fi</code></pre>
+<p>Noten que las líneas de comandos (comando1, comando2) no necesitan
+terminarse con ‘;’</p>
 <div id="comparación-de-íntegros-en-condicionales" class="section level3" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> Comparación de
 íntegros en condicionales</h3>
@@ -2497,9 +2504,10 @@ elif [ &quot;$c&quot; != &quot;$j&quot; ]; then
 fi</code></pre>
 <pre><code>## c:carla != j:juan</code></pre>
 </div>
-<div id="comprobación-de-la-existencia-de-un-archivo-de-tamaño-0-bytes" class="section level3" number="3.2.3">
+<div id="comprobación-de-la-existencia--e-file-de-un-archivo-de-tamaño-0-bytes" class="section level3" number="3.2.3">
 <h3><span class="header-section-number">3.2.3</span> Comprobación de la
-existencia de un archivo de tamaño &gt; 0 bytes</h3>
+existencia (<b>[ -e file ]</b>) de un archivo de tamaño &gt; 0
+bytes</h3>
 <pre class="bash"><code>touch empty_file
 ls -l empty_file
 ls -l assembly*gz
@@ -2520,7 +2528,7 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago 22 23:37 empty_file
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 sep  1 23:26 empty_file
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago 22  2022 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty
@@ -2531,7 +2539,7 @@ fi
 test <strong>[ condición ] &amp;&amp; comando1 &amp;&amp;
 comando2</strong> …</h3>
 <pre class="bash"><code># también podemos usar la versión corta del test:
-f=$(ls *gz)
+f=$(ls *gz) # &lt;&lt;&lt; peligroso: usar sólo si estás seguro que existe un solo archivo *gz en el directorio
 [ -s &quot;$f&quot; ] &amp;&amp; echo &quot;$f exists and is non-empty&quot;</code></pre>
 <pre><code>## assembly_summary.txt.gz exists and is non-empty</code></pre>
 </div>
@@ -2561,11 +2569,12 @@ else</strong></h3>
 <div id="bucles-for" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> <strong>Bucles
 for</strong></h2>
-<p>la sintaxis general de un bucle for en <span class="math inline">\(Bash\)</span> es:</p>
-<p><code>for ALIAS in LIST; do CMD1; CMD2; done</code></p>
+<p>la sintaxis general de un <b>bucle for</b> en <span class="math inline">\(Bash\)</span> es:</p>
+<p><b>for ALIAS in LIST; do CMD1; CMD2; done</b></p>
 <p>donde el usuario tiene que cambiar los términos en mayúsculas por
 opciones concretas. ALIAS es el nombre de una variable temporal a la que
-se asigna secuencialmente cada valor de LIST.</p>
+se asigna secuencialmente cada valor de la lista LIST. Cómo generar la
+lista LIST dependerá de la situación.</p>
 <p>Así por ejemplo, si tuviéramos muchos archivos de secuencias
 homólogas con la extensión *.faa en un directorio, podríamos alinearlas
 secuencialmente con <span class="math inline">\(clustalo\)</span> con un
@@ -2573,8 +2582,8 @@ comando como el siguiente:</p>
 <p><code>for file in <em>.faa; do clustalo -i $file -o
 ${file%.</em>}_cluoAln.faa; done</code></p>
 <p>donde ALIAS=file, LIST=*.faa y CMD1 es una llamada al programa de
-alineamientos múltiples clustalo que veremos más adelante en este
-taller.</p>
+alineamientos múltiples <span class="math inline">\(clustalo\)</span>
+que veremos más adelante en este taller.</p>
 <div id="ejemplo-de-bucle-for-acoplado-a-las-herramientas-de-filtrado-y-de-manipulación-de-variables" class="section level3" number="3.3.1">
 <h3><span class="header-section-number">3.3.1</span> Ejemplo de bucle
 for, acoplado a las herramientas de filtrado y de manipulación de
@@ -2674,16 +2683,96 @@ cat programming.cmds</code></pre>
 rm *.cmds</code></pre>
 </div>
 </div>
-<div id="bash-scripts---primeros-pasos" class="section level2" number="3.4">
-<h2><span class="header-section-number">3.4</span> <strong><span class="math inline">\(Bash\)</span> scripts</strong> - primeros
+<div id="bucles-while" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> <strong>Bucles
+while</strong></h2>
+<p>la sintaxis general de un <b>bucle while</b> en <span class="math inline">\(Bash\)</span> es:</p>
+<p><b>while &lt;CRITERIOS&gt;; do &lt;BLOQUE&gt;; done</b></p>
+<p>donde el usuario tiene que cambiar los términos en &lt;MAYÚSCULAS&gt;
+por opciones concretas. El &lt;BLOQUE&gt; de comandos se ejecutará
+mientras que el|los &lt;CRITERIOS&gt; se cumplan, es decir, que tengan
+un estatus de salida (exit status) igual a 0.</p>
+<p>Van unos ejemplos genéricos:</p>
+<pre class="bash"><code># cuenta de 1..3; noten el uso del operador (( )), usado para operaciones aritméticas; ((count++)) autoincrementa la variable count 
+count=1
+
+while (( count &lt;= 3)); do
+    echo $count
+    ((count++))
+done</code></pre>
+<pre><code>## 1
+## 2
+## 3</code></pre>
+<div id="procesamiento-dea-archivos-con-bucles-while-read" class="section level3" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> Procesamiento dea
+archivos con bucles <i>while read</i></h3>
+<p>Los bucles <span class="math inline">\(while\)</span> se usan
+principalmente para procesar archivos. De hecho, la manera más robusta y
+canónica de procesar archivos en <span class="math inline">\(BASH\)</span> es mediante el uso de bucles <span class="math inline">\(while\)</span>.</p>
+<p>Reescribamos haciendo uso de un bucle <span class="math inline">\(while\)</span> el ejemplo anterior que usaba un
+<i>bucle for</i> para procesar el archivo
+<i>linux_basic_commands.tab</i>.</p>
+<p>El bucle <span class="math inline">\(while\)</span> procesará línea a
+línea el contenido del archivo <i>linux_basic_commands.tab</i></p>
+<p>Con <code>read -r</code> asignamos a las variables <i>name</i>
+<i>category</i> <i>descr</i> y <i>appeared</i> el contenido de cada uno
+de los cuatro campos de la tabla <i>linux_basic_commands.tab</i>, leída
+por el bucle con <code>done &lt; file</code>. Cada línea es cortada por
+espacios, tabuladores o saltos de línea, acorde a la variable de
+ambiente <span class="math inline">\(\$IFS\)</span>.</p>
+<pre class="bash"><code>#&gt;&gt;&gt; Ejemplo integrativo: usa un bucle while, acoplado a grep para generar archivos que contengan solo los comandos de las diferentes categorias
+#    nombrando a los archivos por estas
+
+while read -r name category descr appeared; do
+    # La variable category contendrá sólo la primera palabra del campo correspondiente.
+    grep -w &quot;$category&quot; linux_basic_commands.tab &gt; &quot;${category}&quot;.cmds
+done &lt; linux_basic_commands.tab</code></pre>
+<p>Y voilà:</p>
+<pre class="bash"><code># veamos el contenido del directorio después de correr el bucle
+ls *.cmds</code></pre>
+<pre><code>## Batch.cmds
+## C.cmds
+## Filesystem.cmds
+## FORTRAN77.cmds
+## Misc.cmds
+## Network.cmds
+## Process.cmds
+## Programming.cmds
+## SCCS.cmds
+## Shell.cmds
+## Std.cmds
+## System.cmds
+## Text.cmds</code></pre>
+<pre class="bash"><code># veamos el contenido de uno de los nuevos archivos generados
+cat Shell.cmds</code></pre>
+<pre><code>## command  Shell programming   Execute a simple command    
+## echo     Shell programming   Write arguments to standard output  Version 2 AT&amp;T UNIX
+## expr     Shell programming   Evaluate arguments as an expression     Version 7 AT&amp;T UNIX
+## false    Shell programming   Return false value  Version 7 AT&amp;T UNIX
+## getopts  Shell programming   Parse utility options   
+## logger   Shell programming   Log messages    4.3BSD
+## printf   Shell programming   Write formatted output  4.3BSD-Reno
+## read     Shell programming   Read a line from standard input     
+## sh   Shell programming   Shell, the standard command language interpreter    Version 7 AT&amp;T UNIX (in earlier versions, sh was either the Thompson shell or the PWB shell)
+## sleep    Shell programming   Suspend execution for an interval   Version 4 AT&amp;T UNIX
+## tee  Shell programming   Duplicate the standard output   Version 5 AT&amp;T UNIX
+## test     Shell programming   Evaluate expression     Version 7 AT&amp;T UNIX
+## true     Shell programming   Return true value   Version 7 AT&amp;T UNIX
+## xargs    Shell programming   Construct argument lists and invoke utility     PWB UNIX</code></pre>
+<pre class="bash"><code># finalmente borremos los nuevos archivos generados
+rm *.cmds</code></pre>
+</div>
+</div>
+<div id="bash-scripts---primeros-pasos" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> <strong><span class="math inline">\(Bash\)</span> scripts</strong> - primeros
 pasos</h2>
 <p>Para finalizar esta sección, voy a mostrarles varios ejemplos muy
 sencillos de <strong>Shell scripts</strong> escritos en <span class="math inline">\(Bash\)</span> que integran varios aspectos de la
 sintaxis básica del lenguaje arriba descritas, así como extensiones
 adicionales como son <strong>argumentos posicionales</strong> y
 <strong>funciones</strong></p>
-<div id="la-shebang-line-usrbinenv-bash-y-permisos-de-ejecución---el-script-ls_dir" class="section level3" number="3.4.1">
-<h3><span class="header-section-number">3.4.1</span> la “<strong>shebang
+<div id="la-shebang-line-usrbinenv-bash-y-permisos-de-ejecución---el-script-ls_dir" class="section level3" number="3.5.1">
+<h3><span class="header-section-number">3.5.1</span> la “<strong>shebang
 line</strong>” (#!/usr/bin/env bash) y permisos de ejecución - el script
 <em>ls_dir</em></h3>
 <p>Se conocen como <em>scripts</em> a archivos de texto plano
@@ -2702,7 +2791,7 @@ particular, como <span class="math inline">\(bash\)</span>, <span class="math in
 # AIM: learning basic BASH-programming constructs for TIB-filoinfo
 # https://github.com/vinuesa/TIB-filoinfo
 
-for file in $(ls)
+for file in *
 do 
     if [ -d &quot;$file&quot; ]
     then 
@@ -2716,10 +2805,10 @@ manera abajo indicada:</p>
 PEGA AQUÍ EL CÓDIGO ARRIBA MOSTRADO
 CTRL-D</code></pre>
 <p>El script <em>ls_dir</em> busca los directorios presentes en el
-directorio actual usando un bucle for para analizar cada archivo
-econtrado por <span class="math inline">\(ls\)</span>, evaluando
-seguidamente si el archivo en turno es un directorio con un condicional
-<code>if [ -d “$file” ]</code></p>
+directorio actual usando un bucle <span class="math inline">\(for\)</span> para analizar cada archivo econtrado
+por <span class="math inline">\(ls\)</span>, evaluando seguidamente si
+el archivo en turno es un directorio con un condicional <code>if [ -d
+“$file” ]</code></p>
 <p>Noten que la primera línea inicia con lo que se conoce como una
 <strong>shebang line</strong>:</p>
 <p><code>#!/usr/bin/env bash</code></p>
@@ -2728,9 +2817,9 @@ izquierda o arriba de la línea!), le indica al sistema operativo qué
 <strong>intérprete de comandos</strong> usar para la ejecución del
 código que sigue. En este caso se llama al intérprete de comandos <span class="math inline">\(bash\)</span></p>
 <p>Noten también que cualquier línea que inicie con <strong>#</strong>,
-después de la shebang line, representa un comentario, es decir, que el
-texto que sigue al gato no es interpretado por <span class="math inline">\(bash\)</span></p>
-<p>Para ejecutar el script como si fuera un comando cualquiera de <span class="math inline">\(Linux\)</span>, le damos <strong>permisos de
+después de la shebang line, representa un <b>comentario</b>, es decir,
+que el texto que sigue al gato no es interpretado por <span class="math inline">\(bash\)</span></p>
+<p>Para ejecutar el script como si fuera un comando cualquiera de <span class="math inline">\(Linux\)</span>, le otorgamos <strong>permisos de
 ejecución</strong>:</p>
 <pre><code>chmod 755 ls_dir</code></pre>
 <p>Comprueba los permisos:</p>
@@ -2741,7 +2830,7 @@ demás pueden ejecutarlo (<span class="math inline">\(x\)</span>)</p>
 <p>Finalmente copia o mueve el script a un directorio que esté en el
 <span class="math inline">\(PATH\)</span>, típicamente a <span class="math inline">\(HOME/bin\)</span></p>
 <pre><code>mv ls_dir ~/bin</code></pre>
-<p>y ya puedes usarlo:</p>
+<p>y ya puedes usarlo como un comando cualquiera del sistema:</p>
 <pre class="bash"><code>ls_dir</code></pre>
 <pre><code>## TIB-filo
 ## tareas
@@ -2755,15 +2844,15 @@ demás pueden ejecutarlo (<span class="math inline">\(x\)</span>)</p>
 <p>Nota: el script <em>ls_dir</em> funciona perfectamente, pero no es la
 manera más eficiente de buscar directorios. La función <span class="math inline">\(find\)</span> de <span class="math inline">\(Linux\)</span> es mucho más eficiente.</p>
 </div>
-<div id="paso-de-argumentos-posicionales-a-un-script-o-función---el-script-find_dir" class="section level3" number="3.4.2">
-<h3><span class="header-section-number">3.4.2</span> Paso de
+<div id="paso-de-argumentos-posicionales-a-un-script-o-función---el-script-find_dir" class="section level3" number="3.5.2">
+<h3><span class="header-section-number">3.5.2</span> Paso de
 <strong>argumentos posicionales</strong> a un script o función - el
 script <em>find_dir</em></h3>
 <p>Los scripts (o funciones) pueden recibir opciones dadas por los
 usuarios para comportarse acorde a ellas. Esto les da gran
 flexibilidad.</p>
-<p>La manera más sencialla de pasarle opciones al script es mediante
-<strong>argumentos posicionales</strong>, como los usados por
+<p>La manera más sencialla de <i>pasarle opciones al script</i> es
+mediante <strong>argumentos posicionales</strong>, como los usados por
 <em>find_dir</em>. El nombre de <strong>argumentos posicionales</strong>
 alude al hecho que el script of función recibe los argumentos en el
 orden en el que listan en la línea de comandos, o en el orden en el que
@@ -2775,7 +2864,7 @@ en las variables
 <p>Los scripts y funciones pueden recibir opciones dadas por los
 usuarios para comportarse acorde a ellas. Esto les confiere gran
 versatilidad.</p>
-<p>La sintaxis de paso de argumentos a un script o función es muy
+<p>La sintaxis de paso de argumentos (arg) a un script o función es muy
 sencilla:</p>
 <pre>
 mi_script.sh arg1 arg2 ...
@@ -2797,7 +2886,7 @@ usados por <em>find_dir</em></p>
 # https://github.com/vinuesa/TIB-filoinfo
 
 # global variables
-progname=${0##*/}      # find_dir
+progname=${0##*/}    # find_dir; elimina la ruta absoluta que precede a la localización del script
 VERSION=&#39;0.1_29Jul19&#39; 
 
 # Function definition
@@ -2831,9 +2920,11 @@ type=${2:-d}  # if not provided, the second argument is set to &#39;d&#39; by de
 
 # execute find command with the provided arguments
 find . -maxdepth $max_depth -type $type</code></pre>
-<p>Guarda el código arriba mostrado en un archivo llamado
-<em>find_dir</em>, dale permisos de ejecución, y cópialo a <span class="math inline">\(HOME/bin\)</span>, como se mostró en el ejemplo
-anterior.</p>
+Guarda el código arriba mostrado en un archivo llamado
+<em>find_dir</em>, dale permisos de ejecución, y muévelo a
+<pre>$HOME/bin</pre>
+<p>, como se mostró en el ejemplo anterior.</p>
+<pre><code>chmod 755 find_dir &amp;&amp; mv find_dir $HOME/bin</code></pre>
 <p><em>find_dir</em> hace la siguiente llamada a <span class="math inline">\(find\)</span></p>
 <p><code>find . -maxdepth $max_depth -type $type</code></p>
 <p>para encontrar directorios y subdirectorios por debajo del acutal, al
@@ -2867,34 +2958,33 @@ argumentos</p>
 <pre><code>  find_dir 1</code></pre>
 </div>
 </div>
-<div id="funciones-en-bash" class="section level2" number="3.5">
-<h2><span class="header-section-number">3.5</span> Funciones en
+<div id="funciones-en-bash" class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> Funciones en
 Bash</h2>
 <p>A medida que los programas se hacen más grandes y complejos, se
 vuelven más difíciles de diseñar, escribir y mantener.</p>
 <p>Escribir funciones permite reducir la extensión, redundancia y
-complejidad de un programa complejo, facilitando su mantenimiento.
-Muchos programas tienen que ejecutar múltiples veces una misma acción,
-como por ejemplo verificar que se ha escrito a disco un archivo con
-resultados generados por el programa. Escribir una función que verifique
-la existencia de un archivo pasado a la misma como argumento permite
-reducir redundancia y extensión del código, ya que en el lugar indicado
-del script principal, se llama a la función en vez de repetir el cógido
-encapsulado en la misma. Si hubiera un error en la función, sólo hay que
-corregirlo en un bloque de código.</p>
+complejidad de un programa complejo, facilitando su mantenimiento.</p>
+<p>Muchos programas tienen que ejecutar múltiples veces una misma
+acción, como por ejemplo verificar que se ha escrito a disco un archivo
+con resultados generados por el programa. Escribir una función que
+verifique la existencia de un archivo pasado a la misma como argumento
+permite reducir redundancia y extensión del código, ya que en el lugar
+indicado del script principal, se llama a la función en vez de repetir
+el cógido encapsulado en la misma.</p>
+<p>Escribir funciones además ayuda al programador a mantener código, ya
+que si hubiera un error en la función, sólo hay que corregirlo en un
+bloque de código.</p>
 <p>Por tanto una práctica fundamental en programación es la
 modularización del cógido en funciones y librerías de funciones
 relacionadas.</p>
 <p>La sintaxis básica de una función es la siguiente:</p>
-<p>La sintaxis básica de una función es la siguiente:</p>
 <pre>
-function name1 {
+function funname() {
     command1
     command2
     ...
-    return
 }
-
 </pre>
 <p>Una buena función debe estar especializada en realizar una sola
 tarea, eso si, bajo diferentes condiciones u opciones, que se le pasan
@@ -2906,8 +2996,8 @@ funciones que se llaman al inicio del script principal mediante el
 comando <span class="math inline">\(source\)</span>, antes de que éste
 haga llamadas a las funciones, como se muestra en el “machote” de script
 que se presenta más adelante.</p>
-<div id="llamada-a-la-función-print_numbered_table_header_fields-con-uno-o-dos-argumentos-posicionales" class="section level3" number="3.5.1">
-<h3><span class="header-section-number">3.5.1</span> Llamada a la
+<div id="llamada-a-la-función-print_numbered_table_header_fields-con-uno-o-dos-argumentos-posicionales" class="section level3" number="3.6.1">
+<h3><span class="header-section-number">3.6.1</span> Llamada a la
 función <span class="math inline">\(print\_numbered\_table\_header\_fields\)</span>
 con uno o dos argumentos posicionales</h3>
 <p>Si usas con frecuencia algunas funciones, puedes ponerlas también el
@@ -2963,8 +3053,8 @@ argumento</li>
      4  First appeared</code></pre>
 </div>
 </div>
-<div id="machote-de-un-bash-script-que-llama-a-funciones" class="section level2" number="3.6">
-<h2><span class="header-section-number">3.6</span> Machote de un Bash
+<div id="machote-de-un-bash-script-que-llama-a-funciones" class="section level2" number="3.7">
+<h2><span class="header-section-number">3.7</span> Machote de un Bash
 script que llama a funciones</h2>
 <p>El siguiente bloque muestra un machote para un <span class="math inline">\(script\)</span> básico, que llama a funciones y
 que recibe argumentos posicionales desde la línea de comandos. Puedes
@@ -3095,8 +3185,8 @@ prog1 $var1 $var2
 
 </pre>
 </div>
-<div id="alineamiento-múltiple-de-secuencias-e-interconversión-de-formatos-con-align_seqs_with_clustal_or_muscle.sh-y-convert_alnformats_using_clustalw.sh" class="section level2" number="3.7">
-<h2><span class="header-section-number">3.7</span> Alineamiento múltiple
+<div id="alineamiento-múltiple-de-secuencias-e-interconversión-de-formatos-con-align_seqs_with_clustal_or_muscle.sh-y-convert_alnformats_using_clustalw.sh" class="section level2" number="3.8">
+<h2><span class="header-section-number">3.8</span> Alineamiento múltiple
 de secuencias e interconversión de formatos con
 <em>align_seqs_with_clustal_or_muscle.sh</em> y
 <em>convert_alnFormats_using_clustalw.sh</em></h2>
@@ -3109,7 +3199,8 @@ este fin.</p>
 que permite hacer inteconversión de formatos con clustalw.</p>
 <p>Los alineamientos múltiples y las llamadas a <span class="math inline">\(clustalw\)</span> las explicaremos en la <a href="https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos">sesión4_alineamientos</a>.</p>
 <p>Con lo aprendido hasta ahora y los comentarios que documentan los
-scripts, deberías entender lo que hacen.</p>
+scripts, deberías poder entender lo que hacen. Si persiste alguna duda
+me preguntas a mí o a <span class="math inline">\(google\)</span>.</p>
 <p>Vuelve a explorar ambos scripts después de haber revisado la <a href="https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos">sesión4_alineamientos</a>.</p>
 <hr />
 </div>
@@ -3117,19 +3208,23 @@ scripts, deberías entender lo que hacen.</p>
 <div id="el-lenguaje-de-procesamiento-de-patrones-awk" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> El lenguaje de
 procesamiento de patrones <b>AWK</b></h1>
-<p><b>AWK</b> es un lenguaje de programación diseñado para procesar
-datos de texto, ya sean ficheros o flujos de datos. El nombre <b>AWK</b>
-deriva de las iniciales de los apellidos de sus autores: Alfred
-<b>A</b>ho, Peter <b>W</b>einberger, y Brian <b>K</b>ernighan. <b><span class="math inline">\(awk\)</span></b>, cuando está escrito todo en
-minúsculas, hace referencia al programa de Unix que interpreta programas
-escritos en el lenguaje de programación AWK. Es decir <b>AWK</b> es un
-lenguaje interpretado por el intérprete de comando <b><span class="math inline">\(awk\)</span></b>.</p>
+<p><b>AWK</b> es un lenguaje de programación diseñado para procesar de
+manera fácil y versátil textos con cierta estructura, ya sean ficheros o
+flujos de datos.</p>
+<p>El nombre <b>AWK</b> deriva de las iniciales de los apellidos de sus
+autores: Alfred <b>A</b>ho, Peter <b>W</b>einberger, y Brian
+<b>K</b>ernighan.</p>
+<p><b><span class="math inline">\(awk\)</span></b>, cuando está escrito
+todo en minúsculas, hace referencia al <em>intérprete de comandos</em>,
+es decir, el programa de Unix que interpreta programas escritos en el
+<strong>lenguaje de programación AWK</strong>. Por tanto <b>AWK</b> es
+un lenguaje interpretado por el intérprete de comando <b><span class="math inline">\(awk\)</span></b>.</p>
 <p><b>AWK</b> fue creado como un reemplazo a los algoritmos escritos en
 C para análisis de texto. Fue una de las primeras herramientas en
 aparecer en Unix (en la versión 3). Ganó popularidad rápidamente por la
-gran funcionalidad permitía añadir a las tuberías de comandos de Unix.
-Por ello se considera como una de las utilidades necesarias de este
-sistema operativo y de Linux.</p>
+gran funcionalidad que permite añadir a las tuberías de comandos de
+Unix. Por ello se considera como una de las utilidades necesarias de
+este sistema operativo y de Linux.</p>
 <p>Debido a su densa notación, todos estos lenguajes son frecuentemente
 usados para escribir programas de una línea, como veremos
 seguidamente.</p>
@@ -3137,37 +3232,43 @@ seguidamente.</p>
 <h2><span class="header-section-number">4.1</span> Estructura de los
 programas AWK</h2>
 <p>En general, a <span class="math inline">\(awk\)</span> se le dan dos
-piezas de datos: <b>un fichero de órdenes</b> y <b>un archivo de
-entrada</b>.</p>
+piezas de datos o información: <b>un fichero de órdenes</b> y <b>un
+archivo de entrada</b>.</p>
 <p>Un fichero de órdenes (que puede ser un fichero real, o puede ser
 incluido en la invocación de <span class="math inline">\(awk\)</span>
-desde la línea de comandos) contiene una serie de sentencias que le
-indican a <span class="math inline">\(awk\)</span> cómo procesar el
-fichero de entrada.</p>
+desde la línea de comandos) contiene una serie de sentencias o
+instrucciones que le indican a <span class="math inline">\(awk\)</span>
+cómo procesar el fichero de entrada.</p>
 <p>El fichero primario de entrada es normalmente texto estructurado con
 un formato particular, como archivos con campos separados por
-tabuladores (tablas).</p>
+tabuladores (tablas). En vez de leer un archivo, <span class="math inline">\(awk\)</span> puede procesar el flujo recibido de
+un comando anterior mediante el uso de pipes ‘|’.</p>
 <div id="estructura-básica---ejemplos-genéricos" class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Estructura básica -
 ejemplos genéricos</h3>
 <ul>
-<li>Un programa AWK típico consiste en una serie de líneas, cada una de
-la forma:</li>
+<li>Un programa <span class="math inline">\(AWK\)</span> típico consiste
+en una serie de líneas, típicamente de la forma:</li>
 </ul>
-<p><code>/patrón/ { acción }</code>, donde:</p>
+<p><code>awk ‘/patrón/ { acción }’ archivo(s)</code>, o <code>awk
+‘condicione(s) { acción }’ archivo(s)</code>, o <code>awk
+‘condicione(s)’ archivo(s)</code>, o <code>awk ‘{acción}’
+archivo(s)</code>, o</p>
+<p>donde:</p>
 <ul>
 <li>la acción por defecto es imprimir <code>{print}</code></li>
 <li>patrón es una <b><a href="https://es.wikipedia.org/wiki/Expresi%C3%B3n_regular">expresión
 regular</a></b></li>
-<li>acción es una orden.</li>
+<li>acción es un código a ejecutar si la línea actualmente en memoria
+contiene el patrón y/o cumple la(s) condición(es).</li>
 </ul>
-<p>La mayoría de las implementaciones de AWK usan <b><a href="https://www.rexegg.com/regex-quickstart.html">expresiones
-regulares extendidas (EREs)</a></b> por defecto. AWK lee línea por línea
-el fichero de entrada. Cuando encuentra una línea que coincide con el
-“patrón”, ejecuta la(s) orden(es) indicadas en “acción”.</p>
+<p>La mayoría de las implementaciones de <span class="math inline">\(AWK\)</span> usan <b><a href="https://www.rexegg.com/regex-quickstart.html">expresiones
+regulares extendidas (EREs)</a></b> por defecto. <span class="math inline">\(AWK\)</span> lee línea por línea el fichero de
+entrada. Cuando encuentra una línea que coincide con el “patrón”,
+ejecuta la(s) orden(es) indicadas en “acción”.</p>
 <ul>
 <li>Para llamar a <span class="math inline">\(awk\)</span> desde la
-línea de comandos, usaríamos una sintaxis de este tipo:</li>
+línea de comandos, usaremos la siguiente sintaxis:</li>
 </ul>
 <p><code>awk ‘CODIGO AWK’ ARCHIVO_A_PROCESAR</code></p>
 <ul>
@@ -3180,12 +3281,12 @@ al STDIN de <span class="math inline">\(awk\)</span> mediante <span class="math 
 <div id="formas-alternativas-del-código-awk" class="section level3" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Formas alternativas
 del código AWK:</h3>
-<p><code>BEGIN { acción }</code> Ejecuta las órdenes de acción al
-comienzo de la ejecución, antes de que los datos comiencen a ser
-procesados.</p>
-<p><code>END { acción }</code> Similar a la forma previa, pero ejecuta
-las órdenes de acción después de que todos los datos sean
-procesados.</p>
+<p><code>BEGIN{acción}/patrón/ &amp;&amp; condición1 { acción }</code>
+Ejecuta las órdenes de acción al comienzo de la ejecución, antes de que
+los datos comiencen a ser procesados.</p>
+<p><code>/patrón/ &amp;&amp; condiciín1 { acción1 }END { acción2
+}</code> Similar a la forma previa, pero ejecuta las órdenes de acción2
+después de que todos los datos sean procesados.</p>
 <p><code>/patrón/</code> Imprime las líneas que contienen al patrón.</p>
 <p><code>{ acción }</code> Ejecuta acción por cada línea en la
 entrada.</p>
@@ -3217,16 +3318,16 @@ arg1){code}</code></li>
 <li>estructuras de datos como arreglos asociativos (hashes o
 diccionarios): <code>array[string]=value</code>, entre otros.</li>
 </ul></li>
-<li>AWK Maneja también una serie de variables propias, de las que les
-resalto sólo las más usadas:</li>
+<li>AWK Maneja también una serie de <strong>variables propias</strong>,
+de las que les resalto sólo las más usadas:</li>
 </ul>
-<pre><code>$0       guarda el valor de la fila actual en memoria de un archivo de entrada
-$1-$n    guarda los contenidos de los campos de una fila
-FILENAME nombre del archivo de entrada actualmente en procesamiento
-FS       separador de campos (por defecto SPACE or TAB)
-NR       guarda el número de campos delimitados por FS en registro o fila actual
-OFS      separador de campo de la salida (SPACE por defecto)
-ORS      separador de registro de la salida (\n por defecto)</code></pre>
+<pre><code>$0         guarda el valor de la fila actual en memoria de un archivo de entrada
+$1, $2 ... guarda los contenidos de los campos de una fila
+FILENAME   nombre del archivo de entrada actualmente en procesamiento
+FS         separador de campos (por defecto SPACE or TAB)
+NR         guarda el número de campos delimitados por FS en registro o fila actual
+OFS        separador de campo de la salida (SPACE por defecto)
+ORS        separador de registro de la salida (\n por defecto)</code></pre>
 </div>
 </div>
 <div id="ejemplos-básicos-pero-muy-útiles-de-uso-de-awk" class="section level2" number="4.2">
@@ -3234,47 +3335,217 @@ ORS      separador de registro de la salida (\n por defecto)</code></pre>
 muy útiles de uso de AWK</h2>
 <p>No podemos aprender aquí más que algunos idiomas de AWK muy útiles,
 como veremos seguidamente</p>
-<div id="filtrado-de-archivos-con-awk" class="section level3" number="4.2.1">
-<h3><span class="header-section-number">4.2.1</span> filtrado de
-archivos con AWK</h3>
-<ul>
-<li>Cuenta el número de procesadores de tu sistema:</li>
-</ul>
-<pre class="bash"><code># el archivo /proc/cpuinfo contiene la información sobre las cpus del sistema, incluyendo los cores/procesadores contenidos en la unidad de procesamiento central
-head -5 /proc/cpuinfo </code></pre>
-<pre><code>## processor    : 0
+<p>Para empezar, usaremos <span class="math inline">\(AWK\)</span> para
+procesar esta simple tabla, que te pido copies al arhivo
+<i>tabla.csv</i> haciendo uso de <comand>cat &gt;
+tabla.csv</command></p>
+<pre>
+nombre,salario,hrs
+Pepe,21,0
+Lola,19,0
+Carla,15.50,10
+Yadira,25,20
+Mary,22.50,22
+Susana,17,18
+</pre>
+<p>Te recuerdo la secuencia de comandos para generar un archivo con
+cat.</p>
+<pre><code>cat &gt; tabla.csv
+nombre,salario,hrs
+Pepe,21,0
+Lola,19,0
+Carla,15.50,10
+Yadira,25,20
+Mary,22.50,22
+Susana,17,18
+CTRL+d</code></pre>
+<p>Confirma que se generó el archivo</p>
+<pre class="bash"><code># confirma que tienes la tabla correctamente guardada
+cat tabla.csv</code></pre>
+<pre><code>## nombre,salario,hrs
+## Pepe,21,0
+## Lola,19,0
+## Carla,15.50,10
+## Yadira,25,20
+## Mary,22.50,22
+## Susana,17,18</code></pre>
+<p>La tabla contiene los <span class="math inline">\(salarios/hr\)</span> y <span class="math inline">\(número\ de\ horas\)</span> trabajadas por cada
+trabajador/a.</p>
+<p>Usaremos <span class="math inline">\(AWK\)</span> para imprimir los
+nombres de trabajadorxs y pagos correspondientes.</p>
+<p><span class="math inline">\(AWK\)</span> procesa los archivos línea a
+línea y separa automáticamente los campos delimitados por espacios o
+tabuladores. Esta es la opción por defecto.</p>
+<p>En nuestro caso, los campos están delimitados por comas ‘,’. Podemos
+hacer una de dos cosas:</p>
+<ol style="list-style-type: decimal">
+<li>Convertir el archivo csv a uno delimitado por tabuladores</li>
+<li>Usar las variables internas de <span class="math inline">\(AWK\)</span> <span class="math inline">\(FS\)</span> y <span class="math inline">\(OFS\)</span>.</li>
+</ol>
+<p>Veamos ejemplos de ambos casos, empezando por el archivo
+<em>tabla.tsv</em>:</p>
+<pre class="bash"><code># conversión de csv a tsv usando sed
+[ -s tabla.csv ] &amp;&amp; sed &#39;s/,/\t/g&#39; tabla.csv &gt; tabla.tsv
+
+cat tabla.tsv</code></pre>
+<pre><code>## nombre   salario hrs
+## Pepe 21  0
+## Lola 19  0
+## Carla    15.50   10
+## Yadira   25  20
+## Mary 22.50   22
+## Susana   17  18</code></pre>
+<ol style="list-style-type: decimal">
+<li>Llamada de <span class="math inline">\(AWK\)</span> sin código de
+filtrado o condición; sólo acción de imprimir</li>
+</ol>
+<pre class="bash"><code># Llamada de AWK sin código de filtrado o condición; sólo acción de imprimir
+awk &#39;{print}&#39; tabla.tsv</code></pre>
+<pre><code>## nombre   salario hrs
+## Pepe 21  0
+## Lola 19  0
+## Carla    15.50   10
+## Yadira   25  20
+## Mary 22.50   22
+## Susana   17  18</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Llamada de <span class="math inline">\(AWK\)</span> con código de
+filtrado o condición <code>NR &gt; 1</code> para imprimir las líneas de
+registro (NR) mayores a 1 (elimina cabecera)</li>
+</ol>
+<pre class="bash"><code># Llamada de AWK con código de filtrado o condición;
+awk &#39;NR &gt; 1&#39; tabla.tsv</code></pre>
+<pre><code>## Pepe 21  0
+## Lola 19  0
+## Carla    15.50   10
+## Yadira   25  20
+## Mary 22.50   22
+## Susana   17  18</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Llamada de <span class="math inline">\(AWK\)</span> con código de
+filtrado o condición <code>NR &gt; 1</code> para imprimir las líneas de
+registro (NR) mayores a 1 (elimina cabecera) y horas trabajadas &gt;
+0.</li>
+</ol>
+<pre class="bash"><code># Llamada de AWK varias condiciones de filrado;
+awk &#39;NR &gt; 1 &amp;&amp; $3 &gt; 0&#39; tabla.tsv</code></pre>
+<pre><code>## Carla    15.50   10
+## Yadira   25  20
+## Mary 22.50   22
+## Susana   17  18</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Cálculo de las pagas de cada trabajador que ha trabajado &gt; 0
+hrs.</li>
+</ol>
+<pre class="bash"><code># Llamada de AWK varias condiciones de filrado y acción a ejecutar para las líneas que pasan los filtros
+awk &#39;NR &gt; 1 &amp;&amp; $3 &gt; 0 { print $1, $2* $3 }&#39; tabla.tsv</code></pre>
+<pre><code>## Carla 155
+## Yadira 500
+## Mary 495
+## Susana 306</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Cálculo de las pagas de cada trabajador que ha trabajado &gt; 0 hrs,
+con formato de salida tabular e impresión de cabecera en <strong>bloque
+BEGIN</strong>.</li>
+</ol>
+<pre class="bash"><code># Llamada de AWK varias condiciones de filrado y acción a ejecutar para las líneas que pasan los filtros
+awk &#39;BEGIN{OFS=&quot;\t&quot;; print &quot;Nombre\tpaga&quot;}NR &gt; 1 &amp;&amp; $3 &gt; 0 { print $1, $2* $3 }&#39; tabla.tsv</code></pre>
+<pre><code>## Nombre   paga
+## Carla    155
+## Yadira   500
+## Mary 495
+## Susana   306</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>Lista los nombres de trabajadores que no han trabajado en el último
+periodo.</li>
+</ol>
+<pre class="bash"><code># Llamada de AWK varias condiciones de filrado y acción a ejecutar para las líneas que pasan los filtros
+awk &#39;NR &gt; 1 &amp;&amp; $3 == 0 {print $1}&#39; tabla.tsv</code></pre>
+<pre><code>## Pepe
+## Lola</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Imprime los nombres y números de horas trabajadas, haciendo uso del
+archivo <em>tabla.csv</em>, con formato de salida tabular, e impresión
+de cabecera en <strong>bloque BEGIN</strong>.</li>
+</ol>
+<pre class="bash"><code># Llamada de AWK varias condiciones de filrado y acción a ejecutar para las líneas que pasan los filtros
+awk &#39;BEGIN{FS=&quot;,&quot;; OFS=&quot;\t&quot;} { print $1, $3 }&#39; tabla.csv | column -t</code></pre>
+<pre><code>## nombre  hrs
+## Pepe    0
+## Lola    0
+## Carla   10
+## Yadira  20
+## Mary    22
+## Susana  18</code></pre>
+<p>Estos simples ejemplos dan una primera idea de la flexibilidad y
+elegancia de <span class="math inline">\(AWK\)</span> para procesar
+textos con cierto formato. Veremos más ejemplos a lo largo del
+curso.</p>
+<p><span class="math inline">\(AWK\)</span> es mucho más poderoso de lo
+que muestran estos ejemplos básicos. Es un lenguaje de programación
+completo. Puedes ver mis apuntes del <a href="https://vinuesa.github.io/intro2linux/index.html">taller de
+biocómputo en Linux</a> que contiene una extensa sección sobre
+programación en <span class="math inline">\(AWK\)</span> para
+procesamiento de datos bioinformáticos.</p>
+<!--
+### filtrado de archivos con AWK
+- Cuenta el número de procesadores de tu sistema:
+
+```bash
+# el archivo /proc/cpuinfo contiene la información sobre las cpus del sistema, incluyendo los cores/procesadores contenidos en la unidad de procesamiento central
+head -5 /proc/cpuinfo 
+```
+
+```
+## processor    : 0
 ## vendor_id    : GenuineIntel
 ## cpu family   : 6
 ## model        : 158
-## model name   : Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz</code></pre>
-<p>Recordemos la sintaxis general de código AWK: <code>/patrón/ { acción
-}</code></p>
-<pre class="bash"><code># usamos el patrón &#39;/^processor/, seguido de la acción {cuanta instancias} y terminamos con un bloque END{} que imprime el valor de la variable n
+## model name   : Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
+```
+
+Recordemos la sintaxis general de código AWK: <code>/patrón/ { acción }</code>
+
+```bash
+# usamos el patrón '/^processor/, seguido de la acción {cuanta instancias} y terminamos con un bloque END{} que imprime el valor de la variable n
 # este código de AWK se lo pasamos directamente al intérprete de comandos awk como un una cadena entre comillas, seguido del archivo a procesar
-# awk &#39;CODIGO AWK&#39; ARCHIVO_A_PROCESAR
-awk &#39;/^processor/{n++} END{ print &quot;This computer has&quot;, n, &quot;processors&quot;}&#39; /proc/cpuinfo </code></pre>
-<pre><code>## This computer has 12 processors</code></pre>
-<ul>
-<li>Imprime líneas con 12 o menos caracteres de entre las primeras 20
-líneas del archivo /proc/cpuinfo :</li>
-</ul>
-<pre class="bash"><code># con head -20 filtramos las primeras 20 líneas, las cuales pasamos a awk con |
+# awk 'CODIGO AWK' ARCHIVO_A_PROCESAR
+awk '/^processor/{n++} END{ print "This computer has", n, "processors"}' /proc/cpuinfo 
+```
+
+```
+## This computer has 12 processors
+```
+
+- Imprime líneas con 12 o menos caracteres de entre las primeras 20 líneas del archivo /proc/cpuinfo :
+
+```bash
+# con head -20 filtramos las primeras 20 líneas, las cuales pasamos a awk con |
 # recuerda: la acción por defecto de awk es imprimir, en este caso las líneas que satisfagan la condición
-head -20 /proc/cpuinfo | awk &#39;length &lt;= 12&#39;</code></pre>
-<pre><code>## model        : 158
+head -20 /proc/cpuinfo | awk 'length <= 12'
+```
+
+```
+## model        : 158
 ## core id      : 0
 ## apicid       : 0
 ## fpu      : yes
-## wp       : yes</code></pre>
-<ul>
-<li>Imprime líneas con 30 o más caracteres de entre las primeras 20
-líneas del archivo /proc/cpuinfo :</li>
-</ul>
-<pre class="bash"><code>head -20 /proc/cpuinfo | awk &#39;length &gt;= 30&#39;</code></pre>
-<pre><code>## model name   : Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
-## flags        : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d arch_capabilities</code></pre>
+## wp       : yes
+```
+
+- Imprime líneas con 30 o más caracteres de entre las primeras 20 líneas del archivo /proc/cpuinfo :
+
+```bash
+head -20 /proc/cpuinfo | awk 'length >= 30'
+```
+
+```
+## model name   : Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
+## flags        : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d arch_capabilities
+```
+
+-->
 <hr />
-</div>
 </div>
 </div>
 <div id="ejercicios-integrativos-de-uso-de-herramientas-de-filtrado-del-shell" class="section level1" number="5">

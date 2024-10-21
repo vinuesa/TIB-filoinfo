@@ -176,6 +176,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 #### <b>Sesi&oacute;n 4: Alineamientos m&uacute;ltiples (teor&iacute;a y pr&aacute;cticas)</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos/Tema4_alineamientos_multiples.pdf)
 - pr&aacute;ctica
+  - [comandos, html](https://vinuesa.github.io/TIB-filoinfo/sesion4_alineamientos)
   - [comandos, txt](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos/practicas_aln_multiples_clustal.cmds)
   - [sequences, tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos/sequences_for_alingment.tgz)
   - [align_seqs_with_clustal_or_muscle.sh](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/align_seqs_with_clustal_or_muscle.sh)

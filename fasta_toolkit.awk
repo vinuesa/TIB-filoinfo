@@ -8,7 +8,8 @@
 #       -R 2 [reverse complement DNA sequence] 
 #       -R 3 [extract sequence by -s start -e end coordinates]
 #       -R 4 [translate CDSs, using universal genetic code]
-#       -R 5 [print basic sequence stats]
+#       -R 5 [print basic DNA sequence stats]
+#       -R 6 [print sequence lengths (also for proteins!]
 # USAGE: call the script without arguments to print the help menu
 # NOTES:  
 #   1. uses Arnold Robbin's getopt() function from the gawk distro to deal with options and arguments
@@ -131,16 +132,41 @@ function print_sequence_stats(header, dna_seq,         i,l)
 }
 #---------------------------------------------------------------------------------------------------------
 
+function print_sequence_lengths(header, dna_seq,         l) 
+{  # receives two arguments: the fasta header and the CDS sequence to be translated
+   l=length(dna_seq)
+   
+   #length_summary_stats(l)   
+   # print sequence length to STDOUT
+   printf "%s\t%d\n", header, l 
+}
+#---------------------------------------------------------------------------------------------------------
+#function length_summary_stats (l,   sum,mean_len,min,max,counter)
+#{
+#   sum += l
+#   counter++
+#   
+#   # print sequence length to STDOUT
+#   mean_len =sum/counter
+#         
+#         if (l < min){min = l} else if (l > max) {max = l}
+#
+#           printf "%d\t%d\t%3.2f\n", min, max, mean_len 
+#   
+#}
+#---------------------------------------------------------------------------------------------------------
+
 function print_help(prog, vers) # (program, version)
 {   
    print "OPTIONS for " prog " v"vers > "/dev/stderr" 
    print " # Required options" > "/dev/stderr" 
    print "    -R <int> [runmode]" > "/dev/stderr" 
-   print "         1 [filter sequences matching -m string]" > "/dev/stderr" 
+   print "         1 [filter DNA|PROT sequences matching -m string]" > "/dev/stderr" 
    print "         2 [reverse complement DNA sequence]" > "/dev/stderr" 
-   print "         3 [extract sequence by -s start -e end coordinates]" > "/dev/stderr" 
+   print "         3 [extract DNA|PROT sequence by -s start -e end coordinates]" > "/dev/stderr" 
    print "         4 [translate CDSs]" > "/dev/stderr" 
-   print "         5 [print basic sequence stats]" > "/dev/stderr" 
+   print "         5 [print basic DNA sequence stats]" > "/dev/stderr" 
+   print "         6 [print DNA|PROT sequence lenghts]" > "/dev/stderr" 
 
    print "\n # Runmode-specific options" > "/dev/stderr" 
    print "     -m <string> [match 'string'] for -R 1" > "/dev/stderr" 
@@ -152,12 +178,14 @@ function print_help(prog, vers) # (program, version)
    print "     -d [FLAG; sets DEBUG=1 to print extra debugging info]" > "/dev/stderr" 
   
    print "\n # Usage examples:"
-   print "    ./" prog " -R 1 -m match_string input.fasta" > "/dev/stderr" 
-   print "    ./" prog " -R 1 -M RevMatch_string input.fasta" > "/dev/stderr" 
-   print "    ./" prog " -R 2 input.fasta" > "/dev/stderr" 
-   print "    ./" prog " -R 3 -s 2 -e 5 input.fasta" > "/dev/stderr" 
-   print "    ./" prog " -R 4 input.fasta" > "/dev/stderr" 
-   print "    ./" prog " -R 5 input.fasta" > "/dev/stderr" 
+   print "    ./" prog " -R 1 -m match_string input_DNA_or_PROT.fasta" > "/dev/stderr" 
+   print "    ./" prog " -R 1 -M RevMatch_string input_DNA.fasta" > "/dev/stderr" 
+   print "    ./" prog " -R 2 input_DNA.fasta" > "/dev/stderr" 
+   print "    ./" prog " -R 3 -s 2 -e 5 input_DNA_or_PROT.fasta" > "/dev/stderr" 
+   print "    ./" prog " -R 4 input_DNA.fasta" > "/dev/stderr" 
+   print "    ./" prog " -R 5 input_DNA.fasta" > "/dev/stderr" 
+   print "    ./" prog " -R 6 input_DNA_or_PROT.fasta | sort -t$'\\t' -nk2,2" > "/dev/stderr" 
+   print "    ./" prog " -R 6 input_DNA_or_PROT.fasta | sort -t$'\\t' -nk2,2 | col_sumStats.sh" > "/dev/stderr" 
    print "    cat input.fasta | ./"prog " -R 5" > "/dev/stderr" 
 
    print "\n # Notes:" > "/dev/stderr" 
@@ -242,7 +270,8 @@ BEGIN {
     Optind = 1    # skip ARGV[0]
     
     progname = "fasta_toolkit.awk"
-    version  = 0.5  # v0.5 dec 30, 2020, added -M string for -R 1, to select sequences not matching string (revMatch)
+    version  = 0.6  # v0.6 Nov 2, 2024, added -R 6, to compute only sequence lengths for DNA or Protein sequences; improved documentation
+                    # v0.5 dec 30, 2020, added -M string for -R 1, to select sequences not matching string (revMatch)
                     # v0.4 dec 25, 2020. added PROCINFO["sorted_in"] = "@ind_num_asc" to print sorted results
                     # v0.3 dec 23, 2020. Prints warning and does not exit, if dna_seq not divisible by 3
                     # v0.2 dec 22, 2020, improved layout; fixed typos
@@ -348,8 +377,8 @@ BEGIN {
         codons["GGA"]="G"; codons["GGC"]="G"; codons["GGG"]="G"; codons["GGT"]="G";
         codons["TCA"]="S"; codons["TCC"]="S"; codons["TCG"]="S"; codons["TCT"]="S";
         codons["TTC"]="F"; codons["TTT"]="F"; codons["TTA"]="L"; codons["TTG"]="L";
-        codons["TAC"]="Y"; codons["TAT"]="Y"; codons["TAA"]=""; codons["TAG"]="";
-        codons["TGC"]="C"; codons["TGT"]="C"; codons["TGA"]=""; codons["TGG"]="W";
+        codons["TAC"]="Y"; codons["TAT"]="Y"; codons["TAA"]="*"; codons["TAG"]="*";
+        codons["TGC"]="C"; codons["TGT"]="C"; codons["TGA"]="*"; codons["TGG"]="W";
     }
 
     if (runmode == 5) {
@@ -365,7 +394,7 @@ NR > 1 {
    # read the CDS (DNA) sequence into the global seqs hash
 
 
-   if (runmode > 5) {
+   if (runmode > 6) {
       printf "ERROR: runmomde %d is not defined\n", runmode
       print_help(progname, version)
    }
@@ -379,7 +408,6 @@ END {
 	if( length(seqs[h] >= 2) && runmode == 1 && string) 
 	{ 
 	    if(h ~ string) print ">"h, seqs[h] 
-	
 	}
 
 	if( length(seqs[h] >= 2) && runmode == 1 && RevMatch) 
@@ -402,5 +430,6 @@ END {
 	   }    
         }
 	if( length(seqs[h] >= 2) && runmode == 5 ) { print_sequence_stats(h, seqs[h]) }
+	if( length(seqs[h] >= 2) && runmode == 6 ) { print_sequence_lengths(h, seqs[h]) }
     }
 }

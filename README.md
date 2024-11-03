@@ -14,7 +14,7 @@ Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de S
 
 
 ## Presentaci&oacute;n
-Este taller de **nivel intermedio-avanzado** te proporcionar&aacute; una s&oacute;lida **introducci&oacute;n al bioc&oacute;mputo en sistemas Linux** para trabajar con eficiencia en inferencia filogen&eacute;tica, evoluci&oacute;n molecular y gen&oacute;mica microbiana, con &eacute;nfasis en pangen&oacute;mica y filogen&oacute;mica microbiana. Al término del taller manejarás con soltura el Shell y sabrás usar su poder para parsear y procesar eficientemente datos de diversa naturaleza (tablas, secuencias ...), generar estadísticas de resumen y gráficas con R para analizar distribuciones de datos, y construir tuberías de análisis bioinformáticos. 
+Este taller de **nivel intermedio-avanzado** te proporcionar&aacute; una s&oacute;lida **introducci&oacute;n al bioc&oacute;mputo en sistemas Linux** para trabajar con eficiencia en inferencia filogen&eacute;tica, evoluci&oacute;n molecular y gen&oacute;mica microbiana, con &eacute;nfasis en pangen&oacute;mica y filogen&oacute;mica microbiana. Al término del taller manejar&aacute;s con soltura el Shell y sabr&aacute;s usar su poder para parsear y procesar eficientemente datos de diversa naturaleza (tablas, secuencias ...), generar estadísticas de resumen y gr&aacute;ficas con R para analizar distribuciones de datos, y construir tuberías de an&aacute;lisis bioinform&aacute;ticos. 
 
 Además, aprenderás con detalle y profundidad los aspectos teóricos y prácticos para manejar a nivel avanzado diversos programas de la suite BLAST+ desde la línea de comandos, hacer alinemientos múltiples de diversos tipos de secuencias (CDSs, ribosomales, ...), y dominar la selección de modelos paramétricos para DNA y matrices empíricas de proteínas haciendo uso del criterio de optimización de máxima verosimilitud. Aprenderemos a automatizar estos procesos mediante scripts de shell. Después de sentar estas bases, el taller culmina con sesiones avanzadas de **pangenómica y filogenómica microbiana**, haciendo uso de los paquetes [**GET_HOMOLOUGES**](https://github.com/eead-csic-compbio/get_homologues) y [**GET_PHYLOMARKERS**](https://github.com/vinuesa/get_phylomarkers) desarrollados por el profesor del taller junto con sus colaboradores. 
 
@@ -23,7 +23,7 @@ En el taller (~36 hrs) tendremos sesiones te&oacute;ricas y pr&aacute;cticas que
 
 - introducci&oacute;n al bioc&oacute;mputo en sistemas Linux para procesamiento eficiente de secuencias y datos moleculares
 - formateo y escrutinio de bases de datos locales de secuencias mediante BLAST (makeblastdb, blastn, blastp, blastx, blastdbcmd)
-- determinaci&oacute;n e interpretaci&oacute;n de homolog&iacute;a (identificación de ortólogos, parálogos, xenólogos, dominios de proteínas, algoritmos BDBH, COGtriangles, OthoMCL), búsqueda de homólogos distantes
+- determinaci&oacute;n e interpretaci&oacute;n de homolog&iacute;a (identificación de ortólogos, par&aacute;logos, xenólogos, dominios de proteínas, algoritmos BDBH, COGtriangles, OthoMCL), búsqueda de homólogos distantes
 - alineamiento de m&uacute;ltiples secuencias y conversi&oacute;n de formatos 
 - inferencia filogen&eacute;tica estad&iacute;stica bajo el criterio de m&aacute;xima verosimilitud, con énfasis en selección de modelos para DNA y proteínas
 - an&aacute;lisis pangen&oacute;mico y filogen&oacute;mico de genomas microbianos
@@ -171,23 +171,34 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
   - [blast-imager.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/blast-imager.pl)
 - Lecturas recomendadas
   - Camacho C, Coulouris G, Avagyan V, Ma N, Papadopoulos J, Bealer K, Madden TL. [BLAST+: architecture and applications. BMC Bioinformatics. 2009 Dec 15;10:421](https://www.ncbi.nlm.nih.gov/pubmed/20003500)
-  - Hu G, Kurgan L. Sequence Similarity Searching. [Curr Protoc Protein Sci. 2019 Feb;95(1):e71. doi: 10.1002/cpps.71](https://www.ncbi.nlm.nih.gov/pubmed/30102464)
+  - [Katoh K. ed. (2021). Multiple sequence alignment - methods and protocols. MIMB, volume 2231](https://link.springer.com/book/10.1007/978-1-0716-1036-7)
+  
 
-#### <b>Sesi&oacute;n 4: Alineamientos m&uacute;ltiples (teor&iacute;a y pr&aacute;cticas)</b>
+#### <b>Sesi&oacute;n 4: Alineamientos m&uacute;ltiples y modelos ocultos de Markov de perfiles (teor&iacute;a y pr&aacute;cticas)</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos/Tema4_alineamientos_multiples.pdf)
 - pr&aacute;ctica
   - [comandos, html](https://vinuesa.github.io/TIB-filoinfo/sesion4_alineamientos)
-  - [comandos, txt](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos/practicas_aln_multiples_clustal.cmds)
   - [sequences, tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos/sequences_for_alingment.tgz)
   - [align_seqs_with_clustal_or_muscle.sh](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/align_seqs_with_clustal_or_muscle.sh)
   - [convert_alnFormats_using_clustalw.sh](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/convert_alnFormats_using_clustalw.sh)
   - [convert_aln_format_batch_bp.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/convert_aln_format_batch_bp.pl)
   - [translate_fastas.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/translate_fastas.pl)
   - [prot2cdnAlns.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/prot2cdnAlns.pl)
+  - [extract_N-or_C-terminal_regions_and_compute_counts.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/extract_N-or_C-terminal_regions_and_compute_counts.pl)
+  - [fasta_toolkit.awk](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/fasta_toolkit.awk)
+  - [select_sequences_by_ID.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/select_sequences_by_ID.pl)
+
 - Lecturas recomendadas
   - Simossis V, Kleinjung J, Heringa J. An overview of multiple sequence alignment. [Curr Protoc Bioinformatics. 2003 Nov;Chapter 3:Unit 3.7](https://www.ncbi.nlm.nih.gov/pubmed/18428699)
   - Sievers F, Wilm A, Dineen D, Gibson TJ, Karplus K, Li W, Lopez R, McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG. Fast, scalable generation of high-quality protein multiple sequence alignments using Clustal Omega. [Mol Syst Biol. 2011 Oct 11;7:539](https://www.ncbi.nlm.nih.gov/pubmed/21988835)
   - Sievers F, Higgins DG. Clustal Omega for making accurate alignments of many protein sequences. [Protein Sci. 2018 Jan;27(1):135-145](https://www.ncbi.nlm.nih.gov/pubmed/28884485)
+  - Sean R Eddy (1998). Profile hidden Markov models. [Bioinformatics 14(9):755-63](https://doi.org/10.1093/bioinformatics/14.9.755)
+  - Sean R Eddy (2004). What is a hidden Markov model? [Nat Biotechnol 22(10):1315-6](https://www.nature.com/articles/nbt1004-1315)
+  - Söding J. (2005). Protein homology detection by HMM-HMM comparison. [Bioinformatics 21(7):951-60](https://doi.org/10.1093/bioinformatics/bti125)
+  - Sean R Eddy (2011). Accelerated Profile HMM Searches. [PLoS Comput Biol; 7(10):e1002195](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195)
+  - [HMMER.org](http://hmmer.org/)
+  - [HMMER3.4 user guide](http://eddylab.org/software/hmmer/Userguide.pdf)
+
 
 
 ***

@@ -184,9 +184,9 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
   - [convert_aln_format_batch_bp.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/convert_aln_format_batch_bp.pl)
   - [translate_fastas.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/translate_fastas.pl)
   - [prot2cdnAlns.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/prot2cdnAlns.pl)
-  - [extract_N-or_C-terminal_regions_and_compute_counts.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/extract_N-or_C-terminal_regions_and_compute_counts.pl)
-  - [fasta_toolkit.awk](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/fasta_toolkit.awk)
-  - [select_sequences_by_ID.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/select_sequences_by_ID.pl)
+  - [extract_N-or_C-terminal_regions_and_compute_counts.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/extract_N-or_C-terminal_regions_and_compute_counts.pl)
+  - [fasta_toolkit.awk](https://github.com/vinuesa/TIB-filoinfo/blob/master/fasta_toolkit.awk)
+  - [select_sequences_by_ID.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/select_sequences_by_ID.pl)
 
 - Lecturas recomendadas
   - Simossis V, Kleinjung J, Heringa J. An overview of multiple sequence alignment. [Curr Protoc Bioinformatics. 2003 Nov;Chapter 3:Unit 3.7](https://www.ncbi.nlm.nih.gov/pubmed/18428699)

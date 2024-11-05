@@ -164,7 +164,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 #### <b>Sesi&oacute;n 3: B&uacute;squeda de hom&oacute;logos usando BLAST desde la l&iacute;nea de comandos (teor&iacute;a y pr&aacute;cticas)</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/Tema3_BLAST_OVERVIEW.pdf)
 - pr&aacute;ctica
-  - [comandos, html](https://vinuesa.github.io/TIB-filoinfo/sesion3_BLAST)
+  - [Running and parsing BLAST+ from the Linux command line](https://vinuesa.github.io/TIB-filoinfo/sesion3_BLAST)
   - [16S_4blastN.tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/16S_4blastN.tgz)
   - [gene_discovery_and_annotation_using_blastx.tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/data/gene_discovery_and_annotation_using_blastx.tgz)
   - [split_fasta.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/split_fasta.pl)
@@ -177,7 +177,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 #### <b>Sesi&oacute;n 4: Alineamientos m&uacute;ltiples y modelos ocultos de Markov de perfiles (teor&iacute;a y pr&aacute;cticas)</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos/Tema4_alineamientos_multiples.pdf)
 - pr&aacute;ctica
-  - [comandos, html](https://vinuesa.github.io/TIB-filoinfo/sesion4_alineamientos)
+  - [Multiple sequence alignments, and profile hidden Markov models - tutorial](https://vinuesa.github.io/TIB-filoinfo/sesion4_alineamientos)
   - [sequences, tgz](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion4_alineamientos/sequences_for_alingment.tgz)
   - [align_seqs_with_clustal_or_muscle.sh](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/align_seqs_with_clustal_or_muscle.sh)
   - [convert_alnFormats_using_clustalw.sh](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/convert_alnFormats_using_clustalw.sh)
@@ -198,7 +198,6 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
   - Sean R Eddy (2011). Accelerated Profile HMM Searches. [PLoS Comput Biol; 7(10):e1002195](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195)
   - [HMMER.org](http://hmmer.org/)
   - [HMMER3.4 user guide](http://eddylab.org/software/hmmer/Userguide.pdf)
-
 
 
 ***
@@ -276,7 +275,9 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ## Lista de software
 - [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
+- [clustalw](http://www.clustal.org/clustal2/)
 - [clustal omega](http://www.clustal.org/omega/)
+- [HMMER3](http://hmmer.org/)
 - [seaview](http://doua.prabi.fr/software/seaview)
 - [PhyML](https://github.com/stephaneguindon/phyml)
 - [jModelTest2](https://github.com/ddarriba/jmodeltest2)
@@ -285,17 +286,19 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 - [GET_PHYLOMARKERS](https://github.com/vinuesa/get_phylomarkers)
 
 ## Lista de scripts
-
 - [blast-imager.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/blast-imager.pl)
 - [col_sumStats.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/col_freqAndHistogram.sh)
 - [compute_RBH_clusters.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/compute_RBH_clusters.sh)
 - [convert_aln_format_batch_bp.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/convert_aln_format_batch_bp.pl)
+- [extract_N-or_C-terminal_regions_and_compute_counts.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/extract_N-or_C-terminal_regions_and_compute_counts.pl)
 - [fasta_toolkit.awk](https://github.com/vinuesa/TIB-filoinfo/blob/master/fasta_toolkit.awk)
 - [phyml_DNAmodelFinder.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_DNAmodelFinder.sh)
 - [phyml_protModelFinder.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_protModelFinder.sh)
 - [prot2cdnAln.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/prot2cdnAln.pl)
+- [select_sequences_by_ID.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/select_sequences_by_ID.pl)
 - [split_fasta.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/split_fasta.pl)
 - [translate_fastas.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/translate_fastas.pl)
+
 
 <!--- [MrBayes](http://nbisweden.github.io/MrBayes/)-->
 

@@ -5,12 +5,13 @@ use Getopt::Long;
 use File::Basename;
 
 #: AUTHOR: Pablo Vinuesa, CCG-UNAM, Mexico; https://www.ccg.unam.mx/~vinuesa/; @pvinmex
-#: AIM: select [includes|excludes] sequences listed in the --ids IDs.list file from the
-#:       provided multi-FASTA file, and write the filtered FASTA file to disk.
+#: AIM: select [include|exclude] sequences listed in --ids IDs.list from the
+#:      user-provided multi-FASTA file, and write the filtered FASTA file to disk.
 
 
 my $progname = basename($0); # select_sequences_by_ID.pl
-my $version = '0.1_2024-11-01'; # v0.1_2024-11-02; first commit
+my $version = '0.2_2024-11-01'; # V0.2_2024-11-05, improved description of the script's aim
+                                # v0.1_2024-11-02; first commit
 
 # Variables for command-line options
 my ($fasta_file, $id_file, $include, $exclude, $output_file, $help);
@@ -48,9 +49,9 @@ Options:
 Note:
     Either --include or --exclude must be specified, but not both.
     
-AIM: select [includes|excludes] sequences listed in the --ids IDs.list file from the
-      provided multi-FASTA file, and write the filtered FASTA file to disk.
-    
+AIM: select [include|exclude] sequences listed in --ids IDs.list from the
+     user-provided multi-FASTA file, and write the filtered FASTA file to disk.
+         
 END_HELP
     exit;
 }

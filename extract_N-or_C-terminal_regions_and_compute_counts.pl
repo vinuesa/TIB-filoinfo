@@ -5,13 +5,15 @@ use Getopt::Long;
 use File::Basename;
 
 #: AUTHOR: Pablo Vinuesa, CCG-UNAM, Mexico; https://www.ccg.unam.mx/~vinuesa/; @pvinmex
-#: AIM; extract a user-defined number of N- or C-terminal residues from a multi-FASTA file,
+#: AIM: extract a user-defined number of N- or C-terminal residues from a multi-FASTA file,
 #:    and compute basic stats and counts for a certain residue. 
 #:    This is useful, for example, to verify and analyze the distribution of cysteines
 #:      among the five C-terminal residues in Rab GTPases
 
 my $progname = basename($0); # extract_N-or_C-terminal_regions_and_compute_counts.pl
-my $version = '0.1_2024-11-01'; # v0.2_2024-11-02; added single letter options
+my $version = '0.3_2024-11-05'; v0.3_2024-11-05; corrected version number and improved description of the script's aim and output
+
+                                # v0.2_2024-11-02; added single letter options
                                 # v0.1_2024-11-01 first commit
 
 # Variables for command-line options
@@ -44,14 +46,14 @@ Options:
 
 AIM:
    Extracts a specified number of N- or C-terminal residues from each protein sequence in a multi-FASTA file,
-     and computes basic overal residue frequencies and counts instances a certain focal amino acid. 
-   This is useful, for example, to verify and analyze the distribution of cysteines found among
-     the five C-terminal residues of Rab GTPases
+     computes basic overal residue frequencies, and counts the occurrences of a certain focal amino acid. 
+   This is useful, for example, to analyze the distribution of cysteines found among the five C-terminal 
+    residues of Rab GTPases, which require at least one cysteine as a prennylation site.
 
 OUTPUT:
-    multi-FASTA with the extracted N- or C-terminal regions
-    Three-col table with the seq_id, sequence, counts for user-defined residue in the extracted sequence
-    Matrix with overall proportions of each amino acid at each site of the extracted sequences 
+    - multi-FASTA file with the extracted N- or C-terminal regions
+    - A three-col table with the seq_id, sequence, counts for user-defined residue in the extracted sequence
+    - A Matrix with overall proportions of each amino acid at each site of the extracted sequences 
 
 HELP
     exit;

@@ -171,7 +171,6 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
   - [blast-imager.pl](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/bin/blast-imager.pl)
 - Lecturas recomendadas
   - Camacho C, Coulouris G, Avagyan V, Ma N, Papadopoulos J, Bealer K, Madden TL. [BLAST+: architecture and applications. BMC Bioinformatics. 2009 Dec 15;10:421](https://www.ncbi.nlm.nih.gov/pubmed/20003500)
-  - [Katoh K. ed. (2021). Multiple sequence alignment - methods and protocols. MIMB, volume 2231](https://link.springer.com/book/10.1007/978-1-0716-1036-7)
   
 
 #### <b>Sesi&oacute;n 4: Alineamientos m&uacute;ltiples y modelos ocultos de Markov de perfiles (teor&iacute;a y pr&aacute;cticas)</b>
@@ -189,6 +188,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
   - [select_sequences_by_ID.pl](https://github.com/vinuesa/TIB-filoinfo/blob/master/select_sequences_by_ID.pl)
 
 - Lecturas recomendadas
+  - [Katoh K. ed. (2021). Multiple sequence alignment - methods and protocols. MIMB, volume 2231](https://link.springer.com/book/10.1007/978-1-0716-1036-7)
   - Simossis V, Kleinjung J, Heringa J. An overview of multiple sequence alignment. [Curr Protoc Bioinformatics. 2003 Nov;Chapter 3:Unit 3.7](https://www.ncbi.nlm.nih.gov/pubmed/18428699)
   - Sievers F, Wilm A, Dineen D, Gibson TJ, Karplus K, Li W, Lopez R, McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG. Fast, scalable generation of high-quality protein multiple sequence alignments using Clustal Omega. [Mol Syst Biol. 2011 Oct 11;7:539](https://www.ncbi.nlm.nih.gov/pubmed/21988835)
   - Sievers F, Higgins DG. Clustal Omega for making accurate alignments of many protein sequences. [Protein Sci. 2018 Jan;27(1):135-145](https://www.ncbi.nlm.nih.gov/pubmed/28884485)
@@ -208,6 +208,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion5_metodos_filogeneticos_y_modelos/Tema5_metodos_filogeneticos_y_modelos.pdf)
 - Lecturas recomendadas
   - Yang Z, Rannala B. Molecular phylogenetics: principles and practice. [Nat Rev Genet. 2012 Mar 28;13(5):303-14](https://www.ncbi.nlm.nih.gov/pubmed/22456349)
+  - Yang Z (2014). Molecular Evolution - a Statistical Approach.[Oxford University Press.](https://academic.oup.com/book/26340)
   - Juan Zurita-Artaloitia, Javier Rivera and Pablo Vinuesa*. Extensive cryptic diversity and ecological associations uncovered among Mexican and global collections of Naegleria and Vermamoeba by 18S rDNA, ITS, and COI sequence analysis. [Microbiology Spectrum, 21 March 2023](https://journals.asm.org/doi/10.1128/spectrum.03795-22).
   - Luz Edith Ochoa-Sanchez and Pablo Vinuesa* (2017). Evolutionary genetic analysis uncovers multiple species with distinct habitat preferences and antibiotic resistance phenotypes in the Stenotrophomonas maltophilia complex. Front. Microbiol. 8: 1548. [doi.org/10.3389/fmicb.2017.01548](https://doi.org/10.3389/fmicb.2017.01548)
   - Ciro Cubillas, Pablo Vinuesa, María Luisa Tabche and Alejandro García-de los Santos (2013). Phylogenomic analysis of Cation Diffusion Facilitator proteins uncovers Ni2+/Co2+ transporters. [Metallomics 5(12):1634-1643](https://doi.org/10.1039/c3mt00204g).
@@ -227,7 +228,6 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 - [phyml_protModelFinder.sh](https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_protModelFinder.sh)
 
 - Lecturas recomendadas
-  - Lefort V, Longueville JE, Gascuel O. SMS: Smart Model Selection in PhyML. [Mol Biol Evol. 2017 Sep 1;34(9):2422-2424](https://www.ncbi.nlm.nih.gov/pubmed/28472384)
   - Criscuolo A. morePhyML: improving the phylogenetic tree space exploration with PhyML 3. Mol [Phylogenet Evol. 2011 Dec;61(3):944-8](https://www.ncbi.nlm.nih.gov/pubmed/21925283)
   - Guindon S, Dufayard JF, Lefort V, Anisimova M, Hordijk W, Gascuel O. New algorithms and methods to estimate maximum-likelihood phylogenies: assessing the performance of PhyML 3.0. [Syst Biol. 2010 May;59(3):307-21](https://www.ncbi.nlm.nih.gov/pubmed/20525638)
 

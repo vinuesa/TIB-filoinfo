@@ -51,12 +51,13 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='1.2.0_2023-11-18' # phyml_DNAmodelFinder.sh v1.2.0_2023-11-18; 
-                           # - implements extended (base) model set: 
-			   #    * 6 standard named models
-			   #    * 64 extended equal-frequency (ef) models (TIM and TVM sets)
-			   #    * 62 extended unequal-frequency (uf) models (TIM and TVM sets)
-			   # - minor code cleanup (removed unused variable)
+version='1.2.1_2024-11-20' # v1.2.1_2024-11-20; added citation
+  # phyml_DNAmodelFinder.sh v1.2.0_2023-11-18; 
+  # - implements extended (base) model set: 
+  #    * 6 standard named models
+  #    * 64 extended equal-frequency (ef) models (TIM and TVM sets)
+  #    * 62 extended unequal-frequency (uf) models (TIM and TVM sets)
+  # - minor code cleanup (removed unused variable)
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -739,6 +740,9 @@ SOURCE: the latest version of the program is available on GitHub:
 	 https://github.com/vinuesa/TIB-filoinfo
 
 LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
+
+CITATION: Vinuesa P. (2023). Efficient two-step selection of DNA models with phyml_DNAmodelFinder.
+            https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_DNAmodelFinder.sh
    
 EoH
       

@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México. GitHub repos; @pvinmex" />
 
-<meta name="date" content="2024-11-16" />
+<meta name="date" content="2024-11-20" />
 
 <title>Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</title>
 
@@ -437,7 +437,7 @@ display: none;
 de modelos y búsquedas intensivas de árboles</h1>
 <h4 class="author"><a href="https://www.ccg.unam.mx/~vinuesa/">Pablo
 Vinuesa, CCG-UNAM, Cuernavaca, México</a>. <a href="https://github.com/vinuesa">GitHub repos</a>; <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a></h4>
-<h4 class="date">2024-11-16</h4>
+<h4 class="date">2024-11-20</h4>
 
 </div>
 
@@ -1878,14 +1878,15 @@ hacer de manera repetida.</p>
 <p>Como discutimos en el tema de <a href="https://vinuesa.github.io/intro2linux/index.html#funciones-y-modularizaci%C3%B3n-de-c%C3%B3digo"><strong>funciones</strong></a>,
 éstas son fundamentales para modularizar el código en <strong>unidades
 lógicas autocontenidas</strong>, lo cual es esencial para escribir
-programas complejos y poderlos mantener y desarrollar con facilidad.</p>
+programas complejos y poderlos mantener y desarrollar con mayor
+facilidad.</p>
 <p>Vamos a cerrar este tutorial corriendo los <span class="math inline">\(scripts\)</span>
 <code>phyml_protModelFinder.sh</code> y
-<code>phyml_DNAmodelFinder.sh</code>, que puedes descargar a su
+<code>phyml_DNAmodelFinder.sh</code>, que puedes descargar a tu
 directorio <code>~/bin</code> desde el <a href="https://github.com/vinuesa/TIB-filoinfo">repositorio GitHub de los
 TIB</a>, usando una llamada a <span class="math inline">\(wget\)</span>
 con el siguiente código:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># si no existe el directorio ~/bin, entonces generalo</span></span>
+<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># si no existe el directorio ~/bin, entonces genéralo</span></span>
 <span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="bu">[</span> <span class="ot">!</span> <span class="ot">-d</span> ~/bin <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="fu">mkdir</span> ~/bin </span>
 <span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a></span>
 <span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a><span class="co"># cámbiate al directorio ~/bin y llama a wget para decargar los scripts</span></span>
@@ -1905,7 +1906,7 @@ Akaike (<span class="math inline">\(AIC\)</span>) y bayesiano (<span class="math
 <p>Veremos que el <span class="math inline">\(AIC\)</span> usa un
 criterio más laxo que el <span class="math inline">\(BIC\)</span>,
 tendiendo a seleccionar modelos más complejos que el segundo.</p>
-<p>Si quieres aprender a programar Bash, te invito a que explores en
+<p>Si te interesa la programación en Bash, te invito a que explores en
 detalle el código de ambos <span class="math inline">\(scripts\)</span>.</p>
 <p><b>NOTA</b>: Los scripts <em>phyml_protModelFinder.sh</em>, y en
 particular <em>phyml_DNAmodelFinder.sh</em>, hacen uso de sintaxis
@@ -1961,13 +1962,14 @@ CITATION: Vinuesa 2023. Fast and easy selection of protein models for phylogenet
 
 </pre>
 <p>Necesitamos pasarle dos parámetros a
-<em>phyml_protModelFinder.sh</em>: <em>i</em>) el archivo <span class="math inline">\(phylip\)</span> con las secuencias alineadas y
+<em>phyml_protModelFinder.sh</em>: <em>i</em>) el archivo <span class="math inline">\(phylip\)</span> con las secuencias alineadas, y
 <em>ii</em>) elegir un set de matrices a evaluar.</p>
 <p>Hay un tercer parámetro <span class="math inline">\(&lt;int&gt;\)</span> opcional, que nos permite
 indicarle al programa que queremos hacer la búsqueda final de árboles a
 partir de <span class="math inline">\(n\)</span> árboles de semilla de
 adición secuencial aleatorizada, bajo el mejor modelo seleccionado.</p>
-<p>Probemos con el set de modelos para genes nucleares</p>
+<p>Probemos con el set (#5) de modelos para genes nucleares y
+retrovirales.</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="ex">phyml_protModelFinder.sh</span> primates_21_AA.phy 5</span></code></pre></div>
 <p>Abajo vemos el STDOUT del <span class="math inline">\(script\)</span>.</p>
 <ul>
@@ -1985,39 +1987,39 @@ función <span class="math inline">\(check\_is\_phylip\)</span>.</p></li>
 de los aminoácidos con la función <span class="math inline">\(compute\_AA\_freq\_in\_phylip()\)</span>, que se
 muestra seguidamente:</p></li>
 </ul>
-<div class="sourceCode" id="cb46"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="kw">function</span><span class="fu"> compute_AA_freq_in_phylip()</span></span>
-<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="kw">{</span></span>
-<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>  <span class="bu">local</span> <span class="va">phylip</span></span>
-<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a>  <span class="va">phylip</span><span class="op">=</span><span class="va">$1</span></span>
+<div class="sourceCode" id="cb46"><pre class="sourceCode awk"><code class="sourceCode awk"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="kw">function</span> compute_AA_freq_in_phylip<span class="op">()</span></span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>  local phylip</span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a>  phylip<span class="op">=</span><span class="dt">$1</span></span>
 <span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a> </span>
-<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a>  <span class="fu">awk</span> <span class="st">&#39;</span></span>
-<span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a><span class="st">  BEGIN{print &quot;idx\tAA\tobs_freq&quot;}</span></span>
-<span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a><span class="st">  {</span></span>
-<span id="cb46-9"><a href="#cb46-9" tabindex="-1"></a><span class="st">    # ignore first row and column</span></span>
-<span id="cb46-10"><a href="#cb46-10" tabindex="-1"></a><span class="st">    if( NR &gt; 1 &amp;&amp; NF &gt; 1){</span></span>
-<span id="cb46-11"><a href="#cb46-11" tabindex="-1"></a><span class="st">       # remove empty spaces</span></span>
-<span id="cb46-12"><a href="#cb46-12" tabindex="-1"></a><span class="st">       gsub(/[ ]+/,&quot; &quot;)</span></span>
-<span id="cb46-13"><a href="#cb46-13" tabindex="-1"></a><span class="st">       l=length($0)</span></span>
+<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a>  awk &#39;</span>
+<span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a>  <span class="er">BEGIN</span><span class="op">{</span><span class="kw">print</span> <span class="st">&quot;idx</span><span class="sc">\t</span><span class="st">AA</span><span class="sc">\t</span><span class="st">obs_freq&quot;</span><span class="op">}</span></span>
+<span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb46-9"><a href="#cb46-9" tabindex="-1"></a>    <span class="co"># ignore first row and column</span></span>
+<span id="cb46-10"><a href="#cb46-10" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span> <span class="bu">NR</span> <span class="op">&gt;</span> <span class="dv">1</span> <span class="op">&amp;&amp;</span> <span class="bu">NF</span> <span class="op">&gt;</span> <span class="dv">1</span><span class="op">){</span></span>
+<span id="cb46-11"><a href="#cb46-11" tabindex="-1"></a>       <span class="co"># remove empty spaces</span></span>
+<span id="cb46-12"><a href="#cb46-12" tabindex="-1"></a>       <span class="fu">gsub</span><span class="op">(</span><span class="ot">/[</span><span class="ss"> </span><span class="ot">]+/</span><span class="op">,</span><span class="st">&quot; &quot;</span><span class="op">)</span></span>
+<span id="cb46-13"><a href="#cb46-13" tabindex="-1"></a>       l<span class="op">=</span><span class="fu">length</span><span class="op">(</span><span class="dt">$0</span><span class="op">)</span></span>
 <span id="cb46-14"><a href="#cb46-14" tabindex="-1"></a></span>
-<span id="cb46-15"><a href="#cb46-15" tabindex="-1"></a><span class="st">       for(i=1; i&lt;=l; i++){</span></span>
-<span id="cb46-16"><a href="#cb46-16" tabindex="-1"></a><span class="st">          c = substr($0, i, 1)</span></span>
-<span id="cb46-17"><a href="#cb46-17" tabindex="-1"></a><span class="st">         </span></span>
-<span id="cb46-18"><a href="#cb46-18" tabindex="-1"></a><span class="st">      # count only standard amino acids</span></span>
-<span id="cb46-19"><a href="#cb46-19" tabindex="-1"></a><span class="st">      if (c ~ /[ARNDCQEGHILKMFPSTWYV]/){</span></span>
-<span id="cb46-20"><a href="#cb46-20" tabindex="-1"></a><span class="st">              ccounts[c]++</span></span>
-<span id="cb46-21"><a href="#cb46-21" tabindex="-1"></a><span class="st">              letters++</span></span>
-<span id="cb46-22"><a href="#cb46-22" tabindex="-1"></a><span class="st">          }</span></span>
-<span id="cb46-23"><a href="#cb46-23" tabindex="-1"></a><span class="st">       }</span></span>
-<span id="cb46-24"><a href="#cb46-24" tabindex="-1"></a><span class="st">    }</span></span>
-<span id="cb46-25"><a href="#cb46-25" tabindex="-1"></a><span class="st">  }</span></span>
-<span id="cb46-26"><a href="#cb46-26" tabindex="-1"></a><span class="st">  # print relative frequency of each residue</span></span>
-<span id="cb46-27"><a href="#cb46-27" tabindex="-1"></a><span class="st">  END {</span></span>
-<span id="cb46-28"><a href="#cb46-28" tabindex="-1"></a><span class="st">     for (c in ccounts){ </span></span>
-<span id="cb46-29"><a href="#cb46-29" tabindex="-1"></a><span class="st">        aa++ </span></span>
-<span id="cb46-30"><a href="#cb46-30" tabindex="-1"></a><span class="st">        printf &quot;%i\t%s\t%.4f\n&quot;, aa, c, (ccounts[c] / letters )</span></span>
-<span id="cb46-31"><a href="#cb46-31" tabindex="-1"></a><span class="st">     }  </span></span>
-<span id="cb46-32"><a href="#cb46-32" tabindex="-1"></a><span class="st">  }&#39;</span> <span class="st">&quot;</span><span class="va">$phylip</span><span class="st">&quot;</span></span>
-<span id="cb46-33"><a href="#cb46-33" tabindex="-1"></a><span class="kw">}</span></span></code></pre></div>
+<span id="cb46-15"><a href="#cb46-15" tabindex="-1"></a>       <span class="cf">for</span><span class="op">(</span>i<span class="op">=</span><span class="dv">1</span><span class="op">;</span> i<span class="op">&lt;=</span>l<span class="op">;</span> i<span class="op">++){</span></span>
+<span id="cb46-16"><a href="#cb46-16" tabindex="-1"></a>          c <span class="op">=</span> <span class="fu">substr</span><span class="op">(</span><span class="dt">$0</span><span class="op">,</span> i<span class="op">,</span> <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb46-17"><a href="#cb46-17" tabindex="-1"></a>         </span>
+<span id="cb46-18"><a href="#cb46-18" tabindex="-1"></a>      <span class="co"># count only standard amino acids</span></span>
+<span id="cb46-19"><a href="#cb46-19" tabindex="-1"></a>      <span class="cf">if</span> <span class="op">(</span>c <span class="op">~</span> <span class="ot">/[</span><span class="ss">ARNDCQEGHILKMFPSTWYV</span><span class="ot">]/</span><span class="op">){</span></span>
+<span id="cb46-20"><a href="#cb46-20" tabindex="-1"></a>              ccounts[c]<span class="op">++</span></span>
+<span id="cb46-21"><a href="#cb46-21" tabindex="-1"></a>              letters<span class="op">++</span></span>
+<span id="cb46-22"><a href="#cb46-22" tabindex="-1"></a>          <span class="op">}</span></span>
+<span id="cb46-23"><a href="#cb46-23" tabindex="-1"></a>       <span class="op">}</span></span>
+<span id="cb46-24"><a href="#cb46-24" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb46-25"><a href="#cb46-25" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb46-26"><a href="#cb46-26" tabindex="-1"></a>  <span class="co"># print relative frequency of each residue</span></span>
+<span id="cb46-27"><a href="#cb46-27" tabindex="-1"></a>  <span class="er">END</span> <span class="op">{</span></span>
+<span id="cb46-28"><a href="#cb46-28" tabindex="-1"></a>     <span class="cf">for</span> <span class="op">(</span>c <span class="kw">in</span> ccounts<span class="op">){</span> </span>
+<span id="cb46-29"><a href="#cb46-29" tabindex="-1"></a>        aa<span class="op">++</span> </span>
+<span id="cb46-30"><a href="#cb46-30" tabindex="-1"></a>        <span class="kw">printf</span> <span class="st">&quot;%i</span><span class="sc">\t</span><span class="st">%s</span><span class="sc">\t</span><span class="st">%.4f</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> aa<span class="op">,</span> c<span class="op">,</span> <span class="op">(</span>ccounts[c] <span class="op">/</span> letters <span class="op">)</span></span>
+<span id="cb46-31"><a href="#cb46-31" tabindex="-1"></a>     <span class="op">}</span>  </span>
+<span id="cb46-32"><a href="#cb46-32" tabindex="-1"></a>  <span class="op">}</span>&#39; <span class="st">&quot;$phylip&quot;</span></span>
+<span id="cb46-33"><a href="#cb46-33" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Puedes copiar la función a la terminal y llamarla desde la línea de
 comandos:</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="ex">compute_AA_freq_in_phylip</span> primtates_21_AA.phy</span></code></pre></div>
@@ -2302,7 +2304,8 @@ paste &quot;${infile}&quot;_sorted_model_set_&quot;${model_set}&quot;_fits.tsv \
 <div id="el-criterio-bayesiano-de-información-bic" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> El criterio bayesiano
 de información (<span class="math inline">\(BIC\)</span>)</h2>
-<p>Noten que el mejor modelo seleccionado por <span class="math inline">\(BIC\)</span> en nuestro caso es <span class="math inline">\(HIVb+G\)</span>, mientras que <span class="math inline">\(AIC\)</span> selecciona <span class="math inline">\(HIVw+f+G\)</span>. Es más, vemos que <span class="math inline">\(HIVw+f+G\)</span> tiene un <span class="math inline">\(\Delta_{BIC}\)</span> &gt; 6, por lo que es un
+<p>Tal vez notaste que en nuestro caso el mejor modelo seleccionado por
+<span class="math inline">\(BIC\)</span> es el <span class="math inline">\(HIVb+G\)</span>, mientras que <span class="math inline">\(AIC\)</span> selecciona <span class="math inline">\(HIVw+f+G\)</span>. Es más, vemos que <span class="math inline">\(HIVw+f+G\)</span> tiene un <span class="math inline">\(\Delta_{BIC}\)</span> &gt; 6, por lo que es un
 modelo claramente peor que el <span class="math inline">\(HIVb+G\)</span>. Es tan grande la distancia <span class="math inline">\(\Delta_{BIC}\)</span> entre ambos modelos, que
 <span class="math inline">\(HIVw+f+G\)</span> tiene un <span class="math inline">\(BIC_w\ =\ 0.03\)</span>.</p>
 <p>El criterio de información de Akaike (<span class="math inline">\(AIC\)</span>) es sabido que tiende a favorecer
@@ -2354,13 +2357,16 @@ podemos:</p>
 AIC o BIC. El mejor modelo tendrá el del <span class="math inline">\(AIC_{min}\)</span> o <span class="math inline">\(BIC_{min}\)</span></li>
 <li>Calcular la diferencia en unidades de <span class="math inline">\(AIC\)</span> o <span class="math inline">\(BIC\)</span> de cada modelo con respecto al <span class="math inline">\(AIC_{min}\)</span> o <span class="math inline">\(BIC_{min}\)</span>, es decir, su <span class="math inline">\({\Delta}AIC_i\)</span> o <span class="math inline">\({\Delta}BIC_i\)</span></li>
 </ol>
-<p>Recuerda que:</p>
+<p>Recuerda que, de acuerdo con <a href="https://link.springer.com/book/10.1007/b97636">Burnham and
+Anderson (2002). Model Selection and Multimodel Inference, Springer,
+p.70:</a></p>
 <ol style="list-style-type: decimal">
-<li>Modelos a una distancia de 1-2 unidades de <span class="math inline">\(AIC\)</span> o <span class="math inline">\(BIC\)</span> del <span class="math inline">\(AIC_{min}\)</span> o <span class="math inline">\(BIC_{min}\)</span> son peores pero alternativas
-importantes del mejor modelo</li>
-<li>Modelos a una distancia de 2-7 unidades de <span class="math inline">\(AIC\)</span> o <span class="math inline">\(BIC\)</span> del <span class="math inline">\(AIC_{min}\)</span> o <span class="math inline">\(BIC_{min}\)</span> alternativas significativamente
+<li>Modelos a una distancia de 0-2 unidades de <span class="math inline">\(AIC\)</span> o <span class="math inline">\(BIC\)</span> del <span class="math inline">\(AIC_{min}\)</span> o <span class="math inline">\(BIC_{min}\)</span> tienen un soporte
+sustancial</li>
+<li>Modelos a una distancia de 4-7 unidades de <span class="math inline">\(AIC\)</span> o <span class="math inline">\(BIC\)</span> del <span class="math inline">\(AIC_{min}\)</span> o <span class="math inline">\(BIC_{min}\)</span> alternativas considerablemente
 peores</li>
-<li>Modelos a una distancia de &gt;7 unidades de <span class="math inline">\(AIC\)</span> o <span class="math inline">\(BIC\)</span> del <span class="math inline">\(AIC_{min}\)</span> o <span class="math inline">\(BIC_{min}\)</span> los podemos despreciar</li>
+<li>Modelos a una distancia de &gt; 10 unidades de <span class="math inline">\(AIC\)</span> o <span class="math inline">\(BIC\)</span> del <span class="math inline">\(AIC_{min}\)</span> o <span class="math inline">\(BIC_{min}\)</span> los podemos despreciar, ya que
+carecen de soporte</li>
 </ol>
 <p>Esto queda claramente reflejado en los pesos o ponderaciones de
 Akaike y bayesianas para cada modelo, su <span class="math inline">\({\Delta}AIC_i\)</span> o <span class="math inline">\({\Delta}BIC_i\)</span>, como te muestro
@@ -2429,16 +2435,18 @@ BIC\)</span>:</strong></p>
 <li><p><strong>Calcula los pesos o ponderaciones
 acumuladas</strong>:</p>
 <ul>
-<li>Cumulative weight for model 0: <span class="math inline">\(0.81719\)</span></li>
-<li>Cumulative weight for model 1: <span class="math inline">\(0.81719 +
-0.15236 = 0.96955\)</span></li>
-<li>Cumulative weight for model 2: <span class="math inline">\(0.96955 +
-0.02700 = 0.99655\)</span></li>
-<li>Cumulative weight for model 3: <span class="math inline">\(0.99655 +
-0.00365 = 1.00020\)</span> (approx 1.000 due to rounding)</li>
-<li>Cumulative weights for models 4 and 5 stay at <span class="math inline">\(1.000\)</span>.</li>
+<li>Peso acumulado para el modelo 0: <span class="math inline">\(0.81719\)</span></li>
+<li>Peso acumulado para el modelo 1: <span class="math inline">\(0.81719
++ 0.15236 = 0.96955\)</span></li>
+<li>Peso acumulado para el modelo 2: <span class="math inline">\(0.96955
++ 0.02700 = 0.99655\)</span></li>
+<li>Peso acumulado para el modelo 3: <span class="math inline">\(0.99655
++ 0.00365 = 1.00020\)</span> (approx 1.000 due to rounding)</li>
+<li>Peso acumulado para modelos 4 y 5 queda en <span class="math inline">\(1.000\)</span>.</li>
 </ul></li>
 </ol>
+<p>A partir de estos datos podemos determinar que con los modelos 0 y 1
+alcanzamos el intervalo de credibilidad del 95%.</p>
 </div>
 </div>
 <div id="código-de-awk-para-calcular-los-pesos-y-pesos-acumulados-de-cada-modelo" class="section level3" number="5.2.3">
@@ -2448,32 +2456,32 @@ calcular los pesos y pesos acumulados de cada modelo</h3>
 ordenada de valores de <span class="math inline">\(\Delta BIC\)</span>,
 similar al que usan los <span class="math inline">\(scripts\)</span>
 <span class="math inline">\(phyml\_protModelFinder.sh\)</span> y <span class="math inline">\(phyml\_DNAmodelFinder.sh\)</span></p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode awk"><code class="sourceCode awk"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="cf">BEGIN</span> <span class="op">{</span></span>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="ex">BEGIN</span> {</span>
 <span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>    <span class="co"># Delta BIC values</span></span>
-<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a>    delta_bics[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>    delta_bics[<span class="dv">1</span>] <span class="op">=</span> <span class="fl">4.02575</span></span>
-<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a>    delta_bics[<span class="dv">2</span>] <span class="op">=</span> <span class="fl">6.80293</span></span>
-<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a>    delta_bics[<span class="dv">3</span>] <span class="op">=</span> <span class="fl">10.82696</span></span>
-<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a>    delta_bics[<span class="dv">4</span>] <span class="op">=</span> <span class="fl">26.16869</span></span>
-<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a>    delta_bics[<span class="dv">5</span>] <span class="op">=</span> <span class="fl">27.94213</span></span>
-<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a>    n <span class="op">=</span> <span class="dv">6</span>  <span class="co"># Number of models</span></span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a>    <span class="va">delta_bics</span><span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="ex">=</span> 0</span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>    <span class="va">delta_bics</span><span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="ex">=</span> 4.02575</span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a>    <span class="va">delta_bics</span><span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="ex">=</span> 6.80293</span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a>    <span class="va">delta_bics</span><span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="ex">=</span> 10.82696</span>
+<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a>    <span class="va">delta_bics</span><span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="ex">=</span> 26.16869</span>
+<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a>    <span class="va">delta_bics</span><span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="ex">=</span> 27.94213</span>
+<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a>    <span class="ex">n</span> = 6  <span class="co"># Number of models</span></span>
 <span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a></span>
 <span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a>    <span class="co"># Step 1: Calculate exp(-Delta BIC / 2) for each model</span></span>
-<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a>    sum_exp <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a>        exp_values[i] <span class="op">=</span> <span class="fu">exp</span><span class="op">(-</span>delta_bics[i] <span class="op">/</span> <span class="dv">2</span><span class="op">)</span></span>
-<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a>        sum_exp <span class="op">+=</span> exp_values[i]</span>
-<span id="cb49-16"><a href="#cb49-16" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a>    <span class="ex">sum_exp</span> = 0</span>
+<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a>    <span class="cf">for</span> <span class="kw">(</span><span class="ex">i</span> = 0<span class="kw">;</span> <span class="ex">i</span> <span class="op">&lt;</span> n<span class="kw">;</span> <span class="ex">i++</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a>        <span class="va">exp_values</span><span class="op">[</span>i<span class="op">]</span> <span class="ex">=</span> exp<span class="er">(</span><span class="ex">-delta_bics[i]</span> / 2<span class="kw">)</span></span>
+<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a>        <span class="ex">sum_exp</span> += exp_values<span class="pp">[</span><span class="ss">i</span><span class="pp">]</span></span>
+<span id="cb49-16"><a href="#cb49-16" tabindex="-1"></a>    <span class="kw">}</span></span>
 <span id="cb49-17"><a href="#cb49-17" tabindex="-1"></a></span>
 <span id="cb49-18"><a href="#cb49-18" tabindex="-1"></a>    <span class="co"># Step 2: Calculate weights and cumulative weights</span></span>
-<span id="cb49-19"><a href="#cb49-19" tabindex="-1"></a>    cumulative_weight <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb49-20"><a href="#cb49-20" tabindex="-1"></a>    <span class="kw">printf</span> <span class="st">&quot;%-10s %-10s %-10s %-10s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="st">&quot;Model&quot;</span><span class="op">,</span> <span class="st">&quot;Delta BIC&quot;</span><span class="op">,</span> <span class="st">&quot;Weight&quot;</span><span class="op">,</span> <span class="st">&quot;Cum. Weight&quot;</span></span>
-<span id="cb49-21"><a href="#cb49-21" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb49-22"><a href="#cb49-22" tabindex="-1"></a>        weight <span class="op">=</span> exp_values[i] <span class="op">/</span> sum_exp</span>
-<span id="cb49-23"><a href="#cb49-23" tabindex="-1"></a>        cumulative_weight <span class="op">+=</span> weight</span>
-<span id="cb49-24"><a href="#cb49-24" tabindex="-1"></a>        <span class="kw">printf</span> <span class="st">&quot;%-10d %-10.5f %-10.5f %-10.5f</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">+</span><span class="dv">1</span><span class="op">,</span> delta_bics[i]<span class="op">,</span> weight<span class="op">,</span> cumulative_weight</span>
-<span id="cb49-25"><a href="#cb49-25" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb49-26"><a href="#cb49-26" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb49-19"><a href="#cb49-19" tabindex="-1"></a>    <span class="ex">cumulative_weight</span> = 0</span>
+<span id="cb49-20"><a href="#cb49-20" tabindex="-1"></a>    <span class="bu">printf</span> <span class="st">&quot;%-10s %-10s %-10s %-10s\n&quot;</span>, <span class="st">&quot;Model&quot;</span>, <span class="st">&quot;Delta BIC&quot;</span>, <span class="st">&quot;Weight&quot;</span>, <span class="st">&quot;Cum. Weight&quot;</span></span>
+<span id="cb49-21"><a href="#cb49-21" tabindex="-1"></a>    <span class="cf">for</span> <span class="kw">(</span><span class="ex">i</span> = 0<span class="kw">;</span> <span class="ex">i</span> <span class="op">&lt;</span> n<span class="kw">;</span> <span class="ex">i++</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb49-22"><a href="#cb49-22" tabindex="-1"></a>        <span class="ex">weight</span> = exp_values<span class="pp">[</span><span class="ss">i</span><span class="pp">]</span> / sum_exp</span>
+<span id="cb49-23"><a href="#cb49-23" tabindex="-1"></a>        <span class="ex">cumulative_weight</span> += weight</span>
+<span id="cb49-24"><a href="#cb49-24" tabindex="-1"></a>        <span class="bu">printf</span> <span class="st">&quot;%-10d %-10.5f %-10.5f %-10.5f\n&quot;</span>, i+1, delta_bics<span class="pp">[</span><span class="ss">i</span><span class="pp">]</span>, weight, cumulative_weight</span>
+<span id="cb49-25"><a href="#cb49-25" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb49-26"><a href="#cb49-26" tabindex="-1"></a><span class="er">}</span></span></code></pre></div>
 <div id="explicación-de-cada-función" class="section level4" number="5.2.3.1">
 <h4><span class="header-section-number">5.2.3.1</span> Explicación de
 cada función</h4>
@@ -2496,11 +2504,18 @@ para cada modelo.</li>
 <div id="tarea-selección-de-modelos-con-bic" class="section level3" number="5.2.4">
 <h3><span class="header-section-number">5.2.4</span> Tarea: selección de
 modelos con BIC</h3>
-<pre><code>1. Calcula manualmente los valores de $BICi$, $BIC_{MIN}$ y $\Delta_{BIC}$ $para los modelo $HIVb+G$ y $HIVb+f+G$ 
-del alineamiento de primates_21_AA.phy, usando la fórmula mostrada en la sección de $BIC$ y los datos que imprime 
-$phyml\_protModelFinder.sh$ al inicio de su salida. 
-2. Vuelve a correr el script, pero evaluando todos los modelos. $phyml\_protModelFinder.sh$ ¿Hay alguna diferencia? Comenta el resultado.
-3. Si no lo has hecho aún, repite el ejercicio de selección de modelos paramétricos (de DNA) con las secuencias *primates.phy*, usando $BIC$.</code></pre>
+<ol style="list-style-type: decimal">
+<li>Calcula manualmente los valores de <span class="math inline">\(BICi\)</span>, <span class="math inline">\(BIC_{MIN}\)</span> y <span class="math inline">\(\Delta_{BIC}\)</span> para los modelo <span class="math inline">\(HIVb+G\)</span> y <span class="math inline">\(HIVb+f+G\)</span> del alineamiento de
+primates_21_AA.phy, usando la fórmula mostrada en la sección de <span class="math inline">\(BIC\)</span> y los datos que imprime <span class="math inline">\(phyml\_protModelFinder.sh\)</span> al inicio de su
+salida.</li>
+<li>Vuelve a correr el script, pero evaluando todos los modelos
+<code>phyml_protModelFinder.sh primates_21_AA.phy 6</code> ¿Hay alguna
+diferencia? Comenta el resultado.</li>
+<li>Si no lo has hecho aún, repite el ejercicio de selección de modelos
+paramétricos (de DNA) con las secuencias <em>primates.phy</em>, usando
+<span class="math inline">\(BIC\)</span> para evaluar los modelos
+simplificados a partir de los parámetros estiamdos por GTR+I+G.</li>
+</ol>
 <hr />
 </div>
 </div>
@@ -2515,7 +2530,8 @@ usuario puede pedirle que evalúe el <strong>conjunto de modelos estándar
 (JC69, K80, F81, HKY85, TN93 y GTR)</strong> más un conjunto amplio de
 modelos transicionales (TIM<em>) y transversionales (TVM</em>), con 3, 4
 y 5 clases de tasas, los cuales son elegidos después de comprobar si
-existe o no un sesgo transicional significativo.</p>
+existen o no sesgos en frecuencia de bases y transicional
+significativos.</p>
 <p><b>NOTA: </b> <span class="math inline">\(phyml\_DNAmodelFinder.sh\)</span> hace uso de
 idiomas más avanzados y recientes del lenguaje <em>Bash</em> que <span class="math inline">\(phyml\_protModelFinder.sh\)</span>, ya que además
 de <code>arreglos</code> y <code>hashes</code>, usa
@@ -2595,7 +2611,7 @@ de modelos</h3>
 <li>que las secuencias están en formato <span class="math inline">\(phylip\)</span></li>
 <li>calcula unas estadísticas descriptivas de las secuencias</li>
 </ul>
-<div class="sourceCode" id="cb51"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="ex">phyml_DNAmodelFinder.sh</span> primates.phy 2</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="ex">phyml_DNAmodelFinder.sh</span> primates.phy 2</span></code></pre></div>
 <pre>
 
 =========================================================================================
@@ -2688,13 +2704,13 @@ TN93_BICi: 12134.51460
 <p>Como ven arriba, el <span class="math inline">\(script\)</span>
 detecta:</p>
 <ol style="list-style-type: decimal">
-<li>un sesgo composicional significativo,
+<li>un <strong>sesgo composicional significativo</strong>,
 <code>compositional_heterogeneity_flag=1</code></li>
-<li>No considera significativa la diferencia de tasas de transiciones
-entre purinas y pirimidinas
+<li><strong>No considera significativa la diferencia de tasas de
+transiciones entre purinas y pirimidinas</strong>
 <code>transitional_heterogeneity_flag=0</code></li>
-<li>Tampoco considera que el parámetro <span class="math inline">\(pInv\)</span> incremente significativamente el
-ajuste, por lo que <code>use_pInv_flag=0</code></li>
+<li><strong>Tampoco considera que el parámetro <span class="math inline">\(pInv\)</span> incremente significativamente el
+ajuste</strong>, por lo que <code>use_pInv_flag=0</code></li>
 </ol>
 <p>En el siguiente ciclo, el programa evaluará sólo modelos <span class="math inline">\(TVM*\)</span> del set extendido, con estima
 empírica de la frecuencia de las bases, sin <span class="math inline">\(pInv\)</span></p>
@@ -2931,7 +2947,7 @@ Done!
 <p>Podemos desplegar el árbol directamente en la línea de comandos con
 <span class="math inline">\(nw\_display\)</span>, enraizando previamente
 en <em>Tarsius syrichta</em> y <em>Lemur catta</em> con <span class="math inline">\(nw\_reroot\)</span>, como se muestra abajo:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="ex">nw_display</span> <span class="op">&lt;(</span><span class="ex">nw_reroot</span> primates.phy_HKY85+G_BESTmoves_phyml_tree.txt Tarsius_sy<span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="ex">nw_display</span> <span class="op">&lt;(</span><span class="ex">nw_reroot</span> primates.phy_HKY85+G_BESTmoves_phyml_tree.txt Tarsius_sy<span class="op">)</span></span></code></pre></div>
 <pre>
  +----------------+ Tarsius sy                                                  
  |                                                                              
@@ -2991,7 +3007,7 @@ con las siguientes características:</p>
 <em>phyml</em> v.3.3_2023 (<em>single-threaded</em>) sobre un solo
 núcleo.</li>
 </ul>
-<div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="bu">time</span> phyml_DNAmodelFinder.sh primates.phy 2 <span class="op">&amp;&gt;</span> /dev/null </span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="bu">time</span> phyml_DNAmodelFinder.sh primates.phy 2 <span class="op">&amp;&gt;</span> /dev/null </span></code></pre></div>
 <pre>
 real    0m17.044s
 user    0m15.052s
@@ -3023,7 +3039,7 @@ empleada es la que viene pre-empacada para Ubuntu 22.04.1 LTS</p>
 <em>phyml-mpi</em> PhyML_3.0_linux64 v20130103 sobre 12 cores asignados
 automáticamente</li>
 </ul>
-<div class="sourceCode" id="cb54"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="bu">time</span> jmodeltest <span class="at">-d</span> primates.phy <span class="at">-i</span> <span class="at">-f</span> <span class="at">-g</span> 4 <span class="at">-BIC</span> <span class="at">-v</span> <span class="at">-a</span> <span class="at">-t</span> fixed <span class="at">-s</span> 203 <span class="at">-H</span> BIC <span class="op">&amp;&gt;</span> /dev/null </span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="bu">time</span> jmodeltest <span class="at">-d</span> primates.phy <span class="at">-i</span> <span class="at">-f</span> <span class="at">-g</span> 4 <span class="at">-BIC</span> <span class="at">-v</span> <span class="at">-a</span> <span class="at">-t</span> fixed <span class="at">-s</span> 203 <span class="at">-H</span> BIC <span class="op">&amp;&gt;</span> /dev/null </span></code></pre></div>
 <pre>
 real    1m30.086s
 user    13m27.152s

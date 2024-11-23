@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México. GitHub repos; @pvinmex" />
 
-<meta name="date" content="2024-11-20" />
+<meta name="date" content="2024-11-23" />
 
 <title>Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</title>
 
@@ -437,15 +437,14 @@ display: none;
 de modelos y búsquedas intensivas de árboles</h1>
 <h4 class="author"><a href="https://www.ccg.unam.mx/~vinuesa/">Pablo
 Vinuesa, CCG-UNAM, Cuernavaca, México</a>. <a href="https://github.com/vinuesa">GitHub repos</a>; <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a></h4>
-<h4 class="date">2024-11-20</h4>
+<h4 class="date">2024-11-23</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
 <li><a href="#selección-y-análisis-de-modelos-paramétricos-y-empíricos-mediante-lrts-aic-y-bic-con-phyml-desde-la-línea-de-comandos-de-linux" id="toc-selección-y-análisis-de-modelos-paramétricos-y-empíricos-mediante-lrts-aic-y-bic-con-phyml-desde-la-línea-de-comandos-de-linux"><span class="toc-section-number">1</span> Selección y análisis de modelos
-paramétricos y empíricos mediante LRTs, AIC y BIC con phyml desde la
-línea de comandos de <span class="math inline">\(Linux\)</span></a>
+paramétricos y empíricos mediante LRTs, AIC y BIC con <span class="math inline">\(PhyML\)</span> desde la línea de comandos de <span class="math inline">\(Linux\)</span></a>
 <ul>
 <li><a href="#presentación" id="toc-presentación"><span class="toc-section-number">1.1</span> Presentación</a></li>
 <li><a href="#objetivos" id="toc-objetivos"><span class="toc-section-number">1.2</span> Objetivos</a></li>
@@ -458,8 +457,8 @@ EL REPOSITORIO GitHub</a>
 PhyML</a></li>
 <li><a href="#opciones-más-usadas-de-phyml-v3" id="toc-opciones-más-usadas-de-phyml-v3"><span class="toc-section-number">2.2</span> Opciones más usadas de PhyML
 v3</a></li>
-<li><a href="#ejemplos-de-invocación-de-phyml-v3-para-alineamientos-de-secuencias-de-dna-a-y-proteína-b" id="toc-ejemplos-de-invocación-de-phyml-v3-para-alineamientos-de-secuencias-de-dna-a-y-proteína-b"><span class="toc-section-number">2.3</span> Ejemplos de invocación de PhyML v3
-para alineamientos de secuencias de DNA (A) y proteína (B)</a></li>
+<li><a href="#ejemplos-de-invocación-de-phyml-v3-para-secuencias-de-dna-a-y-proteína-b" id="toc-ejemplos-de-invocación-de-phyml-v3-para-secuencias-de-dna-a-y-proteína-b"><span class="toc-section-number">2.3</span> Ejemplos de invocación de PhyML v3
+para secuencias de DNA (A) y proteína (B)</a></li>
 </ul></li>
 <li><a href="#seleccion-de-modelos-paramétricos-de-dna-usando-phyml---prácticas" id="toc-seleccion-de-modelos-paramétricos-de-dna-usando-phyml---prácticas"><span class="toc-section-number">3</span> SELECCION DE MODELOS PARAMÉTRICOS DE
 DNA USANDO PHYML - Prácticas</a>
@@ -493,8 +492,8 @@ Yano de 1985 + proporción de sitios invariantes (<span class="math inline">\(HK
 Yano de 1985 + distribución Gamma + proporción de sitios invariantes
 (<span class="math inline">\(HKY85+G+I\)</span>)</a></li>
 </ul></li>
-<li><a href="#análisis-gráfico-y-estadístico-de-resultdos-usando-herramientas-de-linux-y-r" id="toc-análisis-gráfico-y-estadístico-de-resultdos-usando-herramientas-de-linux-y-r"><span class="toc-section-number">3.2.3</span> Análisis gráfico y estadístico
-de resultdos usando herramientas de <span class="math inline">\(Linux\)</span> y <span class="math inline">\(R\)</span></a>
+<li><a href="#análisis-gráfico-y-estadístico-de-resultados-usando-herramientas-de-linux-y-r" id="toc-análisis-gráfico-y-estadístico-de-resultados-usando-herramientas-de-linux-y-r"><span class="toc-section-number">3.2.3</span> Análisis gráfico y estadístico
+de resultados usando herramientas de <span class="math inline">\(Linux\)</span> y <span class="math inline">\(R\)</span></a>
 <ul>
 <li><a href="#graficado-con-r-de-valores-de-verosimilitud-de-los-modelos-en-competición-ordenados-de-lnl" id="toc-graficado-con-r-de-valores-de-verosimilitud-de-los-modelos-en-competición-ordenados-de-lnl"><span class="toc-section-number">3.2.3.1</span> Graficado con R de valores de
 verosimilitud de los modelos en competición, ordenados de <span class="math inline">\(lnL\)</span></a></li>
@@ -512,12 +511,14 @@ con figtree</a></li>
 selección de modelos de DNA: reducción de parámetros del modelo GTR+G+I,
 y evaluación de los modelos resultantes mediante <span class="math inline">\(AIC\)</span></a>
 <ul>
-<li><a href="#ajuste-de-modelo-gtrgi-a-primates.phy" id="toc-ajuste-de-modelo-gtrgi-a-primates.phy"><span class="toc-section-number">3.3.1</span> Ajuste de modelo <span class="math inline">\(GTR+G+I\)</span> a primates.phy</a></li>
-<li><a href="#exploración-del-archivo-stats-para-identificar-posibles-simplificaciones-al-modelo-gtrgi" id="toc-exploración-del-archivo-stats-para-identificar-posibles-simplificaciones-al-modelo-gtrgi"><span class="toc-section-number">3.3.2</span> Exploración del archivo stats
-para identificar posibles simplificaciones al modelo GTR+G+I</a></li>
+<li><a href="#ajuste-del-modelo-gtrgi-a-primates.phy" id="toc-ajuste-del-modelo-gtrgi-a-primates.phy"><span class="toc-section-number">3.3.1</span> Ajuste del modelo <span class="math inline">\(GTR+G+I\)</span> a primates.phy</a></li>
+<li><a href="#exploración-del-archivo-stats-para-identificar-posibles-simplificaciones-al-modelo-gtrgi" id="toc-exploración-del-archivo-stats-para-identificar-posibles-simplificaciones-al-modelo-gtrgi"><span class="toc-section-number">3.3.2</span> Exploración del archivo
+<em>stats</em> para identificar posibles simplificaciones al modelo
+GTR+G+I</a></li>
 <li><a href="#evaluación-de-modelos-simplificados-de-2-3-y-4-tasas" id="toc-evaluación-de-modelos-simplificados-de-2-3-y-4-tasas"><span class="toc-section-number">3.3.3</span> Evaluación de modelos
 simplificados de 2, 3 y 4 tasas</a></li>
-<li><a href="#cálculo-de-los-aici-de-cada-modelo-y-delta_i-con-respecto-al-aicmin-en-r" id="toc-cálculo-de-los-aici-de-cada-modelo-y-delta_i-con-respecto-al-aicmin-en-r"><span class="toc-section-number">3.3.4</span> Cálculo de los <span class="math inline">\(AICi\)</span> (de cada modelo) y <span class="math inline">\(\Delta_i\)</span> con respecto al <span class="math inline">\(AICmin\)</span> en <code>R</code></a></li>
+<li><a href="#cálculo-de-los-aici-y-delta_i-de-cada-modelo-con-respecto-al-aicmin-en-r" id="toc-cálculo-de-los-aici-y-delta_i-de-cada-modelo-con-respecto-al-aicmin-en-r"><span class="toc-section-number">3.3.4</span> Cálculo de los <span class="math inline">\(AICi\)</span> y <span class="math inline">\(\Delta_i\)</span> (de cada modelo) con respecto al
+<span class="math inline">\(AICmin\)</span> en <code>R</code></a></li>
 <li><a href="#conclusiones" id="toc-conclusiones"><span class="toc-section-number">3.3.5</span> Conclusiones</a></li>
 <li><a href="#tarea-de-ajuste-de-modelos-paramétricos-mediante-criterios-de-información-aic-y-bic" id="toc-tarea-de-ajuste-de-modelos-paramétricos-mediante-criterios-de-información-aic-y-bic"><span class="toc-section-number">3.3.6</span> Tarea de ajuste de modelos
 paramétricos mediante criterios de información AIC y BIC</a></li>
@@ -526,9 +527,8 @@ paramétricos mediante criterios de información AIC y BIC</a></li>
 <li><a href="#cálculo-de-aics-y-bics-para-selección-modelos-de-aminoácidos" id="toc-cálculo-de-aics-y-bics-para-selección-modelos-de-aminoácidos"><span class="toc-section-number">4</span> Cálculo de <span class="math inline">\(AICs\)</span> y <span class="math inline">\(BICs\)</span> para selección modelos de
 aminoácidos</a>
 <ul>
-<li><a href="#evaluación-rápida-de-un-subconjunto-de-matrices-con-un-bucle-for" id="toc-evaluación-rápida-de-un-subconjunto-de-matrices-con-un-bucle-for"><span class="toc-section-number">4.1</span> Evaluación rápida de un
-subconjunto de matrices con un <span class="math inline">\(bucle\
-for\)</span></a></li>
+<li><a href="#evaluación-rápida-de-un-subconjunto-de-matrices-empíricas-con-un-bucle-for-y-un-hash" id="toc-evaluación-rápida-de-un-subconjunto-de-matrices-empíricas-con-un-bucle-for-y-un-hash"><span class="toc-section-number">4.1</span> Evaluación rápida de un
+subconjunto de matrices empíricas con un <span class="math inline">\(bucle\ for\)</span> y un <span class="math inline">\(hash\)</span></a></li>
 <li><a href="#análisis-gráfico-y-numérico-de-resultados-de-aic-usando-herramientas-de-filtrado-de-linux-y-r" id="toc-análisis-gráfico-y-numérico-de-resultados-de-aic-usando-herramientas-de-filtrado-de-linux-y-r"><span class="toc-section-number">4.2</span> Análisis gráfico y numérico de
 resultados de <span class="math inline">\(AIC\)</span> usando
 herramientas de filtrado de <span class="math inline">\(Linux\)</span> y
@@ -607,8 +607,7 @@ scripts <em>phyml_DNAmodelFinder</em> y
 
 <div id="selección-y-análisis-de-modelos-paramétricos-y-empíricos-mediante-lrts-aic-y-bic-con-phyml-desde-la-línea-de-comandos-de-linux" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Selección y análisis de
-modelos paramétricos y empíricos mediante LRTs, AIC y BIC con phyml
-desde la línea de comandos de <span class="math inline">\(Linux\)</span></h1>
+modelos paramétricos y empíricos mediante LRTs, AIC y BIC con <span class="math inline">\(PhyML\)</span> desde la línea de comandos de <span class="math inline">\(Linux\)</span></h1>
 <div id="presentación" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Presentación</h2>
 <p>Estas prácticas fueron diseñadas originalmente para los <a href="https://www.nnb.unam.mx/EBM2022/pangenomica-y-filogenomica-microbiana/">Talleres
@@ -739,10 +738,9 @@ incluyendo FASTA, PHYLIP, NEXUS, entre muchos otros.</li>
 # -u usertree permite pasarle a phyml un árbol precalculado por el usuario
 </pre>
 </div>
-<div id="ejemplos-de-invocación-de-phyml-v3-para-alineamientos-de-secuencias-de-dna-a-y-proteína-b" class="section level2" number="2.3">
+<div id="ejemplos-de-invocación-de-phyml-v3-para-secuencias-de-dna-a-y-proteína-b" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Ejemplos de
-invocación de PhyML v3 para alineamientos de secuencias de DNA (A) y
-proteína (B)</h2>
+invocación de PhyML v3 para secuencias de DNA (A) y proteína (B)</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># A: Ejemplo de corrida para NT; recureda que los modificatodres de tasa indicados con -m se aplican en este orden: (ac ag at cg ct gt)</span></span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">phyml</span> <span class="at">-i</span> primates.phy <span class="at">-m</span> HKY85 <span class="at">-c</span> 4 <span class="at">-a</span> e <span class="at">-o</span> tlr <span class="at">-s</span> BEST <span class="at">--rand_start</span> <span class="at">--n_rand_starts</span> 5 <span class="op">&amp;&gt;</span> /dev/null</span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
@@ -1087,9 +1085,9 @@ de datos, sin escribir archivos intermedios, como hicimos en los
 ejemplos anteriores.</p>
 </div>
 </div>
-<div id="análisis-gráfico-y-estadístico-de-resultdos-usando-herramientas-de-linux-y-r" class="section level3" number="3.2.3">
+<div id="análisis-gráfico-y-estadístico-de-resultados-usando-herramientas-de-linux-y-r" class="section level3" number="3.2.3">
 <h3><span class="header-section-number">3.2.3</span> Análisis gráfico y
-estadístico de resultdos usando herramientas de <span class="math inline">\(Linux\)</span> y <span class="math inline">\(R\)</span></h3>
+estadístico de resultados usando herramientas de <span class="math inline">\(Linux\)</span> y <span class="math inline">\(R\)</span></h3>
 <p>Una vez evaluados los diferentes modelos en competición, haremos un
 simple análisis gráfico y estadístico de los resultados.</p>
 <ul>
@@ -1329,8 +1327,8 @@ datos, y examinar la matriz de transición resultante para simplificarla
 (reducir parámetros) donde parezca obvio, por ser tasas muy similares
 (&lt; ~20-30 % de diferencia), y evaluar los ajustes de estos modelos
 usando <strong>criterios de información</strong>.</p>
-<div id="ajuste-de-modelo-gtrgi-a-primates.phy" class="section level3" number="3.3.1">
-<h3><span class="header-section-number">3.3.1</span> Ajuste de modelo
+<div id="ajuste-del-modelo-gtrgi-a-primates.phy" class="section level3" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Ajuste del modelo
 <span class="math inline">\(GTR+G+I\)</span> a primates.phy</h3>
 <p>Igual que en ejemplos anteriores, usamos el árbol NJ-JC para estimar
 sobre éste los parámetros del modelo de sustitución y evaluar el ajuste
@@ -1346,8 +1344,8 @@ nombrado.</p>
 </div>
 <div id="exploración-del-archivo-stats-para-identificar-posibles-simplificaciones-al-modelo-gtrgi" class="section level3" number="3.3.2">
 <h3><span class="header-section-number">3.3.2</span> Exploración del
-archivo stats para identificar posibles simplificaciones al modelo
-GTR+G+I</h3>
+archivo <em>stats</em> para identificar posibles simplificaciones al
+modelo GTR+G+I</h3>
 <p>Analicemos los valores obtenidos para las tres clases de parámetros
 de modelos para secuencias de DNA: <strong>frecuencias</strong>,
 <strong>tasas</strong>, y de <strong>heterogeneidad de tasas entre
@@ -1428,16 +1426,17 @@ TN93G          -5710.55182
 HKYG           -5711.93899
 
 </pre>
-<p>Noten que si bien el modelo de más alta parametrización (<span class="math inline">\(GTR+G+I\)</span>) tiene el puntaje más alto de
-<span class="math inline">\(lnL\)</span>, la diferencia contra el
-competidor <span class="math inline">\(HKY+G\)</span> es pequeña, &lt;
-1-2 unidades de <span class="math inline">\(lnL\)</span>.</p>
+<p>Nota que si bien el modelo de más alta parametrización (<span class="math inline">\(GTR+G+I\)</span>) tiene el puntaje de
+verosimilitud (<span class="math inline">\(lnL\)</span>) más alto, la
+diferencia contra el competidor <span class="math inline">\(HKY+G\)</span> es pequeña, de sólo ~3 unidades de
+<span class="math inline">\(lnL\)</span>.</p>
 <p>Usemos el <strong>criterio de información de Akaike (AIC)</strong>
 para evaluar estos resultados formalmente.</p>
 </div>
-<div id="cálculo-de-los-aici-de-cada-modelo-y-delta_i-con-respecto-al-aicmin-en-r" class="section level3" number="3.3.4">
+<div id="cálculo-de-los-aici-y-delta_i-de-cada-modelo-con-respecto-al-aicmin-en-r" class="section level3" number="3.3.4">
 <h3><span class="header-section-number">3.3.4</span> Cálculo de los
-<span class="math inline">\(AICi\)</span> (de cada modelo) y <span class="math inline">\(\Delta_i\)</span> con respecto al <span class="math inline">\(AICmin\)</span> en <code>R</code></h3>
+<span class="math inline">\(AICi\)</span> y <span class="math inline">\(\Delta_i\)</span> (de cada modelo) con respecto al
+<span class="math inline">\(AICmin\)</span> en <code>R</code></h3>
 <p>Recordemos la fórmula del <b>criterio de información de Akaike</b>
 para un modelo particular: <span class="math inline">\(AIC_i=-2*(lnL_i)+(2N_i)\)</span></p>
 <p>donde:</p>
@@ -1584,10 +1583,9 @@ usuario (<code>-u usertree</code>).</p>
 <p>Copia todo el bloque en la terminal, a partir de
 <code>infile=primates_21_AA.phy</code>, para ejecutar todas las líneas
 secuencialmente.</p>
-<div id="evaluación-rápida-de-un-subconjunto-de-matrices-con-un-bucle-for" class="section level2" number="4.1">
+<div id="evaluación-rápida-de-un-subconjunto-de-matrices-empíricas-con-un-bucle-for-y-un-hash" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Evaluación rápida de
-un subconjunto de matrices con un <span class="math inline">\(bucle\
-for\)</span></h2>
+un subconjunto de matrices empíricas con un <span class="math inline">\(bucle\ for\)</span> y un <span class="math inline">\(hash\)</span></h2>
 <p>En este ejercicio haremos uso más eficiente de las herramientas que
 nos brindan el <span class="math inline">\(Shell\)</span> y <span class="math inline">\(linux\)</span>, como primeros pasos hacia la
 automatización del proceso.</p>

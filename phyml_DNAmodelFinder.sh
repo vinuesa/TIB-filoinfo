@@ -51,7 +51,7 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='1.2.2_2024-12-3' # v1.2.2_2024-12-3' strict check of phylip format
+version='1.2.3_2024-12-3' # v1.2.3_2024-12-3' strict check of phylip format
    # phyml_DNAmodelFinder.sh v1.2.0_2023-11-18; 
    # - implements extended (base) model set: 
    #	* 6 standard named models
@@ -493,8 +493,7 @@ function check_phyml_version {
 }
 #-----------------------------------------------------------------------------------------
 
-
-function check_is_phylip() {
+function check_is_phylip(){
     local phylip_file="$1"
 
     if [[ ! -f "$phylip_file" ]]; then
@@ -516,26 +515,37 @@ function check_is_phylip() {
         num_sequences = $1
         sequence_length = $2
     }
-    NR > 1 {
+    NR > 1 && /^[^[:space:]]+/{ 
         # Other lines: verify alignment and proper separation
-        id = substr($0, 1, 10)  # PHYLIP identifiers are typically up to 10 chars
-        seq = substr($0, 11)
-        gsub(/^ +| +$/, "", seq)  # Trim spaces around the sequence part
+	id = substr($0, 1, 10)  # PHYLIP identifiers are typically up to 10 chars
+	idcounts++
+        seq = $2
+        #gsub(/^ +| +$/, "", seq)  # Trim spaces around the sequence part
         if (!match(seq, /^[-A-Za-z.]+$/)) {
             print "Error: Invalid sequence format on line " NR "."
             valid = 0
             exit 1
         }
         # Check alignment (ensure space between ID and sequence)
-        if (substr($0, 10, 1) != " ") {
+        #if (substr($0, 10, 1) != " ") {
+	if (! /^[^[:space:]]+[[:space:]+]/){
             print "Error: No space separating ID and sequence on line " NR "."
             valid = 0
             exit 1
         }
     }
+    NR > 1 && /^[[:space:]+][-A-Za-z.]+/{
+        seq = $0
+        gsub(/^ +| +$| /, "", seq)  # Trim spaces around the sequence part
+        if (!match(seq, /^[-A-Za-z.]+$/)) {
+            print "Error: Invalid sequence format on line " NR "."
+            valid = 0
+            exit 1
+        }
+    }
     END {
-        if (NR - 1 != num_sequences) {
-            print "Error: Number of sequences does not match specified count (" num_sequences ")."
+        if (idcounts != num_sequences) {
+            print "Error: Number of sequences " idcounts " does not match specified count (" num_sequences ")."
             valid = 0
         }
         exit valid ? 0 : 1

@@ -18,8 +18,10 @@ set -uo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version=1.0_2024-11-20  # phyml_protModelFinder.sh v1.0_2024-11-20; added citation.
-  # phyml_protModelFinder.sh 0.9_2023-11-17 ; 
+version=1.0_2024-12-03 # v1.0_2024-12-03 double-checks that the input file is a bona-fide PHYLIP alignment
+                       # - check_is_phylip now more strictly checks the full file, not only first line
+		       # - compute_AA_freq_in_phylip exits with 1 if it cannot compute the frequencies
+  # phyml_protModelFinder.sh v0.8_2023-11-17; 
   # - fixed phyml call using original matrix aa frequencies with -f m
   # - the change above makes phyml_protModelFinder.sh primates_21_AA.phy 5 select the same HIVb+G model, with same BIC & BICw as
   #   prottest3 -i primates_21_AA.phy -BIC -G -F -S 0 -threads 20
@@ -90,6 +92,7 @@ function check_dependencies()
     
     progs+=("${required_binaries[@]}")
     
+    
     for programname in "${progs[@]}"
     do
        if ! type -P "$programname"; then  # NOTE: will print paths of binaries to STDOUT (no >/dev/null)
@@ -147,9 +150,11 @@ function check_is_phylip()
    local phylip
    phylip=$1
    
-   if ! awk 'NR==1 && NF==2' "$phylip" &> /dev/null; then 
-       echo "FATAL ERROR: input file $phylip does not seem to by a canonical phylip alingment"
-       print_help
+   if [[ $(awk 'NR==1 && NF==2' "$phylip") ]] && [[ $(awk 'NR>1 && NF==2' "$phylip") ]]; then 
+       echo "$phylip looks OK"
+   else 
+       echo "FATAL ERROR: input file $phylip does not seem to be a canonical phylip alignment. Will exit now!"
+       exit 1
    fi
 }
 #-----------------------------------------------------------------------------------------
@@ -177,7 +182,7 @@ function compute_AA_freq_in_phylip()
               letters++
           }
        }
-    }
+    }else { print "FATAL ERROR: " FILENAME " does not seem to be a Phylip-formatted file. Will exit"; exit 1} 
   }
   # print relative frequency of each residue
   END {
@@ -300,10 +305,7 @@ SOURCE: the latest version of the program is available from GitHub at:
 	 https://github.com/vinuesa/TIB-filoinfo
 
 LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
-
-CITATION: Vinuesa P. (2023). Fast and easy selection of protein models for phylogenetics with phyml_protModelFinder.
-               https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_protModelFinder.sh
-
+   
 EoH
    
    exit 0
@@ -367,6 +369,8 @@ echo "- number of branches: $no_branches"
 
 echo "- observed amino acid frequencies:"
 compute_AA_freq_in_phylip "$infile"
+(($? > 0)) && { echo "FATAL ERROR: input file ${infile} does not seem to be a canonical phylip file. Will exit now!"; exit 1 ; }
+
 echo '--------------------------------------------------------------------------------'
 echo '' 
 

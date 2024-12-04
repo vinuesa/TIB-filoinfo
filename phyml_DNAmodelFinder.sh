@@ -51,9 +51,7 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='1.2.1_2024-12-3' # v'1.2.1_2024-12-3' double-checks that the input file is a bona-fide PHYLIP alignment
-                          # - check_is_phylip now more strictly checks the full file, not only first line
-			  # - compute_AA_freq_in_phylip exits with 1 if it cannot compute the frequencies
+version='1.2.2_2024-12-3' # v1.2.2_2024-12-3' strict check of phylip format
    # phyml_DNAmodelFinder.sh v1.2.0_2023-11-18; 
    # - implements extended (base) model set: 
    #	* 6 standard named models
@@ -495,18 +493,56 @@ function check_phyml_version {
 }
 #-----------------------------------------------------------------------------------------
 
-function check_is_phylip()
-{
-   local phylip
-   phylip=$1
-   
-   if [[ $(awk 'NR==1 && NF==2' "$phylip") ]] && [[ $(awk 'NR>1 && NF==2' "$phylip") ]]; then 
-       echo "$phylip looks OK"
-   else 
-       echo "FATAL ERROR: input file $phylip does not seem to by a canonical phylip alingment"
-       print_help
-   fi
+
+function check_is_phylip() {
+    local phylip_file="$1"
+
+    if [[ ! -f "$phylip_file" ]]; then
+        echo "Error: File not found: $phylip_file"
+        return 1
+    fi
+
+    awk '
+    BEGIN {
+        valid = 1
+    }
+    NR == 1 {
+        # First line: check for two integers separated by whitespace
+        if (!($1 ~ /^[0-9]+$/ && $2 ~ /^[0-9]+$/ && NF == 2)) {
+            print "Error: First line must contain two integers separated by whitespace."
+            valid = 0
+            exit 1
+        }
+        num_sequences = $1
+        sequence_length = $2
+    }
+    NR > 1 {
+        # Other lines: verify alignment and proper separation
+        id = substr($0, 1, 10)  # PHYLIP identifiers are typically up to 10 chars
+        seq = substr($0, 11)
+        gsub(/^ +| +$/, "", seq)  # Trim spaces around the sequence part
+        if (!match(seq, /^[-A-Za-z.]+$/)) {
+            print "Error: Invalid sequence format on line " NR "."
+            valid = 0
+            exit 1
+        }
+        # Check alignment (ensure space between ID and sequence)
+        if (substr($0, 10, 1) != " ") {
+            print "Error: No space separating ID and sequence on line " NR "."
+            valid = 0
+            exit 1
+        }
+    }
+    END {
+        if (NR - 1 != num_sequences) {
+            print "Error: Number of sequences does not match specified count (" num_sequences ")."
+            valid = 0
+        }
+        exit valid ? 0 : 1
+    }
+    ' "$phylip_file"
 }
+
 #-----------------------------------------------------------------------------------------
 
 function compute_nt_freq_in_phylip()
@@ -532,8 +568,6 @@ function compute_nt_freq_in_phylip()
               letters++
           }
        }
-    } else { 
-        print "FATAL ERROR: " FILENAME " does not seem to be a Phylip-formatted file. Will exit"; exit 1 
     } 
   }
   # print relative frequency of each residue

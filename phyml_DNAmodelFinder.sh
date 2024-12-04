@@ -51,13 +51,15 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='1.2.1_2024-11-20' # v1.2.1_2024-11-20; added citation
-  # phyml_DNAmodelFinder.sh v1.2.0_2023-11-18; 
-  # - implements extended (base) model set: 
-  #    * 6 standard named models
-  #    * 64 extended equal-frequency (ef) models (TIM and TVM sets)
-  #    * 62 extended unequal-frequency (uf) models (TIM and TVM sets)
-  # - minor code cleanup (removed unused variable)
+version='1.2.1_2024-12-3' # v'1.2.1_2024-12-3' double-checks that the input file is a bona-fide PHYLIP alignment
+                          # - check_is_phylip now more strictly checks the full file, not only first line
+			  # - compute_AA_freq_in_phylip exits with 1 if it cannot compute the frequencies
+   # phyml_DNAmodelFinder.sh v1.2.0_2023-11-18; 
+   # - implements extended (base) model set: 
+   #	* 6 standard named models
+   #	* 64 extended equal-frequency (ef) models (TIM and TVM sets)
+   #	* 62 extended unequal-frequency (uf) models (TIM and TVM sets)
+   # - minor code cleanup (removed unused variable)
 
 min_bash_vers=4.4 # required to write modern bash idioms:
                   # 1.  printf '%(%F)T' '-1' in print_start_time; and 
@@ -84,6 +86,7 @@ declare -A model_free_params  # hash mapping base models with their free paramet
 declare -a TIMef TVMef TIMuf TVMuf # array holding the model codes
 
 # To be implemented
+# http://www.iqtree.org/doc/Substitution-Models#dna-models
 #named_model_codes[JC]=000000
 #named_model_codes[F81]=000000
 #named_model_codes[K80]=010010
@@ -115,7 +118,7 @@ model_free_params['HKY85']=4
 model_free_params['TN93']=5
 model_free_params['GTR']=8
 
-### extended_models_ef - TVM* # 15
+### extended_models_ef - TVM* # 21
 
 model_free_params['012210ef']=2  # K81
 model_free_params['012314ef']=4  # TVMef
@@ -124,8 +127,8 @@ model_free_params['010213ef']=3  # TVM2ef
 model_free_params['012213ef']=3  # TVM3ef
 model_free_params['012013ef']=3  # TVM4ef
 model_free_params['010012ef']=2  # TVM5ef 
-model_free_params['012012ef']=2  # TVM6ef 
-model_free_params['010212ef']=2  # TVM7ef 
+model_free_params['012012ef']=2  # TVM6ef   # TPM3
+model_free_params['010212ef']=2  # TVM7ef   # TPM2
 model_free_params['010210ef']=2  # TVM8ef 
 model_free_params['012313ef']=3  # TVM9ef 
 model_free_params['010011ef']=1  # TVM10ef
@@ -164,7 +167,7 @@ TVMef[19]=010112
 TVMef[20]=010211
 
 
-### extended_models_ef - TNef|TIM*|SYM # 26
+### extended_models_ef - TNef|TIM*|SYM # 43
 model_free_params['010020ef']=2  # TNef
 model_free_params['012230ef']=3  # TIMef
 model_free_params['012345ef']=5  # SYMef
@@ -199,7 +202,7 @@ model_free_params['010203ef']=3  # TIM27ef
 model_free_params['010223ef']=3  # TIM28ef
 model_free_params['010230ef']=3  # TIM29ef
 model_free_params['012032ef']=3  # TIM30ef # < TIM3
-model_free_params['010233ef']=3  # TIM31ef
+model_free_params['010233ef']=3  # TIM31ef 
 model_free_params['001234ef']=4  # TIM32ef
 model_free_params['010234ef']=4  # TIM33ef
 model_free_params['011234ef']=4  # TIM34ef
@@ -211,11 +214,11 @@ model_free_params['012334ef']=4  # TIM39ef
 model_free_params['012341ef']=4  # TIM40ef
 model_free_params['012344ef']=4  # TIM41ef
 
-TIMef[0]=010020   #TNef
-TIMef[1]=012230
+TIMef[0]=010020   # TNef
+TIMef[1]=012230   # TIMef
 TIMef[2]=012345
 TIMef[3]=010023
-TIMef[4]=010232
+TIMef[4]=010232   # TIM2
 TIMef[5]=012232
 TIMef[6]=012332
 TIMef[7]=012342
@@ -257,9 +260,9 @@ TIMef[41]=012341
 TIMef[42]=012344
 
 
-## extended_models_uf TVM* # 16
+## extended_models_uf TVM* # 21
 model_free_params['012210']=5  # K81uf # K81=TPM1
-model_free_params['012314']=7  # TVM
+model_free_params['012314']=7  # TVM   # TVM
 model_free_params['012310']=6  # TVM1
 model_free_params['010213']=6  # TVM2
 model_free_params['012213']=6  # TVM3
@@ -282,14 +285,14 @@ model_free_params['010112']=5  # TVM18
 model_free_params['010211']=5  # TVM19
 
 TVMuf[0]=012210
-TVMuf[1]=012314
+TVMuf[1]=012314   # TVM
 TVMuf[2]=012310
 TVMuf[3]=010213
 TVMuf[4]=012213
 TVMuf[5]=012013
 TVMuf[6]=010012
 TVMuf[7]=012012   # TPM3
-TVMuf[8]=010212
+TVMuf[8]=010212   # TPM2
 TVMuf[9]=012313
 TVMuf[10]=010011
 TVMuf[11]=012212
@@ -305,7 +308,7 @@ TVMuf[19]=010112
 TVMuf[20]=010211
 
 
-## extended_models_uf TIM* # 25
+## extended_models_uf TIM* # 41
 model_free_params['012230']=6  # TIM   # < TIM1
 model_free_params['010023']=6  # TIM1
 model_free_params['010232']=7  # TIM2  # < TIM2
@@ -394,7 +397,7 @@ TIMuf[39]=012341
 TIMuf[40]=012344
 
 # array of models to evaluate
-standard_models=(JC69 K80 F81 HKY85 TN93 GTR)
+standard_models=(JC69 K80 F81 HKY85 TN93 GTR)      # 6
 
 extended_models_ef=( "${TIMef[@]}" "${TVMef[@]}" ) # 64
 
@@ -497,7 +500,9 @@ function check_is_phylip()
    local phylip
    phylip=$1
    
-   if ! awk 'NR==1 && NF==2' "$phylip" &> /dev/null; then 
+   if [[ $(awk 'NR==1 && NF==2' "$phylip") ]] && [[ $(awk 'NR>1 && NF==2' "$phylip") ]]; then 
+       echo "$phylip looks OK"
+   else 
        echo "FATAL ERROR: input file $phylip does not seem to by a canonical phylip alingment"
        print_help
    fi
@@ -527,7 +532,9 @@ function compute_nt_freq_in_phylip()
               letters++
           }
        }
-    }
+    } else { 
+        print "FATAL ERROR: " FILENAME " does not seem to be a Phylip-formatted file. Will exit"; exit 1 
+    } 
   }
   # print relative frequency of each residue
   END {
@@ -740,9 +747,6 @@ SOURCE: the latest version of the program is available on GitHub:
 	 https://github.com/vinuesa/TIB-filoinfo
 
 LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
-
-CITATION: Vinuesa P. (2023). Efficient two-step selection of DNA models with phyml_DNAmodelFinder.
-            https://github.com/vinuesa/TIB-filoinfo/blob/master/phyml_DNAmodelFinder.sh
    
 EoH
       
@@ -840,6 +844,7 @@ echo "- number of branches: $no_branches"
 
 echo "- observed nucleotide frequencies:"
 compute_nt_freq_in_phylip "$infile"
+(($? > 0)) && { echo "FATAL ERROR: input file ${infile} does not seem to be a canonical phylip file. Will exit now!"; exit 1 ; }
 echo '--------------------------------------------------------------------------------'
 echo ''
 

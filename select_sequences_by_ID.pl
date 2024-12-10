@@ -10,7 +10,8 @@ use File::Basename;
 
 
 my $progname = basename($0); # select_sequences_by_ID.pl
-my $version = '0.2_2024-11-01'; # V0.2_2024-11-05, improved description of the script's aim
+my $version = '0.3_2024-12-09'; # v0.3_2024-12-09; improved format description for IDs file
+                                # V0.2_2024-11-05, improved description of the script's aim.
                                 # v0.1_2024-11-02; first commit
 
 # Variables for command-line options
@@ -45,12 +46,19 @@ Options:
     --include|-i   Include only the sequences listed in the ID file
     --exclude|-e   Exclude the sequences listed in the ID file
     --help|-h      Show this help message
-
-Note:
-    Either --include or --exclude must be specified, but not both.
     
 AIM: select [include|exclude] sequences listed in --ids IDs.list from the
      user-provided multi-FASTA file, and write the filtered FASTA file to disk.
+     
+NOTES:
+  1. Either --include or --exclude must be specified, but not both.
+  2. The IDs file should only contain the sequence identifiers, 
+       without '>' or description, as shown below:
+         sp|P33519|RAN_DICDI
+         sp|P51159|RB27A_HUMAN
+         UYP46336.1
+         WP_147661765.1
+         ...
          
 END_HELP
     exit;

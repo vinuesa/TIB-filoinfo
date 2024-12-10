@@ -11,8 +11,8 @@ use File::Basename;
 #:      among the five C-terminal residues in Rab GTPases
 
 my $progname = basename($0); # extract_N-or_C-terminal_regions_and_compute_counts.pl
-my $version = '0.3_2024-11-05'; v0.3_2024-11-05; corrected version number and improved description of the script's aim and output
-
+my $version = '0.3.1_2024-12-09'; # v0.3.1_2024-12-09 added missing # before comment following version; 
+                                # v0.3_2024-11-05; corrected version number and improved description of the script's aim and output
                                 # v0.2_2024-11-02; added single letter options
                                 # v0.1_2024-11-01 first commit
 

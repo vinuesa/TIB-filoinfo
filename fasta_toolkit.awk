@@ -184,9 +184,9 @@ function print_help(prog, vers) # (program, version)
    print "    ./" prog " -R 3 -s 2 -e 5 input_DNA_or_PROT.fasta" > "/dev/stderr" 
    print "    ./" prog " -R 4 input_DNA.fasta" > "/dev/stderr" 
    print "    ./" prog " -R 5 input_DNA.fasta" > "/dev/stderr" 
-   print "    ./" prog " -R 6 input_DNA_or_PROT.fasta | sort -t$'\\t' -nk2,2" > "/dev/stderr" 
-   print "    ./" prog " -R 6 input_DNA_or_PROT.fasta | sort -t$'\\t' -nk2,2 | col_sumStats.sh" > "/dev/stderr" 
    print "    cat input.fasta | ./"prog " -R 5" > "/dev/stderr" 
+   print "    ./" prog " -R 6 input_DNA_or_PROT.fasta | sort -t$'\\t' -nk2,2" > "/dev/stderr" 
+   print "    ./" prog " -R 6 input_DNA_or_PROT.fasta | cut -f2 | col_sumStats.sh" > "/dev/stderr" 
 
    print "\n # Notes:" > "/dev/stderr" 
    print "    1. Pass only single FASTA files to " prog > "/dev/stderr" 
@@ -270,7 +270,8 @@ BEGIN {
     Optind = 1    # skip ARGV[0]
     
     progname = "fasta_toolkit.awk"
-    version  = 0.6  # v0.6 Nov 2, 2024, added -R 6, to compute only sequence lengths for DNA or Protein sequences; improved documentation
+    version  = 0.7  # v0.7 Dec 9, 2024, added improved documentation to parse sequence-length stats with col_sumStats.sh
+                    # v0.6 Nov 2, 2024, added -R 6, to compute only sequence lengths for DNA or Protein sequences; improved documentation
                     # v0.5 dec 30, 2020, added -M string for -R 1, to select sequences not matching string (revMatch)
                     # v0.4 dec 25, 2020. added PROCINFO["sorted_in"] = "@ind_num_asc" to print sorted results
                     # v0.3 dec 23, 2020. Prints warning and does not exit, if dna_seq not divisible by 3

@@ -18,7 +18,10 @@ set -uo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='2.0_2024-12-11' # v2.0_2024-12-11; major upgrade: added getopts interface; improved checking of user-provided input data and parameters.
+version='2.1_2024-12-12_GUADALUPE' # v2.1_2024-12-12_GUADALUPE; major upgrade
+                                   # - added getopts interface with key options -m -s -b to control model set, search and branch-support methods.
+				   # - improved checking of user-provided input data and parameters.
+  # v2.0_2024-12-11; major upgrade: added getopts interface; improved checking of user-provided input data and parameters.
   # v1.2_2024-12-03 fixed check_is_phylip
   # phyml_protModelFinder.sh v0.8_2023-11-17; 
   # - fixed phyml call using original matrix aa frequencies with -f m
@@ -40,6 +43,7 @@ phymlyr=''
 n_starts=1
 model_set=''
 search_method=BEST
+boot=-5
 
 # declare array and hash variables
 declare -a models        # array holding the base models (empirical substitution matrices to be evaluated)
@@ -330,13 +334,12 @@ EOF
 function print_help {
    # Prints the help message explaining how to use the script.
    cat <<EOF
- USAGE for $progname v$version 
-   
- Usage: $progname -i <infile> -s <model set to evaluate> [ -h <print help>] [-r <number of random seed trees>] [-S <SEARCH METHOD>] [ -v <print version>]
+ USAGE for $progname v$version:
+ $progname -i <infile> -m <model set to evaluate> [-b <(-)int>] [ -h <print help>] [-r <number of random seed trees>] [-s <SEARCH METHOD>] [ -v <print version>]
  
  REQUIRED:
   -i <string> input alignment in PHYLIP format
-  -s <int> model set to evaluate by BIC
+  -m <int> model set to evaluate by BIC
        1 -> nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
        2 -> organellar genes (CpREV MTMAM MtREV MtArt)
        3 -> nuclear and organellar (1 + 2)
@@ -347,13 +350,23 @@ function print_help {
 
  OPTIONAL
   -h <flag> print help (this message)
-  -S <NNI|SPR|BEST> Search (branch-swapping) method; default:$search_method
+  -b <int>
+      int > 0: int is the number of bootstrap replicates.
+       0: neither approximate likelihood ratio test nor bootstrap values are computed.
+      -1: approximate likelihood ratio test returning aLRT statistics.
+      -2: approximate likelihood ratio test returning Chi2-based parametric branch supports.
+      -4: SH-like branch supports alone.
+      -5: (default) approximate Bayes branch supports.  
+  -s <NNI|SPR|BEST> Search (branch-swapping) method; default:$search_method
   -r <integer> number of random start trees to use for sequential searches; default rand_starts:$n_starts
   -v <flag> print version
  
  EXAMPLES:
-   $progname -i my_PHYLIP_alignment.phy -s 1 -r 10
+   $progname -i my_PHYLIP_alignment.phy -m 1 -b -4 -r 10
  
+ NOTES: 
+  1. Assumes protein input sequences are ALIGNED and in (relaxed) PHYLIP format 
+	 
  AIM: $progname v${version} will evaluate the fit of the the seleced model set,
        combined or not with +G and/or +f, computing AICi, BICi, deltaBIC, BICw 
 	and inferring the ML tree under the BIC-selected model and the 
@@ -372,9 +385,6 @@ function print_help {
  LICENSE: GPL v3.0. 
     See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
     
- NOTES: 
-  1. Assumes protein input sequences are ALIGNED and in (relaxed) PHYLIP format 
-	 
 EOF
    
    exit 1  
@@ -397,17 +407,19 @@ EOF
 
 args=("$@")
 
-while getopts ':i:r:s:S:hv?:' OPTIONS
+while getopts ':b:i:r:m:s:hv?:' OPTIONS
 do
    case $OPTIONS in
 
+   b)   boot=$OPTARG
+        ;;
    i)   infile=$OPTARG
         ;;
-   s)   model_set=$OPTARG
+   m)   model_set=$OPTARG
         ;;
    r)   n_starts=$OPTARG
         ;;
-   S)   search_method=$OPTARG
+   s)   search_method=$OPTARG
         ;;	
    h)   print_help
         ;;
@@ -452,6 +464,17 @@ if (( model_set < 1 )) || (( model_set > 7 )); then
    print_help
 fi
 
+if (( boot < -5 )); then
+   echo "# you are setting branch support value mode to $boot; values < -5 are not allowed!"
+   print_help
+fi
+
+if (( boot > 10000 )); then
+   echo "# you are setting bootstrapping to $boot; that will take a very long time to compute. Use a number of pseudoreplicates <= 10000"
+   print_help
+fi
+
+
 # Check that the provided search_method matches the allowed set
 regex='NNI|SPR|BEST'
 
@@ -492,7 +515,7 @@ echo "# cheching basic dependencies ..."
 check_dependencies
 
 echo "# Run parameters:"
-echo "# infile:$infile; model_set:$model_set; search_method:$search_method; seed trees: $n_starts"; mpi_OK:$mpi_OK;
+echo "# infile:$infile; model_set:$model_set; search_method:$search_method; seed trees: $n_starts"; branch_support_type:$boot; mpi_OK:$mpi_OK;
 echo "========================================================================================="
 echo ''
 
@@ -689,15 +712,15 @@ echo "... will estimate the ML tree under best-fitting model $best_model selecte
 print_start_time
 
 if ((n_starts == 1)); then
-    echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s $search_method"
+    echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s $search_method -b $boot"
 
     # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail
-    phyml -i "$infile" -d aa -m ${model_cmds[$best_model]} -o tlr -s "$search_method" &> /dev/null
+    phyml -i "$infile" -d aa -m ${model_cmds[$best_model]} -o tlr -s "$search_method"  -b "$boot" &> /dev/null
 else
-    echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s $search_method --rand_start --n_rand_starts $n_starts"
+    echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s $search_method --rand_start --n_rand_starts $n_starts  -b $boot"
     
     # note that on tepeu (Bash 4.4), the quotes around "${model_cmds[$best_model]}" make the command fail
-    phyml -i "$infile" -d aa -m ${model_cmds[$best_model]} -o tlr -s "$search_method" --rand_start --n_rand_starts "$n_starts" &> /dev/null
+    phyml -i "$infile" -d aa -m ${model_cmds[$best_model]} -o tlr -s "$search_method" --rand_start --n_rand_starts "$n_starts"  -b "$boot" &> /dev/null
 
 fi
 

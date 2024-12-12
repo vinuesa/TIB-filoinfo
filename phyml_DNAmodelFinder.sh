@@ -51,7 +51,10 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='1.2.3_2024-12-3' # v1.2.3_2024-12-3' strict check of phylip format
+version='2.0_2024-12-12_GUADALUPE' # v2.0_2024-12-12_GUADALUPE; major upgrade
+                                   # - added getopts interface with key options -m -s -b to control model set, search and branch-support methods.
+				   # - improved checking of user-provided input data and parameters.
+   # v1.2.2_2024-12-3' strict check of phylip format
    # phyml_DNAmodelFinder.sh v1.2.0_2023-11-18; 
    # - implements extended (base) model set: 
    #	* 6 standard named models
@@ -68,11 +71,15 @@ min_bash_vers=4.4 # required to write modern bash idioms:
 min_phyml_version=3.3 # this corresponds to 3.3.year; check_phyml_version also extracts the year, suggesting to update to v2022
 phymlv=''
 phymlyr=''
+model_set=''
 
 DEBUG=0
 
 n_starts=1         # seed trees
 delta_BIC_cutoff=2 # to set compositional_heterogeneity, transitional_heterogeneity and pInv flags 
+search_method=BEST # BEST of NNI and SPR at each move
+boot=-5
+
 
 # declare array and hash variables
 declare -a models             # array holding the base models (empirical substitution matrices to be evaluated)
@@ -451,6 +458,13 @@ function check_dependencies()
 }
 #-----------------------------------------------------------------------------------------
 
+function print_version()
+{
+   echo "$progname v$version"
+   exit 0
+}
+#-----------------------------------------------------------------------------------------
+
 function check_bash_version()
 {
    local bash_vers min_bash_vers
@@ -745,117 +759,233 @@ EOF
 }
 #----------------------------------------------------------------------------------------- 
 
-function print_help(){
+function print_help {
+   # Prints the help message explaining how to use the script.
 
    bash_vers=$(check_bash_version "$min_bash_vers")
    bash_ge_5=$(awk -v bv="$bash_vers" 'BEGIN { if (bv >= 5.0){print 1}else{print 0} }')   
    
-if ((bash_ge_5 > 0)); then 
-   cat <<EoH
+if (( bash_ge_5 > 0)); then 
 
-$progname v${version} requires two arguments provided on the command line, the third one being optional:
-
-$progname <string [aligned DNA sequences in PHYLIP format)> <int [model sets:1-3]> <int [no_rdm_starts; default:$n_starts]>
+ cat <<EOF
+ USAGE for $progname v$version:
+ $progname -i <infile> -m <model set to evaluate> [-b <(-)int>] [ -h <print help>] [-r <number of random seed trees>] [-s <SEARCH METHOD>] [ -v <print version>]
  
-# model sets to choose from: 
-1 -> standard models (JC69 K80 F81 HKY85 TN93 GTR)
+ REQUIRED:
+  -i <string> input alignment in PHYLIP format
+  -m <int> model set to evaluate by BIC
+       1 -> standard models (JC69 K80 F81 HKY85 TN93 GTR)
+       2 -> WILL NOT RUN properly on Bash < v5.0, sorry (see NOTE below) 
+       3 -> minimal test set (JC69 F81 HKY85 TN93)
 
-2 -> standard + ${#extended_models_ef[@]} extended_ef_models, OR
-     standard + ${#extended_models_uf[@]} extended_uf_models 
-     			     
-NOTE: $progname automatically chooses the proper extended set (ef|uf) to evaluate, 
-        based on delta_BIC evaluation of compositional bias (JC69 vs. F81)
+ OPTIONAL
+  -h <flag> print help (this message)
+  -b <int>
+      int > 0: int is the number of bootstrap replicates.
+       0: neither approximate likelihood ratio test nor bootstrap values are computed.
+      -1: approximate likelihood ratio test returning aLRT statistics.
+      -2: approximate likelihood ratio test returning Chi2-based parametric branch supports.
+      -4: SH-like branch supports alone.
+      -5: (default) approximate Bayes branch supports.  
+  -s <NNI|SPR|BEST> search (branch-swapping) method; default:$search_method
+  -r <integer> number of random start trees to use for sequential searches; default rand_starts:$n_starts
+  -v <flag> print version
  
-3 -> minimal test set (JC69 F81 HKY85 TN93)
-
-EXAMPLE: $progname primates.phy 2
+ EXAMPLE:
+   $progname -i my_PHYLIP_alignment.phy -m 2 -b -4 -r 10 -s NNI
  
-AIM:  $progname v${version} will evaluate the fit of the selected model set,
-	combined or not with +G and/or +f, computing AICi, BICi, deltaBIC and BICw, 
-     	  inferring the ML tree under the BIC-selected model.  
-
-PROCEDURE:
- - Models are fitted using a fixed BioNJ-JC tree, optimizing branch lengths and rates 
-      to calculate their AICi, BICi, delta_BIC and BICw
- - Only relevant models among the extended set are evaluated, based on delta_BIC
-      comparisons between JC69-F81, to decide if ef|uf models should be evaluated,
-      and comparisons between KHY85-TN93 to determine if models with two Ti rates should 
-      be evaluated
- - pInv is automatically excluded in the extended model set, 
-	if the delta_BICi_HKY+G is =< $delta_BIC_cutoff when compared with the BIC_HKY+G+I
- - The best model is selected by BIC
- - SPR searches can be launched starting from multiple random trees
- - Default single seed tree searches use a BioNJ tree with BEST moves
-     
-SOURCE: the latest version of the program is available on GitHub:
-	 https://github.com/vinuesa/TIB-filoinfo
-
-LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
-   
-EoH
-      
-else
-   cat <<EoH
-
-$progname v${version} requires two arguments provided on the command line, the third one being optional:
-
-$progname <string [input phylip file (aligned DNA sequences)> <int [model sets:1|3]> <int [no_rdm_starts; default:$n_starts]>
- 
-   # model sets to choose from: 
-   1 -> (JC69 K80 F81 HKY85 TN93 GTR)
-   2 -> WILL NOT RUN properly on Bash < v5.0, sorry (see NOTE below) 
-   3 -> minimal test set (JC K80 F81 HKY85 TN93)
-
-AIM:  $progname v${version} will evaluate the fit of the selected model set,
+ NOTES: 1. Assumes DNA input sequences are ALIGNED and in (relaxed) PHYLIP format 
+	 
+ AIM:  $progname v${version} will evaluate the fit of the selected model set,
 	combined or not with +G and/or +f, computing AICi, BICi, deltaBIC and BICw, 
      	  inferring the ML tree under the BIC-selected model  
 
-PROCEDURE
+ PROCEDURE
   - Models are fitted using a fixed NJ-JC tree, optimizing branch lenghts and rates 
        to calculate their AICi, BICi, delta_BIC and BICw
   - The best model is selected by BIC
   - SPR searches can be launched starting from multiple random trees
   - Default single seed tree searches use a BioNJ with BEST moves     
       
-SOURCE: the latest version of the program is available on GitHub:
+ SOURCE: the latest version of the program is available on GitHub:
 	 https://github.com/vinuesa/TIB-filoinfo
 
-LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
+ LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
 
-NOTE: you are running the old Bash version $bash_vers. 
-      Update to version >=5.0 to profit from the full set of models 
-        and features implemented in $progname
+EOF
 
-EoH
+else
+
+ cat <<EOF
+ USAGE for $progname v$version: 
+ $progname -i <infile> -m <model set to evaluate> [-b <(-)int>] [ -h <print help>] [-r <number of random seed trees>] [-s <SEARCH METHOD>] [ -v <print version>]
+ 
+ REQUIRED:
+  -i <string> input alignment in PHYLIP format
+  -m <int> model set to evaluate by BIC
+       1 -> standard models (JC69 K80 F81 HKY85 TN93 GTR)
+       2 -> WILL NOT RUN properly on Bash < v5.0, sorry (see NOTE below) 
+       3 -> minimal test set (JC69 F81 HKY85 TN93)
+
+ OPTIONAL
+  -h <flag> print help (this message)
+  -b <int>
+      int > 0: int is the number of bootstrap replicates.
+       0: neither approximate likelihood ratio test nor bootstrap values are computed.
+      -1: approximate likelihood ratio test returning aLRT statistics.
+      -2: approximate likelihood ratio test returning Chi2-based parametric branch supports.
+      -4: SH-like branch supports alone.
+      -5: (default) approximate Bayes branch supports.  
+  -s <NNI|SPR|BEST> search (branch-swapping) method; default:$search_method
+  -r <integer> number of random start trees to use for sequential searches; default rand_starts:$n_starts
+  -v <flag> print version
+ 
+ EXAMPLE:
+   $progname -i my_PHYLIP_alignment.phy -m 1 -b -4 -s NNI -r 10
+
+ NOTES: 1. you are running the old Bash version $bash_vers. 
+           Update to version >=5.0 to profit from the full set of models 
+             and features implemented in $progname
+        2. Assumes DNA input sequences are ALIGNED and in (relaxed) PHYLIP format 
+
+
+ AIM:  $progname v${version} will evaluate the fit of the selected model set,
+	combined or not with +G and/or +f, computing AICi, BICi, deltaBIC and BICw, 
+     	  inferring the ML tree under the BIC-selected model  
+
+ PROCEDURE
+  - Models are fitted using a fixed NJ-JC tree, optimizing branch lenghts and rates 
+       to calculate their AICi, BICi, delta_BIC and BICw
+  - The best model is selected by BIC
+  - SPR searches can be launched starting from multiple random trees
+  - Default single seed tree searches use a BioNJ with BEST moves     
+      
+ SOURCE: the latest version of the program is available on GitHub:
+	 https://github.com/vinuesa/TIB-filoinfo
+
+ LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
+
+EOF
+
+fi
    
-   fi
-   
-   exit 0
-
+   exit 1  
 }
+
 #-----------------------------------------------------------------------------------------
 #============================= END FUNCTION DEFINITIONS ==================================
 #=========================================================================================
+#------------------------------------#
+#----------- GET OPTIONS ------------#
+#------------------------------------#
+# This section uses getopts to process command-line arguments 
+#    and set the corresponding variables accordingly. 
+
+[ $# -eq 0 ] && print_help
+
+args=("$@")
+
+while getopts ':b:i:m:r:s:hv?:' OPTIONS
+do
+   case $OPTIONS in
+
+   b)   boot=$OPTARG
+        ;;
+   i)   infile=$OPTARG
+        ;;
+   m)   model_set=$OPTARG
+        ;;
+   r)   n_starts=$OPTARG
+        ;;
+   s)   search_method=$OPTARG
+        ;;	
+   h)   print_help
+        ;;
+   v)   print_version
+        ;;
+   :)   printf "argument missing from -%s option\n" "$OPTARG"
+   	 print_help
+     	 ;;
+   ?)   echo "need the following args: "
+   	 print_help
+	 ;;
+   *)   echo "An  unexpected parsing error occurred"
+         echo
+         print_help
+	 ;;	 
+   esac >&2   # print the ERROR MESSAGES to STDERR
+done
+
+shift $((OPTIND - 1))
+
+# Check required params were provided
+if [[ -z "$infile" ]]; then
+       echo "Missing required input PHYLIP file name: -i <input>"
+       print_help
+fi
+
+if [[ -z "$model_set" ]]; then
+       echo "Missing required model_set option: -s <1|2|3>" warn
+       print_help
+fi
+
+# Validate user-provided data and params
+[[ ! -s "$infile" ]] && echo "FATAL ERROR: could not find $infile in $wkd" && exit 1
+
+# Check input file is a relaxed or canonical PHYLIP file
+if ! check_is_phylip "$infile" &> /dev/null; then 
+   echo "FATAL ERROR: input file ${infile} does not seem to be a canonical phylip file. Will exit now!"
+   exit 1
+fi 
+
+if (( model_set < 1 )) || (( model_set > 3 )); then
+   print_help
+fi
+
+if (( model_set == 2 )) && (( bash_ge_5 < 0 )); then
+   echo "You are using bash version $bash_vers, which is incopatible with model_set == 2; upgrade your Bash, or use model_set == 1"
+   print_help
+fi
+
+
+if (( boot < -5 )); then
+   echo "# you are setting branch support value mode to $boot; values < -5 are not allowed!"
+   print_help
+fi
+
+if (( boot > 10000 )); then
+   echo "# you are setting bootstrapping to $boot; that will take a very long time to compute. Use a number of pseudoreplicates <= 10000"
+   print_help
+fi
+
+
+# Check that the provided search_method matches the allowed set
+regex='NNI|SPR|BEST'
+
+if ! [[ "$search_method" =~ $regex ]]; then
+   echo "ERROR: the provided search_method '-S $search_method' does not match the allowed set $regex"
+   exit 1
+fi
 
 # ============ #
 # >>> MAIN <<<
 # ------------ #
+# Main script logic starts here
 
 ## Check environment
 # 0. Check that the input file was provided, and that the host runs bash >= v4.3
-(( $# < 2 )) || (( $# > 3 )) && print_help
-
-infile="$1"
-model_set="$2"
-n_starts="${3:-1}"
+echo "# invocation: $progname " "${args[@]}"
 
 wkd=$(pwd)
 
+
+## Check Bash & PhyMLs vesions
+# check PhyML version
+echo "# checking PhyML version"
 phymlv=$(check_phyml_version "$min_phyml_version")
 phymlyr=$(echo "$phymlv" | cut -d_ -f2)
    
-check_is_phylip "$infile"
-
+   
 # OK, ready to start the analysis ...
 start_time=$SECONDS
 echo "========================================================================================="
@@ -869,7 +999,7 @@ echo "# running with phyml v.${phymlv}"
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
 echo "# workding directory: $wkd"
 check_dependencies
-echo "# infile:$infile; model_set:$model_set => ${model_options[$model_set]}; seed trees: $n_starts; delta_BIC_cutoff=$delta_BIC_cutoff" 
+echo "# infile:$infile; model_set:$model_set => ${model_options[$model_set]}; seed trees: $n_starts; delta_BIC_cutoff=$delta_BIC_cutoff; branch_support_type=$boot"
 echo "========================================================================================="
 echo ''
 
@@ -1277,15 +1407,15 @@ print_start_time
 ((compositional_heterogeneity == 0)) && best_model=${best_model%ef}
 
 if ((n_starts == 1)); then
-    echo "# running: phyml -i $infile -d nt -m ${model_cmds[${best_model}]} -o tlr -s BEST"
+    echo "# running: phyml -i $infile -d nt -m ${model_cmds[${best_model}]} -o tlr -s $search_method -b $boot"
 
-    # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail (Bash v4.4)
-    phyml -i "$infile" -d nt -m ${model_cmds[${best_model}]} -o tlr -s BEST &> /dev/null
+    # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the command fail (Bash v4.4)
+    phyml -i "$infile" -d nt -m ${model_cmds[${best_model}]} -o tlr -s $search_method -b "$boot" &> /dev/null
 else
-    echo "# running: phyml -i $infile -d nt -m ${model_cmds[${best_model}]} -o tlr -s SPR --rand_start --n_rand_starts $n_starts"
+    echo "# running: phyml -i $infile -d nt -m ${model_cmds[${best_model}]} -o tlr -s $search_method --rand_start --n_rand_starts $n_starts -b $boot"
 
     # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail (Bash v4.4)
-    phyml -i "$infile" -d nt -m ${model_cmds[${best_model}]} -o tlr -s SPR --rand_start --n_rand_starts "$n_starts" &> /dev/null
+    phyml -i "$infile" -d nt -m ${model_cmds[${best_model}]} -o tlr -s "$search_method" --rand_start --n_rand_starts "$n_starts" -b "$boot" &> /dev/null
 fi
 
 
@@ -1293,13 +1423,13 @@ fi
 if [[ -s "${infile}"_phyml_stats.txt ]]; then
      
      if ((n_starts == 1)); then
-         mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_BESTmoves_phyml_stats.txt
+         mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_"${search_method}"moves_phyml_stats.txt
          echo "# Your results:"
-         echo "  - ${infile}_${best_model}_BESTmoves_phyml_stats.txt"
+         echo "  - ${infile}_${best_model}_${search_method}moves_phyml_stats.txt"
      else
-         mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_"${n_starts}"rdmStarts_SPRmoves_phyml_stats.txt
+         mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_"${n_starts}"rdmStarts_"${search_method}"moves_phyml_stats.txt
          echo "# Your results:"
-         echo "  - ${infile}_${best_model}_${n_starts}rdmStarts_SPRmoves_phyml_stats.txt"
+         echo "  - ${infile}_${best_model}_${n_starts}rdmStarts_${search_method}moves_phyml_stats.txt"
      fi
 else
      echo "FATAL ERROR: ${infile}_phyml_stats.txt was not generated!"
@@ -1307,11 +1437,11 @@ fi
 
 if [[ -s "${infile}"_phyml_tree.txt ]]; then
      if ((n_starts == 1)); then
-         mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_BESTmoves_phyml_tree.txt
-         echo "  - ${infile}_${best_model}_BESTmoves_phyml_tree.txt"
+         mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_"${search_method}"moves_phyml_tree.txt
+         echo "  - ${infile}_${best_model}_${search_method}moves_phyml_tree.txt"
      else
-         mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_"${n_starts}"rdmStarts_SPRmoves_phyml_tree.txt
-         echo "  - ${infile}_${best_model}_${n_starts}rdmStarts_SPRmoves_phyml_tree.txt"
+         mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_"${n_starts}"rdmStarts_"${search_method}"moves_phyml_tree.txt
+         echo "  - ${infile}_${best_model}_${n_starts}rdmStarts_${search_method}moves_phyml_tree.txt"
      fi
 else
      echo "FATAL ERROR: ${infile}_phyml_tree.txt was not generated!"

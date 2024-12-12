@@ -18,9 +18,9 @@ set -uo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='2.1_2024-12-12_GUADALUPE' # v2.1_2024-12-12_GUADALUPE; major upgrade
-                                   # - added getopts interface with key options -m -s -b to control model set, search and branch-support methods.
-				   # - improved checking of user-provided input data and parameters.
+version='2.1.2_2024-12-12_GUADALUPE' # v2.1.2_2024-12-12_GUADALUPE; major upgrade
+                                     # - added getopts interface with key options -m -s -b to control model set, search and branch-support methods.
+				     # - improved checking of user-provided input data and parameters.
   # v2.0_2024-12-11; major upgrade: added getopts interface; improved checking of user-provided input data and parameters.
   # v1.2_2024-12-03 fixed check_is_phylip
   # phyml_protModelFinder.sh v0.8_2023-11-17; 
@@ -447,7 +447,7 @@ if [[ -z "$infile" ]]; then
 fi
 
 if [[ -z "$model_set" ]]; then
-       echo "Missing required model_set option: -s <1|2|3|4|5|6|7>" warn
+       echo "Missing required model_set option: -m <1|2|3|4|5|6|7>" warn
        print_help
 fi
 
@@ -515,7 +515,7 @@ echo "# cheching basic dependencies ..."
 check_dependencies
 
 echo "# Run parameters:"
-echo "# infile:$infile; model_set:$model_set; search_method:$search_method; seed trees: $n_starts"; branch_support_type:$boot; mpi_OK:$mpi_OK;
+echo "# infile:$infile; model_set:$model_set; search_method:$search_method; seed trees:$n_starts; branch_support_type:$boot; mpi_OK:$mpi_OK"
 echo "========================================================================================="
 echo ''
 

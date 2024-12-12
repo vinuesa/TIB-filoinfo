@@ -51,9 +51,10 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='2.0_2024-12-12_GUADALUPE' # v2.0_2024-12-12_GUADALUPE; major upgrade
-                                   # - added getopts interface with key options -m -s -b to control model set, search and branch-support methods.
-				   # - improved checking of user-provided input data and parameters.
+version='2.1.0_2024-12-12_GUADALUPE' # v2.1.0_2024-12-12_GUADALUPE: fixed awk exp() out of range error message, by replacing with 2.7183^()
+   # v2.0_2024-12-12_GUADALUPE; major upgrade
+   # - added getopts interface with key options -m -s -b to control model set, search and branch-support methods.
+   # - improved checking of user-provided input data and parameters.
    # v1.2.2_2024-12-3' strict check of phylip format
    # phyml_DNAmodelFinder.sh v1.2.0_2023-11-18; 
    # - implements extended (base) model set: 
@@ -1345,10 +1346,17 @@ do
 done
 
 # 7.2 Compute the BICw_sums (denominator) of BICw
+# e (Euler's number; constant | e = 2.718281828459) base of the natural logarithm and exponential function
+#  use e^(-1/2 * delta) instead of exp(-1/2 * delta) to avoid exponential out of range messages like:
+#  awk: cmd. line:1: warning: exp: argument -1233.51 is out of range # on chaac
+# https://stackoverflow.com/questions/69285812/awk-error-argument-is-out-of-the-range-how-to-solve-this-problem
+# https://www.rapidtables.com/math/number/e_constant.html
+e=2.718281828459
 BICw_sums=0
 for i in "${BIC_deltas_a[@]}"; do 
    #echo "DEBUG: delta=$i 'BEGIN{printf '%.10f', exp(-1/2 * delta) }')"
-   BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }')  
+   #BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }' 2> /dev/null)  
+   BICw_numerator=$(awk -v delta="$i" -v e="$e" 'BEGIN{printf "%.10f", e^(-1/2 * delta) }' 2> /dev/null)
    #echo "DEBUG num:$BICw_numerator"
    BICw_sums=$(bc <<< "$BICw_sums"'+'"$BICw_numerator")
 done
@@ -1359,7 +1367,8 @@ BICw_a=()
 BICcumW_a=()
 BICcumW=0
 for i in "${BIC_deltas_a[@]}"; do
-   BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }' 2> /dev/null)   
+   #BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }' 2> /dev/null)   
+   BICw_numerator=$(awk -v delta="$i" -e="$e" 'BEGIN{printf "%.10f", e^(-1/2 * delta) }' 2> /dev/null) 
    BICw=$(echo "$BICw_numerator / $BICw_sums" | bc -l)
    BICw_a+=( $(printf "%.2f" "$BICw") )
    BICcumW=$(echo "$BICcumW + $BICw" | bc)

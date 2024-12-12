@@ -72,6 +72,7 @@ min_phyml_version=3.3 # this corresponds to 3.3.year; check_phyml_version also e
 phymlv=''
 phymlyr=''
 model_set=''
+bash_ge_5=''
 
 DEBUG=0
 
@@ -925,7 +926,7 @@ if [[ -z "$infile" ]]; then
 fi
 
 if [[ -z "$model_set" ]]; then
-       echo "Missing required model_set option: -s <1|2|3>" warn
+       echo "Missing required model_set option: -m <1|2|3>" warn
        print_help
 fi
 
@@ -996,9 +997,12 @@ awk -v bv="$bash_vers" -v mb="$min_bash_vers" \
 echo "# running with phyml v.${phymlv}"
 ((phymlyr < 2022)) && printf '%s\n%s\n' "# Warning: running old PhyML version from $phymlyr!" "   Update to the latest one, using the phyml's GitHub repo: https://github.com/stephaneguindon/phyml/releases" 
 
+check_dependencies
+
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
 echo "# workding directory: $wkd"
-check_dependencies
+
+# Print run parameters
 echo "# infile:$infile; model_set:$model_set => ${model_options[$model_set]}; seed trees: $n_starts; delta_BIC_cutoff=$delta_BIC_cutoff; branch_support_type=$boot"
 echo "========================================================================================="
 echo ''

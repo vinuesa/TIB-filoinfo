@@ -18,8 +18,8 @@ set -uo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version=1.2_2024-12-03 # v1.2_2024-12-03 fixed check_is_phylip
-
+version='2.0_2024-12-11' # v2.0_2024-12-11; major upgrade: added getopts interface; improved checking of user-provided input data and parameters.
+  # v1.2_2024-12-03 fixed check_is_phylip
   # phyml_protModelFinder.sh v0.8_2023-11-17; 
   # - fixed phyml call using original matrix aa frequencies with -f m
   # - the change above makes phyml_protModelFinder.sh primates_21_AA.phy 5 select the same HIVb+G model, with same BIC & BICw as
@@ -38,6 +38,8 @@ phymlyr=''
 
 # by default, use a single seed tree (BioNJ)
 n_starts=1
+model_set=''
+search_method=BEST
 
 # declare array and hash variables
 declare -a models        # array holding the base models (empirical substitution matrices to be evaluated)
@@ -108,6 +110,13 @@ function check_dependencies()
     echo
     echo '# Run check_dependencies() ... looks good: all required binaries are in place.'
     echo ''
+}
+#-----------------------------------------------------------------------------------------
+
+function print_version()
+{
+   echo "$progname v$version"
+   exit 0
 }
 #-----------------------------------------------------------------------------------------
 
@@ -318,74 +327,157 @@ EOF
 }
 #----------------------------------------------------------------------------------------- 
 
-function print_help(){
-
-   cat <<EoH
-
-$progname v${version} requires two arguments provided on the command line:
-
-$progname <string [input phylip file (aligned PROTEIN sequences)> <int [model sets:1-7]> <int [num random seed trees; default:$n_starts]>
+function print_help {
+   # Prints the help message explaining how to use the script.
+   cat <<EOF
+ USAGE for $progname v$version 
+   
+ Usage: $progname -i <infile> -s <model set to evaluate> [ -h <print help>] [-r <number of random seed trees>] [-S <SEARCH METHOD>] [ -v <print version>]
  
-   # model sets to choose from: 
-   1 -> nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
-   2 -> organellar genes (CpREV MTMAM MtREV MtArt)
-   3 -> nuclear and organellar (1 + 2)
-   4 -> retroviral genes (HIVw HIVb RtREV)
-   5 -> nuclear + retroviral genes (1 + 4)
-   6 -> all (1+2+3+4+5)
-   7 -> test (JTT LG)
+ REQUIRED:
+  -i <string> input alignment in PHYLIP format
+  -s <int> model set to evaluate by BIC
+       1 -> nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
+       2 -> organellar genes (CpREV MTMAM MtREV MtArt)
+       3 -> nuclear and organellar (1 + 2)
+       4 -> retroviral genes (HIVw HIVb RtREV)
+       5 -> nuclear + retroviral genes (1 + 4)
+       6 -> all (1+2+3+4+5)
+       7 -> test (JTT LG)
 
-EXAMPLE: $progname primates_21_AA.phy 5 10
+ OPTIONAL
+  -h <flag> print help (this message)
+  -S <NNI|SPR|BEST> Search (branch-swapping) method; default:$search_method
+  -r <integer> number of random start trees to use for sequential searches; default rand_starts:$n_starts
+  -v <flag> print version
+ 
+ EXAMPLES:
+   $progname -i my_PHYLIP_alignment.phy -s 1 -r 10
+ 
+ AIM: $progname v${version} will evaluate the fit of the the seleced model set,
+       combined or not with +G and/or +f, computing AICi, BICi, deltaBIC, BICw 
+	and inferring the ML tree under the BIC-selected model and the 
+	use-selected search method (N|S|B) and number os start trees.
 
-AIM:  $progname v${version} will evaluate the fit of the the seleced model set,
-	combined or not with +G and/or +f, computing AICi, BICi, deltaBIC, BICw 
-     	  and inferring the ML tree under the BIC-selected model  
-
-PROCEDURE
-     - Models are fitted using a fixed NJ-LG tree, optimizing branch lenghts and rates 
-     	  to calculate their AICi, BICi, delta_BIC and BICw
-     - The best model is selected by BIC
-     - SPR searches can be launched starting from multiple random trees
-     - Default single seed tree searches use a BioNJ with BEST moves     
-
-SOURCE: the latest version of the program is available from GitHub at:
-	 https://github.com/vinuesa/TIB-filoinfo
-
-LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
+ PROCEDURE
+   - Models are fitted using a fixed NJ-LG tree, optimizing branch lenghts and rates 
+	to calculate their AICi, BICi, delta_BIC and BICw
+   - The best model is selected by BIC
+   - SPR searches can be launched starting from multiple random trees
+   - Default single seed tree searches use a BioNJ with BEST moves     
    
-EoH
    
-   exit 0
-
+ SOURCE: the latest version can be fetched from https://github.com/vinuesa/TIB-filoinfo
+         
+ LICENSE: GPL v3.0. 
+    See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
+    
+ NOTES: 
+  1. Assumes protein input sequences are ALIGNED and in (relaxed) PHYLIP format 
+	 
+EOF
+   
+   exit 1  
 }
+#----------------------------------------------------------------------------------------- 
+
+
 #-----------------------------------------------------------------------------------------
 #============================= END FUNCTION DEFINITIONS ==================================
 #=========================================================================================
 
+
+#------------------------------------#
+#----------- GET OPTIONS ------------#
+#------------------------------------#
+# This section uses getopts to process command-line arguments 
+#    and set the corresponding variables accordingly. 
+
+[ $# -eq 0 ] && print_help
+
+args=("$@")
+
+while getopts ':i:r:s:S:hv?:' OPTIONS
+do
+   case $OPTIONS in
+
+   i)   infile=$OPTARG
+        ;;
+   s)   model_set=$OPTARG
+        ;;
+   r)   n_starts=$OPTARG
+        ;;
+   S)   search_method=$OPTARG
+        ;;	
+   h)   print_help
+        ;;
+   v)   print_version
+        ;;
+   :)   printf "argument missing from -%s option\n" "$OPTARG"
+   	 print_help
+     	 ;;
+   ?)   echo "need the following args: "
+   	 print_help
+	 ;;
+   *)   echo "An  unexpected parsing error occurred"
+         echo
+         print_help
+	 ;;	 
+   esac >&2   # print the ERROR MESSAGES to STDERR
+done
+
+shift $((OPTIND - 1))
+
+# Check required params were provided
+if [[ -z "$infile" ]]; then
+       echo "Missing required input PHYLIP file name: -i <input>"
+       print_help
+fi
+
+if [[ -z "$model_set" ]]; then
+       echo "Missing required model_set option: -s <1|2|3|4|5|6|7>" warn
+       print_help
+fi
+
+# Validate user-provided data and params
+[[ ! -s "$infile" ]] && echo "FATAL ERROR: could not find $infile in $wkd" && exit 1
+
+# Check input file is a relaxed or canonical PHYLIP file
+if ! check_is_phylip "$infile" &> /dev/null; then 
+   echo "FATAL ERROR: input file ${infile} does not seem to be a canonical phylip file. Will exit now!"
+   exit 1
+fi 
+
+if (( model_set < 1 )) || (( model_set > 7 )); then
+   print_help
+fi
+
+# Check that the provided search_method matches the allowed set
+regex='NNI|SPR|BEST'
+
+if ! [[ "$search_method" =~ $regex ]]; then
+   echo "ERROR: the provided search_method '-S $search_method' does not match the allowed set $regex"
+   exit 1
+fi
+
 # ============ #
 # >>> MAIN <<<
 # ------------ #
-
+# Main script logic starts here
 
 ## Check environment
 # 0. Check that the input file was provided, and that the host runs bash >= v4.3
-(( $# < 2 )) || (( $# > 3 )) && print_help
-
-infile="$1"
-model_set="$2"
-n_starts="${3:-1}"
+echo "# invocation: $progname " "${args[@]}"
 
 wkd=$(pwd)
 
-# verify input & bash vesion
-[[ ! -s "$infile" ]] && echo "FATAL ERROR: could not find $infile in $wkd" && exit 1
-(( model_set < 1 )) || ((model_set > 7 )) && print_help
 
+## Check Bash & PhyMLs vesions
 # check PhyML version
+echo "# checking PhyML version"
 phymlv=$(check_phyml_version "$min_phyml_version")
 phymlyr=$(echo "$phymlv" | cut -d_ -f2)
 
-check_is_phylip "$infile"
 
 # OK, ready to start the analysis ...
 start_time=$SECONDS
@@ -396,8 +488,11 @@ echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F
 echo "# running with phyml v.${phymlv}"
 ((phymlyr < 2022)) && printf '%s\n%s\n' "# WARNING: THE SCRIPT MAY NOT WORK AS EXPECTED. You are running old PhyML version from $phymlyr!" "   Update to the latest one, using the phyml's GitHub repo: https://github.com/stephaneguindon/phyml/releases;" 
 
+echo "# cheching basic dependencies ..."
 check_dependencies
-echo "# infile:$infile; model_set:$model_set; mpi_OK:$mpi_OK; seed trees: $n_starts"
+
+echo "# Run parameters:"
+echo "# infile:$infile; model_set:$model_set; search_method:$search_method; seed trees: $n_starts"; mpi_OK:$mpi_OK;
 echo "========================================================================================="
 echo ''
 
@@ -416,6 +511,7 @@ echo "- number of branches: $no_branches"
 
 echo "- observed amino acid frequencies:"
 compute_AA_freq_in_phylip "$infile"
+# double check inout file is in PHYLIP format
 (($? > 0)) && { echo "FATAL ERROR: input file ${infile} does not seem to be a canonical phylip file. Will exit now!"; exit 1 ; }
 
 echo '--------------------------------------------------------------------------------'
@@ -593,15 +689,15 @@ echo "... will estimate the ML tree under best-fitting model $best_model selecte
 print_start_time
 
 if ((n_starts == 1)); then
-    echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s BEST"
+    echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s $search_method"
 
     # note that on tepeu, the quotes around "${model_cmds[$best_model]}" make the comand fail
-    phyml -i "$infile" -d aa -m ${model_cmds[$best_model]} -o tlr -s BEST &> /dev/null
+    phyml -i "$infile" -d aa -m ${model_cmds[$best_model]} -o tlr -s "$search_method" &> /dev/null
 else
-    echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s SPR --rand_start --n_rand_starts $n_starts"
+    echo "# running: phyml -i $infile -d aa -m ${model_cmds[$best_model]} -o tlr -s $search_method --rand_start --n_rand_starts $n_starts"
     
-    # note that on tepeu (Bash 4.4), the quotes around "${model_cmds[$best_model]}" make the comand fail
-    phyml -i "$infile" -d aa -m ${model_cmds[$best_model]} -o tlr -s SPR --rand_start --n_rand_starts "$n_starts" &> /dev/null
+    # note that on tepeu (Bash 4.4), the quotes around "${model_cmds[$best_model]}" make the command fail
+    phyml -i "$infile" -d aa -m ${model_cmds[$best_model]} -o tlr -s "$search_method" --rand_start --n_rand_starts "$n_starts" &> /dev/null
 
 fi
 
@@ -609,13 +705,13 @@ fi
 if [[ -s "${infile}"_phyml_stats.txt ]]; then
      
      if ((n_starts == 1)); then
-         mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_BESTmoves_phyml_stats.txt
+         mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_"${search_method}"moves_phyml_stats.txt
          echo "# Your results:"
-         echo "  - ${infile}_${best_model}_BESTmoves_phyml_stats.txt"
+         echo "  - ${infile}_${best_model}_${search_method}moves_phyml_stats.txt"
      else
-         mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_"${n_starts}"rdmStarts_SPRmoves_phyml_stats.txt
+         mv "${infile}"_phyml_stats.txt "${infile}"_"${best_model}"_"${n_starts}"rdmStarts_"${search_method}"moves_phyml_stats.txt
          echo "# Your results:"
-         echo "  - ${infile}_${best_model}_${n_starts}rdmStarts_SPRmoves_phyml_stats.txt"
+         echo "  - ${infile}_${best_model}_${n_starts}rdmStarts_${search_method}moves_phyml_stats.txt"
      fi
 else
      echo "FATAL ERROR: ${infile}_phyml_stats.txt was not generated!"
@@ -623,11 +719,11 @@ fi
 
 if [[ -s "${infile}"_phyml_tree.txt ]]; then
      if ((n_starts == 1)); then
-         mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_BESTmoves_phyml_tree.txt
-         echo "  - ${infile}_${best_model}_BESTmoves_phyml_tree.txt"
+         mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_"${search_method}"moves_phyml_tree.txt
+         echo "  - ${infile}_${best_model}_${search_method}moves_phyml_tree.txt"
      else
-         mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_"${n_starts}"rdmStarts_SPRmoves_phyml_tree.txt
-         echo "  - ${infile}_${best_model}_${n_starts}rdmStarts_SPRmoves_phyml_tree.txt"
+         mv "${infile}"_phyml_tree.txt "${infile}"_"${best_model}"_"${n_starts}"rdmStarts_"${search_method}"moves_phyml_tree.txt
+         echo "  - ${infile}_${best_model}_${n_starts}rdmStarts_${search_method}moves_phyml_tree.txt"
      fi
 else
      echo "FATAL ERROR: ${infile}_phyml_tree.txt was not generated!"

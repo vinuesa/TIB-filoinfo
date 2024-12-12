@@ -1000,7 +1000,7 @@ echo "# running with phyml v.${phymlv}"
 check_dependencies
 
 echo -n "# $progname v$version running on $host. Run started on: "; printf '%(%F at %T)T\n' '-1'
-echo "# workding directory: $wkd"
+echo "# working directory: $wkd"
 
 # Print run parameters
 echo "# infile:$infile; model_set:$model_set => ${model_options[$model_set]}; seed trees: $n_starts; delta_BIC_cutoff=$delta_BIC_cutoff; branch_support_type=$boot"

@@ -1368,7 +1368,7 @@ BICcumW_a=()
 BICcumW=0
 for i in "${BIC_deltas_a[@]}"; do
    #BICw_numerator=$(awk -v delta="$i" 'BEGIN{printf "%.10f", exp(-1/2 * delta) }' 2> /dev/null)   
-   BICw_numerator=$(awk -v delta="$i" -e="$e" 'BEGIN{printf "%.10f", e^(-1/2 * delta) }' 2> /dev/null) 
+   BICw_numerator=$(awk -v delta="$i" -v e="$e" 'BEGIN{printf "%.10f", e^(-1/2 * delta) }' 2> /dev/null) 
    BICw=$(echo "$BICw_numerator / $BICw_sums" | bc -l)
    BICw_a+=( $(printf "%.2f" "$BICw") )
    BICcumW=$(echo "$BICcumW + $BICw" | bc)

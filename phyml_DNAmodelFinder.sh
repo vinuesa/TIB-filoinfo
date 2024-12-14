@@ -51,7 +51,8 @@ set -euo pipefail
 host=$(hostname)
 
 progname=${0##*/}
-version='2.1.0_2024-12-12_GUADALUPE' # v2.1.0_2024-12-12_GUADALUPE: fixed awk exp() out of range error message, by replacing with 2.7183^()
+version='2.1.1_2024-12-13' # v2.1.1_2024-12-13; Updated and improved help menu
+   # v2.1.0_2024-12-12_GUADALUPE: fixed awk exp() out of range error message, by replacing with 2.7183^()
    # v2.0_2024-12-12_GUADALUPE; major upgrade
    # - added getopts interface with key options -m -s -b to control model set, search and branch-support methods.
    # - improved checking of user-provided input data and parameters.
@@ -777,8 +778,12 @@ if (( bash_ge_5 > 0)); then
   -i <string> input alignment in PHYLIP format
   -m <int> model set to evaluate by BIC
        1 -> standard models (JC69 K80 F81 HKY85 TN93 GTR)
-       2 -> WILL NOT RUN properly on Bash < v5.0, sorry (see NOTE below) 
-       3 -> minimal test set (JC69 F81 HKY85 TN93)
+       2 -> standard + 64 extended_ef_models, OR
+            standard + 62 extended_uf_models 
+                     
+            NOTE: phyml_DNAmodelFinder.sh automatically chooses the proper extended set (ef|uf) to evaluate, 
+                 based on delta_BIC evaluation of compositional bias (JC69 vs. F81)
+        3 -> minimal test set (JC69 F81 HKY85 TN93)
 
  OPTIONAL
   -h <flag> print help (this message)
@@ -805,6 +810,12 @@ if (( bash_ge_5 > 0)); then
  PROCEDURE
   - Models are fitted using a fixed NJ-JC tree, optimizing branch lenghts and rates 
        to calculate their AICi, BICi, delta_BIC and BICw
+  - Only relevant models among the extended set are evaluated, based on delta_BIC
+      comparisons between JC69-F81, to decide if ef|uf models should be evaluated,
+      and comparisons between KHY85-TN93 to determine if models with two Ti rates should 
+      be evaluated
+  - pInv is automatically excluded in the extended model set, 
+      if the delta_BICi_HKY+G is =< 2 when compared with the BIC_HKY+G+I
   - The best model is selected by BIC
   - SPR searches can be launched starting from multiple random trees
   - Default single seed tree searches use a BioNJ with BEST moves     
@@ -814,6 +825,8 @@ if (( bash_ge_5 > 0)); then
 
  LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
 
+ CITATION: Vinuesa P. (2023). Efficient two-step selection of DNA models with phyml_DNAmodelFinder.
+             https://github.com/vinuesa/TIB-filoinfo
 EOF
 
 else
@@ -867,6 +880,9 @@ else
 
  LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
 
+ CITATION: Vinuesa P. (2023). Efficient two-step selection of DNA models with phyml_DNAmodelFinder.
+           https://github.com/vinuesa/TIB-filoinfo
+ 
 EOF
 
 fi

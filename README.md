@@ -1,4 +1,4 @@
-# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2024-FILO" width="115" height="115" align="middle"> <b>TIB2024-FILO</b>
+# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2024-FILO" width="115" height="115" align="middle"> <b>TIB2025-FILO</b>
 
 <img src="docs/pics/TIB24_23ene24-1280_cropped.png" alt="TIB2024 foto de grupo" align="middle">
 
@@ -8,8 +8,8 @@
 **TIB22 participants, 2022-08-03** -->
 
 
-# <b>Talleres Internacionales de Bioinform&aacute;tica - [Centro de Ciencias Gen&oacute;micas, UNAM](https://www.ccg.unam.mx/), Cuernavaca, M&eacute;xico (TIB2024-FILO)</b>
-Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer regularmente el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/) (#TIB2024-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2022 (TIB2022). 
+# <b>Talleres Internacionales de Bioinform&aacute;tica - [Centro de Ciencias Gen&oacute;micas, UNAM](https://www.ccg.unam.mx/), Cuernavaca, M&eacute;xico (TIB2025-FILO)</b>
+Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer regularmente el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/EBM2025/pangenomica-y-filogenomica-microbiana/) (#TIB2025-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2024 (TIB2024). 
 
 
 
@@ -57,7 +57,7 @@ integran la gen&oacute;mica y la bioinform&aacute;tica con la biolog&iacute;a y 
 la evoluci&oacute;n y emergencia de pat&oacute;genos oportunistas a partir de microbios ambientales. 
 
 ### Sobre los ayudantes
-Tenemos el privilegio de contar con la ayuda de <b>Daniela Hernández</b> y <b>Mauricio Osorio</b> como ayudantes del [Taller](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/). Ambos son personas con un excelente trato y alumn@s de licenciatura de la Facultade de Ciencias de la UNAM con amplia experiencia en los tópicos de este taller.
+Tenemos el privilegio de contar con la ayuda de <b>Daniela Hernández</b> y <b>Mauricio Osorio</b> como ayudantes del [Taller](https://www.nnb.unam.mx/EBM2025/pangenomica-y-filogenomica-microbiana/). Ambos son personas con un excelente trato y alumn@s de licenciatura de la Facultade de Ciencias de la UNAM con amplia experiencia en los tópicos de este taller.
 
 ### Sobre medidas de seguridad sanitaria para minimizar riesgo de infecci&oacute;n por SARS-CoV-2
 Seguiremos estrictas medidas de seguridad para minimizar el riesgo latente de contraer COVID-19
@@ -70,14 +70,14 @@ Seguiremos estrictas medidas de seguridad para minimizar el riesgo latente de co
 *** 
 
 ## Sobre el material did&aacute;ctico
-A trav&eacute;s de estas p&aacute;ginas se distribuyen los apuntes, ejercicios y datos que se usar&aacute;n en el [Taller sobre Pangen&oacute;mica y Filogen&oacute;mica Microbiana](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/).
+A trav&eacute;s de estas p&aacute;ginas se distribuyen los apuntes, ejercicios y datos que se usar&aacute;n en el [Taller sobre Pangen&oacute;mica y Filogen&oacute;mica Microbiana](https://www.nnb.unam.mx/EBM2025/pangenomica-y-filogenomica-microbiana/).
 Para tu convenienca, se distribuye en formatos pdf y html.
 
 Puedes ver en mi sitio Web el [listados de cursos](http://www.ccg.unam.mx/~vinuesa/cursos.html) y materiales asociados, que pongo libremente disponible para la comunidad.
 
 
 ### Sobre el repositorio
-Este repositorio contiene el material para el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/) de los [Talleres Internacionales de Bioinform&aacute;tica - TIB2024](https://www.nnb.unam.mx/talleres/), a celebrarse en el [Centro de Ciencias Gen&oacute;micas](http://www.ccg.unam.mx) de la [Universidad Nacional Aut&oacute;noma de M&eacute;xico](http://www.ccg.unam.mx), del 22 al 26 de enero de 2024.
+Este repositorio contiene el material para el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/EBM2025/pangenomica-y-filogenomica-microbiana/) de los [Talleres Internacionales de Bioinform&aacute;tica - TIB2024](https://www.nnb.unam.mx/talleres/), a celebrarse en el [Centro de Ciencias Gen&oacute;micas](http://www.ccg.unam.mx) de la [Universidad Nacional Aut&oacute;noma de M&eacute;xico](http://www.ccg.unam.mx), del 22 al 26 de enero de 2024.
 
 
 ### Clonaci&oacute;n del repositorio
@@ -102,7 +102,7 @@ que indican c&oacute;mo instalar el <i>Git plugin</i> de MobaXterm.
 
 
 ### Licencia y t&eacute;rminos de uso
-El material del [Taller, TIB-filoinfo](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/) lo distribuyo p&uacute;blicamente a trav&eacute;s de este repositorio GitHub bajo la [**Licencia No Comercial Creative Commons 4.0**](https://creativecommons.org/licenses/by-nc/4.0/) 
+El material del [Taller, TIB-filoinfo](https://www.nnb.unam.mx/EBM2025/pangenomica-y-filogenomica-microbiana/) lo distribuyo p&uacute;blicamente a trav&eacute;s de este repositorio GitHub bajo la [**Licencia No Comercial Creative Commons 4.0**](https://creativecommons.org/licenses/by-nc/4.0/) 
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0</a>
 
@@ -117,13 +117,13 @@ Quiero agradecer al [Nodo Nacional de Bioinform&aacute;tica - UNAM](https://www.
 ## <b>Sesiones y material asociado</b>
 ### Horario y lugar de impartici&oacute;n de las sesiones
 Las clases se imparten del 22 al 26 de enero en el auditorio Guillermo Sober&oacute;n del [CCG-UNAM](http://www.ccg.unam.mx/), Cuernavaca, Morelos
-de 9 a 17:00 hrs, seg&uacute;n el [programa del TIB2024](https://www.nnb.unam.mx/tib2024-1/pangenomica-y-filogenomica-microbiana/)
+de 9 a 17:00 hrs, seg&uacute;n el [programa del TIB2024](https://www.nnb.unam.mx/EBM2025/pangenomica-y-filogenomica-microbiana/)
 
 <img src="docs/pics/PV_impartiendo_clases_TIB19_2.png" alt="TIB2022-T3 foto de grupo" width="400" height="300">
 
 **Sesión del Taller TIB2019 en el Auditorio Guillermo Soberón del CCG-UNAM**
 
-### Lunes 22 de enero
+### Lunes 4 de agosto
 
 #### <b>Sesi&oacute;n 1: Introducci&oacute;n a Linux (teor&iacute;a y pr&aacute;ctica)</b>
 - [presentaci&oacute;n - PDF: Primer contacto con un sistema GNU/Linux](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf)
@@ -159,7 +159,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ***
 
-### Martes 23 de enero
+### Martes 5 de agosto
 
 #### <b>Sesi&oacute;n 3: B&uacute;squeda de hom&oacute;logos usando BLAST desde la l&iacute;nea de comandos (teor&iacute;a y pr&aacute;cticas)</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion3_BLAST/Tema3_BLAST_OVERVIEW.pdf)
@@ -202,7 +202,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ***
 
-### Mi&eacute;rcoles 24 de enero
+### Mi&eacute;rcoles 6 de agosto
 
 #### <b>Sesi&oacute;n 5: Introducci&oacute;n a los m&eacute;todos filogen&eacute;ticos, modelos de sustituci&oacute;n y algoritmos de b&uacute;squeda de &aacute;rboles</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion5_metodos_filogeneticos_y_modelos/Tema5_metodos_filogeneticos_y_modelos.pdf)
@@ -240,7 +240,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ***
 
-### Jueves 25 de enero
+### Jueves 7 de agosto
 #### <b>C&oacute;mputo de familias de genes hom&oacute;logos con datos gen&oacute;micos usando GET_HOMOLOGUES (teor&iacute;a)</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion7_pangenomica_GET_HOMOLOGUES/pangenomica_microbiana_y_GET_HOMOLOGUES.pdf)
 - [pr&aacute;ctica GET_HOMOLOUGES+GET_PHYLOMARKERS- html](https://vinuesa.github.io/TIB-filoinfo/sesion7_pangenomica_GET_HOMOLOGUES/) 
@@ -259,7 +259,7 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 ***
 
-### Viernes 26 de enero
+### Viernes 8 de agosto
 #### <b>Estrategias para la estima de filogenias gen&oacute;micas</b>
 - [presentaci&oacute;n - PDF](https://github.com/vinuesa/TIB-filoinfo/tree/master/docs/sesion8_filogenomica_GET_PHYLOMARKERS/get_phylomarkers_overview.pdf)
 - [tutorial GET_PHYLOMARKERS - html](https://github.com/vinuesa/get_phylomarkers/blob/master/docs/GET_PHYLOMARKERS_manual.md#get_phylomarkers-tutorial)
@@ -301,4 +301,3 @@ Python for bioinformatics in high schools. [PLoS Comput Biol. 2019 Feb 14;15(2):
 
 
 <!--- [MrBayes](http://nbisweden.github.io/MrBayes/)-->
-

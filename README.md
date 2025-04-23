@@ -9,7 +9,7 @@
 
 
 # <b>Talleres Internacionales de Bioinform&aacute;tica - [Centro de Ciencias Gen&oacute;micas, UNAM](https://www.ccg.unam.mx/), Cuernavaca, M&eacute;xico (TIB2025-FILO)</b>
-Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer regularmente el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/EBM2025/pangenomica-y-filogenomica-microbiana/) (#TIB2025-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2024 (TIB2024). 
+Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer regularmente el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/TIB2025/pangenomica-y-filogenomica-microbiana/) (#TIB2025-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2024 (TIB2024). 
 
 
 

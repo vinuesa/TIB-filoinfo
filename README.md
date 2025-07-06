@@ -1,4 +1,4 @@
-# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2024-FILO" width="115" height="115" align="middle"> <b>TIB2025-FILO</b>
+# <img src="docs/pics/NNB-TIB-Logo.png" alt="TIB2025-FILO" width="115" height="115" align="middle"> <b>TIB2025-FILO</b>
 
 <img src="docs/pics/TIB24_23ene24-1280_cropped.png" alt="TIB2024 foto de grupo" align="middle">
 
@@ -10,7 +10,6 @@
 
 # <b>Talleres Internacionales de Bioinform&aacute;tica - [Centro de Ciencias Gen&oacute;micas, UNAM](https://www.ccg.unam.mx/), Cuernavaca, M&eacute;xico (TIB2025-FILO)</b>
 Despu&eacute;s de una interrupci&oacute;n de dos años debida a la pandemia de SARS-CoV-2, volvemos a ofrecer regularmente el [Taller sobre Pangen&oacute;mica y Filoinform&aacute;tica microbiana](https://www.nnb.unam.mx/TIB2025/pangenomica-y-filogenomica-microbiana/) (#TIB2025-FILO) de manera <b>presencial</b>. Este taller ha sido muy solicitado y altamente valorado por l@s participantes de ediciones anteriores, la &uacute;ltima en 2024 (TIB2024). 
-
 
 
 ## Presentaci&oacute;n
@@ -57,12 +56,12 @@ integran la gen&oacute;mica y la bioinform&aacute;tica con la biolog&iacute;a y 
 la evoluci&oacute;n y emergencia de pat&oacute;genos oportunistas a partir de microbios ambientales. 
 
 ### Sobre los ayudantes
-Tenemos el privilegio de contar con la ayuda de <b>Daniela Hernández</b> y <b>Mauricio Osorio</b> como ayudantes del [Taller](https://www.nnb.unam.mx/EBM2025/pangenomica-y-filogenomica-microbiana/). Ambos son personas con un excelente trato y alumn@s de licenciatura de la Facultade de Ciencias de la UNAM con amplia experiencia en los tópicos de este taller.
+Tenemos el privilegio de contar con la ayuda de la M.C. <b>Stefany Argueta</b>, el Biol. <b>Mauricio Osorio</b>, y <b>Karina Mendoza</b> como ayudantes del [Taller](https://www.nnb.unam.mx/EBM2025/pangenomica-y-filogenomica-microbiana/). Son personas con un excelente trato y alumn@s con amplia experiencia en los tópicos de este taller.
 
 ### Sobre medidas de seguridad sanitaria para minimizar riesgo de infecci&oacute;n por SARS-CoV-2
-Seguiremos estrictas medidas de seguridad para minimizar el riesgo latente de contraer COVID-19
-- tendremos un aforo muy reducido, a < 25% de capaciad del auditorio, el cual cuenta con excelente ventilaci&oacute;n. 
-- el uso correcto de cubrebocas KN95 o superior ser&aacute; obligatorio. 
+Seguiremos estrictas medidas de seguridad para minimizar el riesgo latente de contraer COVID-19 u otros virus respiratorios.
+- tendremos un aforo reducido, a < 25% de capaciad del auditorio, el cual cuenta con excelente ventilaci&oacute;n. 
+- el uso correcto de cubrebocas KN95 o superior es recomendado y agradecido. 
 - contaremos con varias [unidades de filtraci&oacute;n de aire Corsi-Rosenthal](https://aghealth.ucdavis.edu/es/news/la-caja-corsi-rosenthal-filtro-de-aire-casero-con-ventilador-de-caja-para-covid-19-y-el-humo)
 <!-- - vamos a pedir prueba r&aacute;pida de ant&iacute;geno hecha < 48 hrs del inicio del taller --> 
 

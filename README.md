@@ -116,7 +116,7 @@ Quiero agradecer al [Nodo Nacional de Bioinform&aacute;tica - UNAM](https://www.
 ## <b>Sesiones y material asociado</b>
 ### Horario y lugar de impartici&oacute;n de las sesiones
 Las clases se imparten del 4 al 8 de agosto  en el <b>Auditorio Guillermo Sober&oacute;n</b> del [CCG-UNAM](http://www.ccg.unam.mx/), Cuernavaca, Morelos
-lunes a jueves de 9 a 17:00 hrs, y viernes de 9:00 a 14:00 hrs seg&uacute;n el [programa del TIB2024](https://www.nnb.unam.mx/EBM2025/pangenomica-y-filogenomica-microbiana/)
+lunes a jueves de 9 a 17:00 hrs, y viernes de 9:00 a 14:00 hrs seg&uacute;n el [programa del TIB2025](https://www.nnb.unam.mx/TIB2025/pangenomica-y-filogenomica-microbiana/)
 
 <img src="docs/pics/PV_impartiendo_clases_TIB19_2.png" alt="TIB2022-T3 foto de grupo" width="400" height="300">
 

@@ -49,7 +49,7 @@ Hola, me llamo [Pablo Vinuesa](https://www.ccg.unam.mx/~vinuesa/). Soy investiga
 [Centro de Ciencias Gen&oacute;micas](https://www.ccg.unam.mx) de la 
 [Universidad Nacional Aut&oacute;noma de M&eacute;xico - UNAM](https://www.unam.mx/).
 
-Puedes seguirme en [LinkedIn](https://www.linkedin/in/pvinuesa), [BlueSky](https://bsky.app/profile/pvinuesa.bsky.social), o X: [@pvinmex](https://twitter.com/pvinmex).
+Puedes seguirme en [LinkedIn](https://www.linkedin/in/pvinuesa), [BlueSky](https://bsky.app/profile/pvinuesa.bsky.social), X: [@pvinmex](https://twitter.com/pvinmex), o [Pl@ntNet](https://identify.plantnet.org/users/109715341/observations).
 
 Mis [l&iacute;neas de investigaci&oacute;n](http://www.ccg.unam.mx/~vinuesa/research.html) 
 integran la gen&oacute;mica y la bioinform&aacute;tica con la biolog&iacute;a y gen&eacute;tica molecular para entender 
@@ -60,8 +60,8 @@ Tenemos el privilegio de contar con la participación de la M.C. <b>Stefany Argu
 
 ### Sobre medidas de seguridad sanitaria para minimizar riesgo de infecci&oacute;n por SARS-CoV-2 u otros virus respiratorios
 Seguiremos estrictas medidas de seguridad
-- tendremos un aforo reducido, a < 25% de capaciad del auditorio, el cual cuenta con excelente ventilaci&oacute;n. 
-- el uso correcto de cubrebocas KN95 o superior es recomendado y agradecido. 
+<!-- - tendremos un aforo reducido, a < 25% de capaciad del auditorio, el cual cuenta con excelente ventilaci&oacute;n. -->
+- el uso correcto de cubrebocas KN95 o superior es recomendado y agradecido. Será obligatorio para personas con proceso gripal activo.
 - contaremos con varias [unidades de filtraci&oacute;n de aire Corsi-Rosenthal](https://aghealth.ucdavis.edu/es/news/la-caja-corsi-rosenthal-filtro-de-aire-casero-con-ventilador-de-caja-para-covid-19-y-el-humo)
 <!-- - vamos a pedir prueba r&aacute;pida de ant&iacute;geno hecha < 48 hrs del inicio del taller --> 
 
@@ -115,8 +115,7 @@ Quiero agradecer al [Nodo Nacional de Bioinform&aacute;tica - UNAM](https://www.
 
 ## <b>Sesiones y material asociado</b>
 ### Horario y lugar de impartici&oacute;n de las sesiones
-Las clases se imparten del 4 al 8 de agosto  en el <b>Auditorio Guillermo Sober&oacute;n</b> del [CCG-UNAM](http://www.ccg.unam.mx/), Cuernavaca, Morelos
-lunes a jueves de 9 a 17:00 hrs, y viernes de 9:00 a 14:00 hrs seg&uacute;n el [programa del TIB2025](https://www.nnb.unam.mx/TIB2025/pangenomica-y-filogenomica-microbiana/)
+Las clases se imparten del 4 al 8 de agosto en el <b>[aula #3 de la Licenciatura en Ciencias Gen&oacute;micas](https://www.lcg.unam.mx/)</b> del [CCG-UNAM](https://www.ccg.unam.mx/), Cuernavaca, Morelos, lunes a jueves de 9 a 17:00 hrs, y viernes de 9:00 a 14:00 hrs seg&uacute;n el [programa del TIB2025](https://www.nnb.unam.mx/TIB2025/pangenomica-y-filogenomica-microbiana/)
 
 <img src="docs/pics/PV_impartiendo_clases_TIB19_2.png" alt="TIB2022-T3 foto de grupo" width="400" height="300">
 

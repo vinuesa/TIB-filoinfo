@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, Centro de Ciencias Genómicas - UNAM" />
 
-<meta name="date" content="2025-08-02" />
+<meta name="date" content="2025-08-04" />
 
 <title>Sesión 1. Introducción al biocómputo en sistemas GNU/Linux</title>
 
@@ -354,7 +354,7 @@ display: none;
 sistemas GNU/Linux</h1>
 <h4 class="author">Pablo Vinuesa, Centro de Ciencias Genómicas -
 UNAM</h4>
-<h4 class="date">2025-08-02</h4>
+<h4 class="date">2025-08-04</h4>
 
 </div>
 
@@ -635,7 +635,7 @@ Internacionales de Bioinformática <a href="https://www.nnb.unam.mx/talleres/">T
 el <a href="http://www.ccg.unam.mx">Centro de Ciencias Genómicas</a> de
 la <a href="http://www.ccg.unam.mx">Universidad Nacional Autónoma de
 México</a>, del 22 al 26 de enero de 2024 por <a href="http://www.ccg.unan.mx/~vinuesa/">Pablo Vinuesa, CCG-UNAM</a> <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a>.</p>
-<p>Version: 2025-08-02</p>
+<p>Version: 2025-08-04</p>
 <p>Si éste es tu primer contacto con Linux, te recomiendo que leas
 primero esta <a href="https://github.com/vinuesa/TIB-filoinfo/blob/master/docs/sesion1_intro2linux/Intro_biocomputo_Linux_pt1.pdf">presentación
 sobre introducción al biocómputo en sistemas Linux - PDF</a>.</p>
@@ -706,7 +706,7 @@ que estoy conectado) y la IP</h3>
 <pre class="bash"><code>hostname
 hostname -I</code></pre>
 <pre><code>## alisio
-## 192.168.1.91 172.17.0.1</code></pre>
+## 192.168.1.91 172.17.0.1 10.8.43.34</code></pre>
 </div>
 <div id="uname-muestra-el-sistema-operativo-del-host" class="section level3" number="2.1.3">
 <h3><span class="header-section-number">2.1.3</span>
@@ -798,55 +798,55 @@ las opciones disponibles para dicho comando</h3>
 ls --help</code></pre>
 <pre class="bash"><code># mostrar todos (-a all) los archivos, incluidos los ocultos, y sus propiedades (-l, long format)
 ls -al </code></pre>
-<pre><code>## total 30972
-## drwxr-xr-x 6 vinuesa vinuesa     4096 ago  2 21:51 .
-## drwxrwxr-x 4 vinuesa vinuesa     4096 ago  2 21:14 ..
+<pre><code>## total 31664
+## drwxr-xr-x 6 vinuesa vinuesa     4096 ago  4 22:00 .
+## drwxrwxr-x 7 vinuesa vinuesa     4096 ago  3 20:01 ..
 ## -rw-r--r-- 1 vinuesa vinuesa   110128 ago  2 21:14 800px-Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa  6780296 ago  2 21:14 assembly_summary.txt.gz
-## -rw-rw-r-- 1 vinuesa vinuesa      492 ago  2 21:51 Batch.cmds
-## -rw-rw-r-- 1 vinuesa vinuesa      643 ago  2 21:51 C.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa      492 ago  4 22:00 Batch.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa      643 ago  4 22:00 C.cmds
 ## -rw-rw-r-- 1 vinuesa vinuesa     2000 ago  2 21:14 .cmds
 ## -rwxr-xr-x 1 vinuesa vinuesa    10193 ago  2 21:14 comandos_de_linux.tab
 ## -rw-r--r-- 1 vinuesa vinuesa   438308 ago  2 21:14 Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa   222602 ago  2 21:14 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## -rw-rw-r-- 1 vinuesa vinuesa     1814 ago  2 21:51 Filesystem.cmds
-## -rw-rw-r-- 1 vinuesa vinuesa       54 ago  2 21:51 FORTRAN77.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa     1814 ago  4 22:00 Filesystem.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa       54 ago  4 22:00 FORTRAN77.cmds
 ## -rw-r--r-- 1 vinuesa vinuesa    87065 ago  2 21:14 github_TIB-filoinfo_screenshot.png
 ## -rw-rw-r-- 1 vinuesa vinuesa  2724055 ago  2 21:14 Instalación_de_mobaXterm_en_Windows.pdf
-## -rw-r--r-- 1 vinuesa vinuesa  8095138 ago  2 21:14 intro_biocomputo_Linux_pt1.odp
-## -rw-r--r-- 1 vinuesa vinuesa 10739713 ago  2 21:14 Intro_biocomputo_Linux_pt1.pdf
+## -rw-rw-r-- 1 vinuesa vinuesa  8572811 ago  3 16:22 intro_biocomputo_Linux_pt1.odp
+## -rw-r--r-- 1 vinuesa vinuesa 10665591 ago  3 16:02 Intro_biocomputo_Linux_pt1.pdf
 ## -rwxr-xr-x 1 vinuesa vinuesa    10193 ago  2 21:14 linux_basic_commands.tab
 ## -rwxr-xr-x 1 vinuesa vinuesa    10193 ago  2 21:14 linux_commands.tab
 ## -rwxr-xr-x 1 vinuesa vinuesa     1024 ago  2 21:14 .linux_commands.tab.swp
 ## -rwxr-xr-x 1 vinuesa vinuesa     1705 ago  2 21:14 linux_very_basic_commands_table.csv
-## -rw-rw-r-- 1 vinuesa vinuesa     2133 ago  2 21:51 Misc.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa     2133 ago  4 22:00 Misc.cmds
 ## -rw-rw-r-- 1 vinuesa vinuesa   106127 ago  2 21:14 MobaXTerm_plugins_page_screenshot.png
 ## drwxr-xr-x 2 vinuesa vinuesa     4096 ago  2 21:14 MobaXterm_screen_shots
-## -rw-rw-r-- 1 vinuesa vinuesa      215 ago  2 21:51 Network.cmds
-## -rw-rw-r-- 1 vinuesa vinuesa     1138 ago  2 21:51 Process.cmds
-## -rw-rw-r-- 1 vinuesa vinuesa       81 ago  2 21:51 Programming.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa      215 ago  4 22:00 Network.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa     1138 ago  4 22:00 Process.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa       81 ago  4 22:00 Programming.cmds
 ## -rw-r--r-- 1 vinuesa vinuesa    77803 ago  2 21:14 recA_Bradyrhizobium_vinuesa.fna
-## -rw-r--r-- 1 vinuesa vinuesa    17704 ago  2 21:51 recA_Byuanmingense.fna
+## -rw-r--r-- 1 vinuesa vinuesa    17704 ago  4 22:00 recA_Byuanmingense.fna
 ## drwxr-xr-x 2 vinuesa vinuesa     4096 ago  2 21:14 recA_seq_data
-## -rwxr-xr-x 1 vinuesa vinuesa        8 ago  2 21:14 .Rhistory
-## -rw-rw-r-- 1 vinuesa vinuesa      528 ago  2 21:51 SCCS.cmds
+## -rwxr-xr-x 1 vinuesa vinuesa        8 ago  3 17:47 .Rhistory
+## -rw-rw-r-- 1 vinuesa vinuesa      528 ago  4 22:00 SCCS.cmds
 ## -rw-rw-r-- 1 vinuesa vinuesa    51271 ago  2 21:14 sesion_local_capt_pantalla.png
 ## -rw-r--r-- 1 vinuesa vinuesa    40746 ago  2 21:14 sesion_remota_bonampak_capt_pantalla1.png
 ## -rw-r--r-- 1 vinuesa vinuesa     4468 ago  2 21:14 sesion_remota_bonampak_capt_pantalla2.png
 ## -rw-rw-r-- 1 vinuesa vinuesa   408580 ago  2 21:14 sesion_remota_bonampak_capt_pantalla.png
-## -rw-rw-r-- 1 vinuesa vinuesa     1038 ago  2 21:51 Shell.cmds
-## -rw-rw-r-- 1 vinuesa vinuesa      148 ago  2 21:51 Std.cmds
-## -rw-rw-r-- 1 vinuesa vinuesa     1394 ago  2 21:51 System.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa     1038 ago  4 22:00 Shell.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa      148 ago  4 22:00 Std.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa     1394 ago  4 22:00 System.cmds
 ## -rw-r--r-- 1 vinuesa vinuesa       94 ago  2 21:14 tabla.csv
-## -rw-r--r-- 1 vinuesa vinuesa       94 ago  2 21:51 tabla.tsv
-## -rw-rw-r-- 1 vinuesa vinuesa     2000 ago  2 21:51 Text.cmds
+## -rw-r--r-- 1 vinuesa vinuesa       94 ago  4 22:00 tabla.tsv
+## -rw-rw-r-- 1 vinuesa vinuesa     2000 ago  4 22:00 Text.cmds
 ## drwxr-xr-x 3 vinuesa vinuesa     4096 ago  2 21:14 TIB2019-T3
 ## drwxrwxr-x 3 vinuesa vinuesa     4096 ago  2 21:14 TIB-filo
 ## -rwxr-xr-x 1 vinuesa vinuesa     6047 ago  2 21:14 working_with_linux_commands.code
-## -rw-r--r-- 1 vinuesa vinuesa  1291688 ago  2 21:51 working_with_linux_commands.html
-## -rw-rw-r-- 1 vinuesa vinuesa    34046 ago  2 21:14 working_with_linux_commands.log
-## -rw-r--r-- 1 vinuesa vinuesa   105136 ago  2 21:52 working_with_linux_commands.Rmd
-## -rw-rw-r-- 1 vinuesa vinuesa   190939 ago  2 21:14 working_with_linux_commands.tex</code></pre>
+## -rw-r--r-- 1 vinuesa vinuesa  1292635 ago  4 22:00 working_with_linux_commands.html
+## -rw-rw-r-- 1 vinuesa vinuesa    64617 ago  3 16:17 working_with_linux_commands.log
+## -rw-rw-r-- 1 vinuesa vinuesa   474974 ago  3 16:17 working_with_linux_commands.pdf
+## -rw-r--r-- 1 vinuesa vinuesa   105561 ago  4 22:00 working_with_linux_commands.Rmd</code></pre>
 <div id="veamos-el-contenido-del-directorio-raiz-salida-recortada-a-sólo-10-entradas-al-pasar-la-salida-de-ls-al-comando-head-mediante-un-pipe" class="section level4" number="2.2.3.1">
 <h4><span class="header-section-number">2.2.3.1</span> Veamos el
 contenido del directorio raiz (salida recortada a sólo 10 entradas al
@@ -889,7 +889,7 @@ cadenas de comandos.</p>
 ## drwxr-xr-x   4 root root  4096 oct 10  2024 boot-sav
 ## drwxr-xr-x   2 root root  4096 oct  4  2020 cdrom
 ## -rw-r-----   1 root root  1240 may  2 16:33 debug
-## drwxr-xr-x  20 root root  5440 ago  2 11:26 dev
+## drwxr-xr-x  20 root root  5440 ago  4 20:17 dev
 ## drwxr-xr-x 181 root root 12288 ago  2 11:58 etc
 ## drwxr-xr-x   2 root root  4096 oct 10  2024 grub
 ## drwxr-xr-x   5 root root  4096 abr 15  2020 home
@@ -1553,16 +1553,16 @@ fi
 # confirmamos que se generaron las ligascomandos_de_linux.tab
 ls -l | head</code></pre>
 <pre><code>## ln: failed to create symbolic link &#39;comandos_de_linux.tab&#39;: File exists
-## total 30952
+## total 31644
 ## -rw-r--r-- 1 vinuesa vinuesa   110128 ago  2 21:14 800px-Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa  6780296 ago  2 21:14 assembly_summary.txt.gz
-## -rw-rw-r-- 1 vinuesa vinuesa      492 ago  2 21:51 Batch.cmds
-## -rw-rw-r-- 1 vinuesa vinuesa      643 ago  2 21:51 C.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa      492 ago  4 22:00 Batch.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa      643 ago  4 22:00 C.cmds
 ## -rwxr-xr-x 1 vinuesa vinuesa    10193 ago  2 21:14 comandos_de_linux.tab
 ## -rw-r--r-- 1 vinuesa vinuesa   438308 ago  2 21:14 Evolución_UNIX.png
 ## -rw-r--r-- 1 vinuesa vinuesa   222602 ago  2 21:14 fetch_recA_bradys_vinuesa_nuccore_screenshot.png
-## -rw-rw-r-- 1 vinuesa vinuesa     1814 ago  2 21:51 Filesystem.cmds
-## -rw-rw-r-- 1 vinuesa vinuesa       54 ago  2 21:51 FORTRAN77.cmds</code></pre>
+## -rw-rw-r-- 1 vinuesa vinuesa     1814 ago  4 22:00 Filesystem.cmds
+## -rw-rw-r-- 1 vinuesa vinuesa       54 ago  4 22:00 FORTRAN77.cmds</code></pre>
 <div id="renombramos-la-liga-o-cualquier-archivo-o-directorio" class="section level3" number="2.9.1">
 <h3><span class="header-section-number">2.9.1</span> renombramos la liga
 (o cualquier archivo o directorio)</h3>
@@ -1746,6 +1746,20 @@ instancias</li>
 ##      2   Category 
 ##      3   Description 
 ##      4   First appeared</code></pre>
+<ul>
+<li>Imprime solo un rango de líneas de un archivo, por ejemplo de la
+primera a la quinta (equivalente a ‘head -5 archivo’)</li>
+</ul>
+<pre class="bash"><code>sed -n &#39;1,5p&#39; linux_commands.tab | column -t -s $&#39;\t&#39;</code></pre>
+<pre><code>## IEEE Std 1003.1-2008 utilities Name   Category          Description                             First appeared
+## admin                                 SCCS              Create and administer SCCS files        PWB UNIX
+## alias                                 Misc              Define or display aliases               
+## ar                                    Misc              Create and maintain library archives    Version 1 AT&amp;T UNIX
+## asa                                   Text processing   Interpret carriage-control characters   System V</code></pre>
+<p>Noten el uso de la opción ‘-n’ para suprimir el comportamiento por
+defecto de <span class="math inline">\(sed\)</span> de imprimir todas
+las líneas, y la instrucción ‘p’ para imprimir (print) el rango de
+líneas indicadas por ‘dirección’ o número de línea.</p>
 </div>
 </div>
 <div id="uso-de-tuberias-de-herramientas-unixlinux-para-filtrado-de-texto-con-cut-grep-sort-uniq-wc-y" class="section level2" number="2.13">
@@ -1786,7 +1800,7 @@ herramientas de filtrado de texto en acción</h3>
 campo (-d) específicos (TAB por defecto), extrayendo los campos
 indicados con -f (cut -d’ ’ -f1-3,5,9 # corta usando espacios como
 delimitador, seleccionando los campos 1 al 3, 5 y 9)</li>
-<li><code>sort</code> ordena (sor -u; sort -nrk2; sort -dk1)</li>
+<li><code>sort</code> ordena (sort -u; sort -nrk2; sort -dk1)</li>
 <li><code>wc</code> cuenta líneas, palabras y caracteres (wc -l)</li>
 <li><code>uniq</code> regresa listas de valores únicos (uniq -c)</li>
 <li><code>grep</code> Filtra las lineas de un archivo que contienen (o
@@ -1810,7 +1824,7 @@ zcat assembly_summary.txt.gz | wc -l</code></pre>
 assembly_level de la misma?</li>
 </ol>
 <pre class="bash"><code># la columna assembly_level (#12) indica el estado del ensamble. ¿Cuáles son los niveles de la variable categórica assembly_level (valores únicos de la misma?
-zcat assembly_summary.txt.gz | grep -v &quot;^#&quot; | cut -f 12 | sort -u</code></pre>
+zcat assembly_summary.txt.gz | sed &#39;1,2d&#39; | cut -f 12 | sort -u</code></pre>
 <pre><code>## Chromosome
 ## Complete Genome
 ## Contig
@@ -1823,18 +1837,17 @@ assembly_level?</li>
 # nota que usamoms sed &#39;ed&#39; para eliminar las 1as 2 líneas con comentarios y 
 # pasamos la salida ordenada con sort a uniq -c para contar las instancias 
 # de cada elemento de la lista ordenada
-zcat assembly_summary.txt.gz | sed &#39;2d&#39; | cut -f 12 | sort | uniq -c</code></pre>
+zcat assembly_summary.txt.gz | sed &#39;1,2d&#39; | cut -f 12 | sort | uniq -c</code></pre>
 <pre><code>##    2018 Chromosome
 ##   13983 Complete Genome
 ##   82755 Contig
-##   62539 Scaffold
-##       1 #   See ftp://ftp.ncbi.nlm.nih.gov/genomes/README_assembly_summary.txt for a description of the columns in this file.</code></pre>
+##   62539 Scaffold</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>Asocia cada nombre de columna de la cabecera con el número de la
 columna correspondiente</li>
 </ol>
 <pre class="bash"><code># asocia cada nombre de columna de la cabecera con el número de la columna correspondiente
-zcat assembly_summary.txt.gz | head -2 | sed &#39;1d; s/\t/\n/g&#39; | cat -n</code></pre>
+zcat assembly_summary.txt.gz | sed -n &#39;2p&#39; | sed &#39;s/\t/\n/g&#39; | cat -n</code></pre>
 <pre><code>##      1   # assembly_accession
 ##      2   bioproject
 ##      3   biosample
@@ -1862,7 +1875,7 @@ zcat assembly_summary.txt.gz | head -2 | sed &#39;1d; s/\t/\n/g&#39; | cat -n</c
 8), y muestra sólo las 10 especies con más genomas secuenciados</li>
 </ol>
 <pre class="bash"><code># genera una estadística del número de genomas por especie (columna # 8), y muestra sólo las 10 especies con más genomas secuenciados!
-zcat assembly_summary.txt.gz | grep -v &quot;^#&quot; | cut -f8 | sort | uniq -c | sort -nrk1 | head -10</code></pre>
+zcat assembly_summary.txt.gz | sed &#39;1,2d&#39; | cut -f8 | sort | uniq -c | sort -nrk1 | head -10</code></pre>
 <pre><code>##   14089 Escherichia coli
 ##    8039 Streptococcus pneumoniae
 ##    6398 Klebsiella pneumoniae
@@ -1942,7 +1955,7 @@ posterior.</p>
 comando: <b>man command</b></h2>
 <pre class="bash"><code># mira las opciones de cut y sort en la manpage
 man cut | head -30</code></pre>
-<pre><code>## CUT(1)                                                                    User Commands                                                                    CUT(1)
+<pre><code>## CUT(1)                                                                   User Commands                                                                  CUT(1)
 ## 
 ## NAME
 ##        cut - remove sections from each line of files
@@ -2272,22 +2285,21 @@ find borrame/ -type f -name &#39;arch-A&#39; | wc -l</code></pre>
 de <code>-exec ls -l</code></li>
 </ul>
 <pre class="bash"><code>find borrame/ -type f -name arch-B -exec ls -l &#39;{}&#39; + | head -5</code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 borrame/dir-001/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 borrame/dir-002/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 borrame/dir-003/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 borrame/dir-004/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 borrame/dir-005/arch-B
-## find: ‘ls’ terminated by signal 13</code></pre>
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 borrame/dir-001/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 borrame/dir-002/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 borrame/dir-003/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 borrame/dir-004/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 borrame/dir-005/arch-B</code></pre>
 <ul>
 <li>lista en formato largo los primeros 5 archivos arch-B haciendo uso
 de <code>xargs ls -l</code></li>
 </ul>
 <pre class="bash"><code>find borrame/ -type f -name arch-B | xargs ls -l | head -5</code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 borrame/dir-001/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 borrame/dir-002/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 borrame/dir-003/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 borrame/dir-004/arch-B
-## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 borrame/dir-005/arch-B</code></pre>
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 borrame/dir-001/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 borrame/dir-002/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 borrame/dir-003/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 borrame/dir-004/arch-B
+## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 borrame/dir-005/arch-B</code></pre>
 <p>-¿qué hace este comando?</p>
 <pre><code>find borrame/ -type f -name &#39;arch-*&#39; | xargs ls -l | tail -3</code></pre>
 <p>-¿qué hace este comando?</p>
@@ -2330,19 +2342,19 @@ disponible en el sistema y en cada partición o dispositivo montados en
 el sistema de archivos.</p>
 <pre class="bash"><code>df        </code></pre>
 <pre><code>## Filesystem      1K-blocks       Used Available Use% Mounted on
-## tmpfs             3272336       2360   3269976   1% /run
-## /dev/nvme0n1p3  465816208  162661116 279419440  37% /
-## tmpfs            16361660      71784  16289876   1% /dev/shm
+## tmpfs             3272336       2380   3269956   1% /run
+## /dev/nvme0n1p3  465816208  162673984 279406572  37% /
+## tmpfs            16361664      72544  16289120   1% /dev/shm
 ## tmpfs                5120         16      5104   1% /run/lock
 ## efivarfs              128         41        83  33% /sys/firmware/efi/efivars
 ## /dev/nvme0n1p1    1994928      10536   1984392   1% /boot/efi
-## /dev/sda1      1921724608 1255088308 568944244  69% /home
+## /dev/sda1      1921724608 1255644800 568387752  69% /home
 ## tmpfs             3272332        168   3272164   1% /run/user/1000</code></pre>
 <p>Si le pasamos como argumento un directorio o partición, nos da la
 información correspondiente al espacio disponible.</p>
 <pre class="bash"><code>df /</code></pre>
 <pre><code>## Filesystem     1K-blocks      Used Available Use% Mounted on
-## /dev/nvme0n1p3 465816208 162661116 279419440  37% /</code></pre>
+## /dev/nvme0n1p3 465816208 162673984 279406572  37% /</code></pre>
 </div>
 <div id="opciones-más-comunes-de-df" class="section level3" number="2.18.2">
 <h3><span class="header-section-number">2.18.2</span> Opciones más
@@ -2375,14 +2387,14 @@ echo
 df -h /home</code></pre>
 <pre><code>## Filesystem     1M-blocks     Used Available Use% Mounted on
 ## tmpfs              3196M       3M     3194M   1% /run
-## /dev/nvme0n1p3   454899M  158849M   272871M  37% /
+## /dev/nvme0n1p3   454899M  158862M   272858M  37% /
 ## tmpfs             15979M      71M    15908M   1% /dev/shm
 ## tmpfs                 5M       1M        5M   1% /run/lock
 ## efivarfs              1M       1M        1M  33% /sys/firmware/efi/efivars
 ## /dev/nvme0n1p1     1949M      11M     1938M   1% /boot/efi
-## /dev/sda1       1876685M 1225673M   555610M  69% /home
+## /dev/sda1       1876685M 1226216M   555067M  69% /home
 ## tmpfs              3196M       1M     3196M   1% /run/user/1000
-## total           2355906M 1384605M   852720M  62% -
+## total           2355906M 1385161M   852164M  62% -
 ## 
 ## 
 ## Filesystem      Size  Used Avail Use% Mounted on
@@ -2459,7 +2471,7 @@ echo &#39; &gt;&gt;&gt; Ojo, VARIABLE ENTRE COMILLAS SENCILLAS NO INTERPOLA: $sa
 echo</code></pre>
 <pre><code>## linux_commands.tab
 ## var2: Cadena con espacios, entre comillas sencillas
-## Bienvenido a alisio, vinuesa! Te recuerdo que hoy es sáb 02 ago 2025 21:52:39 CST
+## Bienvenido a alisio, vinuesa! Te recuerdo que hoy es lun 04 ago 2025 22:01:50 CST
 ##  &gt;&gt;&gt; Ojo, VARIABLE ENTRE COMILLAS SENCILLAS NO INTERPOLA: $saludo_inicial; se imprime literalmente</code></pre>
 <p>No es necesario hacer llamados a las variables entre comillas dobles,
 pero es una buena práctica, como se muestra en los ejemplos del bloque
@@ -2472,7 +2484,7 @@ salida de un comando en una variable con <b>var=$(comando)</b></h3>
 date=$(date | awk &#39;{print $3,$2,$6}&#39; | sed &#39;s/ //g&#39;)
 h=$HOSTNAME
 echo &quot;&gt;&gt;&gt; working in: $wkdir at &lt;$h&gt; on &lt;$date&gt;&quot;</code></pre>
-<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/TIB/TIB25/sesion1_intro2linux at &lt;alisio&gt; on &lt;ago02CST&gt;</code></pre>
+<pre><code>## &gt;&gt;&gt; working in: /home/vinuesa/Cursos/TIB/TIB25/sesion1_intro2linux at &lt;alisio&gt; on &lt;ago04CST&gt;</code></pre>
 </div>
 <div id="modificación-de-variables-y-operaciones-con-ellas" class="section level3" number="3.1.3">
 <h3><span class="header-section-number">3.1.3</span> Modificación de
@@ -2570,7 +2582,7 @@ if [ -s &quot;$f&quot; ]; then
    echo &quot;$f exists and has size: $size&quot;
 fi
 </code></pre>
-<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  2 21:52 empty_file
+<pre><code>## -rw-rw-r-- 1 vinuesa vinuesa 0 ago  4 22:01 empty_file
 ## -rw-r--r-- 1 vinuesa vinuesa 6780296 ago  2 21:14 assembly_summary.txt.gz
 ## empty_file file exists
 ## empty_file file exists but is empty
@@ -3801,10 +3813,10 @@ imprime sólo los campos organism_name y ftp_path separados por ’ ~~~ ’,
 imprimiendo sólo las primeras 3 líneas</li>
 </ul>
 <pre class="bash"><code># ejempo de código AWK con la estructura: BEGIN_BLOCK, condición1 &amp;&amp; condición2 &amp;&amp; condición3, acción
-zcat assembly_summary.txt.gz | awk &#39;BEGIN{FS=&quot;\t&quot;; OFS=&quot; ~~~ &quot;} $16 ~ /v2$/ &amp;&amp; $15 ~ /201./ &amp;&amp; $12 == &quot;Scaffold&quot; {print $8, $20}&#39; | head -3</code></pre>
-<pre><code>## Leptospira interrogans ~~~ ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/370/085/GCF_002370085.2_ASM237008v2
-## Helicobacter pylori GAM100Ai ~~~ ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/310/005/GCF_000310005.2_ASM31000v2
-## Helicobacter pylori GAM101Biv ~~~ ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/344/945/GCF_000344945.2_ASM34494v2</code></pre>
+zcat assembly_summary.txt.gz | awk &#39;BEGIN{FS=&quot;\t&quot;; OFS=&quot; ~~~ &quot;} $16 ~ /v2$/ &amp;&amp; $15 ~ /2019/ &amp;&amp; $12 == &quot;Scaffold&quot; {print $8, $20}&#39; | head -3</code></pre>
+<pre><code>## Escherichia coli ~~~ ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/368/385/GCF_003368385.2_ASM336838v2
+## Escherichia coli ~~~ ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/368/425/GCF_003368425.2_ASM336842v2
+## Escherichia coli ~~~ ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/368/435/GCF_003368435.2_ASM336843v2</code></pre>
 <ul>
 <li>genera una estadística del número de genomas por especie (columna #
 8) del género Pseudomonas en formato tabular [EspecieTABnum_genomas], y

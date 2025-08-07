@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México. GitHub repos; @pvinmex" />
 
-<meta name="date" content="2025-08-05" />
+<meta name="date" content="2025-08-06" />
 
 <title>Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</title>
 
@@ -337,7 +337,7 @@ display: none;
 de modelos y búsquedas intensivas de árboles</h1>
 <h4 class="author"><a href="https://www.ccg.unam.mx/~vinuesa/">Pablo
 Vinuesa, CCG-UNAM, Cuernavaca, México</a>. <a href="https://github.com/vinuesa">GitHub repos</a>; <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a></h4>
-<h4 class="date">2025-08-05</h4>
+<h4 class="date">2025-08-06</h4>
 
 </div>
 
@@ -817,8 +817,8 @@ cat primates.phy_phyml_stats.txt</code></pre>
   - f(T)=  0.25000
 ...truncado
 </pre>
-<p>Trabajando desde un <span class="math inline">\(Shell\)</span> de
-<span class="math inline">\(Unix\)</span> o <span class="math inline">\(Linux\)</span>, podemos acceder a este valor sin
+<p>Trabajando desde un <span class="math inline">\(shell\)</span> de
+<span class="math inline">\(Unix\)</span> o <span class="math inline">\(linux\)</span>, podemos acceder a este valor sin
 necesidad de abrir el archivo:</p>
 <pre style="background: Cornsilk;"><code># o usando grep:
 grep Log-like primates.phy_phyml_stats.txt </code></pre>
@@ -883,7 +883,7 @@ bases y <em>sesgo transicional</em> en tasas de sustitución.</li>
 </ul>
 <pre style="background: Cornsilk;"><code># 4. Modelo HKY85
 # phyml -i primates.phy -d nt -m 010010 -f m -t e -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
-phyml -i primates.phy -d nt -m HKY85 -f m -t e -c 1 -o lr -b 0 &amp;&gt; /dev/null
+phyml -i primates.phy -d nt -m HKY85 -f m -t e -c 1 -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
 
 grep Log-like primates.phy_phyml_stats.txt &gt; HKY85.fit</code></pre>
 <p>NOTA: Como veremos en ejemplos posteriores, podíamos haber optimizado
@@ -1081,8 +1081,8 @@ xsq &lt;- 2*(-6284.99565 - -6424.20245)
 xsq # [1] 278.4136 # Este es un valor gigantesco de la ji-cuadrada, y por tanto ALTAMENTE SIGNIFICATIVO.
 
 # cómputo de estadísticas
-pchisq(xsq,1)      # 1;  este es el valor critico de la X2 para el estadistico LRT con 1 grado de libertad; [1] 1
-1-(pchisq(xsq,1))  # 0; esta es la p asociada a dicho valor crítico, ABSOLUTAMENTE SIGNIFICATIVA =&gt;
+pchisq(xsq,3)      # 1;  este es el valor critico de la X2 para el estadistico LRT con 3 grados de libertad; [1] 1
+1-(pchisq(xsq,3))  # 0; esta es la p asociada a dicho valor crítico, ABSOLUTAMENTE SIGNIFICATIVA =&gt;
                    # rechazamos el modelo nulo                                                       
 
 q()         # para salir de R
@@ -1404,7 +1404,7 @@ secuencialmente.</p>
 un subconjunto de matrices con un <span class="math inline">\(bucle\
 for\)</span></h2>
 <p>En este ejercicio haremos uso más eficiente de las herramientas que
-nos brindan el <span class="math inline">\(Shell\)</span> y <span class="math inline">\(Linux\)</span>, como primeros pasos hacia la
+nos brindan el <span class="math inline">\(Shell\)</span> y <span class="math inline">\(linux\)</span>, como primeros pasos hacia la
 automatización del proceso.</p>
 <pre style="background: Cornsilk;"><code># Evaluemos un subconjunto de los modelos empiricos (matrices de sustitución) implementados en phyml para proteínas
 # - Amino-acid based models : LG (default) | WAG | JTT | MtREV | Dayhoff | DCMut | RtREV | CpREV | VT | AB
@@ -1731,36 +1731,57 @@ filogenia correspondiente.</p>
 <pre style="background: Cornsilk;"><code># despliegue de la ayuda
 phyml_protModelFinder.sh</code></pre>
 <pre>
-phyml_protModelFinder.sh v0.6 requires two arguments provided on the command line; the third one is optional
 
-phyml_protModelFinder.sh [input phylip file of aligned PROTEIN sequences] [model sets:1-7] [num random seed trees; default:1]
+ USAGE for phyml_protModelFinder.sh v2.2.3_2025-08-06:
+ phyml_protModelFinder.sh -i <infile> -m <model set to evaluate> [-b &lt;(-)int&gt;] [ -h <print help>] [-r <number of random seed trees>] [-s <SEARCH METHOD>] [ -v <print version>]
  
-   # model sets to choose from: 
-   1 -&gt; nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
-   2 -&gt; organellar genes (CpREV MTMAM MtREV MtArt)
-   3 -&gt; nuclear and organellar (1 + 2)
-   4 -&gt; retroviral genes (HIVw HIVb RtREV)
-   5 -&gt; nuclear + retroviral genes (1 + 4)
-   6 -&gt; all (1+2+3+4+5)
-   7 -&gt; test (JTT LG)
+ REQUIRED:
+  -i <string> input alignment in PHYLIP format
+  -m <int> model set to evaluate by BIC
+       1 -&gt; nuclear genes (AB BLOSUM62 DAYHOFF DCMut JTT LG VT WAG)
+       2 -&gt; organellar genes (CpREV MTMAM MtREV MtArt)
+       3 -&gt; nuclear and organellar (1 + 2)
+       4 -&gt; retroviral genes (HIVw HIVb RtREV)
+       5 -&gt; nuclear + retroviral genes (1 + 4)
+       6 -&gt; all (1+2+3+4+5)
+       7 -&gt; test (JTT LG)
 
-EXAMPLE: phyml_protModelFinder.sh primates_21_AA.phy 5 10
+ OPTIONAL
+  -h <flag> print help (this message)
+  -b <int>
+      int &gt; 0: int is the number of bootstrap replicates.
+       0: neither approximate likelihood ratio test nor bootstrap values are computed.
+      -1: approximate likelihood ratio test returning aLRT statistics.
+      -2: approximate likelihood ratio test returning Chi2-based parametric branch supports.
+      -4: SH-like branch supports alone.
+      -5: (default) approximate Bayes branch supports.  
+  -s <NNI|SPR|BEST> Search (branch-swapping) method; default:BEST
+  -r <integer> number of random start trees to use for sequential searches; default rand_starts:1
+  -v <flag> print version
+ 
+ EXAMPLES:
+   phyml_protModelFinder.sh -i my_PHYLIP_alignment.phy -m 1 -b -4 -r 10
+ 
+ NOTES: 
+  1. Assumes protein input sequences are ALIGNED and in (relaxed) PHYLIP format 
+     
+ AIM: phyml_protModelFinder.sh v2.2.3_2025-08-06 will evaluate the fit of the the seleced model set,
+       combined or not with +G and/or +f, computing AICi, BICi, deltaBIC, BICw 
+    and inferring the ML tree under the BIC-selected model and the 
+    use-selected search method (N|S|B) and number os start trees.
 
-AIM:  phyml_protModelFinder.sh v0.6 will evaluate the fit of the the seleced model set,
-    combined or not with +G and/or +f, computing AICi, BICi, deltaBIC, BICw 
-          and inferring the ML tree under the BIC-selected model  
-
-PROCEDURE
-     - Models are fitted using a fixed NJ-LG tree, optimizing branch lenghts and rates 
-          to calculate their AICi, BICi, delta_BIC and BICw
-     - The best model is selected by BIC
-     - SPR searches can be launched starting from multiple random trees
-     - Default single seed tree searches use a BioNJ with BEST moves     
-
-SOURCE: the latest version of the program is available from GitHub at:
-     https://github.com/vinuesa/TIB-filoinfo
-
-LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
+ PROCEDURE
+   - Models are fitted using a fixed NJ-LG tree, optimizing branch lenghts and rates 
+    to calculate their AICi, BICi, delta_BIC and BICw
+   - The best model is selected by BIC
+   - SPR searches can be launched starting from multiple random trees
+   - Default single seed tree searches use a BioNJ with BEST moves     
+   
+   
+ SOURCE: the latest version can be fetched from https://github.com/vinuesa/TIB-filoinfo
+         
+ LICENSE: GPL v3.0. 
+    See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE
 
 </pre>
 <p>Vemos que necesitamos pasarle dos parámetros: el archivo phylip con
@@ -1770,7 +1791,7 @@ indicarle al programa que queremos hacer la búsqueda final de árboles a
 partir de <span class="math inline">\(n\)</span> árboles de semilla de
 adición secuencial aleatorizada, bajo el mejor modelo seleccionado.</p>
 <p>Probemos con el set de modelos para genes nucleares</p>
-<pre style="background: Cornsilk;"><code>phyml_protModelFinder.sh primates_21_AA.phy 5</code></pre>
+<pre style="background: Cornsilk;"><code>phyml_protModelFinder.sh -i primates_21_AA.phy -m 5</code></pre>
 <p>Abajo vemos el STDOUT del <span class="math inline">\(script\)</span>.</p>
 <ul>
 <li><p>Antes de inciar, comprueba que estamos corriendo una versión de
@@ -2173,47 +2194,61 @@ tanto la funcionalidad completa del script sólo está disponible si usas
 una versión de <span class="math inline">\(bash &gt;= 5.1\)</span>.</p>
 <p>Veamos la ayuda de <span class="math inline">\(phyml\_DNAmodelFinder.sh\)</span>:</p>
 <pre>
-phyml_DNAmodelFinder.sh v0.7_2022-12-01 requires two arguments provided on the command line, the third one being optional:
-
-phyml_DNAmodelFinder.sh <string [input phylip file (aligned DNA sequences)> <int [model sets:1-3]> <int [no_rdm_starts; default:1]>
+ phyml_DNAmodelFinder.sh -i <infile> -m <model set to evaluate> [-b &lt;(-)int&gt;] [ -h <print help>] [-r <number of random seed trees>] [-s <SEARCH METHOD>] [ -v <print version>]
  
-# model sets to choose from: 
-1 -&gt; standard models (JC69 K80 F81 HKY85 TN93 GTR)
-
-2 -&gt; standard + 24 extended_ef_models OR  standard + 23 extended_uf_models 
+ REQUIRED:
+  -i <string> input alignment in PHYLIP format
+  -m <int> model set to evaluate by BIC
+       1 -&gt; standard models (JC69 K80 F81 HKY85 TN93 GTR)
+       2 -&gt; standard + 64 extended_ef_models, OR
+            standard + 62 extended_uf_models 
                      
-NOTE: phyml_DNAmodelFinder.sh automatically chooses the proper extended set (ef|uf) to evaluate, 
-        based on delta_BIC evaluation of compositional bias (JC69 vs F81)
- 
-3 -&gt; minimal test set (K80 F81 HKY85 GTR)
+            NOTE: phyml_DNAmodelFinder.sh automatically chooses the proper extended set (ef|uf) to evaluate, 
+                 based on delta_BIC evaluation of compositional bias (JC69 vs. F81)
+        3 -&gt; minimal test set (JC69 F81 HKY85 TN93)
 
-EXAMPLE: phyml_DNAmodelFinder.sh primates.phy 2
+ OPTIONAL
+  -h <flag> print help (this message)
+  -b <int>
+      int &gt; 0: int is the number of bootstrap replicates.
+       0: neither approximate likelihood ratio test nor bootstrap values are computed.
+      -1: approximate likelihood ratio test returning aLRT statistics.
+      -2: approximate likelihood ratio test returning Chi2-based parametric branch supports.
+      -4: SH-like branch supports alone.
+      -5: (default) approximate Bayes branch supports.  
+  -s <NNI|SPR|BEST> search (branch-swapping) method; default:BEST
+  -r <integer> number of random start trees to use for sequential searches; default rand_starts:1
+  -v <flag> print version
  
-AIM:  phyml_DNAmodelFinder.sh v0.7_2022-12-01 will evaluate the fit of the the seleced model set,
-    combined or not with +G and/or +f, computing AICi, BICi, deltaBIC, BICw 
-          and inferring the ML tree under the BIC-selected model  
-
-PROCEDURE:
- - Models are fitted using a fixed NJ-JC tree, optimizing branch lenghts and rates 
-      to calculate their AICi, BICi, delta_BIC and BICw
- - Only relevant matrices among the extended set are evaluated, based on delta_BIC
-      comparisons between JC69-F81, to decide if ef|uf models should be evaluated
-      and comparisons between KHY85-TN93, to determine if models with two Ti rates should 
-      be evaluated
- - pInv is automatically excluded in the extended model set, 
-    if the delta_BICi_HKY+G is =&lt; 2 when compared with the BIC_HKY+G+I
- - The best model is selected by BIC
- - SPR searches can be launched starting from multiple random trees
- - Default single seed tree searches use a BioNJ with BEST moves
+ EXAMPLE:
+   phyml_DNAmodelFinder.sh -i my_PHYLIP_alignment.phy -m 2 -b -4 -r 10 -s NNI
+ 
+ NOTES: 1. Assumes DNA input sequences are ALIGNED and in (relaxed) PHYLIP format 
      
-SOURCE: the latest version of the program is available on GitHub:
+ AIM:  phyml_DNAmodelFinder.sh v2.1.1_2024-12-13 will evaluate the fit of the selected model set,
+    combined or not with +G and/or +f, computing AICi, BICi, deltaBIC and BICw, 
+          inferring the ML tree under the BIC-selected model  
+
+ PROCEDURE
+  - Models are fitted using a fixed NJ-JC tree, optimizing branch lenghts and rates 
+       to calculate their AICi, BICi, delta_BIC and BICw
+  - Only relevant models among the extended set are evaluated, based on delta_BIC
+      comparisons between JC69-F81, to decide if ef|uf models should be evaluated,
+      and comparisons between KHY85-TN93 to determine if models with two Ti rates should 
+      be evaluated
+  - pInv is automatically excluded in the extended model set, 
+      if the delta_BICi_HKY+G is =&lt; 2 when compared with the BIC_HKY+G+I
+  - The best model is selected by BIC
+  - SPR searches can be launched starting from multiple random trees
+  - Default single seed tree searches use a BioNJ with BEST moves     
+      
+ SOURCE: the latest version of the program is available on GitHub:
      https://github.com/vinuesa/TIB-filoinfo
 
-LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
+ LICENSE: GPL v3.0. See https://github.com/vinuesa/get_phylomarkers/blob/master/LICENSE 
 
-CITATION: Vinuesa P. (2022). Efficient two-step selection of DNA models with phyml_DNAmodelFinder.
-           https://github.com/vinuesa/TIB-filoinfo
-
+ CITATION: Vinuesa P. (2023). Efficient two-step selection of DNA models with phyml_DNAmodelFinder.
+             https://github.com/vinuesa/TIB-filoinfo
 </pre>
 <p>Al elegir el <em>set 2</em> de modelos, en vez de evaluar a todos los
 modelos estándar+TIM+TVM, <em>phyml_DNAmodelFinder.sh</em> hace unas
@@ -2243,26 +2278,25 @@ de modelos</h3>
 <li>que las secuencias están en formato <span class="math inline">\(phylip\)</span></li>
 <li>calcula unas estadísticas descriptivas de las secuencias</li>
 </ul>
-<pre style="background: Cornsilk;"><code>phyml_DNAmodelFinder.sh primates.phy 2</code></pre>
+<pre style="background: Cornsilk;"><code>phyml_DNAmodelFinder.sh -i primates.phy -m 2</code></pre>
 <pre>
-
+# invocation: phyml_DNAmodelFinder.sh  -i primates.phy -m 2
+# checking PhyML version
 =========================================================================================
-# Bash version 5.1 OK
+# Bash version 5.2 OK
 # running with phyml v.3.3_2023
-# phyml_DNAmodelFinder.sh v1.2.0_2023-11-18 running on alisio. Run started on: 2023-11-19 at 18:54:14
-# workding directory: /home/vinuesa/Cursos/LCG/ENS_y_PANGENOMICA/tema12_maxima_verosimilitud/data
-/home/vinuesa/anaconda3/bin/mpirun
-/usr/bin/phyml-mpi
 /usr/bin/awk
-/home/vinuesa/anaconda3/bin/bc
+/usr/bin/bc
 /usr/bin/sed
-/home/vinuesa/anaconda3/bin/perl
+/usr/bin/perl
 /usr/local/bin/phyml
 
 # Run check_dependencies() ... looks good: all required binaries are in place.
 
-# infile:primates.phy; model_set:2 =&gt; extended_models; seed trees: 1; delta_BIC_cutoff=2
-=========================================================================================
+# phyml_DNAmodelFinder.sh v2.1.1_2024-12-13 running on alisio. Run started on: 2025-08-06 at 20:30:26
+# working directory: /home/vinuesa/Cursos/TIB/TIB24/sesion6_maxima_verosimilitud/data
+# infile:primates.phy; model_set:2 =&gt; extended_models; seed trees: 1; delta_BIC_cutoff=2; branch_support_type=-5
+========================================================================================
 
 18:54:14  # 1. Computing sequence stats for primates.phy:
 - number of sequences: 12

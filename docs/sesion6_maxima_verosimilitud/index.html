@@ -11,7 +11,7 @@
 
 <meta name="author" content="Pablo Vinuesa, CCG-UNAM, Cuernavaca, México. GitHub repos; @pvinmex" />
 
-<meta name="date" content="2025-08-06" />
+<meta name="date" content="2025-08-08" />
 
 <title>Tutoral de uso de PhyML v3 para selección de modelos y búsquedas intensivas de árboles</title>
 
@@ -337,7 +337,7 @@ display: none;
 de modelos y búsquedas intensivas de árboles</h1>
 <h4 class="author"><a href="https://www.ccg.unam.mx/~vinuesa/">Pablo
 Vinuesa, CCG-UNAM, Cuernavaca, México</a>. <a href="https://github.com/vinuesa">GitHub repos</a>; <a href="https://twitter.com/pvinmex"><span class="citation">@pvinmex</span></a></h4>
-<h4 class="date">2025-08-06</h4>
+<h4 class="date">2025-08-08</h4>
 
 </div>
 
@@ -926,7 +926,7 @@ composicional</em> de bases, <em>sesgo transicional</em> en tasas de
 sustitución y <em>heterogeneidad de tasas entre sitios</em>,
 considerando sólo una proporción de sitios invariantes.</li>
 </ul>
-<pre style="background: Cornsilk;"><code># 5. Modelo HKY85+G
+<pre style="background: Cornsilk;"><code># 5. Modelo HKY85+I
 # phyml -i primates.phy -d nt -m 121121 -f m -t e -c 1 -v e -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
 phyml -i primates.phy -d nt -m HKY85 -f m -t e -c 1 -v e -u primates_JC.ph -o lr -b 0 &amp;&gt; /dev/null
 grep Log-like primates.phy_phyml_stats.txt &gt; HKY85I.fit</code></pre>

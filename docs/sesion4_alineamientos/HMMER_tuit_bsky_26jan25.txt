@@ -1,0 +1,1 @@
+Want to learn how to build and calibrate #HMMs, run & parse #HMMER3 programs & output efficiently on the #Linux command line using #AWK, #Bash, and #R code/idioms? This detailed hands-on tutorial may help you 👉 https://rb.gy/tz8tsl #Bioinformatics @lcgunam #UNAM  💻🤓👩‍💻🧑‍💻 👇
